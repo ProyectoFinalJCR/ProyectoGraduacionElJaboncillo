@@ -1,0 +1,52 @@
+/* Estilos generales */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    background-color: #efeeee;
+    display: flex;
+    align-items: center;  
+    justify-content: space-between;
+    padding: 1% 5%;
+}
+
+.navbar img {
+    width: 250px;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    background-color: #3bb64a;
+    width: 250px;
+    color: white;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0% 4%;
+    align-items: center;
+    justify-content: flex-start;
+}
+.sidebar .items{
+    padding: 10px;
+}
+.sidebar a{
+    color: white;
+    text-decoration: none;
+}
+.sidebar a:hover {
+    color: #d0fcd8;
+}
+.contenido {
+    flex: 1;
+    padding: 20px;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+}
