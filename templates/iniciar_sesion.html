@@ -5,42 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/iniciar_sesion.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+ 
+
     <title>Iniciar Sesión | El Jaboncillo </title>
 </head>
 
 <body>
-    <div class="conteiner">
-        <div class="form-conteiner ">
-            <div class="registrarse">
-                <div class="conteiner-img-logo">
+    <div class="container">
+        <div class="form-container ">
+            <div class="register">
+                <div class="container-img-logo">
                     <img src="/static/img/login/logoElJaboncillo.png" alt="">
                 </div>
-                <div class="conteiner-titulo">
+                <div class="container-title">
                     <h2>¡BIENVENIDOS!</h2>
-                    <button>registrate</button>
                 </div>
-                <div class="conteiner-img-flores">
+                <div class="container-img-flowers">
                     <img src="/static/img/login/floresLogin-HDpng 1.png" alt="">
                 </div>
 
             </div>
-            <div class="iniciar-sesion">
-                <div class="conteiner-icono">
+            <div class="login-seccion">
+                <div class="container-icon">
                     <img src="/static/img/login/iconoInicioS.png" alt="">
                 </div>
-                <div class="conteiner-titulos"> 
+                <div class="container-loginTitle"> 
                     <h3>Iniciar Sesión</h3>
                 </div>
-                <div class="conteiner-input">
-                    <input type="text" id="correo" name="correo" placeholder="Correo electrónico">
-                    <input type="text" id="correo" name="correo" placeholder="Contraseña"   >
+                <div class="container-input">
+                    <div class="input-shape">                       
+                        <i class="material-icons-outlined">mail</i>
+                        <input class="inputs" type="text" id="correo" name="correo" placeholder="Correo electrónico">
+                    </div>
+                    <div class="input-shape">
+                        <i class="material-icons-outlined">lock</i>
+                        <input class="inputs" type="password" id="correo" name="correo" placeholder="Contraseña"   >
+                        <i class="material-icons-outlined eye">visibility</i>
+                        <i class="material-icons-outlined noneye">visibility_off</i>
+                    </div>
+                    <div class="container-forgetP">
+                        <a href="" class="forget-password"><p class="forget">¿Olvidaste tu contraseña?</p></a>
+                    </div>
                 </div>
-                <div class="conteiner-olvideC">
-                    <p>¿Olvidaste tu contraseña?</p>
-                </div>
-                <div class="btn_iniciarS">
+                <div class="btn_login">
                     <button>INICIAR SESIÓN</button>
-                </div>
+                </div> 
             </div>
         </div>
 
