@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Categorias
+{% endblock %}
+
+{% block main %}
+    <div class="search">
+        <form action="#">
+            <input class="input-search" name="search" id="search" placeholder="Buscar categoria">
+            <button class="btn-search" type="submit">
+                <i class="material-icons">search</i>
+            </button>
+        </form> 
+        <div>
+            <button class="btn-add">Agregar categoria</button>
+        </div>
+    </div>
+
+    <div class="table-categories">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Categorias</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Plantas</td>
+                    <td>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Maceteras</td>
+                    <td>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

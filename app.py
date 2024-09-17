@@ -17,9 +17,9 @@ app = Flask(__name__)
 def index():
     return render_template('iniciar_sesion.html')
 
-@app.route('/layout')
-def plantilla():
-    return render_template('layout.html')
+@app.route('/categorias')
+def categorias():
+    return render_template('categorias.html')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)

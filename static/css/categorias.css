@@ -1,0 +1,69 @@
+.input-search{
+    border: 1.5px solid gray;
+    border-radius: 3px;
+    font-weight:lighter;
+    padding: 10px;
+    padding-right: 200px;
+    background-color: white; 
+}
+.input-search:focus{
+    outline: none;
+}
+.btn-search{
+    border: none;
+    color: gray;
+    background-color: inherit;
+}
+.btn-search :hover{
+    color: #006834;
+}
+.search{
+    display: flex;
+    padding: 2%;
+    justify-content: space-between;
+}
+.search form{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+.btn-add{
+    border: none;
+    color: white;
+    background-color: #2db87e;
+    border-radius: 7px;
+    padding: 10px;
+}
+
+.table-categories{
+    padding-left: 16%;
+    padding-top: 4%;
+}
+/* Estilo para la tabla */
+table {
+    width: 80%;
+    border-collapse: collapse; /* Elimina el espacio entre bordes */
+    margin: 20px 0; /* Espaciado superior e inferior */
+}
+
+/* Estilo para las celdas de la tabla */
+th, td {
+    border: 1px solid #ddd; /* Color del borde de las celdas */
+    padding: 7px; /* Espaciado interno en las celdas */
+    text-align: left; /* Alineación del texto en las celdas */
+}
+
+/* Estilo para los encabezados de la tabla */
+th {
+    background-color: #f4f4f4; /* Color de fondo para el encabezado */
+    font-weight: bold; /* Negrita para el texto del encabezado */
+}
+
+/* Estilo para las filas */
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Color de fondo para filas pares */
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Color de fondo al pasar el ratón por encima de una fila */
+}
