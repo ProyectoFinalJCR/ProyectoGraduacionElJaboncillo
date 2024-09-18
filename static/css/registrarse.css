@@ -13,14 +13,109 @@
     align-items: center;
 }
 .form-container{
-    width: 850px;
-    height: 55vh;
+    width: 1100px;
+    height: 550px;
     border: 1px solid #000;
     display: grid;
-    grid-template-columns:  0.9fr 1fr;
+    grid-template-columns:  1fr 1fr;
     grid-template-rows: 1fr;
     border-radius: 25px;
     border-bottom: none;
+}
+
+.form-container .login-seccion{
+    width: 100%;
+    height: 100%;
+    background: rgb(42,116,71);
+    background: linear-gradient(180deg, rgba(42,116,71,1) 0%, rgba(0,67,27,1) 68%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    padding: 15px;
+    gap: 35px;
+}
+.form-container .login-seccion .container-icon .account-icon{
+    color: #fff;
+    font-size: 75px;
+}
+.form-container .login-seccion .container-loginTitle h3{
+    font-family: verdana;
+    color: #fff;
+}
+.form-container .login-seccion .container-input{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
+    padding: 5px 20px;
+}
+.form-container .login-seccion .container-input .inputs-group{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 15px;
+}
+.form-container .login-seccion .container-input .inputs-group .input-shape{
+    width: 350px;
+    height: 45px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    padding-left: 15px;
+    background-color: #fff;
+    border-radius: 45px;
+    
+}
+.form-container .login-seccion .container-input .inputs-group .input-shape .material-icons-outlined{    
+    color:gray;
+        
+}
+.form-container .login-seccion .container-input .inputs-group .input-shape .inputs{
+    border: none;
+    width: 85%;
+    height: 80%;
+    padding-left: 10px;
+    font-size: 18px;
+    border-left: 1px solid #000;
+    outline: none;
+}
+.form-container .login-seccion .container-input .inputs-group .input-shape .eye,.form-container .login-seccion .container-input .input-shape .noneye{
+    display: none;
+}
+.form-container .login-seccion .container-input .container-forgetP{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.form-container .login-seccion .container-forgetP .forget-password{
+    color: #fff;
+    font-size: 16px;
+    font-family: georigia;
+}
+.form-container .login-seccion .btn_login{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-container .login-seccion .btn_login button{
+    width: 155px;
+    height: 40px;
+    border: none;
+    background-color: #3AB54C;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    font-weight: bold;
+    border-radius:5px;
+    cursor: pointer;
+}
+.form-container .login-seccion .btn_login button:hover{
+    background-color: #158D46;
 }
 .form-container .register{
     width: 100%;
@@ -29,8 +124,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px ;
 
 }
 .form-container .register .container-img-logo, .container-title, .container-img-flowers{
@@ -69,89 +164,7 @@
 .form-container .register .container-img-flowers img{
     width: 100%;
     height: 100%;
+    border-bottom-right-radius: 25px;
 }
 
-.form-container .login-seccion{
-    width: 100%;
-    height: 100%;
-    background: rgb(42,116,71);
-    background: linear-gradient(180deg, rgba(42,116,71,1) 0%, rgba(0,67,27,1) 68%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    padding: 15px;
-    gap: 35px;
-}
-.form-container .login-seccion .container-loginTitle h3{
-    font-family: Georgia;
-    color: #fff;
-}
-.form-container .login-seccion .container-input{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-}
-.form-container .login-seccion .container-input .input-shape{
-    width: 350px;
-    height: 45px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-    padding-left: 15px;
-    background-color: #fff;
-    border-radius: 45px;
-    
-}
-.form-container .login-seccion .container-input .input-shape .material-icons-outlined{    
-    color:gray;
-        
-}
-.form-container .login-seccion .container-input .input-shape .inputs{
-    border: none;
-    width: 85%;
-    height: 80%;
-    padding-left: 10px;
-    font-size: 18px;
-    border-left: 1px solid #000;
-    outline: none;
-}
-.form-container .login-seccion .container-input .input-shape .eye,.form-container .login-seccion .container-input .input-shape .noneye{
-    display: none;
-}
-.form-container .login-seccion .container-input .container-forgetP{
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-.form-container .login-seccion .container-forgetP .forget-password{
-    color: #fff;
-    font-size: 16px;
-    font-family: georigia;
-}
-.form-container .login-seccion .btn_login{
-    width: 100%;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.form-container .login-seccion .btn_login button{
-    width: 125px;
-    height: 40px;
-    border: none;
-    background-color: #3AB54C;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #fff;
-    font-weight: bold;
-    border-radius:5px;
-    cursor: pointer;
-}
-.form-container .login-seccion .btn_login button:hover{
-    background-color: #158D46;
-}
 

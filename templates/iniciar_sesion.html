@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/css/iniciar_sesion.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
- 
+
 
     <title>Iniciar Sesión | El Jaboncillo </title>
 </head>
@@ -21,6 +21,7 @@
                 </div>
                 <div class="container-title">
                     <h2>¡BIENVENIDOS!</h2>
+                    <a href="/register"><button class="btn-register">regístrate</button></a>
                 </div>
                 <div class="container-img-flowers">
                     <img src="/static/img/login/floresLogin-HDpng 1.png" alt="">
@@ -31,30 +32,32 @@
                 <div class="container-icon">
                     <img src="/static/img/login/iconoInicioS.png" alt="">
                 </div>
-                <div class="container-loginTitle"> 
+                <div class="container-loginTitle">
                     <h3>Iniciar Sesión</h3>
                 </div>
-                <div class="container-input">
-                    <div class="input-shape">                       
+                <form class="container-input">
+                    <div class="input-shape">
                         <i class="material-icons-outlined">mail</i>
                         <input class="inputs" type="text" id="correo" name="correo" placeholder="Correo electrónico">
                     </div>
                     <div class="input-shape">
                         <i class="material-icons-outlined">lock</i>
-                        <input class="inputs" type="password" id="correo" name="correo" placeholder="Contraseña"   >
+                        <input class="inputs" type="password" id="correo" name="correo" placeholder="Contraseña">
                         <i class="material-icons-outlined eye">visibility</i>
                         <i class="material-icons-outlined noneye">visibility_off</i>
                     </div>
                     <div class="container-forgetP">
-                        <a href="" class="forget-password"><p class="forget">¿Olvidaste tu contraseña?</p></a>
+                        <a href="" class="forget-password">
+                            <p class="forget">¿Olvidaste tu contraseña?</p>
+                        </a>
                     </div>
-                </div>
-                <div class="btn_login">
-                    <button>INICIAR SESIÓN</button>
-                </div> 
+                    <div class="btn_login">
+                        <button>INICIAR SESIÓN</button>
+                    </div>
+                </form>
+            </div>
             </div>
         </div>
-
     </div>
 </body>
 
