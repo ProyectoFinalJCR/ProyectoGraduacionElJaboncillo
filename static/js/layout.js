@@ -27,5 +27,24 @@ function mostrarFechaHora() {
     document.getElementById("fechaHora").innerHTML = `${fechaFormateada} ${horaFormateada}`;
 }
 
-setInterval(mostrarFechaHora, 1000);
-window.onload = mostrarFechaHora;
+    setInterval(mostrarFechaHora, 1000);
+    window.onload = mostrarFechaHora;
+
+document.addEventListener('DOMContentLoaded', function(){
+    const botones = document.querySelectorAll('.btn-items');
+    const icon = document.querySelector('.key');
+
+    botones.forEach((btnItem, index) => {
+        const opciones = btnItem.nextElementSibling;
+    
+        btnItem.addEventListener('click', function() {
+            if (opciones.classList.contains('options')) {
+                opciones.classList.remove('options');
+                icon.textContent = 'keyboard_arrow_down';
+            } else {
+                opciones.classList.add('options');
+                icon.textContent = 'keyboard_arrow_left';
+            }
+        });
+    });
+})

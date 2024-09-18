@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/layout.css">    
+    <link rel="stylesheet" href="/static/css/layout.css">  
+    <link rel="stylesheet" href="/static/css/categorias.css">  
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> 
     <title>Plantilla</title>
 </head>
@@ -18,20 +19,27 @@
     </div>
     <div class="container">
         <div class="sidebar">
-            <h2>Administracion</h2>
+            <h2>Bienvenido</h2>
             <div class="items">
-                <i class="material-icons">chevron_right</i>
-                <a href="#">Gestion inventario</a>
-            </div>
-            <div class="items">
-                <a href="#">Gestion inventario</a>
-            </div>
-            <div class="items">
-                <a href="#">Gestion inventario</a>
+                <div>
+                    <button class="btn-items">
+                        <i class="material-icons">grid_view</i>
+                        Gestion categorias
+                        <i class="material-icons key">keyboard_arrow_left</i>
+                    </button>
+                    <div class="options">
+                        <ul>
+                            <li ><a href="categorias">Categorias</a></li>
+                            <li ><a href="#">Subcategorias</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>  
-        <div class="contenido">
-            <h1>Plantilla para la parte del admin del sistema</h1>
+        <div class="content">
+            {% block main %}
+
+            {% endblock %}
         </div>
     </div>
     
