@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="/static/css/registrarse.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-
+    <link rel="shortcut icon" href="/static/img/logoElJaboncilloflor.png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Registrarse | El Jaboncillo </title>
 </head>
@@ -21,37 +22,38 @@
                 </div>
                 <div class="container-loginTitle">
                     <h3>Crear nueva cuenta</h3>
+                    <p id="error_msg">{{error_msg}}</p>
                 </div>
-                <form class="container-input">
+                <form class="container-input" action="/register" method="post" >
                     <div class="inputs-group">
                         <div class="input-shape">
                             <i class="material-icons-outlined">person</i>
-                            <input class="inputs" type="text" id="user" name="user" placeholder="Nombre Completo">
+                            <input class="inputs" type="text" id="userName" name="userName" placeholder="Nombre Completo">
                         </div>
                         <div class="input-shape">
                             <i class="material-icons-outlined">mail</i>
-                            <input class="inputs" type="text" id="correo" name="correo"
+                            <input class="inputs" type="text" id="email" name="email"
                                 placeholder="Correo electrónico">
                         </div>
                     </div>
                     <div class="inputs-group">
                         <div class="input-shape">
                             <i class="material-icons-outlined">lock</i>
-                            <input class="inputs" type="password" id="contraseña" name="contraseña"
+                            <input class="inputs" type="password" id="contraseña" name="password"
                                 placeholder="Contraseña">
                             <i class="material-icons-outlined eye">visibility</i>
                             <i class="material-icons-outlined noneye">visibility_off</i>
                         </div>
                         <div class="input-shape">
                             <i class="material-icons-outlined">lock</i>
-                            <input class="inputs" type="password" id="Ccontraseña" name="Ccontraseña"
+                            <input class="inputs" type="password" id="confirm_password" name="confirm_password"
                                 placeholder="Confirmar contraseña">
                             <i class="material-icons-outlined eye">visibility</i>
                             <i class="material-icons-outlined noneye">visibility_off</i>
                         </div>
                     </div>
                     <div class="btn_login">
-                        <button>CREAR CUENTA</button>
+                        <button type="submit">CREAR CUENTA</button>
                     </div>
                 </form>
             </div>
@@ -61,16 +63,16 @@
                 </div>
                 <div class="container-title">
                     <h2>¡BIENVENIDOS!</h2>
-                    <a href="/"><button class="btn-register">Inicia Sesión</button></a>
+                    <a href="/login"><button class="btn-register">Inicia Sesión</button></a>
                 </div>
                 <div class="container-img-flowers">
                     <img src="/static/img/login/floressSignin-HDpng 1.png" alt="">
                 </div>
-
             </div>
         </div>
     </div>
     </div>
 </body>
+<script src="/static/js/register_login.js"></script>
 
 </html>

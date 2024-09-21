@@ -155,3 +155,118 @@
     background-color: #158D46;
 }
 
+
+/* MEDIA QUERIES */
+/* Para dispositivos pequeños, como teléfonos pequeños (320px a 375px) */
+@media (min-width: 320px) and (max-width: 424px) {
+    .form-container{
+        display: flex;
+        flex-direction: column;
+        margin: 0px 32px;
+        height: auto;
+        width: 90%;
+    }
+    .form-container .register{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        border-top-right-radius: 25px;
+        padding: 15px;
+    }
+    .form-container .register .container-img-logo img{
+        width: 85%;
+        height: 60px;
+    }
+    .form-container .register .container-title h2{
+        font-size: 17px;
+    }
+    .container-img-flowers{
+        display: none;
+    }
+    .form-container .login-seccion{
+        width: 100%;
+        height: 100%;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius:25px;
+    }
+    .form-container .login-seccion .container-icon img{
+        width:55px;
+    }
+    
+    .form-container .login-seccion .container-loginTitle h3{
+       font-size:16px;
+    }
+    
+    .form-container .login-seccion .container-input{
+        width: 100%;
+        height: 100%;
+    }
+    .form-container .login-seccion .container-input .input-shape{
+        width: 100%;
+    }
+    .form-container .login-seccion .container-input .input-shape .inputs{
+        width: 75%;
+        font-size: 12px;
+
+    }
+  }
+  
+  /* Para teléfonos móviles grandes o tablets pequeñas (425px a 768px) */
+  @media (min-width: 425px) and (max-width: 767px) {
+    .form-container{
+        display: flex;
+        flex-direction: column;
+        margin: 0px 22px;
+        height: auto;
+    }
+    .form-container .register{
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        border-top-right-radius: 25px;
+        padding: 15px;
+    }
+    .form-container .register .container-img-logo img{
+        width: 85%;
+        height: 60px;
+    }
+    .form-container .register .container-title h2{
+        font-size: 17px;
+    }
+    .form-container .login-seccion{
+        width: 100%;
+        height: 100%;
+        border-top-right-radius: 0px;
+        border-bottom-left-radius:25px;
+    }
+    .container-img-flowers{
+        display: none;
+    }
+  }
+  
+  /* Para tablets y pantallas medianas (768px a 1024px) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .form-container{
+        margin: 0px 22px;
+        height: 58vh;
+    }
+    .login-seccion{
+        width: 100%;
+    }
+  }
+  
+  /* Para pantallas grandes (1024px a 1440px) */
+  @media (min-width: 1024px) and (max-width: 1439px) {
+    /* Tus estilos para pantallas entre 1024px y 1439px */
+  }
+  
+  /* Para pantallas muy grandes (1440px a 2560px) */
+  @media (min-width: 1440px) and (max-width: 2559px) {
+    /* Tus estilos para pantallas entre 1440px y 2559px */
+  }
+  
+  /* Para pantallas ultra grandes (2560px en adelante) */
+  @media (min-width: 2560px) {
+    /* Tus estilos para pantallas mayores a 2560px */
+  }
