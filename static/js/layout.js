@@ -48,3 +48,24 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 })
+
+// Modal
+// Cerrar el modal cuando se hace clic en la "X"
+
+const modal = document.getElementById("myModal");
+const span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+    modal.style.display = "none";
+  }
+  
+  const closeModal = document.querySelector('.close-modal');
+  closeModal.addEventListener('click', function(){
+    modal.style.display = "none";
+  })
+  
+  // Cerrar el modal si se hace clic fuera de él
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "show";
+    }
+  }
