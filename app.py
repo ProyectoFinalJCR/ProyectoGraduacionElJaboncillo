@@ -110,10 +110,79 @@ def registrarse():
 
             return redirect("/catalogo")
 
-@app.route('/categorias')
+@app.route('/categorias', methods=["GET", "POST"])
 def categorias():
-    return render_template('categorias.html')
+    if request.method == "GET":
+        obtenerCategorias = text("SELECT * FROM categorias order by id asc")
+        rows = db.execute(obtenerCategorias).fetchall()
 
+        return render_template('categorias.html', categorias=rows)
+    
+    else:
+        categoria = request.form.get('nombre')
+        descripcionCategoria = request.form.get('descripcion')
+
+        if not categoria:
+            return("Ingrese la categoria")
+    
+        if not descripcionCategoria:
+            return("Ingrese una descripcion")
+        
+        
+        else:
+            obtenerCat = text("SELECT * FROM categorias WHERE categoria=:categoria")
+
+            if db.execute(obtenerCat, {'categoria': categoria}).rowcount > 0:
+                return ("La categoria ya existe")
+            else:
+                agregarCategoria = text("INSERT INTO categorias (categoria, descripcion) VALUES (:categoria, :descripcion)")
+                db.execute(agregarCategoria, {"categoria": categoria, "descripcion": descripcionCategoria})
+                
+                db.commit()
+            return redirect(f"/categorias")
+        
+@app.route('/editarCategoria', methods=["POST"])
+def editarCategoria():
+    categoria = request.form.get('nombre_editar')
+    descripcion = request.form.get('descripcion_editar')
+    idCategoria = request.form.get('id_editar')
+    print(categoria)
+    print(descripcion)
+    print(idCategoria)
+
+    if not idCategoria:
+        return("No esta recibiendo valores")
+    if not categoria:
+        return("Ingrese la categoria")
+    
+    if not descripcion:
+        return("Ingrese una descripcion")
+    
+    else:
+        obtenerCat = text("SELECT categoria FROM categorias WHERE id=:id")
+
+        if db.execute(obtenerCat, {'id': idCategoria}).rowcount > 0:
+            editarCategoria = text("UPDATE categorias SET categoria=:categoria, descripcion=:descripcion WHERE id =:id")
+            db.execute(editarCategoria, {"id":idCategoria, "categoria":categoria, "descripcion":descripcion})
+            db.commit()
+        else:
+            return ("La categoria no existe")
+
+    return redirect(f"/categorias")
+
+@app.route('/eliminarCategoria', methods=["GET", "POST"])
+def eliminarCategoria():
+    idCategoria = request.form.get('id_eliminar')
+    print(idCategoria)
+
+    query = text("DELETE FROM categorias WHERE id = :id")
+    db.execute(query, {"id": idCategoria})
+    db.commit()
+    return redirect(f"/categorias")
+
+# @app.route('/layout')
+# def layout():
+#     return render_template('layout.html')
 @app.route('/usuarios')
 def usuarios():
     return render_template('usuarios.html')

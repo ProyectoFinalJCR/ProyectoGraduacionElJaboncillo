@@ -56,7 +56,7 @@
 }
 .sidebar button:hover{
     background-color: #d0fcd8;
-    color: gray;
+    color: #595959;
 }
 .sidebar a{
     color: white;
@@ -67,19 +67,118 @@
     background-color: #d0fcd8;
     border-radius: 5px;
     padding: 2.8%;
-    color: gray;
+    color: #595959;
 }
 .btn-items{
     display: flex;
     align-items: center;
+    width: 100%;
     gap: 8px;
+}
+.btn-items i:nth-child(2){
+    margin-left: auto;
 }
 .content {
     flex: 1;
     padding: 20px;
     overflow: auto;
-    color: gray;
+    color: #595959;
+    background-color: #f8f8f8;
 }
 .options{
     display: none;
+}
+
+
+/* Botones */
+.btn{
+    border: none;
+    color: white;
+    background-color: #2db87e;
+    border-radius: 3px;
+    padding: 10px;
+    width: 150px;
+}
+
+/* Botones de acciones para las tablas */
+.btn-acciones{
+    display: flex;
+    flex-direction: row;
+}
+.btn-acciones button{
+    border: none;
+    padding: 4px;
+    margin: 2px;
+    color: white;
+    border-radius: 3px;
+}
+.btn-acciones button.btn-edit {
+    background-color: #0b63f8;
+}
+.btn-acciones form button.btn-delete {
+    background-color: #f84444;
+}
+
+/* Boton para el buscador */
+.btn-search{
+    border: none;
+    color: #595959;
+    background-color: inherit;
+}
+.btn-search:hover{
+    color: #006834;
+}
+
+/* Inputs */
+.input{
+    border: 1.5px solid #595959;
+    border-radius: 3px;
+    font-weight:lighter;
+    padding: 10px;
+    background-color: white; 
+}
+.input:focus{
+    outline: none;
+}
+
+/* Tabla container, para el despalazamiento */
+.table-container{
+    padding-left: 22%;
+    transition:all 0.9s ease;
+}
+.table-container-add{
+    transition:all 0.6s ease;
+}
+
+
+/* Formato de la tabla */
+.table {
+    border-collapse: collapse;
+    background-color: white;
+    margin: 20px 0;
+    border: none;
+}
+.table th, td {
+    border: none;
+    padding: 11px;
+    text-align: left;
+}
+.table td:nth-child(1) {
+    font-weight: bolder;
+}
+.table td:nth-child(2) {
+    width: 100px;
+}
+.table td:nth-child(3) {
+    width: 350px;
+}
+/* Estilo para los encabezados de la tabla */
+.table th {
+    font-weight: bold;
+}
+.table tbody tr{
+    border-bottom: 1px solid #ddd;
+}
+.table thead tr {
+    border-bottom: 3px solid #ddd;
 }

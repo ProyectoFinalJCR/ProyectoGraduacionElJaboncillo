@@ -1,69 +1,112 @@
-.input-search{
-    border: 1.5px solid gray;
-    border-radius: 3px;
-    font-weight:lighter;
-    padding: 10px;
-    padding-right: 200px;
-    background-color: white; 
-}
-.input-search:focus{
-    outline: none;
-}
-.btn-search{
-    border: none;
-    color: gray;
-    background-color: inherit;
-}
-.btn-search :hover{
-    color: #006834;
-}
 .search{
     display: flex;
     padding: 2%;
     justify-content: space-between;
+}
+.search input{
+    padding-right: 200px;
 }
 .search form{
     display: flex;
     justify-content: center;
     gap: 8px;
 }
-.btn-add{
-    border: none;
-    color: white;
-    background-color: #2db87e;
-    border-radius: 7px;
-    padding: 10px;
+.container-categories{
+    padding: 40px 0px;
+    display: flex;
+}
+.form-categories{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+.form-categories form{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    margin-top: 6px;
+}
+.form-categories input{
+    margin: 10px;
+}
+.form-categories section:nth-child(2){
+    display: flex;
+    justify-content: end;
+    margin: 10px 10px 0px 0px;
+    gap: 15px;
+}
+.input-categories{
+    display: flex;
+    flex-direction: row;
+    margin-top: 2%;
+}
+.btn-modal{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 15px;
+    margin: 10px 10px 0px 0px;;    
+}
+.btn-modal button:nth-child(1){
+    background-color: #595959;
+}
+.btn-agregar button:nth-child(1){
+    background-color: #595959;
 }
 
-.table-categories{
-    padding-left: 16%;
-    padding-top: 4%;
-}
-/* Estilo para la tabla */
-table {
+/* Modal editar */
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Contenido del Modal */
+  .modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
     width: 80%;
-    border-collapse: collapse; /* Elimina el espacio entre bordes */
-    margin: 20px 0; /* Espaciado superior e inferior */
-}
+    max-width: 475px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  /* Botón de cierre (X) */
+  .close {
+    color: #aaa;
+    display: flex;
+    justify-content: flex-end;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
 
-/* Estilo para las celdas de la tabla */
-th, td {
-    border: 1px solid #ddd; /* Color del borde de las celdas */
-    padding: 7px; /* Espaciado interno en las celdas */
-    text-align: left; /* Alineación del texto en las celdas */
-}
 
-/* Estilo para los encabezados de la tabla */
-th {
-    background-color: #f4f4f4; /* Color de fondo para el encabezado */
-    font-weight: bold; /* Negrita para el texto del encabezado */
+/* Ocultar tabla */
+.hidden{
+    display: none;
 }
-
-/* Estilo para las filas */
-tr:nth-child(even) {
-    background-color: #f9f9f9; /* Color de fondo para filas pares */
+.error{
+    color: #f84444;
+    margin: 10px;
+    font-size: smaller;
 }
-
-tr:hover {
-    background-color: #f1f1f1; /* Color de fondo al pasar el ratón por encima de una fila */
+.opacity{
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    cursor: not-allowed;
 }
