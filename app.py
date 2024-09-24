@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, redirect, request
+from flask import Flask, jsonify, render_template, redirect, request, session
 from flask_session import Session
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -33,10 +33,49 @@ def login():
     if request.method == "GET":
         return render_template('iniciar_sesion.html')
     else:
-        userEmail = request.form.get('userEmail')
-        userPassword = request.form.get('userPassword')
+        data = request.get_json()
+        # userEmail = request.form.get('userEmail')
+        # userPassword = request.form.get('userPassword')
+
+        if not data:
+            return jsonify({"success": False, "message": "No se recibieron datos."}), 400
+
+        userEmail = data.get('email')
+        userPassword = data.get('password')
+
+        #validar que ambos campos esten llenos
+        # if not userEmail or not userPassword:
+        #     return jsonify({"success": False, "message":"Verifique su correo electronico o contrasaña"}), 400
+        print("para validar en la consulta " + userEmail)
+        #seleccionar usuario de la bd
+        select_user_query = text('''SELECT * FROM public."usuarios" as u INNER JOIN public.roles as r ON u."rol_id" = r."id" WHERE u."correo" = :email''')
+        selected_user = db.execute(select_user_query,{'email':userEmail}).fetchone()
+
+        if selected_user:
+            #verificar contraseña
+            if check_password_hash(selected_user[3], userPassword) and selected_user[2] == userEmail:
+                session["user_id"] = selected_user[0]
+                session["user_name"] = selected_user[1]
+                session["rol_id"] = selected_user[4]
+                session["user_rol"] = selected_user[6]
+
+                print(session["user_rol"])
+                print(session["rol_id"])
+                #verifica el rol del usuario para redirigirlo a su vista correspondiente
+                if session["user_rol"] == 'CLIENTE':
+                    return jsonify({"success": True, "redirect":"/catalogo"}), 200
+                else:
+                    return jsonify({"success": True, "redirect": "/categorias"}), 200
+
+            else:
+                #contraseña incorrecta
+                return jsonify({"success": False, "message":"Contraseña o correo electronico incorrecto"})
+        else:
+            #usuario no encontrado
+            return jsonify({"success": False, "message":"Usuario no existe"})
 
 
+#Solo para clientes 
 @app.route('/register', methods=["GET", "POST"])
 def registrarse():
     if request.method == "GET":
@@ -47,15 +86,7 @@ def registrarse():
         userPassword = request.form.get('password')
         userConfirmPassword = request.form.get('confirm_password')
 
-        if not userName:
-            return render_template("registrarse.html", error_msg = "El nombre de usuario es requerido")
-        elif not userEmail:
-            return render_template("registrarse.html", error_msg = "El correo electrónico es requerido")
-        elif not userPassword:
-            return render_template("registrarse.html", error_msg = "Campo contraseña es requerido")
-        elif not userConfirmPassword:
-            return render_template("registrarse.html", error_msg = "Campo confirmar la contraseña es requerido")
-        elif userPassword != userConfirmPassword:
+        if userPassword != userConfirmPassword:
             return render_template("registrarse.html", error_msg = "Las contraseñas no coinciden")
         else:
             hash_password = generate_password_hash(userPassword)
@@ -69,15 +100,27 @@ def registrarse():
             db.execute(new_user_client_query,{"userName":userName, "userEmail":userEmail, "userPassword": hash_password})
             db.commit()
             db.close()
-            return redirect("/")
+
+            #asignar el session = id y rol si quieren que le de acceso una vez creó la cuenta
+            #seleccionar usuario de la bd tabla usuarios
+            seleccionar_usuario = text('''SELECT *, r."rol" FROM public."usuarios" as u INNER JOIN public.roles as r ON  u."rol_id" = r."id" WHERE "correo"=:email ''')
+            usuario_seleccionado = db.execute(seleccionar_usuario,{'email': userEmail}).fetchone()
+            session['user_id'] = usuario_seleccionado[0]
+            session['rol_id'] = usuario_seleccionado[4]
+
+            return redirect("/catalogo")
 
 @app.route('/categorias')
 def categorias():
     return render_template('categorias.html')
 
-# @app.route('/index')
-# def index():
-#     return render_template('index.html')
+@app.route('/usuarios')
+def usuarios():
+    return render_template('usuarios.html')
+
+@app.route('/catalogo')
+def catalogo():
+    return render_template('catalogo.html')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)

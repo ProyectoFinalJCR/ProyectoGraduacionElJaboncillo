@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/iniciar_sesion.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="shortcut icon" href="/static/img/logoElJaboncilloflor.png">
 
 
@@ -37,14 +38,16 @@
                 <div class="container-loginTitle">
                     <h3>Iniciar Sesión</h3>
                 </div>
-                <form class="container-input">
+                <form class="container-input" method="post"  id="loginForm">
                     <div class="input-shape">
                         <i class="material-icons-outlined">mail</i>
-                        <input class="inputs" type="text" id="userEmail" name="userEmail" placeholder="Correo electrónico">
+                        <input class="inputs" type="text" id="userEmail_login" name="userEmail"
+                            placeholder="Correo electrónico">
                     </div>
                     <div class="input-shape">
                         <i class="material-icons-outlined">lock</i>
-                        <input class="inputs" type="password" id="userPassword" name="userPassword" placeholder="Contraseña">
+                        <input class="inputs" type="password" id="userPassword_login" name="userPassword"
+                            placeholder="Contraseña">
                         <i class="material-icons-outlined eye">visibility</i>
                         <i class="material-icons-outlined noneye">visibility_off</i>
                     </div>
@@ -54,13 +57,13 @@
                         </a>
                     </div>
                     <div class="btn_login">
-                        <button>INICIAR SESIÓN</button>
+                        <button type="submit">INICIAR SESIÓN</button>
                     </div>
                 </form>
             </div>
-            </div>
         </div>
     </div>
+    </div>
 </body>
-
+<script src="/static/js/login.js"> </script>
 </html>

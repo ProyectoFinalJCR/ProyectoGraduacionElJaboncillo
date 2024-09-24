@@ -1,0 +1,14 @@
+.container-table-inputs{
+    width: 100%;
+    height: 90vh;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    background-color: #dedede;
+}
+.container-table-inputs .container-table{
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    background-color: #a3a3a3;
+}
