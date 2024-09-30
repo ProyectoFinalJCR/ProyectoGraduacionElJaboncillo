@@ -85,12 +85,12 @@ document.addEventListener('DOMContentLoaded', function(){
       const inputs = document.querySelectorAll('.input-check');
       const btnSend = document.querySelector('#btn-add-categories')
       let fields = true;
-      console.log(fields)
+      // console.log(fields)
 
       inputs.forEach(input => {
         if(input.value.trim() === ''){
           fields = false;
-          console.log(fields)
+       //   console.log(fields)
         }
       });
 

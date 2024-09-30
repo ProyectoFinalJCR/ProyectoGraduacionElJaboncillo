@@ -6,31 +6,31 @@ db = SQLAlchemy()
 class Aplicaciones (db.Model):
     __tablename__ = 'aplicaciones'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    aplicacion = db.Column(db.String, unique=True, nullable=False)
+    aplicacion = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=True)
 
 class Composiciones_Principales (db.Model):
     __tablename__ = 'composiciones_principales'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    composicion = db.Column(db.String, unique=True, nullable=False)
+    composicion = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=True)
 
 class Unidades_Medidas (db.Model):
     __tablename__ = 'unidades_medidas'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    unidad_medida = db.Column(db.Integer, unique=True, nullable=False)
+    unidad_medida = db.Column(db.Integer, nullable=False)
 
     
 class Rangos(db.Model):
     __tablename__= 'rangos'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    rango = db.Column(db.String, unique=True, nullable=False)
-    descripcion = db.Column(db.String, unique=True, nullable=False)
+    rango = db.Column(db.String, nullable=False)
+    descripcion = db.Column(db.String, nullable=False)
 
 class Tipos_Medidas(db.Model):
     __tablename__= 'tipos_medidas'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    medida = db.Column(db.String, unique=True, nullable=False)
+    medida = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, unique=True, nullable=False)
 
 class Requerimientos_Agua (db.Model):
@@ -42,23 +42,24 @@ class Requerimientos_Agua (db.Model):
 class Condiciones_almacenamiento (db.Model):
     __tablename__ = 'condiciones_almacenamiento'
     id =db.Column (db.Integer, primary_key=True, autoincrement =True)
-    condicion =db.Column (db.String, unique=True, nullable=False)
+    condicion =db.Column (db.String, nullable=False)
+    descripcion =db.Column (db.String, nullable=True)
 
 class Colores (db.Model):
     __tablename__ = 'colores'
     id =db.Column (db.Integer, primary_key=True, autoincrement =True)
-    color =db.Column (db.String, unique=True, nullable=False)
+    color =db.Column (db.String, nullable=False)
  
 class Entornos_Ideales(db.Model):
     __tablename__ = 'entornos_ideales'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True )
-    entorno = db.Column(db.String, unique=True, nullable=False)
+    entorno = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
 
 class Tipos_Suelos(db.Model):
     __tablename__ = 'tipos_suelos'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True )
-    tipo_suelo = db.Column(db.String, unique=True, nullable=False)
+    tipo_suelo = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
 
 class Temporadas_Plantacion(db.Model):
@@ -71,7 +72,7 @@ class Temporadas_Plantacion(db.Model):
 class Plantas(db.Model):
     __tablename__ = 'plantas'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nombre = db.Column(db.String, unique=True, nullable=False)
+    nombre = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
     entorno_ideal_id = db.Column(db.Integer, db.ForeignKey('entornos_ideales.id'))
     requerimiento_agua_id = db.Column(db.Integer, db.ForeignKey('requerimientos_agua.id'))
@@ -87,7 +88,7 @@ class Colores_plantas (db.Model):
 class Insumos(db.Model):
     __tablename__ = 'insumos'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nombre = db.Column(db.String, unique=True, nullable=False)
+    nombre = db.Column(db.String, nullable=False)
     tipo_insumo = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
     composicion_principal_id =db.Column(db.Integer, db.ForeignKey('composiciones_principales.id'))
@@ -117,14 +118,14 @@ class Colores_Insumos (db.Model):
 class Categorias(db.Model):
     __tablename__ = 'categorias'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    categoria= db.Column(db.String, unique=True, nullable=False)
+    categoria= db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
 
 class Subcategorias(db.Model):
     __tablename__ = 'subcategorias'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     categoria_id = db.Column(db.Integer, db.ForeignKey('categorias.id'))
-    subcategoria = db.Column(db.String, unique=True, nullable=False)
+    subcategoria = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
 
 class Plantas_Subcategoria(db.Model):
@@ -184,8 +185,8 @@ class Rutas_roles(db.Model):
 class Usuarios(db.Model):
     __tablename__ = 'usuarios'
     id = db.Column (db.Integer, primary_key=True , autoincrement=True)
-    nombre_completo = db.Column (db.String, unique=True , nullable=False)
-    correo = db.Column (db.String, nullable=True)
+    nombre_completo = db.Column (db.String, nullable=False)
+    correo = db.Column (db.String, unique=True, nullable=False)
     clave = db.Column (db.String, nullable=True)
     rol_id = db.Column (db.Integer, db.ForeignKey('roles.id'))
 
@@ -193,7 +194,7 @@ class Usuarios(db.Model):
 class Facturas (db.Model):
     __tablename__ = 'facturas'
     id =db.Column (db.Integer, primary_key=True, autoincrement =True)
-    nombre_cliente =db.Column(db.String, unique=True, nullable=False)
+    nombre_cliente =db.Column(db.String, nullable=False)
     usuario_id= db.Column (db.Integer, db.ForeignKey('usuarios.id'))
     fecha_factura= db.Column (db.Date, nullable=False)
     total = db.Column (db.Float, nullable=False)

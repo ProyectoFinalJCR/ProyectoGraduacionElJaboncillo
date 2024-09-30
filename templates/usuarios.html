@@ -12,36 +12,82 @@ Usuarios | El Jaboncillo
         </button>
     </form>
     <div>
-        <button class="btn-add">Agregar usuarios</button>
+        <button class="btn" id="btn-add-user">Agregar usuarios</button>
     </div>
 </div>
 <div class="container-table-inputs">
-    <div class="container-table">
-        <div class="table-categories">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Categorias</th>
-                        <th>Descripcion</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Plantas</td>
-                        <td>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Maceteras</td>
-                        <td>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="table-categories">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre Completo</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuario%}
+                <tr>
+                    <td>{{usuario[0]}}</td>
+                    <td>{{usuario[1]}}</td>
+                    <td>{{usuario[2]}}</td>
+                    <td>{{usuario.rol}}</td>
+                    <td class="btn-acciones"> 
+                        <button class="btn-edit" id="openModalUser">
+                         <i class="material-icons">edit</i>
+                         </button>
+                        
+                        <form action="/eliminarUsuarios" method="post" id="form-eliminar">
+                            <input type="hidden" id="id_eliminar" name="id_usuario" value="{{usuario[0]}}">
+                            <button class="btn-delete" type="submit">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </form>
+                    </td>
+            {% endfor %}
+                </tr>
+            </tbody>
+        </table>
     </div>
     <div class="container-inputsUser">
+        <div class="inputUser-title">
+            <h3>Nuevo Usuario</h3>
+        </div>
+        <form class="formUser" action="/usuarios" id="form_user" method="post"> 
+            <section class="input-users">
+                <div>
+                    <label for="">Nombre Completo</label>
+                    <input type="text" id="nombre" class="input input-user" name="nombre" placeholder="Nombre completo">
+                </div>
+                <div>
+                    <label for="">Correo</label>
+                    <input type="text" id="correo" class="input input-user" name="correo" placeholder="Correo">
+                </div>
+                <div>
+                    <label for="">Contraseña</label>
 
+                    <input type="password" id="contraseña" class="input input-user" name="contraseña"
+                        placeholder="Contraseña">
+                </div>
+                <div>
+                    <label for="">Seleccione Rol</label>
+
+                    <select class="input input-user" id="rol" name="idrol">
+                        {% for rol in Roles %}
+                        <option name="idrol" value=" {{rol[0]}}">{{rol[1]}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </section>
+            <section class="btn-agregar">
+                <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+                <button type="submit" class="btn opacity" id="btn-add-users" disabled>Agregar</button>
+            </section>
+        </form>
     </div>
 </div>
+
+
 {% endblock %}

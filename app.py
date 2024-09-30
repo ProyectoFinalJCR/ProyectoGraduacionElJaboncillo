@@ -65,7 +65,7 @@ def login():
                 if session["user_rol"] == 'CLIENTE':
                     return jsonify({"success": True, "redirect":"/catalogo"}), 200
                 else:
-                    return jsonify({"success": True, "redirect": "/categorias"}), 200
+                    return jsonify({"success": True, "redirect": "/inicioAdmin"}), 200
 
             else:
                 #contraseña incorrecta
@@ -180,12 +180,52 @@ def eliminarCategoria():
     db.commit()
     return redirect(f"/categorias")
 
-# @app.route('/layout')
-# def layout():
-#     return render_template('layout.html')
-@app.route('/usuarios')
+
+@app.route('/usuarios', methods =["GET","POST"])
 def usuarios():
-    return render_template('usuarios.html')
+    if request.method == "GET":
+        obtenerUsuarios = text("SELECT * FROM usuarios as u INNER JOIN roles as r ON r.id = u.rol_id WHERE u.rol_id = 1 OR u.rol_id = 2 ")
+        usuario = db.execute(obtenerUsuarios).fetchall()
+
+        obtenerRol = text("SELECT * FROM roles WHERE id = 1 OR id = 2")
+        roles = db.execute(obtenerRol).fetchall()
+
+        return render_template('usuarios.html', usuario=usuario, Roles = roles)
+    else:
+        nombre_completo = request.form.get('nombre')
+        correo = request.form.get('correo')
+        contraseña = request.form.get('contraseña')
+        rol_id = request.form.get("idrol")
+
+        hashed_contraseña = generate_password_hash(contraseña)
+        
+        obtenerUser = text("SELECT * FROM usuarios WHERE correo =:correo")
+
+        if db.execute(obtenerUser, {'correo': correo}).rowcount > 0:
+            return "usuario ya existe"
+        else:
+            insertar_usuario = text("INSERT INTO usuarios (nombre_completo, correo, clave, rol_id) VALUES (:userName, :userEmail, :userPassword, :idRol)")
+            db.execute(insertar_usuario,{"userName":nombre_completo, "userEmail":correo, "userPassword": hashed_contraseña, "idRol":rol_id})
+            db.commit()
+            db.close()
+            return redirect("/usuarios")     
+
+
+@app.route('/eliminarUsuarios', methods=["GET", "POST"])
+def eliminarUsuarios():
+    idUsuario = request.form.get('id_usuario')
+    print(idUsuario)
+
+    query = text("DELETE FROM usuarios WHERE id = :id")
+    db.execute(query, {"id": idUsuario})
+    db.commit()
+    return redirect(f"/usuarios")
+
+
+    
+@app.route("/inicioAdmin", methods=["GET", "POST"])
+def inicio():
+    return render_template("inicio_admin.html")
 
 @app.route('/catalogo')
 def catalogo():

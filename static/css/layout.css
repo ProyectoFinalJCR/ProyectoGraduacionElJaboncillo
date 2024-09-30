@@ -5,7 +5,106 @@
     box-sizing: border-box;
 }
 
-.navbar {
+.all-screen{
+    max-width: 100%;
+    height: 100vh;
+    display: grid; 
+    grid-template-columns: 0.3fr 1.4fr;
+    grid-template-rows: 0.3fr 2fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "navbar navbar navbar"
+      "sidebar main main"
+      "sidebar main main" 
+      "sidebar main main"; 
+    /* background-color: #3bb64a; */
+
+  }
+  .navbar{
+    grid-area: navbar;
+    width: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;  
+    justify-content: space-between;
+    padding: 1% 5%;
+    background-color: #efeeee;
+  }
+
+  .navbar p{
+    color: #006834;
+    font-size: 19px;    
+}
+.navbar img {
+  width: 280px;
+}
+  .sidebar{
+    grid-area: sidebar;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background-color: #3bb64a;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0px 20px 0px 0px;
+    align-items: center;
+    justify-content: flex-start;
+    
+  }
+
+.sidebar .items{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+}
+.sidebar li{
+    list-style: none;
+    padding-left: 10%;
+    padding-top: 5%;
+}
+.sidebar button{
+    background: none;
+    border: none;
+    padding: 4px;
+    font: inherit;        
+    color: inherit;
+    border-radius: 5px;
+}
+.sidebar button:hover{
+    background-color: #d0fcd8;
+    color: #595959;
+}
+.sidebar a{
+    color: white;
+    padding: 2.8%;
+    text-decoration: none;
+}
+.sidebar a:hover{
+    background-color: #d0fcd8;
+    border-radius: 5px;
+    padding: 2.8%;
+    color: #595959;
+}
+.btn-items{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+}
+.btn-items i:nth-child(2){  
+    margin-left: auto;
+}
+
+.main { 
+    grid-area: main;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%; 
+  }
+
+/* .navbar {
     background-color: #efeeee;
     display: flex;
     align-items: center;  
@@ -81,13 +180,13 @@
 .content {
     flex: 1;
     padding: 20px;
-    overflow: auto;
+    overflow: hidden;
     color: #595959;
     background-color: #f8f8f8;
 }
 .options{
     display: none;
-}
+} */
 
 
 /* Botones */
@@ -98,12 +197,18 @@
     border-radius: 3px;
     padding: 10px;
     width: 150px;
+    cursor: pointer;
+}
+.btn:hover{
+    background-color: #178658;
+  
 }
 
 /* Botones de acciones para las tablas */
 .btn-acciones{
     display: flex;
     flex-direction: row;
+    justify-content: center;
 }
 .btn-acciones button{
     border: none;
@@ -161,7 +266,7 @@
 .table th, td {
     border: none;
     padding: 11px;
-    text-align: left;
+    text-align: center;
 }
 .table td:nth-child(1) {
     font-weight: bolder;

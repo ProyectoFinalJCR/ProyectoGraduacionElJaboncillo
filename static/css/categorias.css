@@ -78,6 +78,13 @@
     border-radius: 10px;
     text-align: center;
   }
+  .modal-content .input-categories{
+    display: flex;
+    flex-direction: column;
+  } 
+  .modal-content .input-categories #descripcion_editar{
+    height: 85px;
+  } 
   
   /* Botón de cierre (X) */
   .close {

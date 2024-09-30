@@ -9,17 +9,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
         if (validate_inputs()) {
             // Si las validaciones son correctas, mostrar mensaje de éxito y NO recargar
-            Swal.fire({
-                icon: 'success',
-                title: 'Creación de cuenta exitosa',
-                text: '¡Tu cuenta ha sido creada, disfruta de nuestro catálogo!',
-                confirmButtonText: 'Aceptar'
-            }).then(() => {
-                // Puedes enviar los datos aquí manualmente, sin recargar la página
-                // Si necesitas enviar el formulario, usa fetch o AJAX
-                // Por ejemplo:
-                // document.getElementById("registerForm").submit(); (solo si realmente quieres enviarlo)
-                document.getElementById("registerForm").submit();
+            document.getElementById("registerForm").addEventListener("submit", function (event) {
+                // Evitar que el formulario se envíe automáticamente
+                event.preventDefault();
+        
+                if (validate_inputs()) {
+                    // Si las validaciones son correctas, mostrar mensaje de éxito y NO recargar
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Creación de cuenta exitosa',
+                        text: '¡Tu cuenta ha sido creada, disfruta de nuestro catálogo!',
+                        confirmButtonText: 'Aceptar'
+                    }).then(() => {
+                        // Puedes enviar los datos aquí manualmente, sin recargar la página
+                        // Si necesitas enviar el formulario, usa fetch o AJAX
+                        // Por ejemplo:
+                        // document.getElementById("registerForm").submit(); (solo si realmente quieres enviarlo)
+                        document.getElementById("registerForm").submit();
+                    });
+                }
             });
         }
     });

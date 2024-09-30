@@ -2,13 +2,73 @@
     width: 100%;
     height: 90vh;
     display:grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    background-color: #dedede;
+    background-color: #fff;
 }
-.container-table-inputs .container-table{
+.container-table-inputs .table-categories{
     width: 100%;
     height: 100%;
     padding: 20px;
-    background-color: #a3a3a3;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+
+}
+.container-table-inputs .table-categories table{
+    width: 90%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.container-table-inputs .table-categories table thead{
+    width: 100%;
+    height: 55px;
+    text-align: center;
+    border: 1px solid gray;
+}
+
+.container-table-inputs .container-inputsUser{
+    display: none;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 20px;
+}
+
+/*Aplciamos el grid, las diviciones*/
+.container-table-inputs.active{
+    grid-template-columns: 2fr 1fr;
+}
+.container-inputsUser.show {
+    display: flex; /* Muestra el formulario al activar la clase 'show' */   
+}
+.container-table-inputs .container-inputsUser .inputUser-title{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+.container-table-inputs .container-inputsUser .formUser{
+    width: 100%;
+    height: auto;
+}
+.container-table-inputs .container-inputsUser .formUser  .input-users{
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.container-table-inputs .container-inputsUser .formUser .input-users .input-user{
+    width: 100%;
+    margin-top: 8px ;
+}
+.container-table-inputs .container-inputsUser .btn-agregar{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin-top: 35px;
+    gap: 15px;
 }

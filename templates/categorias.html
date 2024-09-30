@@ -1,92 +1,96 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Categorias | El Jaboncillo 
+Categorias | El Jaboncillo
 {% endblock %}
 
 {% block main %}
-    <div class="search">
-        <form action="#">
-            <input class="input" name="search" id="search" placeholder="Buscar categoria">
-            <button class="btn-search" type="submit">
-                <i class="material-icons">search</i>
-            </button>
-        </form> 
-        <div>
-            <button class="btn">Agregar categoria</button>
-        </div>
+<div class="search">
+    <form action="#">
+        <input class="input" name="search" id="search" placeholder="Buscar categoria">
+        <button class="btn-search" type="submit">
+            <i class="material-icons">search</i>
+        </button>
+    </form>
+    <div>
+        <button class="btn">Agregar categoria</button>
     </div>
-    <div class="container-categories">
-        <div class="table-container">
-            <h3>Informacion de las categorias</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Categorias</th>
-                        <th>Descripcion</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for rows in categorias %}
-                    <tr>
-                        <td>{{rows.id}}</td>
-                        <td>{{rows.categoria}}</td>
-                        <td>{{rows.descripcion}}</td>
-                        <td class="btn-acciones">
-                            <button class="btn-edit" id="openModalBtn">
-                                <i class="material-icons">edit</i>
+</div>
+<div class="container-categories">
+    <div class="table-container">
+        <h3>Informacion de las categorias</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Categorias</th>
+                    <th>Descripcion</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rows in categorias %}
+                <tr>
+                    <td>{{rows.id}}</td>
+                    <td>{{rows.categoria}}</td>
+                    <td>{{rows.descripcion}}</td>
+                    <td class="btn-acciones">
+                        <button class="btn-edit" id="openModalBtn">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <form action="/eliminarCategoria" method="post">
+                            <input type="hidden" id="id_eliminar" name="id_eliminar" value="{{rows.id}}">
+                            <button class="btn-delete" type="submit">
+                                <i class="material-icons">delete</i>
                             </button>
-                            <form action="/eliminarCategoria" method="post">
-                                <input type="hidden" id="id_eliminar" name="id_eliminar" value="{{rows.id}}">
-                                <button class="btn-delete" type="submit">
-                                    <i class="material-icons">delete</i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="form-categories hidden">
-            <div>
-                <h3>Nueva Categoria</h3>
-                <form action="/categorias" id="form" method="post">
-                    <section class="input-categories">
-                        <div>
-                            <input type="text" id="nombre" class="input input-check" name="nombre" placeholder="Nombre categoria">
-                        </div>
-                        <div>
-                            <input type="text" id="descripcion" class="input input-check" name="descripcion" placeholder="Descripcion">
-                        </div>
-                    </section>
-                    <section class="btn-agregar">
-                        <button type="button" class="btn" id="btn-cancel">Cancelar</button>
-                        <button type="submit" class="btn opacity" id="btn-add-categories" disabled>Agregar</button>
-                    </section>
-                </form>
-            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="form-categories hidden">
+        <div>
+            <h3>Nueva Categoria</h3>
+            <form action="/categorias" id="form" method="post">
+                <section class="input-categories">
+                    <div>
+                        <input type="text" id="nombre" class="input input-check" name="nombre"
+                            placeholder="Nombre categoria">
+                    </div>
+                    <div>
+                        <input type="text" id="descripcion" class="input input-check" name="descripcion"
+                            placeholder="Descripcion">
+                    </div>
+                </section>
+                <section class="btn-agregar">
+                    <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn opacity" id="btn-add-categories" disabled>Agregar</button>
+                </section>
+            </form>
         </div>
     </div>
+</div>
 
-    <!-- Modal editar categoria -->
-    <div id="myModal" class="modal">
-        <div class="modal-content form-categories">
-          <span class="close">&times;</span>
-          <h2>Editar categoria</h2>
-          <form action="/editarCategoria" method="post">
+<!-- Modal editar categoria -->
+<div id="myModal" class="modal">
+    <div class="modal-content form-categories">
+        <span class="close">&times;</span>
+        <h2>Editar categoria</h2>
+        <form action="/editarCategoria" method="post">
             <div class="input-categories">
-                <input type="hidden" id="id_editar"  name="id_editar" value="{{categorias.id}}">
-                <input type="text" id="nombre_editar" class="input" name="nombre_editar" value="{{categorias.categoria}}">
-                <input type="text" id="descripcion_editar" class="input" name="descripcion_editar" value="{{categorias.descripcion}}">
+                <input type="hidden" id="id_editar" name="id_editar" value="{{categorias.id}}">
+                <input type="text" id="nombre_editar" class="input" name="nombre_editar"
+                    value="{{categorias.categoria}}">
+                <input type="text" id="descripcion_editar" class="input" name="descripcion_editar"
+                    value="{{categorias.descripcion}}">
             </div>
             <div class="btn-modal">
                 <button type="button" class="btn close-modal">Cancelar</button>
                 <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
             </div>
         </form>
-        </div>
     </div>
+</div>
 {% endblock %}
