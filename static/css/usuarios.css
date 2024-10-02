@@ -1,10 +1,10 @@
 .container-table-inputs{
     width: 100%;
-    height: 90vh;
+    height: 70vh;
     display:grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    background-color: #fff;
+    background-color: hsl(0, 0%, 100%);
 }
 .container-table-inputs .table-categories{
     width: 100%;
@@ -15,16 +15,15 @@
     align-items: start;
 
 }
-.container-table-inputs .table-categories table{
+.container-table-inputs .table-categories .table{
     width: 90%;
     border-collapse: collapse;
     text-align: center;
 }
-.container-table-inputs .table-categories table thead{
+.container-table-inputs .table-categories .table thead{
     width: 100%;
     height: 55px;
     text-align: center;
-    border: 1px solid gray;
 }
 
 .container-table-inputs .container-inputsUser{
@@ -42,6 +41,8 @@
 .container-inputsUser.show {
     display: flex; /* Muestra el formulario al activar la clase 'show' */   
 }
+
+/*Estilos al formulario*/
 .container-table-inputs .container-inputsUser .inputUser-title{
     width: 100%;
     height: auto;

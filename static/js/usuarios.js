@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function (event) {
-
+       
+  // hasta la linea 17 se aplica la divicion de la tabla y el formulario
         document.getElementById("btn-add-user").addEventListener("click", function(){
 
                 // Tabla de los usuarios centrada y crea la divicion con grid
@@ -50,6 +51,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     limpiarAlerta(e.target.parentElement);
                     return true;
                   }
+
+                
 
                 function mostrarError(mensaje, referencia){
                 //Validar si ya existe una alerta
@@ -107,7 +110,36 @@ document.addEventListener("DOMContentLoaded", function (event) {
             })
             })    
             
-            
+          // alerta btn eliminar 
+         const forms_users = document.querySelectorAll('.form-eliminar')
+
+            forms_users.forEach(form => {
+              form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Detener el envío del formulario inicialmente
+              
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "¡No podrás revertir esta acción!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, eliminarlo',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si el usuario confirma, se envía el formulario
+                        Swal.fire(
+                            'Eliminado!',
+                            'El registro ha sido eliminado.',
+                            'success'
+                        );
+                        event.target.submit(); // Envía el formulario
+                    }
+                  })
+            });
+
+          });
 
    
 });
