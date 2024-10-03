@@ -1,21 +1,18 @@
 document.addEventListener('DOMContentLoaded', function(){
+    document.querySelector('.btn-add').addEventListener('click', function(){
+      const container_table_inputs = document.querySelector(".container-table-inputs");        
+      const form_cat = document.querySelector(".container-inputsCat");
 
-    const btnAdd = document.querySelector('.btn');
-    const btnCancel = document.querySelector('#btn-cancel');
-    const table = document.querySelector('.table-container');
-    const form = document.querySelector('.form-categories');
-
-    btnAdd.addEventListener('click', function(){
-        table.classList.remove('table-container');
-        table.classList.add('table-container-add');
-        form.classList.remove('hidden');
+      //alternar clases para expandir la tabla y mostrar el formulario
+      container_table_inputs.classList.toggle("active");
+      form_cat.classList.toggle("show");
+      //btn cancelar regresa la tabla al centro, quitandole las clases
+      document.getElementById("btn-cancel").addEventListener("click", function(){
+          form_cat.classList.remove("show")
+          container_table_inputs.classList.remove("active")
+      });
     });
 
-    btnCancel.addEventListener('click', function(){
-        table.classList.add('table-container');
-        table.classList.remove('table-container-add');
-        form.classList.add('hidden');
-    });
 
     // Obtener el modal y los elementos que queremos manipular
     const modal = document.getElementById("myModal");
@@ -81,16 +78,14 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     //opacidad y habilitacion del boton agregar
-    document.getElementById('form').addEventListener('input', function() {
+    document.getElementById('form-cat').addEventListener('input', function() {
       const inputs = document.querySelectorAll('.input-check');
       const btnSend = document.querySelector('#btn-add-categories')
       let fields = true;
-      // console.log(fields)
 
       inputs.forEach(input => {
         if(input.value.trim() === ''){
           fields = false;
-       //   console.log(fields)
         }
       });
 
@@ -103,5 +98,18 @@ document.addEventListener('DOMContentLoaded', function(){
       btnSend.classList.add ('opacity');
     }
     });
-}
+  }
+
+   // alerta registro ingresado
+   document.getElementById('btn-add-categories').addEventListener('click', function(){
+              
+    // const formUsers = document.getElementById('form_user')
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Categoria agregada con exito',
+        text: '¡Categoria agregada correctamente!',
+        showConfirmButton: false,
+    })
+    }) 
 });
