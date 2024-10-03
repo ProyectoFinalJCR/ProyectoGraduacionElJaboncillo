@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     //opacidad y habilitacion del boton agregar
     document.getElementById('form-cat').addEventListener('input', function() {
-      const inputs = document.querySelectorAll('.input-check');
+      const inputs = document.querySelectorAll('.input-categories');
       const btnSend = document.querySelector('#btn-add-categories')
       let fields = true;
 
@@ -102,8 +102,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
    // alerta registro ingresado
    document.getElementById('btn-add-categories').addEventListener('click', function(){
-              
-    // const formUsers = document.getElementById('form_user')
 
       Swal.fire({
         icon: 'success',
@@ -111,5 +109,38 @@ document.addEventListener('DOMContentLoaded', function(){
         text: '¡Categoria agregada correctamente!',
         showConfirmButton: false,
     })
-    }) 
+    });
+
+
+    // alerta btn eliminar 
+    const forms_Cat = document.querySelectorAll('.form-eliminar')
+
+    forms_Cat.forEach(form => {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Detener el envío del formulario inicialmente
+      
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esta acción!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si el usuario confirma, se envía el formulario
+                Swal.fire(
+                    'Eliminado!',
+                    'El registro ha sido eliminado.',
+                    'success'
+                );
+                event.target.submit(); // Envía el formulario
+            }
+          })
+    });
+
+  });
+
 });
