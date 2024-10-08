@@ -211,6 +211,21 @@ def usuarios():
             return redirect("/usuarios")     
 
 
+@app.route('/get_informacion_user/<int:id_user>', methods=['GET'])
+def get_informacion(idser):
+    obtenerUser = text("SELECT * FROM usuarios as u INNER JOIN roles as r ON r.id = u.rol_id WHERE u.id = :id ")
+    user = db.execute(obtenerUser, {"id": idser}).fetchone()
+
+    if user:
+        nombre_completo = user[1]   
+        correo = user[2]
+        rol_user = user[5]
+        return jsonify({"nombre": nombre_completo, "correo": correo, "rol": rol_user})
+
+
+
+
+
 @app.route('/eliminarUsuarios', methods=["GET", "POST"])
 def eliminarUsuarios():
     idUsuario = request.form.get('id_usuario')
