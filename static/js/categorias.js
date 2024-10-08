@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     //opacidad y habilitacion del boton agregar
     document.getElementById('form-cat').addEventListener('input', function() {
-      const inputs = document.querySelectorAll('.input-categories');
+      const inputs = document.querySelectorAll('.input-categories[type="text"]');
       const btnSend = document.querySelector('#btn-add-categories')
       let fields = true;
 
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function(){
         }
       });
 
-      // Habilita o deshabilita el botón según el estado de los inputs
+      // Habilita o deshabilita el botón según el estado de la variable fields
     if (fields) {
       btnSend.disabled = false;
       btnSend.classList.remove ('opacity');

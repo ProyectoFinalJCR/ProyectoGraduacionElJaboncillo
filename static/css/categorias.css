@@ -11,15 +11,6 @@
     justify-content: center;
     gap: 8px;
 }
-
-.container-table-inputs{
-    width: 100%;
-    height: 90vh;
-    display:grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    background-color: #fff;
-}
 .container-table-inputs .table-categories{
     width: 100%;
     height: 100%;
@@ -38,7 +29,6 @@
     width: 100%;
     height: 55px;
     text-align: center;
-    border: 1px solid gray;
 }
 
 .container-table-inputs .container-inputsCat{
@@ -108,7 +98,6 @@
 }
 
 /* Modal editar */
-
 .modal {
     display: none; 
     position: fixed; 

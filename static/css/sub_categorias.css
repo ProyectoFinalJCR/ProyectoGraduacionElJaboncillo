@@ -1,0 +1,82 @@
+.container-table-inputs .table-subcategories{
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+.container-table-inputs .table-subcategories table{
+    width: 90%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.container-table-inputs .table-subcategories table thead{
+    width: 100%;
+    height: 55px;
+    text-align: center;
+}
+.container-table-inputs .container-inputSubcat{
+    display: none;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 20px;
+}
+/*Aplciamos el grid, las diviciones*/
+.container-table-inputs.active{
+    grid-template-columns: 2fr 1fr;
+}
+.container-inputSubcat.show {
+    display: flex; /* Muestra el formulario al activar la clase 'show' */   
+}
+.container-table-inputs .container-inputSubcat .inputSubcat-title{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+.container-table-inputs .container-inputSubcat .form-subcat{
+    width: 100%;
+    height: auto;
+}
+.container-table-inputs .container-inputSubcat .form-subcat  .input-subcategories{
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+.container-table-inputs .container-inputSubcat .form-subcat .input-subcategories .input-subcategories{
+    width: 100%;
+    margin-top: 8px ;
+}
+.container-table-inputs .container-inputSubcat .btn-agregar{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin-top: 35px;
+    gap: 15px;
+}
+
+/* MODAL */
+ /* Contenido del Modal */
+ .modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 475px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .modal-content .input-subcategories{
+    display: flex;
+    flex-direction: column;
+  } 
+  .modal-content .input-subcategories #descripcion_editar{
+    height: 85px;
+  } 
+
