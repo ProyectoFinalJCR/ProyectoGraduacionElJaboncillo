@@ -1,21 +1,18 @@
 document.addEventListener('DOMContentLoaded', function(){
+    document.querySelector('.btn-add').addEventListener('click', function(){
+      const container_table_inputs = document.querySelector(".container-table-inputs");        
+      const form_cat = document.querySelector(".container-inputsCat");
 
-    const btnAdd = document.querySelector('.btn');
-    const btnCancel = document.querySelector('#btn-cancel');
-    const table = document.querySelector('.table-container');
-    const form = document.querySelector('.form-categories');
-
-    btnAdd.addEventListener('click', function(){
-        table.classList.remove('table-container');
-        table.classList.add('table-container-add');
-        form.classList.remove('hidden');
+      //alternar clases para expandir la tabla y mostrar el formulario
+      container_table_inputs.classList.toggle("active");
+      form_cat.classList.toggle("show");
+      //btn cancelar regresa la tabla al centro, quitandole las clases
+      document.getElementById("btn-cancel").addEventListener("click", function(){
+          form_cat.classList.remove("show")
+          container_table_inputs.classList.remove("active")
+      });
     });
 
-    btnCancel.addEventListener('click', function(){
-        table.classList.add('table-container');
-        table.classList.remove('table-container-add');
-        form.classList.add('hidden');
-    });
 
     // Obtener el modal y los elementos que queremos manipular
     const modal = document.getElementById("myModal");
@@ -81,20 +78,18 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     //opacidad y habilitacion del boton agregar
-    document.getElementById('form').addEventListener('input', function() {
-      const inputs = document.querySelectorAll('.input-check');
+    document.getElementById('form-cat').addEventListener('input', function() {
+      const inputs = document.querySelectorAll('.input-categories[type="text"]');
       const btnSend = document.querySelector('#btn-add-categories')
       let fields = true;
-      // console.log(fields)
 
       inputs.forEach(input => {
         if(input.value.trim() === ''){
           fields = false;
-       //   console.log(fields)
         }
       });
 
-      // Habilita o deshabilita el botón según el estado de los inputs
+      // Habilita o deshabilita el botón según el estado de la variable fields
     if (fields) {
       btnSend.disabled = false;
       btnSend.classList.remove ('opacity');
@@ -103,5 +98,49 @@ document.addEventListener('DOMContentLoaded', function(){
       btnSend.classList.add ('opacity');
     }
     });
-}
+  }
+
+   // alerta registro ingresado
+   document.getElementById('btn-add-categories').addEventListener('click', function(){
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Categoria agregada con exito',
+        text: '¡Categoria agregada correctamente!',
+        showConfirmButton: false,
+    })
+    });
+
+
+    // alerta btn eliminar 
+    const forms_Cat = document.querySelectorAll('.form-eliminar')
+
+    forms_Cat.forEach(form => {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Detener el envío del formulario inicialmente
+      
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esta acción!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si el usuario confirma, se envía el formulario
+                Swal.fire(
+                    'Eliminado!',
+                    'El registro ha sido eliminado.',
+                    'success'
+                );
+                event.target.submit(); // Envía el formulario
+            }
+          })
+    });
+
+  });
+
 });

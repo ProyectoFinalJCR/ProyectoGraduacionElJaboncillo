@@ -242,6 +242,71 @@ def eliminarUsuarios():
 def inicio():
     return render_template("inicio_admin.html")
 
+@app.route("/subCategorias", methods=["GET", "POST"])
+def subCategorias():
+    if request.method == "GET":
+        obtenerCategorias = text("SELECT * FROM categorias order by id asc")
+        rows = db.execute(obtenerCategorias).fetchall()
+
+        obtenerSubcategorias = text("SELECT subcategorias.id AS id, categorias.categoria AS categoria, subcategorias.subcategoria AS subcategoria, subcategorias.descripcion AS descripcion FROM subcategorias JOIN categorias ON subcategorias.categoria_id = categorias.id")
+        rows2 = db.execute(obtenerSubcategorias).fetchall()
+        return render_template("subcategorias.html", categorias=rows, subcategorias=rows2)
+    else:
+        nombreSub = request.form.get('nombreSub')
+        descripcion = request.form.get('descripcion')
+        idCat = request.form.get('idCat')
+
+        obtenerSub = text("SELECT * FROM subcategorias WHERE subcategoria=:subcategoria")
+        if db.execute(obtenerSub, {'subcategoria': nombreSub}).rowcount > 0:
+            return ("subcategoria ya existe")
+        else:
+            insertarSub = text("INSERT INTO subcategorias (categoria_id, subcategoria, descripcion) VALUES (:categoria_id, :subcategoria, :descripcion)")
+            db.execute(insertarSub, {"categoria_id": idCat, "subcategoria": nombreSub, "descripcion": descripcion})
+
+            db.commit()
+        return redirect(f"/subCategorias")
+    
+@app.route('/eliminarSubcategoria', methods=["GET", "POST"])
+def eliminarSubcategoria():
+    idSubcategoria = request.form.get('id_eliminar')
+
+    query = text("DELETE FROM subcategorias WHERE id = :id")
+    db.execute(query, {"id": idSubcategoria})
+    db.commit()
+    return redirect(f"/subCategorias")
+
+@app.route('/editarSubcategoria', methods=["POST"])
+def editarSubcategoria():
+    subcategoria = request.form.get('nombreSub_editar')
+    categoria = request.form.get('nombreCat_editar')
+    descripcion = request.form.get('descripcion_editar')
+    idSubcategoria = request.form.get('id_editar')
+    print(categoria)
+    print(subcategoria)
+    print(descripcion)
+    print(idSubcategoria)
+
+    if not idSubcategoria:
+        return("No esta recibiendo valores")
+    if not subcategoria:
+        return("Ingrese la subcategoria")
+    if not categoria:
+        return("Ingrese la categoria")
+    if not descripcion:
+        return("Ingrese una descripcion")
+    
+    else:
+        obtenerSubcat = text("SELECT subcategoria FROM subcategorias WHERE id=:id")
+
+        if db.execute(obtenerSubcat, {'id': idSubcategoria}).rowcount > 0:
+            editarCategoria = text("UPDATE categorias SET categoria=:categoria, descripcion=:descripcion WHERE id =:id")
+            db.execute(editarCategoria, {"id":idSubcategoria, "categoria":categoria, "descripcion":descripcion})
+            db.commit()
+        else:
+            return ("La categoria no existe")
+
+    return redirect(f"/subCategorias")
+
 @app.route('/catalogo')
 def catalogo():
     return render_template('catalogo.html')

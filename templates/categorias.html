@@ -13,13 +13,12 @@ Categorias | El Jaboncillo
         </button>
     </form>
     <div>
-        <button class="btn">Agregar categoria</button>
+        <button class="btn-add btn">Agregar categoria</button>
     </div>
 </div>
-<div class="container-categories">
-    <div class="table-container">
-        <h3>Informacion de las categorias</h3>
-        <table class="table">
+<div class="container-table-inputs">
+    <div class="table-categories">
+        <table>
             <thead>
                 <tr>
                     <th>Id</th>
@@ -35,10 +34,10 @@ Categorias | El Jaboncillo
                     <td>{{rows.categoria}}</td>
                     <td>{{rows.descripcion}}</td>
                     <td class="btn-acciones">
-                        <button class="btn-edit" id="openModalBtn">
+                        <button class="btn-edit" id="openModalCat">
                             <i class="material-icons">edit</i>
                         </button>
-                        <form action="/eliminarCategoria" method="post">
+                        <form action="/eliminarCategoria" method="post" class="form-eliminar">
                             <input type="hidden" id="id_eliminar" name="id_eliminar" value="{{rows.id}}">
                             <button class="btn-delete" type="submit">
                                 <i class="material-icons">delete</i>
@@ -50,26 +49,26 @@ Categorias | El Jaboncillo
             </tbody>
         </table>
     </div>
-    <div class="form-categories hidden">
-        <div>
-            <h3>Nueva Categoria</h3>
-            <form action="/categorias" id="form" method="post">
-                <section class="input-categories">
-                    <div>
-                        <input type="text" id="nombre" class="input input-check" name="nombre"
-                            placeholder="Nombre categoria">
-                    </div>
-                    <div>
-                        <input type="text" id="descripcion" class="input input-check" name="descripcion"
-                            placeholder="Descripcion">
-                    </div>
-                </section>
-                <section class="btn-agregar">
-                    <button type="button" class="btn" id="btn-cancel">Cancelar</button>
-                    <button type="submit" class="btn opacity" id="btn-add-categories" disabled>Agregar</button>
-                </section>
-            </form>
+    <div class="container-inputsCat">
+        <div class="inputCat-title">
+            <h3>Nuevo Categoria</h3>
         </div>
+        <form action="/categorias" id="form-cat" method="post" class="form-cat">
+            <section class="input-categories">
+                <div>
+                    <input type="text" id="nombre" class="input input-categories" name="nombre"
+                        placeholder="Nombre categoria">
+                </div>
+                <div>
+                    <input type="text" id="descripcion" class="input input-categories" name="descripcion"
+                        placeholder="Descripcion">
+                </div>
+            </section>
+            <section class="btn-agregar">
+                <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+                <button type="submit" class="btn opacity" id="btn-add-categories" disabled>Agregar</button>
+            </section>
+        </form>
     </div>
 </div>
 

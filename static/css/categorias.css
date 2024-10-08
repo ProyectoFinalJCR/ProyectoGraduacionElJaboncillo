@@ -11,35 +11,78 @@
     justify-content: center;
     gap: 8px;
 }
-.container-categories{
-    padding: 40px 0px;
+.container-table-inputs .table-categories{
+    width: 100%;
+    height: 100%;
+    padding: 20px;
     display: flex;
+    justify-content: center;
+    align-items: start;
+
 }
-.form-categories{
+.container-table-inputs .table-categories table{
+    width: 90%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.container-table-inputs .table-categories table thead{
+    width: 100%;
+    height: 55px;
+    text-align: center;
+}
+
+.container-table-inputs .container-inputsCat{
+    display: none;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 20px;
+}
+
+/*Aplciamos el grid, las diviciones*/
+.container-table-inputs.active{
+    grid-template-columns: 2fr 1fr;
+}
+.container-inputsCat.show {
+    display: flex; /* Muestra el formulario al activar la clase 'show' */   
+}
+.container-table-inputs .container-inputsCat .inputCat-title{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+.container-table-inputs .container-inputsCat .form-cat{
+    width: 100%;
+    height: auto;
+}
+.container-table-inputs .container-inputsCat .form-cat  .input-categories{
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
+    gap: 35px;
 }
-.form-categories form{
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
-    margin-top: 6px;
+
+.container-table-inputs .container-inputsCat .form-cat .input-categories .input-categories{
+    width: 100%;
+    margin-top: 8px ;
 }
-.form-categories input{
-    margin: 10px;
-}
-.form-categories section:nth-child(2){
-    display: flex;
-    justify-content: end;
-    margin: 10px 10px 0px 0px;
-    gap: 15px;
-}
-.input-categories{
+.container-table-inputs .container-inputsCat .btn-agregar{
+    width: 100%;
     display: flex;
     flex-direction: row;
-    margin-top: 2%;
+    justify-content: end;
+    margin-top: 35px;
+    gap: 15px;
 }
+
+
+
+
+
+
+
 .btn-modal{
     display: flex;
     flex-direction: row;
@@ -55,7 +98,6 @@
 }
 
 /* Modal editar */
-
 .modal {
     display: none; 
     position: fixed; 

@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block title %}
+Subcategorias | El Jaboncillo
+{% endblock %}
+
+{% block main %}
+<div class="search">
+    <form action="#">
+        <input class="input" name="search" id="search" placeholder="Buscar subcategoria">
+        <button class="btn-search" type="submit">
+            <i class="material-icons">search</i>
+        </button>
+    </form>
+    <div>
+        <button class="btn-add-sub btn">Agregar subcategoria</button>
+    </div>
+</div>
+<div class="container-table-inputs">
+    <div class="table-subcategories">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Categorias</th>
+                    <th>Subcategoria</th>
+                    <th>Descripcion</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rows2 in subcategorias %}
+                <tr>
+                     <td>{{rows2.id}}</td>
+                     <td>{{rows2.categoria}}</td>
+                     <td>{{rows2.subcategoria}}</td>
+                     <td>{{rows2.descripcion}}</td>
+                    <td class="btn-acciones">
+                        <button class="btn-edit" id="openModalSub">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <form action="/eliminarSubcategoria" method="post" class="form-eliminar">
+                            <input type="hidden" id="id_eliminar" name="id_eliminar" value="{{rows2.id}}">
+                            <button class="btn-delete" type="submit">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="container-inputSubcat">
+        <div class="inputSubcat-title">
+            <h3>Nuevo Subcategoria</h3>
+        </div>
+        <form action="/subCategorias" id="form-subcat" method="post" class="form-subcat">
+            <section class="input-subcategories">
+                <div>
+                    <input type="text" id="nombreSub" class="input input-subcategories" name="nombreSub"
+                        placeholder="Nombre subcategoria">
+                </div>
+                <div>
+                    <select class="input input-subcategories" id="cat" name="idCat">
+                        {% for rows in categorias %}
+                        <option name="idCat" value="{{rows[0]}}">{{rows[1]}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <input type="text" id="descripcion" class="input input-subcategories" name="descripcion"
+                        placeholder="Descripcion">
+                </div>
+            </section>
+            <section class="btn-agregar">
+                <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+                <button type="submit" class="btn opacity" id="btn-add-subcategories" disabled>Agregar</button>
+            </section>
+        </form>
+    </div>
+</div>
+
+<!-- Modal editar subcategoria -->
+<div id="myModal" class="modal">
+    <div class="modal-content form-subcat">
+        <span class="close">&times;</span>
+        <h2>Editar subcategoria</h2>
+        <form action="/editarSubcategoria" method="post">
+            <div class="input-subcategories">
+                <input type="hidden" id="id_editar" name="id_editar" value="{{subcategorias.id}}">
+                <input type="text" id="nombreSub_editar" class="input" name="nombreSub_editar"
+                    value="{{subcategorias.categoria}}">
+                <input type="text" id="nombreCat_editar" class="input" name="nombreCat_editar"
+                    value="{{subcategorias.categoria}}">
+                <input type="text" id="descripcion_editar" class="input" name="descripcion_editar"
+                    value="{{subcategorias.descripcion}}">
+            </div>
+            <div class="btn-modal">
+                <button type="button" class="btn close-modal">Cancelar</button>
+                <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

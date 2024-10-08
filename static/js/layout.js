@@ -32,10 +32,11 @@ function mostrarFechaHora() {
 
 document.addEventListener('DOMContentLoaded', function(){
     const botones = document.querySelectorAll('.btn-items');
-    const icon = document.querySelector('.key');
+    const icons = document.querySelectorAll('.key');
 
     botones.forEach((btnItem, index) => {
         const opciones = btnItem.nextElementSibling;
+        const icon = icons[index];
     
         btnItem.addEventListener('click', function() {
             if (opciones.classList.contains('options')) {
