@@ -20,7 +20,7 @@ Usuarios | El Jaboncillo
         <table class="table">
             <thead>
                 <tr>
-                    <!-- <th>Id</th> -->
+                    <th>Id</th>
                     <th>Nombre Completo</th>
                     <th>Correo</th>
                     <th>Rol</th>
@@ -30,17 +30,17 @@ Usuarios | El Jaboncillo
             <tbody>
                 {% for usuario in usuario%}
                 <tr>
-                    <!-- <td>{{usuario[0]}}</td> -->
+                    <td>{{usuario[0]}}</td>
                     <td>{{usuario[1]}}</td>
                     <td>{{usuario[2]}}</td>
                     <td>{{usuario.rol}}</td>
                     <td class="btn-acciones"> 
                         <button class="btn-edit" id="openModalUser">
-                         <i class="material-icons">edit</i>
-                         </button>
-                        
-                        <form action="/eliminarUsuarios" method="post" class="form-eliminar" id="form-eliminar">
-                            <input type="hidden" id="id_eliminar" name="id_usuario" value="{{usuario[0]}}">
+                                <i class="material-icons">edit</i>
+                            </button>
+                       
+                        <form action="/eliminarUsuarios" method="post" class="form-eliminar" >
+                            <input type="hidden" class="id_eliminar" name="id_usuario" value="{{usuario[0]}}">
                             <button class="btn-delete" id="btn-eliminar" type="submit">
                                 <i class="material-icons">delete</i>
                             </button>
@@ -51,5 +51,69 @@ Usuarios | El Jaboncillo
             </tbody>
         </table>
     </div>
+    <div class="container-inputsUser">
+        <div class="inputUser-title">
+            <h3>Nuevo Usuario</h3>
+        </div>
+        <form class="formUser" action="/usuarios" id="form_user" method="post"> 
+            <section class="input-users">
+                <div>
+                    <label for="">Nombre Completo</label>
+                    <input type="text" id="nombre" class="input input-user" name="nombre" placeholder="Nombre completo">
+                </div>
+                <div>
+                    <label for="">Correo</label>
+                    <input type="text" id="correo" class="input input-user" name="correo" placeholder="Correo">
+                </div>
+                <div>
+                    <label for="">Contraseña</label>
 
+                    <input type="password" id="contraseña" class="input input-user" name="contraseña" placeholder="Contraseña">
+                </div>
+                <div>
+                    <label for="">Seleccione Rol</label>
+
+                    <select class="input input-user" id="rol" name="idrol">
+                        {% for rol in Roles %}
+                        <option name="idrol" value=" {{rol[0]}}">{{rol[1]}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </section>
+            <section class="btn-agregar">
+                <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+                <button type="submit" class="btn opacity" id="btn-add-users" disabled>Agregar</button>
+            </section>
+        </form>
+    </div>
+</div>
+<!-- Modal editar usuarios -->
+
+<div id="myModal" class="modal">
+    <div class="modal-content form-subcat">
+        <span class="close">&times;</span>
+        <h2>Editar Usuario</h2>
+        <form action="/editarUsuario" method="post">
+            <div class="input-subcategories">
+                <input type="hidden" id="id_editar_usuario" name="id_editar_usuario" value="{{usuario.id}}">
+                <label for="">Nombre completo</label>
+                <input type="text" id="nombreUsuario_editar" class="input" name="nombreUsuario_editar"
+                    value="">
+                <label for="">Correo</label>
+                <input type="text" id="correo_editar" class="input" name="correo_editar"
+                    value="">
+                <label for="">Rol</label>
+                <select type="text" id="rol_editar" name="rol_editar" class="input">
+                    {% for rol in Roles %}
+                        <option name="idrol" value="{{rol[0]}}" selected>{{rol[1]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="btn-modal">
+                <button type="button" class="btn close-modal">Cancelar</button>
+                <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
