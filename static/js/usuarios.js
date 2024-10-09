@@ -140,10 +140,52 @@ document.addEventListener("DOMContentLoaded", function (event) {
             });
 
           });
-        });
-        
-      
 
+           // ABRIR Y OBTENER DATOS PARA EL MODAL
+    // Obtener el modal y los elementos que queremos manipular
+    const modal = document.getElementById("myModal");
+    const btnsEdit = document.querySelectorAll(".btn-edit");
+    const inputId_usuario = document.getElementById("id_editar_usuario");
+    const inputNombreUser = document.getElementById("nombreUsuario_editar");
+    const inputCorreo = document.getElementById("correo_editar");
+    const inputRolSeleccionado = document.getElementById("rol_editar");
+
+    // Agregar evento para abrir el modal en cada botón de edición
+    btnsEdit.forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+        // Obtener la fila de la tabla donde se hizo clic
+        const row = event.target.closest("tr");
+
+        // Obtener los datos de la categoría de esa fila
+        const userID = row.cells[0].innerText;
+        const nombreuser = row.cells[1].innerText;
+        const correo = row.cells[2].innerText;
+        const rol = row.cells[3].innerText;
+
+
+        // Rellenar los campos del modal con los datos obtenidos
+        inputId_usuario.value = userID;
+
+        inputNombreUser.value = nombreuser;
+        inputNombreUser.textContent = nombreuser;
+
+        inputCorreo.value = correo;
+        inputCorreo.textContent = correo;
+
+        inputRolSeleccionado.value = rol;
+        console.log("Valor del rol:", rol);
+
+        // inputRolSeleccionado.textContent = rol;
+
+        // Mostrar el modal
+        modal.style.display = "block";
+      });
+    });
+    
+    
+});
+        
+    
 
 
 

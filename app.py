@@ -211,21 +211,6 @@ def usuarios():
             return redirect("/usuarios")     
 
 
-@app.route('/get_informacion_user/<int:id_user>', methods=['GET'])
-def get_informacion(idser):
-    obtenerUser = text("SELECT * FROM usuarios as u INNER JOIN roles as r ON r.id = u.rol_id WHERE u.id = :id ")
-    user = db.execute(obtenerUser, {"id": idser}).fetchone()
-
-    if user:
-        nombre_completo = user[1]   
-        correo = user[2]
-        rol_user = user[5]
-        return jsonify({"nombre": nombre_completo, "correo": correo, "rol": rol_user})
-
-
-
-
-
 @app.route('/eliminarUsuarios', methods=["GET", "POST"])
 def eliminarUsuarios():
     idUsuario = request.form.get('id_usuario')
@@ -236,6 +221,32 @@ def eliminarUsuarios():
     db.commit()
     return redirect(f"/usuarios")
 
+@app.route('/editarUsuario', methods=["POST"])
+def editarUsuario():
+    if request.method == "POST":
+        idUsuario_editar = request.form.get("id_editar_usuario")
+        nombre_completo_editar = request.form.get('nombreUsuario_editar')
+        correo_editar = request.form.get("correo_editar")
+        rol_id_editar = request.form.get("rol_editar")
+
+        print(idUsuario_editar,nombre_completo_editar, correo_editar, rol_id_editar)
+        if not nombre_completo_editar:
+            return("Ingrese un nombre")
+        if not correo_editar:
+            return("Ingrese un correo")
+        if not rol_id_editar:
+            return("Seleccione el rol")
+        else:
+            obtenerUs = text("SELECT correo FROM usuarios WHERE id=:id")
+
+            if db.execute(obtenerUs, {'id': idUsuario_editar}).rowcount > 0:
+                editarUsuario = text("UPDATE usuarios SET nombre_completo=:nombre_completo, correo=:correo, rol_id=:rol_id WHERE id =:id")
+                db.execute(editarUsuario, {"id":idUsuario_editar, "nombre_completo":nombre_completo_editar, "correo":correo_editar, "rol_id": rol_id_editar})
+                db.commit()
+            else:
+                return("Usuario no existe")
+
+        return redirect("/usuarios")
 
     
 @app.route("/inicioAdmin", methods=["GET", "POST"])
