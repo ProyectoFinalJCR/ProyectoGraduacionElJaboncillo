@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         const userID = row.cells[0].innerText;
         const nombreuser = row.cells[1].innerText;
         const correo = row.cells[2].innerText;
-        const rol = row.cells[3].innerText;
+        const rol = row.cells[4].innerText;
 
 
         // Rellenar los campos del modal con los datos obtenidos
@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         inputRolSeleccionado.value = rol;
         console.log("Valor del rol:", rol);
 
-        // inputRolSeleccionado.textContent = rol;
+        inputRolSeleccionado.value = rol;
 
         // Mostrar el modal
         modal.style.display = "block";

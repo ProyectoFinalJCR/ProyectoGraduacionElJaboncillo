@@ -184,7 +184,7 @@ def eliminarCategoria():
 @app.route('/usuarios', methods =["GET","POST"])
 def usuarios():
     if request.method == "GET":
-        obtenerUsuarios = text("SELECT * FROM usuarios as u INNER JOIN roles as r ON r.id = u.rol_id WHERE u.rol_id = 1 OR u.rol_id = 2 ")
+        obtenerUsuarios = text("SELECT * FROM usuarios as u INNER JOIN roles as r ON r.id = u.rol_id WHERE u.rol_id = 1 OR u.rol_id = 2 ORDER by u.id asc")
         usuario = db.execute(obtenerUsuarios).fetchall()
 
         obtenerRol = text("SELECT * FROM roles WHERE id = 1 OR id = 2")
