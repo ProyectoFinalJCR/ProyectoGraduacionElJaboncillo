@@ -248,7 +248,7 @@ def subCategorias():
         obtenerCategorias = text("SELECT * FROM categorias order by id asc")
         rows = db.execute(obtenerCategorias).fetchall()
 
-        obtenerSubcategorias = text("SELECT subcategorias.id AS id, categorias.categoria AS categoria, subcategorias.subcategoria AS subcategoria, subcategorias.descripcion AS descripcion FROM subcategorias JOIN categorias ON subcategorias.categoria_id = categorias.id")
+        obtenerSubcategorias = text("SELECT subcategorias.id AS id, categorias.id AS id_categoria, categorias.categoria AS categoria, subcategorias.subcategoria AS subcategoria, subcategorias.descripcion AS descripcion FROM subcategorias JOIN categorias ON subcategorias.categoria_id = categorias.id")
         rows2 = db.execute(obtenerSubcategorias).fetchall()
         return render_template("subcategorias.html", categorias=rows, subcategorias=rows2)
     else:
@@ -278,10 +278,10 @@ def eliminarSubcategoria():
 @app.route('/editarSubcategoria', methods=["POST"])
 def editarSubcategoria():
     subcategoria = request.form.get('nombreSub_editar')
-    categoria = request.form.get('nombreCat_editar')
+    idcategoria = request.form.get('idCat_editar')
     descripcion = request.form.get('descripcion_editar')
     idSubcategoria = request.form.get('id_editar')
-    print(categoria)
+    print(idcategoria)
     print(subcategoria)
     print(descripcion)
     print(idSubcategoria)
@@ -290,7 +290,7 @@ def editarSubcategoria():
         return("No esta recibiendo valores")
     if not subcategoria:
         return("Ingrese la subcategoria")
-    if not categoria:
+    if not idcategoria:
         return("Ingrese la categoria")
     if not descripcion:
         return("Ingrese una descripcion")
@@ -299,8 +299,8 @@ def editarSubcategoria():
         obtenerSubcat = text("SELECT subcategoria FROM subcategorias WHERE id=:id")
 
         if db.execute(obtenerSubcat, {'id': idSubcategoria}).rowcount > 0:
-            editarCategoria = text("UPDATE categorias SET categoria=:categoria, descripcion=:descripcion WHERE id =:id")
-            db.execute(editarCategoria, {"id":idSubcategoria, "categoria":categoria, "descripcion":descripcion})
+            editarSubcategoria = text("UPDATE subcategorias SET categoria_id=:categoria_id, subcategoria=:subcategoria, descripcion=:descripcion WHERE id =:id")
+            db.execute(editarSubcategoria, {"id":idSubcategoria, "categoria_id":idcategoria, "subcategoria":subcategoria, "descripcion": descripcion})
             db.commit()
         else:
             return ("La categoria no existe")

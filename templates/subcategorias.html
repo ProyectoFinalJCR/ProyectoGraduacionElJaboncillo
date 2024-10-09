@@ -34,6 +34,7 @@ Subcategorias | El Jaboncillo
                      <td>{{rows2.categoria}}</td>
                      <td>{{rows2.subcategoria}}</td>
                      <td>{{rows2.descripcion}}</td>
+                     <td style="display: none;">{{rows2.id_categoria}}</td>
                     <td class="btn-acciones">
                         <button class="btn-edit" id="openModalSub">
                             <i class="material-icons">edit</i>
@@ -45,6 +46,7 @@ Subcategorias | El Jaboncillo
                             </button>
                         </form>
                     </td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -87,13 +89,14 @@ Subcategorias | El Jaboncillo
         <h2>Editar subcategoria</h2>
         <form action="/editarSubcategoria" method="post">
             <div class="input-subcategories">
-                <input type="hidden" id="id_editar" name="id_editar" value="{{subcategorias.id}}">
-                <input type="text" id="nombreSub_editar" class="input" name="nombreSub_editar"
-                    value="{{subcategorias.categoria}}">
-                <input type="text" id="nombreCat_editar" class="input" name="nombreCat_editar"
-                    value="{{subcategorias.categoria}}">
-                <input type="text" id="descripcion_editar" class="input" name="descripcion_editar"
-                    value="{{subcategorias.descripcion}}">
+                <input type="hidden" id="id_editar" name="id_editar">
+                <select class="input" id="idCat_editar" name="idCat_editar">
+                    {% for rows in categorias %}
+                    <option name="idCat_editar" value="{{rows[0]}}">{{rows[1]}}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" id="nombreSub_editar" class="input" name="nombreSub_editar">
+                <input type="text" id="descripcion_editar" class="input" name="descripcion_editar">
             </div>
             <div class="btn-modal">
                 <button type="button" class="btn close-modal">Cancelar</button>

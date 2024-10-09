@@ -78,9 +78,8 @@ document.addEventListener('DOMContentLoaded', function(){
     const btnsEdit = document.querySelectorAll(".btn-edit");
     const inputId = document.getElementById("id_editar");
     const inputNombreSub = document.getElementById("nombreSub_editar");
-    const inputNombreCat = document.getElementById("nombreCat_editar");
+    const inputNombreCat = document.getElementById("idCat_editar");
     const inputDescripcion = document.getElementById("descripcion_editar");
-
     // Agregar evento para abrir el modal en cada botón de edición
     btnsEdit.forEach((btn) => {
       btn.addEventListener('click', (event) => {
@@ -89,17 +88,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
         // Obtener los datos de la categoría de esa fila
         const categoriaId = row.cells[0].innerText;
-        const categoriaNombreSub = row.cells[1].innerText;
-        const categoriaNombreCat = row.cells[2].innerText;
+        const categoriaNombreCat = row.cells[4].innerText;
+        const categoriaNombreSub = row.cells[2].innerText;
         const categoriaDescripcion = row.cells[3].innerText;
 
 
         // Rellenar los campos del modal con los datos obtenidos
         inputId.value = categoriaId;
+        inputNombreCat.value = categoriaNombreCat;
         inputNombreSub.value = categoriaNombreSub;
         inputNombreSub.textContent = categoriaNombreSub;
-        inputNombreCat.value = categoriaNombreCat;
-        inputNombreCat.textContent = categoriaNombreCat;
         inputDescripcion.value = categoriaDescripcion;
         inputDescripcion.textContent = categoriaDescripcion;
 
