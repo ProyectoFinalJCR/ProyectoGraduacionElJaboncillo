@@ -336,6 +336,9 @@ def editarSubcategoria():
     flash(('La subcategoría ha sido editada con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('subCategorias'))
 
+@app.route('/insumos')
+def insumos():
+    return render_template('insumos.html')
 @app.route('/catalogo')
 def catalogo():
     return render_template('catalogo.html')
