@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, jsonify, render_template, redirect, request, session
+from flask import Flask, jsonify, render_template, redirect, request, session, flash, url_for
 from flask_session import Session
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -269,13 +269,15 @@ def subCategorias():
 
         obtenerSub = text("SELECT * FROM subcategorias WHERE subcategoria=:subcategoria")
         if db.execute(obtenerSub, {'subcategoria': nombreSub}).rowcount > 0:
-            return ("subcategoria ya existe")
+            flash(('Ya existe una subcategoria con ese nombre', 'error', '¡Error!'))
+            return redirect(url_for('subCategorias'))
         else:
             insertarSub = text("INSERT INTO subcategorias (categoria_id, subcategoria, descripcion) VALUES (:categoria_id, :subcategoria, :descripcion)")
             db.execute(insertarSub, {"categoria_id": idCat, "subcategoria": nombreSub, "descripcion": descripcion})
 
             db.commit()
-        return redirect(f"/subCategorias")
+        flash(('La subcategoría ha sido agregada con éxito.', 'success', '¡Éxito!'))
+        return redirect(url_for('subCategorias'))
     
 @app.route('/eliminarSubcategoria', methods=["GET", "POST"])
 def eliminarSubcategoria():
@@ -284,7 +286,8 @@ def eliminarSubcategoria():
     query = text("DELETE FROM subcategorias WHERE id = :id")
     db.execute(query, {"id": idSubcategoria})
     db.commit()
-    return redirect(f"/subCategorias")
+    flash(('La subcategoría ha sido eliminada con éxito.', 'success', '¡Éxito!'))
+    return redirect(url_for('subCategorias'))
 
 @app.route('/editarSubcategoria', methods=["POST"])
 def editarSubcategoria():
@@ -292,21 +295,28 @@ def editarSubcategoria():
     idcategoria = request.form.get('idCat_editar')
     descripcion = request.form.get('descripcion_editar')
     idSubcategoria = request.form.get('id_editar')
-    print(idcategoria)
-    print(subcategoria)
-    print(descripcion)
-    print(idSubcategoria)
 
     if not idSubcategoria:
-        return("No esta recibiendo valores")
+        flash(('No está recibiendo valores de subcategoría', 'error', '¡Error!'))
+        return redirect(url_for('subCategorias'))
     if not subcategoria:
-        return("Ingrese la subcategoria")
+        flash(('Ingrese la subcategoría', 'error', '¡Error!'))
+        return redirect(url_for('subCategorias'))
     if not idcategoria:
-        return("Ingrese la categoria")
+        flash(('Ingrese la categoría', 'error', '¡Error!'))
+        return redirect(url_for('subCategorias'))
     if not descripcion:
-        return("Ingrese una descripcion")
+        flash(('Ingrese una descripción', 'error', '¡Error!'))
+        return redirect(url_for('subCategorias'))
+    
+    # VALIDANDO SI HAY UNA SUBCATEGORIA CON ESE NOMBRE
+    obtenerSub = text("SELECT * FROM subcategorias WHERE subcategoria=:subcategoria AND id!=:idSubcategoria")
+    if db.execute(obtenerSub, {'subcategoria': subcategoria, 'idSubcategoria': idSubcategoria}).rowcount > 0:
+        flash(('Ya existe una subcategoria con ese nombre', 'error', '¡Error!'))
+        return redirect(url_for('subCategorias'))
     
     else:
+        # VALIDANDO SI EXISTE UNA SUBCATEGORIA CON ESE ID
         obtenerSubcat = text("SELECT subcategoria FROM subcategorias WHERE id=:id")
 
         if db.execute(obtenerSubcat, {'id': idSubcategoria}).rowcount > 0:
@@ -314,9 +324,11 @@ def editarSubcategoria():
             db.execute(editarSubcategoria, {"id":idSubcategoria, "categoria_id":idcategoria, "subcategoria":subcategoria, "descripcion": descripcion})
             db.commit()
         else:
-            return ("La categoria no existe")
+            flash("Ha ocurrido un error", 'error', '¡Error!')
+            return redirect(url_for('subCategorias'))
 
-    return redirect(f"/subCategorias")
+    flash(('La subcategoría ha sido editada con éxito.', 'success', '¡Éxito!'))
+    return redirect(url_for('subCategorias'))
 
 @app.route('/catalogo')
 def catalogo():

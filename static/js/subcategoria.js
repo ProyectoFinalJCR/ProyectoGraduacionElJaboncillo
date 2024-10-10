@@ -127,17 +127,33 @@ document.addEventListener('DOMContentLoaded', function(){
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Si el usuario confirma, se envía el formulario
-                Swal.fire(
-                    'Eliminado!',
-                    'El registro ha sido eliminado.',
-                    'success'
-                );
-                event.target.submit(); // Envía el formulario
+                event.target.submit(); 
             }
           })
     });
 
   });
-    
+
+
+  //ALERTA EDITAR
+  const form_editar = document.querySelector('.form_edit');
+
+  form_editar.addEventListener('submit', function(event) {
+    event.preventDefault();
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, editar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) =>{
+        if (result.isConfirmed) {
+            event.target.submit();  
+        }
+    });
+  });
+
 });

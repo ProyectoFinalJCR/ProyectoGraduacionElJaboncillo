@@ -87,7 +87,7 @@ Subcategorias | El Jaboncillo
     <div class="modal-content form-subcat">
         <span class="close">&times;</span>
         <h2>Editar subcategoria</h2>
-        <form action="/editarSubcategoria" method="post">
+        <form action="/editarSubcategoria" method="post" class="form_edit">
             <div class="input-subcategories">
                 <input type="hidden" id="id_editar" name="id_editar">
                 <select class="input" id="idCat_editar" name="idCat_editar">
@@ -101,8 +101,23 @@ Subcategorias | El Jaboncillo
             <div class="btn-modal">
                 <button type="button" class="btn close-modal">Cancelar</button>
                 <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
+
             </div>
         </form>
     </div>
 </div>
+
+<!-- Mostrar mensaje de éxito -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <script>
+    Swal.fire({
+      title:'{{ messages[0][2] }}',
+      text: '{{ messages[0][0] }}',
+      icon: '{{ messages[0][1] }}',
+      confirmButtonText: 'OK'
+    });
+  </script>
+{% endif %}
+{% endwith %}
 {% endblock %}
