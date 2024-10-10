@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block title %}
+Insumos | El Jaboncillo
+{% endblock %}
+
+{% block main %}
+<section class="all-screen-insumos">
+    <div class="search">
+        <form action="#">
+            <input class="input-search" name="search" id="search" placeholder="Buscar insumos">
+            <button class="btn-search" type="submit">
+                <i class="material-icons">search</i>
+            </button>
+        </form>
+        <div>
+            <button class="btn" id="btn-add-user">Agregar insumo</button>
+        </div>
+    </div>
+    <div class="container-table-inputs">
+        <div class="table-categories">
+
+        </div>
+        <div class="container-inputsUser">
+            <div class="inputUser-title">
+                <h3>Nuevo insumo</h3>
+            </div>
+            <form class="formUser" action="/usuarios" id="form_user" method="post"> 
+                <section class="input-users">
+                    <div>
+                        <label for="">Insumo</label>
+                        <input type="text" id="nombre_insumo" class="input input-user" name="nombre_insumo" placeholder="Ingrese el insumo">
+                    </div>
+                    <div>
+                        <label for="">Tipo de insumo</label>
+                        <select class="input input-user" id="rol" name="idrol">
+                            <!-- {% for rol in Roles %}
+                            <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
+                            {% endfor %} -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Descripción</label>
+                        <input type="text" id="descripción_insumo" class="input input-user" name="descripción_insumo" placeholder="Ingrese una descripción para este insumo">
+                    </div>
+                    <div>
+                        <label for="">Composición principal</label>
+                        <select class="input input-user" id="rol" name="idrol">
+                            <!-- {% for rol in Roles %}
+                            <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
+                            {% endfor %} -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Frecuencia de aplicacion</label>
+                        <select class="input input-user" id="rol" name="idrol">
+                            <!-- {% for rol in Roles %}
+                            <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
+                            {% endfor %} -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Durabilidad</label>
+                        <input type="text" id="durabilidad" class="input input-user" name="durabilidad" placeholder="Ingrese durabilidad aproximada para este insumo">
+                    </div>
+                    <div>
+                        <label for="">Compatibilidad</label>
+                        <input type="text" id="compatibilidad" class="input input-user" name="compatibilidad" placeholder="Ingrese durabilidad aproximada para este insumo">
+                    </div>
+                    <div>
+                        <label for="">Precauciones</label>
+                        <input type="text" id="precauciones" class="input input-user" name="precauciones" placeholder="Ingrese durabilidad aproximada para este insumo">
+                    </div>
+                </section>
+                <section class="btn-agregar">
+                    <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn opacity" id="btn-add-users" disabled>Agregar</button>
+                </section>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

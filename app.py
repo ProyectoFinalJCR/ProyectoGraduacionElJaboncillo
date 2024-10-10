@@ -318,6 +318,9 @@ def editarSubcategoria():
 
     return redirect(f"/subCategorias")
 
+@app.route('/insumos')
+def insumos():
+    return render_template('insumos.html')
 @app.route('/catalogo')
 def catalogo():
     return render_template('catalogo.html')

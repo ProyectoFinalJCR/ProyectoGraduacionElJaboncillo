@@ -77,7 +77,7 @@ Usuarios | El Jaboncillo
 
                     <select class="input input-user" id="rol" name="idrol">
                         {% for rol in Roles %}
-                        <option name="idrol" value=" {{rol[0]}}">{{rol[1]}}</option>
+                        <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -96,7 +96,7 @@ Usuarios | El Jaboncillo
         <span class="close">&times;</span>
         <h2>Editar Usuario</h2>
         <form action="/editarUsuario" method="post">
-            <div class="input-subcategories">
+            <div class="input-usuario">
                 <input type="hidden" id="id_editar_usuario" name="id_editar_usuario" value="{{usuario.id}}">
                 <label for="">Nombre completo</label>
                 <input type="text" id="nombreUsuario_editar" class="input" name="nombreUsuario_editar"
