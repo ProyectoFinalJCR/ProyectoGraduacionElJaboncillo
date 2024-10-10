@@ -13,6 +13,59 @@ document.addEventListener('DOMContentLoaded', function(){
       });
     });
 
+    // Validacion de los campos
+    const categoria = document.querySelector('#nombre');
+    const categoriaDescripcion = document.querySelector('#descripcion');
+
+    categoria.addEventListener('input', validar);
+    categoriaDescripcion.addEventListener('input', validar);
+
+    function validar(e){
+      if(e.target.value.trim() === ''){
+          mostrarError(`El campo ${e.target.id} es obligatorio`, e.target.parentElement); 
+          return;
+      }
+
+      limpiarAlerta(e.target.parentElement);    
+    };
+
+    function mostrarError(mensaje, referencia){
+      //Validar si ya existe una alerta
+      limpiarAlerta(referencia);
+
+      const error = document.createElement('P');
+      error.textContent = mensaje;
+      error.classList.add('error');
+      referencia.appendChild(error);
+    };
+
+    function limpiarAlerta(referencia){
+      const alerta = referencia.querySelector('.error');
+      if(alerta){
+          alerta.remove();
+      }
+    };
+      //opacidad y habilitacion del boton agregar
+    document.getElementById('form-cat').addEventListener('input', function() {
+      const inputs = document.querySelectorAll('.input-categories[type="text"]');
+      const btnSend = document.querySelector('#btn-add-categories')
+      let fields = true;
+      
+      inputs.forEach(input => {
+        if(input.value.trim() === ''){
+          fields = false;
+        }
+      });
+      
+      // Habilita o deshabilita el botón según el estado de la variable fields
+      if (fields) {
+        btnSend.disabled = false;
+        btnSend.classList.remove ('opacity');
+      } else {
+        btnSend.disabled = true; 
+        btnSend.classList.add ('opacity');
+      }
+    });
 
     // Obtener el modal y los elementos que queremos manipular
     const modal = document.getElementById("myModal");
@@ -22,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const inputDescripcion = document.getElementById("descripcion_editar");
 
     // Agregar evento para abrir el modal en cada botón de edición
-    btnsEdit.forEach((btn, index) => {
+    btnsEdit.forEach((btn) => {
       btn.addEventListener('click', (event) => {
         // Obtener la fila de la tabla donde se hizo clic
         const row = event.target.closest("tr");
@@ -45,73 +98,7 @@ document.addEventListener('DOMContentLoaded', function(){
       });
     });
 
-    // Validacion de los campos
-    const categoria = document.querySelector('#nombre');
-    const categoriaDescripcion = document.querySelector('#descripcion');
-
-    categoria.addEventListener('input', validar);
-    categoriaDescripcion.addEventListener('input', validar);
-
-    function validar(e){
-      if(e.target.value.trim() === ''){
-          mostrarError(`El campo ${e.target.id} es obligatorio`, e.target.parentElement); 
-          return;
-      }
-
-      limpiarAlerta(e.target.parentElement);    
-  };
-
-  function mostrarError(mensaje, referencia){
-    //Validar si ya existe una alerta
-    limpiarAlerta(referencia);
-
-    const error = document.createElement('P');
-    error.textContent = mensaje;
-    error.classList.add('error');
-    referencia.appendChild(error);
-  };
-
-  function limpiarAlerta(referencia){
-    const alerta = referencia.querySelector('.error');
-    if(alerta){
-        alerta.remove();
-    }
-
-    //opacidad y habilitacion del boton agregar
-    document.getElementById('form-cat').addEventListener('input', function() {
-      const inputs = document.querySelectorAll('.input-categories[type="text"]');
-      const btnSend = document.querySelector('#btn-add-categories')
-      let fields = true;
-
-      inputs.forEach(input => {
-        if(input.value.trim() === ''){
-          fields = false;
-        }
-      });
-
-      // Habilita o deshabilita el botón según el estado de la variable fields
-    if (fields) {
-      btnSend.disabled = false;
-      btnSend.classList.remove ('opacity');
-    } else {
-      btnSend.disabled = true; 
-      btnSend.classList.add ('opacity');
-    }
-    });
-  }
-
-   // alerta registro ingresado
-   document.getElementById('btn-add-categories').addEventListener('click', function(){
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Categoria agregada con exito',
-        text: '¡Categoria agregada correctamente!',
-        showConfirmButton: false,
-    })
-    });
-
-
+    // ALERTAS
     // alerta btn eliminar 
     const forms_Cat = document.querySelectorAll('.form-eliminar')
 
@@ -130,17 +117,32 @@ document.addEventListener('DOMContentLoaded', function(){
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Si el usuario confirma, se envía el formulario
-                Swal.fire(
-                    'Eliminado!',
-                    'El registro ha sido eliminado.',
-                    'success'
-                );
-                event.target.submit(); // Envía el formulario
+                event.target.submit();
             }
           })
     });
 
+  });
+
+  //ALERTA EDITAR
+  const form_editar = document.querySelector('.form_edit');
+
+  form_editar.addEventListener('submit', function(event) {
+    event.preventDefault();
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, editar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) =>{
+        if (result.isConfirmed) {
+            event.target.submit();  
+        }
+    });
   });
 
 });

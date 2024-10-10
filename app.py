@@ -122,42 +122,40 @@ def categorias():
         categoria = request.form.get('nombre')
         descripcionCategoria = request.form.get('descripcion')
 
-        if not categoria:
-            return("Ingrese la categoria")
-    
-        if not descripcionCategoria:
-            return("Ingrese una descripcion")
-        
-        
+        obtenerCat = text("SELECT * FROM categorias WHERE categoria=:categoria")
+        if db.execute(obtenerCat, {'categoria': categoria}).rowcount > 0:
+            flash(('Ya existe una categoria con ese nombre', 'error', '¡Error!'))
+            return redirect(url_for('categorias'))
         else:
-            obtenerCat = text("SELECT * FROM categorias WHERE categoria=:categoria")
-
-            if db.execute(obtenerCat, {'categoria': categoria}).rowcount > 0:
-                return ("La categoria ya existe")
-            else:
-                agregarCategoria = text("INSERT INTO categorias (categoria, descripcion) VALUES (:categoria, :descripcion)")
-                db.execute(agregarCategoria, {"categoria": categoria, "descripcion": descripcionCategoria})
-                
-                db.commit()
-            return redirect(f"/categorias")
+            agregarCategoria = text("INSERT INTO categorias (categoria, descripcion) VALUES (:categoria, :descripcion)")
+            db.execute(agregarCategoria, {"categoria": categoria, "descripcion": descripcionCategoria})
+            
+            db.commit()
+        flash(('La categoria ha sido agregada con éxito.', 'success', '¡Éxito!'))
+        return redirect(url_for('categorias'))
         
 @app.route('/editarCategoria', methods=["POST"])
 def editarCategoria():
     categoria = request.form.get('nombre_editar')
     descripcion = request.form.get('descripcion_editar')
     idCategoria = request.form.get('id_editar')
-    print(categoria)
-    print(descripcion)
-    print(idCategoria)
 
     if not idCategoria:
-        return("No esta recibiendo valores")
+        flash(('No está recibiendo valores de categoría', 'error', '¡Error!'))
+        return redirect(url_for('categorias'))
     if not categoria:
-        return("Ingrese la categoria")
-    
+        flash(('Ingrese la categoría', 'error', '¡Error!'))
+        return redirect(url_for('categorias'))
     if not descripcion:
-        return("Ingrese una descripcion")
+        flash(('Ingrese una descripción', 'error', '¡Error!'))
+        return redirect(url_for('categorias'))
     
+    # VALIDANDO SI HAY UNA CATEGORIA CON ESE NOMBRE
+    obtenerCat = text("SELECT * FROM categorias WHERE categoria=:categoria AND id!=:id")
+    if db.execute(obtenerCat, {'categoria': categoria, 'id': idCategoria}).rowcount > 0:
+        flash(('Ya existe una subcategoria con ese nombre', 'error', '¡Error!'))
+        return redirect(url_for('categorias'))
+
     else:
         obtenerCat = text("SELECT categoria FROM categorias WHERE id=:id")
 
@@ -166,19 +164,27 @@ def editarCategoria():
             db.execute(editarCategoria, {"id":idCategoria, "categoria":categoria, "descripcion":descripcion})
             db.commit()
         else:
-            return ("La categoria no existe")
+            flash("Ha ocurrido un error", 'error', '¡Error!')
+            return redirect(url_for('categorias'))
 
-    return redirect(f"/categorias")
+    flash(('La categoría ha sido editada con éxito.', 'success', '¡Éxito!'))
+    return redirect(url_for('categorias'))
 
 @app.route('/eliminarCategoria', methods=["GET", "POST"])
 def eliminarCategoria():
     idCategoria = request.form.get('id_eliminar')
-    print(idCategoria)
+    query = text("SELECT COUNT(*) FROM subcategorias WHERE categoria_id = :categoria_id")
+    resultado = db.execute(query, {'categoria_id': idCategoria}).scalar()
+
+    if resultado > 0:
+        flash(('No se puede eliminar la categoría porque tiene subcategorías asociadas.', 'error'))
+        return redirect(url_for('categorias'))
 
     query = text("DELETE FROM categorias WHERE id = :id")
     db.execute(query, {"id": idCategoria})
     db.commit()
-    return redirect(f"/categorias")
+    flash(('La categoria ha sido eliminada con éxito.', 'success', '¡Éxito!'))
+    return redirect(url_for('categorias'))
 
 
 @app.route('/usuarios', methods =["GET","POST"])
