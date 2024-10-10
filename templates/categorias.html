@@ -77,7 +77,7 @@ Categorias | El Jaboncillo
     <div class="modal-content form-categories">
         <span class="close">&times;</span>
         <h2>Editar categoria</h2>
-        <form action="/editarCategoria" method="post">
+        <form action="/editarCategoria" method="post" class="form_edit">
             <div class="input-categories">
                 <input type="hidden" id="id_editar" name="id_editar" value="{{categorias.id}}">
                 <input type="text" id="nombre_editar" class="input" name="nombre_editar"
@@ -92,4 +92,17 @@ Categorias | El Jaboncillo
         </form>
     </div>
 </div>
+<!-- Mostrar alertas -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <script>
+    Swal.fire({
+      title:'{{ messages[0][2] }}',
+      text: '{{ messages[0][0] }}',
+      icon: '{{ messages[0][1] }}',
+      confirmButtonText: 'OK'
+    });
+  </script>
+{% endif %}
+{% endwith %}
 {% endblock %}
