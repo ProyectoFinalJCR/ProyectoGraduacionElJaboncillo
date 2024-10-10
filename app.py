@@ -202,12 +202,14 @@ def usuarios():
         obtenerUser = text("SELECT * FROM usuarios WHERE correo =:correo")
 
         if db.execute(obtenerUser, {'correo': correo}).rowcount > 0:
-            return "usuario ya existe"
+            flash(('Ya existe un usuario con este correo', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
         else:
             insertar_usuario = text("INSERT INTO usuarios (nombre_completo, correo, clave, rol_id) VALUES (:userName, :userEmail, :userPassword, :idRol)")
             db.execute(insertar_usuario,{"userName":nombre_completo, "userEmail":correo, "userPassword": hashed_contraseña, "idRol":rol_id})
             db.commit()
             db.close()
+            flash(('Usuario agregado con éxito.', 'success', '¡Éxito!'))
             return redirect("/usuarios")     
 
 
@@ -219,7 +221,8 @@ def eliminarUsuarios():
     query = text("DELETE FROM usuarios WHERE id = :id")
     db.execute(query, {"id": idUsuario})
     db.commit()
-    return redirect(f"/usuarios")
+    flash(('El usuario ha sido eliminado con éxito.', 'success', '¡Éxito!'))
+    return redirect(url_for('usuarios'))
 
 @app.route('/editarUsuario', methods=["POST"])
 def editarUsuario():
@@ -230,13 +233,26 @@ def editarUsuario():
         rol_id_editar = request.form.get("rol_editar")
 
         print(idUsuario_editar,nombre_completo_editar, correo_editar, rol_id_editar)
+        if not idUsuario_editar:
+            flash(('No está recibiendo valores del usuario', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
         if not nombre_completo_editar:
-            return("Ingrese un nombre")
+            flash(('Ingrese el nombre completo', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
         if not correo_editar:
-            return("Ingrese un correo")
+            flash(('Ingrese el correo electrónico', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
         if not rol_id_editar:
-            return("Seleccione el rol")
+            flash(('Seleccione un rol para el usuario', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
+        
+        # VALIDANDO SI HAY UNA SUBCATEGORIA CON ESE NOMBRE
+        obtenerUser = text("SELECT * FROM usuarios WHERE correo =:correo AND id != :id")
+        if db.execute(obtenerUser,{"correo": correo_editar, "id": idUsuario_editar}).rowcount > 0:
+            flash(('Ya existe un usuario con este correo', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
         else:
+            # VALIDANDO SI EXISTE UNA SUBCATEGORIA CON ESE ID
             obtenerUs = text("SELECT correo FROM usuarios WHERE id=:id")
 
             if db.execute(obtenerUs, {'id': idUsuario_editar}).rowcount > 0:
@@ -244,9 +260,12 @@ def editarUsuario():
                 db.execute(editarUsuario, {"id":idUsuario_editar, "nombre_completo":nombre_completo_editar, "correo":correo_editar, "rol_id": rol_id_editar})
                 db.commit()
             else:
-                return("Usuario no existe")
+                flash("Ha ocurrido un error", 'error', '¡Error!')
+                return redirect(url_for('usuarios'))
 
-        return redirect("/usuarios")
+        
+        flash(('Los datos han sido editados con éxito.', 'success', '¡Éxito!'))
+        return redirect(url_for('usuarios'))
 
     
 @app.route("/inicioAdmin", methods=["GET", "POST"])

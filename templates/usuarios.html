@@ -95,7 +95,7 @@ Usuarios | El Jaboncillo
     <div class="modal-content form-subcat">
         <span class="close">&times;</span>
         <h2>Editar Usuario</h2>
-        <form action="/editarUsuario" method="post">
+        <form action="/editarUsuario" method="post" class="form_edit_user">
             <div class="input-usuario">
                 <input type="hidden" id="id_editar_usuario" name="id_editar_usuario" value="{{usuario.id}}">
                 <label for="">Nombre completo</label>
@@ -118,4 +118,18 @@ Usuarios | El Jaboncillo
         </form>
     </div>
 </div>
+
+<!-- Mostrar mensaje de éxito -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <script>
+    Swal.fire({
+      title:'{{ messages[0][2] }}',
+      text: '{{ messages[0][0] }}',
+      icon: '{{ messages[0][1] }}',
+      confirmButtonText: 'OK'
+    });
+  </script>
+{% endif %}
+{% endwith %}
 {% endblock %}

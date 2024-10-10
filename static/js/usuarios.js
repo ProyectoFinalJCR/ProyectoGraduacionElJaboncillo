@@ -96,50 +96,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 }
 
             }); 
-            
-            // alerta registro ingresado
-           document.getElementById('btn-add-users').addEventListener('click', function(){
-              
-            const formUsers = document.getElementById('form_user')
-
-              Swal.fire({
-                icon: 'success',
-                title: 'Usuario agreado con exito',
-                text: '¡Usuario agregado correctamente!',
-                showConfirmButton: false,
-            })
-            })    
-            
-          // alerta btn eliminar 
-         const forms_users = document.querySelectorAll('.form-eliminar')
-
-            forms_users.forEach(form => {
-              form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Detener el envío del formulario inicialmente
-              
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "¡No podrás revertir esta acción!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, eliminarlo',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Si el usuario confirma, se envía el formulario
-                        Swal.fire(
-                            'Eliminado!',
-                            'El registro ha sido eliminado.',
-                            'success'
-                        );
-                        event.target.submit(); // Envía el formulario
-                    }
-                  })
-            });
-
-          });
+               
+        
+         
 
            // ABRIR Y OBTENER DATOS PARA EL MODAL
     // Obtener el modal y los elementos que queremos manipular
@@ -182,27 +141,50 @@ document.addEventListener("DOMContentLoaded", function (event) {
       });
     });
     
-    
+
+    // Alertas
+     // alerta btn eliminar 
+     const forms_users = document.querySelectorAll('.form-eliminar')
+
+     forms_users.forEach(form => {
+       form.addEventListener('submit', function(event) {
+         event.preventDefault(); // Detener el envío del formulario inicialmente
+       
+         Swal.fire({
+           title: '¿Estás seguro?',
+           text: "¡No podrás revertir esta acción!",
+           icon: 'warning',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Sí, eliminarlo',
+           cancelButtonText: 'Cancelar'
+       }).then((result) => {
+           if (result.isConfirmed) {
+               event.target.submit(); 
+           }
+         })
+      });
+   });
+
+     //ALERTA EDITAR
+  const form_editar_user = document.querySelector('.form_edit_user');
+
+  form_editar_user.addEventListener('submit', function(event) {
+    event.preventDefault();
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, editar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) =>{
+        if (result.isConfirmed) {
+            event.target.submit();  
+          }
+        });
+    });
 });
-        
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
