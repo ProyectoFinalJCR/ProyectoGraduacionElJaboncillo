@@ -18,7 +18,7 @@ class Composiciones_Principales (db.Model):
 class Unidades_Medidas (db.Model):
     __tablename__ = 'unidades_medidas'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    unidad_medida = db.Column(db.Integer, nullable=False)
+    unidad_medida = db.Column(db.String, nullable=False)
 
     
 class Rangos(db.Model):
@@ -41,9 +41,9 @@ class Requerimientos_Agua (db.Model):
 
 class Condiciones_almacenamiento (db.Model):
     __tablename__ = 'condiciones_almacenamiento'
-    id =db.Column (db.Integer, primary_key=True, autoincrement =True)
-    condicion =db.Column (db.String, nullable=False)
-    descripcion =db.Column (db.String, nullable=True)
+    id =db.Column(db.Integer, primary_key=True, autoincrement =True)
+    condicion =db.Column(db.String, nullable=False)
+    
 
 class Colores (db.Model):
     __tablename__ = 'colores'
