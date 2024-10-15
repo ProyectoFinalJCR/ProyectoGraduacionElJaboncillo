@@ -43,7 +43,7 @@
 }
 
 .form-container .register .container-img-logo img{
-    width: 90%;
+    width: 80%;
     height: auto;
 }
 .form-container .register .container-title h2{
@@ -103,6 +103,7 @@
     align-items: center;
     gap: 15px;
     padding-left: 15px;
+    padding-right: 12px;
     background-color: #fff;
     border-radius: 45px;
     
@@ -121,6 +122,9 @@
     outline: none;
 }
 .form-container .login-seccion .container-input .input-shape .eye,.form-container .login-seccion .container-input .input-shape .noneye{
+    cursor: pointer;
+}
+.form-container .login-seccion .container-input .input-shape .noneye{
     display: none;
 }
 .form-container .login-seccion .container-input .container-forgetP{
@@ -229,11 +233,11 @@
         padding: 15px;
     }
     .form-container .register .container-img-logo img{
-        width: 85%;
-        height: 60px;
+        width: 75%;
+        height: auto;
     }
     .form-container .register .container-title h2{
-        font-size: 17px;
+        font-size: 20px;
     }
     .form-container .login-seccion{
         width: 100%;
@@ -250,7 +254,7 @@
   @media (min-width: 768px) and (max-width: 1023px) {
     .form-container{
         margin: 0px 22px;
-        height: 58vh;
+        height: auto;
     }
     .login-seccion{
         width: 100%;
@@ -265,11 +269,19 @@
   /* Para pantallas muy grandes (1440px a 2560px) */
   @media (min-width: 1440px) and (max-width: 2559px) {
     /* Tus estilos para pantallas entre 1440px y 2559px */
+    .form-container{
+        margin: 0px 22px;
+        height: auto;
+    }
   }
   
   /* Para pantallas ultra grandes (2560px en adelante) */
   @media (min-width: 2560px) {
     /* Tus estilos para pantallas mayores a 2560px */
+    .form-container{
+        margin: 0px 22px;
+        height: auto;
+    }
   }
 
   

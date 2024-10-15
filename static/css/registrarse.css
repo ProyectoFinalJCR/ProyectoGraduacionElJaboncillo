@@ -66,6 +66,7 @@
     align-items: center;
     gap: 15px;
     padding-left: 15px;
+    padding-right: 12px;
     background-color: #fff;
     border-radius: 45px;
     
@@ -83,7 +84,11 @@
     border-left: 1px solid #000;
     outline: none;
 }
-.form-container .login-seccion .container-input .inputs-group .input-shape .eye,.form-container .login-seccion .container-input .input-shape .noneye{
+.form-container .login-seccion .container-input .input-shape .eye,
+.form-container .login-seccion .container-input .input-shape .noneye{
+    cursor: pointer;
+}
+.form-container .login-seccion .container-input .input-shape .noneye{
     display: none;
 }
 .form-container .login-seccion .container-input .container-forgetP{

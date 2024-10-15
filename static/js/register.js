@@ -106,4 +106,51 @@ document.addEventListener("DOMContentLoaded", function (event) {
         return true;
     };
 
+    //Visibilidad de la password
+        // Obtener los elementos
+        const passwordInput = document.getElementById('password');
+        const confirmpasswordInput = document.getElementById('confirm_password');
+        const PasswordEyeOn = document.getElementById('eye');
+        const PasswordEyeOn2 = document.getElementById('eye2');
+        const PasswordEyeOnOff = document.getElementById('noneye');
+        const PasswordEyeOnOff2 = document.getElementById('noneye2');
+
+    
+        // Función para alternar la visibilidad de la contraseña
+        PasswordEyeOn.addEventListener('click', function() {
+            // Cambiar el tipo de input entre 'password' y 'text'
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                PasswordEyeOn.style.display = 'none';  // Ocultar icono de ojo abierto
+                PasswordEyeOnOff.style.display = 'inline';  // Mostrar icono de ojo cerrado
+            }
+        });
+    
+        PasswordEyeOnOff.addEventListener('click', function() {
+            // Cambiar el tipo de input entre 'text' y 'password'
+            if (passwordInput.type === 'text') {
+                passwordInput.type = 'password';
+                PasswordEyeOnOff.style.display = 'none';  // Ocultar icono de ojo cerrado
+                PasswordEyeOn.style.display = 'inline';  // Mostrar icono de ojo abierto
+            }
+        });
+
+        // Función para alternar la visibilidad de la contraseña
+        PasswordEyeOn2.addEventListener('click', function() {
+            // Cambiar el tipo de input entre 'password' y 'text'
+            if (confirmpasswordInput.type === 'password') {
+                confirmpasswordInput.type = 'text';
+                PasswordEyeOn2.style.display = 'none';  // Ocultar icono de ojo abierto
+                PasswordEyeOnOff2.style.display = 'inline';  // Mostrar icono de ojo cerrado
+            }
+        });
+    
+        PasswordEyeOnOff2.addEventListener('click', function() {
+            // Cambiar el tipo de input entre 'text' y 'password'
+            if (confirmpasswordInput.type === 'text') {
+                confirmpasswordInput.type = 'password';
+                PasswordEyeOnOff2.style.display = 'none';  // Ocultar icono de ojo cerrado
+                PasswordEyeOn2.style.display = 'inline';  // Mostrar icono de ojo abierto
+            }
+        });
 });
