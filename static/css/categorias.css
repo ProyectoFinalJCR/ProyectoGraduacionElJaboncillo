@@ -18,12 +18,14 @@
     display: flex;
     justify-content: center;
     align-items: start;
-
+    overflow-x: auto;
 }
 .container-table-inputs .table-categories table{
     width: 90%;
     border-collapse: collapse;
     text-align: center;
+    table-layout: fixed; /* Asegura que las celdas se distribuyan de manera uniforme */
+    word-wrap: break-word;
 }
 .container-table-inputs .table-categories table thead{
     width: 100%;

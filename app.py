@@ -355,9 +355,187 @@ def editarSubcategoria():
     flash(('La subcategoría ha sido editada con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('subCategorias'))
 
-@app.route('/insumos')
+@app.route('/insumos', methods=["GET", "POST"])
 def insumos():
-    return render_template('insumos.html')
+    if request.method == "GET":
+        obtenerComposicion = text("SELECT * FROM composiciones_principales")
+        composicionP = db.execute(obtenerComposicion).fetchall()
+
+        obtenerTipoInsumo = text("SELECT * FROM aplicaciones")
+        tiposInsumo = db.execute(obtenerTipoInsumo).fetchall()
+        
+        obtenerSubcat = text("SELECT * FROM subcategorias")
+        subcat = db.execute(obtenerSubcat).fetchall()
+        
+        obtenerApliacionideal = text("SELECT * FROM condiciones_almacenamiento")
+        aplicaIdeal = db.execute(obtenerApliacionideal).fetchall()
+
+        #muestra la información de los insumos
+        MostrarInsumos = text("SELECT i.id, i.nombre, i.tipo_insumo, i.descripcion, cp.composicion, i.frecuencia_aplicacion, i.durabilidad, c.condicion, i.compatibilidad, i.precauciones, sub.subcategoria FROM insumos i INNER JOIN insumos_subcategoria s ON i.id = s.insumo_id INNER JOIN subcategorias sub ON sub.id = s.subcategoria_id INNER JOIN condiciones_almacenamiento c ON i.condiciones_almacenamiento_id = c.id INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id")
+
+        Insumos = db.execute(MostrarInsumos).fetchall()
+        print(Insumos[0])
+
+        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, Aplicaideal = aplicaIdeal, insumos=Insumos)
+    else:
+        insumo = request.form.get('nombre_insumo')
+        tipoInsumo = request.form.get('idtipoInsumo')
+        descripcionInsumo = request.form.get('descripcion_insumo')
+        subcatInsumo = request.form.get('idsubcat')
+        composicionInsumo = request.form.get('idComposicionP')
+        frecuenciaInsumo = request.form.get('frecuenciaAplicacion_insumo')
+        aplicacionideal = request.form.get("idaplicaIdeal")
+        durabilidadInsumo = request.form.get('durabilidad')
+        compatibilidadInsumo = request.form.get('compatibilidad')
+        precaucionesInsumo = request.form.get('precauciones')
+
+        if not insumo:
+            flash(('Ingrese el nombre del insumo', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        if not tipoInsumo:
+            flash(('Seleccione un tipo de insumo', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        if not subcatInsumo:
+            flash(('Seleccione una subcategoria', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        if not composicionInsumo:
+            flash(('Seleccione una composición principal', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        if not frecuenciaInsumo:
+            flash(('Ingrese la frecuencia de aplicación', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        if not aplicacionideal:
+            flash(('Seleccione una aplicación ideal', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        if not durabilidadInsumo:
+            flash(('Ingrese la durabilidad', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        if not compatibilidadInsumo:
+            flash(('Ingrese la compatibilidad', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        if not precaucionesInsumo:
+            flash(('Ingrese las precauciones', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        obtenerInsumo = text("SELECT * FROM insumos WHERE nombre=:insumo")
+        if db.execute(obtenerInsumo, {'insumo': insumo}).rowcount > 0:
+            flash(('Ya existe un insumo con ese nombre', 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        else:
+            insertarInsumo = text("INSERT INTO insumos (nombre, tipo_insumo, descripcion, composicion_principal_id, frecuencia_aplicacion, durabilidad, condiciones_almacenamiento_id, compatibilidad, precauciones) VALUES (:insumo, :tipoInsumo, :descripcionInsumo, :composicionInsumo, :frecuenciaInsumo, :durabilidadInsumo,:codiciones_almacenamiento_id ,:compatibilidadInsumo, :precaucionesInsumo)")
+            db.execute(insertarInsumo, {"insumo": insumo, "tipoInsumo": tipoInsumo, "descripcionInsumo": descripcionInsumo, "composicionInsumo": composicionInsumo, "frecuenciaInsumo": frecuenciaInsumo, "durabilidadInsumo": durabilidadInsumo,"codiciones_almacenamiento_id": aplicacionideal, "compatibilidadInsumo": compatibilidadInsumo, "precaucionesInsumo": precaucionesInsumo})
+
+            selectInsumoId = text("SELECT id FROM insumos WHERE nombre=:insumo")
+            insumoId = db.execute(selectInsumoId, {'insumo': insumo}).fetchone()
+
+            insertSubcatInsumo = text("INSERT INTO insumos_subcategoria (subcategoria_id, insumo_id) VALUES (:subcatInsumo, :insumoId)")
+            db.execute(insertSubcatInsumo, {"subcatInsumo": subcatInsumo, "insumoId": insumoId[0]})
+
+            db.commit()
+        flash(('El insumo ha sido agregado con éxito.', 'success', '¡Éxito!'))
+        return redirect(url_for('insumos'))
+
+
+
+@app.route('/eliminarInsumo', methods=["GET", "POST"])
+def eliminarInsumos():
+    idInsumo = request.form.get('id_insumo')
+
+    queryEliminarInsumo = text("DELETE FROM insumos_subcategoria WHERE insumo_id = :idInsumo")
+    db.execute(queryEliminarInsumo, {"idInsumo": idInsumo})
+    
+    query = text("DELETE FROM insumos WHERE id = :id")
+    db.execute(query, {"id": idInsumo})
+    db.commit()
+    flash(('El insumo se ha sido eliminado con éxito.', 'success', '¡Éxito!'))
+    return redirect(url_for('insumos'))
+
+@app.route('/editarinsumo', methods=["POST"])
+def editarinsumo():
+    if request.method == "POST":
+       
+       insumo_editar = request.form.get('insumo_editar')
+       tipoInsumo_editar = request.form.get('idtipoInsumo_editar')
+       descripcionInsumo_editar = request.form.get('descripcion_insumo_editar')
+       subcatInsumo_editar = request.form.get('idsubcat_editar')
+       composicionInsumo_editar = request.form.get('idComposicionP_editar')
+       frecuenciaInsumo_editar = request.form.get('frecuenciaAplicacion_insumo_editar')
+       aplicacionideal_editar = request.form.get("idaplicaIdeal_editar")
+       durabilidadInsumo_editar = request.form.get('durabilidad_editar')
+       compatibilidadInsumo_editar = request.form.get('compatibilidad_editar')
+       precaucionesInsumo_editar = request.form.get('precauciones_editar')
+
+       if not insumo_editar:
+           flash(('Ingrese el nombre del insumo', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+       
+       if not tipoInsumo_editar:
+           flash(('Seleccione un tipo de insumo', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+        
+       if not descripcionInsumo_editar:
+           flash(('Ingrese la descripción del insumo', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+        
+       if not subcatInsumo_editar:
+           flash(('Seleccione una subcategoria', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+       
+       if not composicionInsumo_editar:
+           flash(('Seleccione una composición principal', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+       
+       if not frecuenciaInsumo_editar:
+           flash(('Ingrese la frecuencia de aplicación', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+       
+       if not aplicacionideal_editar:
+           flash(('Seleccione una aplicación ideal', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+       
+       if not durabilidadInsumo_editar:
+           flash(('Ingrese la durabilidad', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+       
+       if not compatibilidadInsumo_editar:
+           flash(('Ingrese la compatibilidad', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+       
+       if not precaucionesInsumo_editar:
+           flash(('Ingrese las precauciones', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+       
+       # VALIDANDO SI HAY UN insumo CON ESE NOMBRE
+       obtenerInsumo = text("SELECT * FROM insumos WHERE nombre=:insumo")
+       if db.execute(obtenerInsumo,{'insumo': insumo_editar}).rowcount > 0:
+           flash(('Ya existe un insumo con ese nombre', 'error', '¡Error!'))
+           return redirect(url_for('insumos'))
+       else:
+           # VALIDANDO SI EXISTE UN INSUMO CON ESE ID
+           obtenerInsumo = text("SELECT nombre FROM insumos WHERE nombre=:nombre")
+           if db.execute(obtenerInsumo, {'nombre': insumo_editar}).rowcount > 0:
+               editarInsumo = text("UPDATE insumos SET nombre=:nombre, tipo_insumo=:tipoInsumo, descripcion=:descripcion, composicion_principal_id=:composicionInsumo, frecuencia_aplicacion=:frecuenciaInsumo, durabilidad=:durabilidadInsumo, condiciones_almacenamiento_id=:codiciones_almacenamiento_id, compatibilidad=:compatibilidadInsumo, precauciones=:precauciones WHERE id =:id")
+
+               db.execute(editarInsumo, {"nombre":insumo_editar, "tipoInsumo":tipoInsumo_editar, "descripcion":descripcionInsumo_editar, "composicionInsumo":composicionInsumo_editar, "frecuenciaInsumo":frecuenciaInsumo_editar, "durabilidadInsumo":durabilidadInsumo_editar,"codiciones_almacenamiento_id": aplicacionideal_editar, "compatibilidadInsumo": compatibilidadInsumo_editar, "precaucionesInsumo": precaucionesInsumo_editar})
+               db.commit()
+           else:
+               flash("Ha ocurrido un error", 'error', '¡Error!')
+               return redirect(url_for('insumos'))
+
+       
+       flash(('Los datos han sido editados con éxito.', 'success', '¡Éxito!'))
+       return redirect(url_for('insumos'))
+
+    
+
 @app.route('/catalogo')
 def catalogo():
     return render_template('catalogo.html')

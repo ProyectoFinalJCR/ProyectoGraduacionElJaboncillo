@@ -17,14 +17,60 @@ Insumos | El Jaboncillo
         </div>
     </div>
     <div class="container-table-inputs">
-        <div class="table-categories">
-
-        </div>
+            <div class="table-categories">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Insumo</th>
+                            <th>Tipo Insumo</th>
+                            <th>Descripción</th>
+                            <th>composición principal</th>
+                            <th>Frecuencia de aplicación</th>
+                            <th>Durabilidad</th>
+                            <th>Aplicacion ideal</th>
+                            <th>Compatibilidad</th>
+                            <th>Precauciones</th>
+                            <th>Subcategoria</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for insumo in insumos %}
+                        <tr>
+                            <td>{{insumo[0]}}</td>
+                            <td>{{insumo[1]}}</td>
+                            <td>{{insumo[2]}}</td>
+                            <td>{{insumo[3]}}</td>
+                            <td>{{insumo[4]}}</td>
+                            <td>{{insumo[5]}}</td>
+                            <td>{{insumo[6]}}</td>
+                            <td>{{insumo[7]}}</td>
+                            <td>{{insumo[8]}}</td>
+                            <td>{{insumo[9]}}</td>
+                            <td>{{insumo[10]}}</td>
+                            <td class="btn-acciones"> 
+                                <button class="btn-edit" id="openModalInsumo">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                               
+                                <form action="/eliminarInsumo" method="post" class="form-eliminar" >
+                                    <input type="hidden" class="id_eliminar" name="id_insumo" value="{{insumos[0]}}">
+                                    <button class="btn-delete" id="btn-eliminar" type="submit">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </form>
+                            </td>
+                    {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         <div class="container-inputsUser">
             <div class="inputUser-title">
                 <h3>Nuevo insumo</h3>
             </div>
-            <form class="formUser" action="/usuarios" id="form_user" method="post"> 
+            <form class="formUser" action="/insumos" id="form_user" method="post"> 
                 <section class="input-users">
                     <div>
                         <label for="">Insumo</label>
@@ -32,31 +78,43 @@ Insumos | El Jaboncillo
                     </div>
                     <div>
                         <label for="">Tipo de insumo</label>
-                        <select class="input input-user" id="rol" name="idrol">
-                            <!-- {% for rol in Roles %}
-                            <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
-                            {% endfor %} -->
+                        <select class="input input-user" id="tipoInsumo" name="idtipoInsumo">
+                            {% for tiposInsumo in TiposInsumo %}
+                            <option  value="{{tiposInsumo[1]}}">{{tiposInsumo[1]}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div>
                         <label for="">Descripción</label>
-                        <input type="text" id="descripción_insumo" class="input input-user" name="descripción_insumo" placeholder="Ingrese una descripción para este insumo">
+                        <input type="text" id="descripción_insumo" class="input input-user" name="descripcion_insumo" placeholder="Ingrese una descripción para este insumo">
+                    </div>
+                    <div>
+                        <label for="">Seleccione una subcategoria</label>
+                        <select class="input input-user" id="subcat" name="idsubcat">
+                            {% for subcat in Subcat %}
+                            <option  value="{{subcat[0]}}">{{subcat[2]}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div>
                         <label for="">Composición principal</label>
-                        <select class="input input-user" id="rol" name="idrol">
-                            <!-- {% for rol in Roles %}
-                            <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
-                            {% endfor %} -->
+                        <select class="input input-user" id="ComposicionP" name="idComposicionP">
+                            {% for composicionp in Composicionp %}
+                            <option  value="{{composicionp[0]}}">{{composicionp[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Aplicacion ideal</label>
+                        <select class="input input-user" id="idaplicaIdeal" name="idaplicaIdeal">
+                            {% for aplicaIdeal in Aplicaideal %}
+                            <option name="idaplicaIdeal" value="{{aplicaIdeal[0]}}">{{aplicaIdeal[1]}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div>
                         <label for="">Frecuencia de aplicacion</label>
-                        <select class="input input-user" id="rol" name="idrol">
-                            <!-- {% for rol in Roles %}
-                            <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
-                            {% endfor %} -->
-                        </select>
+                        <input type="text" id="frecuenciaAplicacion_insumo" class="input input-user" name="frecuenciaAplicacion_insumo" placeholder="Ingrese una descripción para este insumo acerca de la frecuencia de aplicacion">
                     </div>
                     <div>
                         <label for="">Durabilidad</label>
@@ -73,10 +131,85 @@ Insumos | El Jaboncillo
                 </section>
                 <section class="btn-agregar">
                     <button type="button" class="btn" id="btn-cancel">Cancelar</button>
-                    <button type="submit" class="btn opacity" id="btn-add-users" disabled>Agregar</button>
+                    <button type="submit" class="btn " id="btn-add-users">Agregar</button>
                 </section>
             </form>
         </div>
     </div>
 </section>
+
+<!-- Modal editar usuarios -->
+
+<div id="myModal" class="modal">
+    <div class="modal-content form-subcat">
+        <span class="close">&times;</span>
+        <h2>Editar Usuario</h2>
+        <form action="/editarInsumo" method="post" class="form_edit_user">
+            <div class="input-usuario">
+                <input type="hidden" id="id_editar_insumo" name="id_editar_insumo" value="{{insumos.id}}">
+                <label for="">Nombre completo</label>
+                <input type="text" id="insumo_editar" class="input" name="insumo_editar"
+                    value="">
+                    <label for="">Tipo de insumo</label>
+                    <select type="text" id="tipoInsumo_editar" name="tipoInsumo_editar" class="input">
+                        {% for tiposInsumo in TiposInsumo %}
+                            <option name="idtipoInsumo" value="{{tiposInsumo[0]}}">{{tiposInsumo[1]}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="">Descripción</label>
+                    <input type="text" id="descripcion_insumo_editar" class="input" name="descripcion_insumo_editar"
+                        value="">
+                    <label for="">Subcategoria</label>
+                    <select type="text" id="subcat_editar" name="subcat_editar" class="input">
+                        {% for subcat in Subcat %}
+                            <option name="idsubcat" value="{{subcat[0]}}"  >{{subcat[2]}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="">Composición principal</label>
+                    <select type="text" id="ComposicionP_editar" name="ComposicionP_editar" class="input">
+                        {% for composicionp in Composicionp %}
+                            <option name="idComposicionP" value="{{composicionp[0]}}"  >{{composicionp[1]}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="">Aplicacion ideal</label>
+                    <select type="text" id="idaplicaIdeal_editar" name="idaplicaIdeal_editar" class="input">
+                        {% for aplicaIdeal in Aplicaideal %}
+                            <option name="idaplicaIdeal" value="{{aplicaIdeal[0]}}"  >{{aplicaIdeal[1]}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="">Frecuencia de aplicacion</label>
+                    <input type="text" id="frecuenciaAplicacion_insumo_editar" class="input" name="frecuenciaAplicacion_insumo_editar"
+                        value="">
+                    <label for="">Durabilidad</label>
+                    <input type="text" id="durabilidad_editar" class="input" name="durabilidad_editar"
+                        value="">
+                    <label for="">Compatibilidad</label>
+                    <input type="text" id="compatibilidad_editar" class="input" name="compatibilidad_editar"
+                        value="">
+                    <label for="">Precauciones</label>
+                    <input type="text" id="precauciones_editar" class="input" name="precauciones_editar"
+                        value="">
+            </div>
+            <div class="btn-modal">
+                <button type="button" class="btn close-modal">Cancelar</button>
+                <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Mostrar mensaje de éxito -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <script>
+    Swal.fire({
+      title:'{{ messages[0][2] }}',
+      text: '{{ messages[0][0] }}',
+      icon: '{{ messages[0][1] }}',
+      confirmButtonText: 'OK'
+    });
+  </script>
+{% endif %}
+{% endwith %}
 {% endblock %}
