@@ -534,7 +534,137 @@ def editarinsumo():
        flash(('Los datos han sido editados con éxito.', 'success', '¡Éxito!'))
        return redirect(url_for('insumos'))
 
+@app.route('/plantas', methods=["GET", "POST"])
+def plantas():
+    if request.method == "GET":
+        obtenerColores = text("SELECT * FROM colores")
+        colores = db.execute(obtenerColores).fetchall()
+
+        obtenerSubcategorias = text("SELECT * FROM subcategorias")
+        subcategorias = db.execute(obtenerSubcategorias).fetchall()
+
+        obtenerRangos = text("SELECT * FROM rangos")
+        rangos = db.execute(obtenerRangos).fetchall()
+
+        obtenerEntornos = text("SELECT * FROM entornos_ideales")
+        entornos = db.execute(obtenerEntornos).fetchall()
+
+        obtenerAgua = text("SELECT * FROM requerimientos_agua")
+        agua = db.execute(obtenerAgua).fetchall()
+
+        obtenerTipoSuelo = text("SELECT * FROM tipos_suelos")
+        suelos = db.execute(obtenerTipoSuelo).fetchall()
+
+        obtenerTemporada = text("SELECT * FROM temporadas_plantacion")
+        temporada = db.execute(obtenerTemporada).fetchall()
+
+        obtenerInfo = text("""
+        SELECT plantas.id AS id, 
+               plantas.nombre AS nombre, 
+               plantas.descripcion AS descripcion, 
+               subcategorias.subcategoria AS subcategoria, 
+               colores.color AS color, 
+               rangos.rango AS rango, 
+               entornos_ideales.entorno AS entorno, 
+               requerimientos_agua.requerimiento_agua AS agua, 
+               tipos_suelos.tipo_suelo AS suelo, 
+               temporadas_plantacion.temporada AS temporada  
+        FROM plantas
+        JOIN plantas_subcategoria ON plantas.id = plantas_subcategoria.planta_id
+        JOIN subcategorias ON plantas_subcategoria.subcategoria_id = subcategorias.id
+        JOIN colores_plantas ON plantas.id = colores_plantas.planta_id
+        JOIN colores ON colores_plantas.color_id = colores.id
+        JOIN rangos_medidas ON plantas.id = rangos_medidas.planta_id
+        JOIN rangos ON rangos_medidas.rango_id = rangos.id
+        JOIN entornos_ideales ON plantas.entorno_ideal_id = entornos_ideales.id
+        JOIN requerimientos_agua ON plantas.requerimiento_agua_id = requerimientos_agua.id
+        JOIN tipos_suelos ON plantas.tipo_suelo_id = tipos_suelos.id
+        JOIN temporadas_plantacion ON plantas.temporada_plantacion_id = temporadas_plantacion.id
+    """)
+        infoPlantas = db.execute(obtenerInfo).fetchall()
+
+        return render_template('plantas.html', InfoPlanta = infoPlantas, Colores = colores, Subcategorias = subcategorias, Rangos = rangos, Entornos = entornos, Agua = agua, Suelos = suelos, Temporada = temporada)
+    else:
+        nombrePlanta = request.form.get('nombrePlanta')
+        descripcion = request.form.get('descripcion')
+        color = request.form.get('idColor')
+        subcategoria = request.form.get('idSub')
+        rango = request.form.get('idRango')
+        entorno = request.form.get('idEntorno')
+        agua = request.form.get('idAgua')
+        suelo = request.form.get('idSuelo')
+        temporada = request.form.get('idTemporada')
+
+        if not nombrePlanta:
+            flash(('Ingrese el nombre', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not descripcion:
+            flash(('Ingrese la descripcion', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not color:
+            flash(('Seleccione el color', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not subcategoria:
+            flash(('Seleccione la subcategoria', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not rango:
+            flash(('Seleccione el rango', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not entorno:
+            flash(('Seleccione el entorno ideal', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not agua:
+            flash(('Seleccione el requeeimiento de agua', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not suelo:
+            flash(('Seleccione el tipo de suelo ', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not temporada:
+            flash(('Seleccione la temporada', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        
+        obtenerPlantas = text("SELECT * FROM plantas WHERE nombre=:nombre")
+        if db.execute(obtenerPlantas, {'nombre': nombrePlanta}).rowcount > 0:
+            flash(('La planta ya existe', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        else:
+            insertarPlanta = text("INSERT INTO plantas (nombre, descripcion, entorno_ideal_id, requerimiento_agua_id, tipo_suelo_id, temporada_plantacion_id) VALUES (:nombre, :descripcion, :entorno_ideal_id, :requerimiento_agua_id, :tipo_suelo_id, :temporada_plantacion_id)")
+            db.execute(insertarPlanta, {'nombre': nombrePlanta, 'descripcion': descripcion, 'entorno_ideal_id':entorno, 'requerimiento_agua_id': agua, 'tipo_suelo_id': suelo, 'temporada_plantacion_id': temporada})
+
+            plantaId = db.execute(text("SELECT * FROM plantas ORDER BY id DESC LIMIT 1")).fetchone()[0]
+
+            insertarPlantasSub = text("INSERT INTO plantas_subcategoria (subcategoria_id, planta_id) VALUES (:subcategoria_id, :planta_id)")
+            db.execute(insertarPlantasSub, {'subcategoria_id': subcategoria, 'planta_id': plantaId})
+
+            insertarColores = text("INSERT INTO colores_plantas (color_id, planta_id) VALUES (:color_id, :planta_id)")
+            db.execute(insertarColores, {'color_id': color, 'planta_id': plantaId})
+
+            insertarRangos = text("INSERT INTO rangos_medidas (rango_id, planta_id) VALUES (:rango_id, :planta_id)")
+            db.execute(insertarRangos, {'rango_id': rango, 'planta_id': plantaId})
+
+            db.commit()
+        flash(('La planta se ha agregado correctamente', 'success', '¡Exito!'))
+        return redirect(url_for('plantas'))
+
+@app.route('/eliminarPlanta', methods=["POST"])
+def eliminarPlanta():
+    idPlanta = request.form.get('id_eliminar')
+
+    eliminarPlantaSub = text("DELETE FROM plantas_subcategoria WHERE planta_id = :planta_id")
+    db.execute(eliminarPlantaSub, {"planta_id": idPlanta})
+
+    eliminarPlantaColor = text("DELETE FROM colores_plantas WHERE planta_id = :planta_id")
+    db.execute(eliminarPlantaColor, {"planta_id": idPlanta})
+
+    eliminarPlantaRango = text("DELETE FROM rangos_medidas WHERE planta_id = :planta_id")
+    db.execute(eliminarPlantaRango, {"planta_id": idPlanta})
     
+    eliminarPlanta = text("DELETE FROM plantas WHERE id = :id")
+    db.execute(eliminarPlanta, {"id": idPlanta})
+    db.commit()
+    flash(('La planta se ha sido eliminado con éxito.', 'success', '¡Éxito!'))
+    return redirect(url_for('plantas'))   
+
 
 @app.route('/catalogo')
 def catalogo():
