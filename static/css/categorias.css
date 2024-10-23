@@ -113,8 +113,7 @@
   
   /* Contenido del Modal */
   .modal-content {
-    background-color: white;
-    margin: 15% auto;
+    background-color: white;    
     padding: 20px;
     border: 1px solid #888;
     width: 80%;

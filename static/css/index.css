@@ -1,0 +1,236 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans", sans-serif;
+
+}
+
+.navbar{
+    width: 100%;
+    height: 85px;
+    background-color: #ededed;
+    display: grid;
+    grid-template-columns: 1.2fr 1.1fr 0.7fr;
+    padding: 0px 30px;
+}
+/*Logo*/
+.seccion-logo{
+    width: 84%;
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: 100px;
+}
+.seccion-logo .logoEJ{
+    width: 40%;
+}
+/*Items*/
+.seccion-items{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+}
+.item-navb{
+    text-decoration: none;
+    color: #000;
+    letter-spacing: 3px;
+    font-size: 14px;
+}
+/*Botones de registro e inicio de sesion*/
+.seccion-btns{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 25px;
+}
+.seccion-btns .btn-inicars{
+    height: 30px;
+    width: 150px;
+}
+
+/* Fondo con el logo en blanco*/
+.seccion-fondoylogo{
+    width: 100%;
+    height: 91vh;
+    position: relative;
+    background-image: url("/static/img/veranera_bonsai.jpg");
+    background-size: cover;
+    background-position:top;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.opacidad{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.3;
+    z-index: 1;
+}
+.logo-blanco{
+    /* width: 963px;
+    height: 355px; */
+    width: 50%;
+    position: relative;
+    z-index: 2;
+}
+/*Plantas*/
+.plantas-list{
+    width: 100%;
+    height: 85px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #009447;
+}
+.plantas-list p{
+    font-size: 15px;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+/*Seccion nosotros*/
+.seccion-nosotros{
+    width: 100%;
+    height: 100vh;
+}
+.nosotrostxt{
+    width: 100%;
+    height: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.nosotrostxt h3{
+    font-size: 25px;
+    color: #646564;
+    letter-spacing: 5px;
+}
+.nosotrostxt .linea{
+    height: 2px;              /* Grosor de la línea */
+    background-color: #646564; /* Color de la línea */
+    width: 50px;             /* Longitud de la línea */
+    margin: 20px auto; 
+}
+.nosotrostxt .parrafo-nosotros-contenedor{
+    width: 40%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.nosotrostxt .parrafo-nosotros-contenedor .parrafo-nosotros{
+    font-size: 15px;
+    color: #000;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+/*cards-plantas*/
+.cards-plantas{
+    width: 100%;
+    height: 65%;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 120px;
+    margin-top: 20px;
+    padding: 50px;
+}
+/*card-plantas*/
+.cards-plantas .card-plantas{
+    width: 300px;
+    height: 440px;
+    background-color: #fff;
+    border-radius: 24px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+ }
+ .cards-plantas .card-plantas .img-card{
+    width: 100%;
+    height: 70%;
+    border-radius: 24px 24px 0px 0px;
+    background-color: #009447;
+    
+  }
+
+  .cards-plantas .card-plantas .img-card img{
+    width: 100%;
+    height: 100%;
+    border-radius: 24px 24px 0px 0px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    }
+  .cards-plantas .card-plantas .card-info{
+    width: 100%;
+    height: 30%;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+   }
+  .cards-plantas .card-plantas .card-info{
+    width: 100%;
+    height: 30%;
+    padding: 15px;
+   }
+   /*nombre planta*/
+  .cards-plantas .card-plantas .card-info .nombre-planta{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+   }
+   /*boton catalogo*/
+   .cards-plantas .card-plantas .card-info .btn-catalogo{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 10px;
+   }
+  .cards-plantas .card-plantas .card-info .btn-catalogo button{
+    width: 45%;
+    height: 27px;
+    border-radius: 15px;
+    border: none;
+    background-color: #BEFFB6;
+    color: #000;
+   }
+  .cards-plantas .card-plantas .card-info .btn-catalogo button:hover{
+    background-color: #aae9a2;
+    font-weight: 600;
+   }
+  .cards-plantas .card-plantas .card-info .btn-catalogo button a{
+    text-decoration: none;
+    letter-spacing: 1px;
+   }
+   /*minilogo*/
+  .cards-plantas .card-plantas .card-info .minilogoEJ{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+   }
+  .cards-plantas .card-plantas .card-info .minilogoEJ img{
+    width: 40%;
+   }
