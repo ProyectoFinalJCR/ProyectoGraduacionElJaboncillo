@@ -2,3 +2,37 @@
     width: 100%;
     height: auto;
 }
+
+/* Modal editar */
+.modal-insumos {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    right: 0;
+    top: 0;
+    width: 83%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Contenido del Modal */
+  .modal-content-insumos {
+    background-color: white;    
+    padding: 20px;
+    border: 1px solid #888;
+    width: 100%;
+    max-width: 475px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .modal-content-insumos .inputs-insumos{
+    display: flex;
+    flex-direction: column;
+  } 
+  .modal-content .input-categories #descripcion_editar{
+    height: 85px;
+  } 
+
+
+
+

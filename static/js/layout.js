@@ -24,7 +24,8 @@ function mostrarFechaHora() {
 
     const fechaFormateada = `${diaSemana}, ${diaMes} de ${mes} del ${año}`;
     
-    document.getElementById("fechaHora").innerHTML = `${fechaFormateada} ${horaFormateada}`;
+    document.getElementById("fecha").innerHTML = `${fechaFormateada}`;
+    document.getElementById("hora").innerHTML = `${horaFormateada}`
 }
 
     setInterval(mostrarFechaHora, 1000);

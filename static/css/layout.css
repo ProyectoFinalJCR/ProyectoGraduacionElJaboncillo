@@ -32,7 +32,13 @@
     padding: 1% 5%;
     background-color: #efeeee;
   }
-
+.navbar .fecha{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px ;
+}
   .navbar p{
     color: #006834;
     font-size: 19px;    
