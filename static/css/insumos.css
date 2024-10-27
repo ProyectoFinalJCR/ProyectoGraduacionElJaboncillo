@@ -3,6 +3,34 @@
     height: auto;
 }
 
+/*Tabla de insumos*/
+.container-table-inputs .table-insumos{
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+.container-table-inputs .table-insumos table{
+  width: 90%;
+  border-collapse: collapse;
+  text-align: center;
+}
+.container-table-inputs .table-insumos table thead{
+  width: 100%;
+  height: 55px;
+  text-align: center;
+}
+.container-table-inputs .container-inputinsumos{
+  display: none;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  padding: 20px;
+}
+
+
 /* Modal editar */
 .modal-insumos {
     display: none; 

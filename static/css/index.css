@@ -234,3 +234,202 @@
   .cards-plantas .card-plantas .card-info .minilogoEJ img{
     width: 40%;
    }
+/* Seccion servicios */
+.seccion-servicios{
+  width: 100%;
+  height: 100vh;
+  background-color: #ededee;
+  margin-top: 50px;
+  padding: 50px 30px;
+}
+.item-servicios{
+  width: 100%;
+  height: 35%;
+  display: grid;
+  grid-template-columns: 2.5fr .1fr 1fr 1fr;
+  gap: 25px;
+}
+ /* titulo servicios */
+.item-servicios .titulo-servicio {
+  height: 100%;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 60px;
+}
+
+.item-servicios .titulo-servicio p{
+  font-size: 45px;
+  color: #000;
+  letter-spacing: 6px;
+  font-weight: 800;
+
+}
+/* linea vertical */
+.linea-vertical{
+    height: 100%;
+    width: 5px;
+    background-color: #000;
+}
+/*parrafos servicios*/
+.parrafos-servicios{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+}
+.parrafos-servicios p{
+  font-size: 15px;
+  color: #000;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+/*img servicios*/
+.img-servicios{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*servicios cards*/
+.servicios-cards{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 50px;
+  padding: 80px 50px;
+}
+.servicios-cards .card-servicios{
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    background-color: #fff;
+    gap: 15px;
+}
+.servicios-cards .card-servicios .titulo-servicio{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+.servicios-cards .card-servicios .titulo-servicio p{
+    font-size: 24px;
+    color: #000;
+    letter-spacing: 6px;
+    text-align: center;
+}
+.servicios-cards .card-servicios .img-servicio{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.servicios-cards .card-servicios .btn-servicio{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.servicios-cards .card-servicios .btn-servicio button{
+    width: 175px;
+    height: 45px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: #BEFFB6;
+    color: #fff;
+    border: none;
+    margin-bottom: 10px;
+}
+.servicios-cards .card-servicios .btn-servicio button:hover{
+    background-color: #aae9a2;
+    font-weight: 600;
+}
+.servicios-cards .card-servicios .btn-servicio button a{
+    text-decoration: none;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+.servicios-cards .card-servicios .img-planta{
+    display: flex;
+    justify-content: start;
+    align-items: center;    
+}
+/* seccion paisaje */
+.seccion-paisaje{
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+    margin-top: 50px;
+    padding: 50px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.paisaje-contenedor{
+    width: 85%;
+    height: 80%;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    background-color: #fff;
+    padding: 55px;
+}
+.paisaje-contenedor .paisaje-info{
+    width: 85%;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    gap: 55px;
+    padding: 30px 0px;
+}
+.paisaje-contenedor .paisaje-info .paisaje-titulo-contenedor{
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.paisaje-contenedor .paisaje-info .paisaje-titulo-contenedor p{
+    font-size: 45px;
+    color: #000;
+    font-weight: 700;
+    letter-spacing: 7px;
+}
+.paisaje-texto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.paisaje-contenedor .paisaje-img{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #60a381;
+}

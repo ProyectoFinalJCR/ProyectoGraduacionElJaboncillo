@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // ABRIR Y OBTENER DATOS PARA EL MODAL
     // Obtener el modal y los elementos que queremos manipular
     const modal = document.getElementById("myModal");
-    const btnsEdit = document.querySelectorAll(".btn-edit");
+    const btnsEdit = document.querySelectorAll(".editar-insumo");
     const inputId_insumo = document.getElementById("id_editar_insumo");
     const inputinsumo_editar = document.getElementById("insumo_editar");
     const inputtipoInsumo_editar = document.getElementById("tipoInsumo_editar");

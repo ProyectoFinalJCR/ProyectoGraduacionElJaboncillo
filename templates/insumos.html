@@ -17,7 +17,7 @@ Insumos | El Jaboncillo
         </div>
     </div>
     <div class="container-table-inputs">
-        <div class="table-categories">
+        <div class="table-insumos">
             <table class="table">
                 <thead>
                     <tr>
@@ -36,8 +36,8 @@ Insumos | El Jaboncillo
                     </tr>
                 </thead>
                 <tbody>
-                    {% for insumo in insumos %}
                     <tr>
+                        {% for insumo in insumos %}
                         <td>{{insumo[0]}}</td>
                         <td>{{insumo[1]}}</td>
                         <td>{{insumo[2]}}</td>
@@ -50,7 +50,7 @@ Insumos | El Jaboncillo
                         <td>{{insumo[9]}}</td>
                         <td>{{insumo[10]}}</td>
                         <td class="btn-acciones">
-                            <button class="btn-edit" id="openModalInsumo">
+                            <button class="btn-edit editar-insumo" id="openModalInsumo">
                                 <i class="material-icons">edit</i>
                             </button>
 
@@ -61,12 +61,12 @@ Insumos | El Jaboncillo
                                 </button>
                             </form>
                         </td>
-                        {% endfor %}
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="container-inputsUser">
+        <div class="container-inputinsumos">
             <div class="inputUser-title">
                 <h3>Nuevo insumo</h3>
             </div>
@@ -147,10 +147,10 @@ Insumos | El Jaboncillo
 
 <!-- Modal editar usuarios -->
 
-<div id="myModal" class="modal-insumos">
-    <div class="modal-content-insumos form-subcat">
+<div id="myModal" class="modal">
+    <div class="modal-content form-subcat">
         <span class="close">&times;</span>
-        <h2>Editar Usuario</h2>
+        <h2>Editar insumos</h2>
         <form action="/editarInsumo" method="post" class="form_edit_insumo">
             <div class="inputs-insumos">
                 <div class="input-insumos">
