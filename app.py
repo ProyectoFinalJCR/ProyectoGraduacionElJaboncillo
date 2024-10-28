@@ -367,16 +367,12 @@ def insumos():
         obtenerSubcat = text("SELECT * FROM subcategorias")
         subcat = db.execute(obtenerSubcat).fetchall()
         
-        obtenerApliacionideal = text("SELECT * FROM condiciones_almacenamiento")
-        aplicaIdeal = db.execute(obtenerApliacionideal).fetchall()
-
         #muestra la información de los insumos
-        MostrarInsumos = text("SELECT i.id, i.nombre, i.tipo_insumo, i.descripcion, cp.composicion, i.frecuencia_aplicacion, i.durabilidad, c.condicion, i.compatibilidad, i.precauciones, sub.subcategoria FROM insumos i INNER JOIN insumos_subcategoria s ON i.id = s.insumo_id INNER JOIN subcategorias sub ON sub.id = s.subcategoria_id INNER JOIN condiciones_almacenamiento c ON i.condiciones_almacenamiento_id = c.id INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id")
+        MostrarInsumos = text("SELECT i.id, i.nombre, i.tipo_insumo, i.descripcion, cp.composicion, i.frecuencia_aplicacion, i.compatibilidad, i.precauciones, sub.subcategoria FROM insumos i INNER JOIN insumos_subcategoria s ON i.id = s.insumo_id INNER JOIN subcategorias sub ON sub.id = s.subcategoria_id INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id")
 
         Insumos = db.execute(MostrarInsumos).fetchall()
-        print(Insumos[0])
 
-        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, Aplicaideal = aplicaIdeal, insumos=Insumos)
+        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, insumos=Insumos)
     else:
         insumo = request.form.get('nombre_insumo')
         tipoInsumo = request.form.get('idtipoInsumo')

@@ -17,6 +17,11 @@ Categorias | El Jaboncillo
     </div>
 </div>
 <div class="container-table-inputs">
+    {%if categorias == [] %}
+    <div class="table-insumos">
+        <h3>No hay categorias en la lista</h3>
+    </div>
+    {%else%}
     <div class="table-categories">
         <table class="table">
             <thead>
@@ -49,6 +54,7 @@ Categorias | El Jaboncillo
             </tbody>
         </table>
     </div>
+    {%endif%}
     <div class="container-inputsCat">
         <div class="inputCat-title">
             <h3>Nuevo Categoria</h3>

@@ -16,6 +16,11 @@ Usuarios | El Jaboncillo
     </div>
 </div>
 <div class="container-table-inputs">
+    {%if usuario == [] %}
+    <div class="table-insumos">
+        <h3>No hay usuarios en la lista</h3>
+    </div>
+    {%else%}
     <div class="table-categories">
         <table class="table">
             <thead>
@@ -53,6 +58,7 @@ Usuarios | El Jaboncillo
             </tbody>
         </table>
     </div>
+    {%endif%}
     <div class="container-inputsUser">
         <div class="inputUser-title">
             <h3>Nuevo Usuario</h3>

@@ -16,6 +16,11 @@ Subcategorias | El Jaboncillo
     </div>
 </div>
 <div class="container-table-inputs">
+    {%if subcategorias == [] %}
+    <div class="table-insumos">
+        <h3>No hay subcategorias en la lista</h3>
+    </div>
+    {%else%}
     <div class="table-subcategories">
         <table class="table">
             <thead>
@@ -52,6 +57,7 @@ Subcategorias | El Jaboncillo
             </tbody>
         </table>
     </div>
+    {%endif%}
     <div class="container-inputSubcat">
         <div class="inputSubcat-title">
             <h3>Nuevo Subcategoria</h3>
