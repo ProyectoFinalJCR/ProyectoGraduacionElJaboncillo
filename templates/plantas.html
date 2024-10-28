@@ -17,6 +17,11 @@ Plantas | El Jaboncillo
 </div>
 </div>
 <div class="container-table-inputs">
+    {%if InfoPlanta == [] %}
+    <div class="table-insumos">
+        <h3>No hay plantas en la lista</h3>
+    </div>
+    {%else%}
     <div class="table-plantas">
         <table class="table">
             <thead>
@@ -64,6 +69,7 @@ Plantas | El Jaboncillo
             </tbody>
         </table>
     </div>
+    {%endif%}
     <div class="container-inputPlantas">
         <div class="inputPlantas-title">
             <h3>Nuevo Planta</h3>

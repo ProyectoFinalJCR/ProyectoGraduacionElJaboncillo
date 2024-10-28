@@ -1,5 +1,20 @@
 document.addEventListener("DOMContentLoaded", function(event) {
+    //Evento para mostrar formulario
+    document.querySelector('#btn-add-insumos').addEventListener('click', function(){
+      const container_table_inputs = document.querySelector(".container-table-inputs");        
+      const form_insumos = document.querySelector(".container-inputinsumos");
 
+      //alternar clases para expandir la tabla y mostrar el formulario
+      container_table_inputs.classList.toggle("active");
+      form_insumos.classList.toggle("show");
+      console.log("este se activa")
+      //btn cancelar regresa la tabla al centro, quitandole las clases
+      document.getElementById("btn-cancel").addEventListener("click", function(){
+          form_insumos.classList.remove("show")
+          container_table_inputs.classList.remove("active")
+          console.log("este se activa")
+      });
+    });
 
 
     // ABRIR Y OBTENER DATOS PARA EL MODAL

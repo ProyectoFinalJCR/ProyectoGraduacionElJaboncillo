@@ -366,12 +366,19 @@ def insumos():
         
         obtenerSubcat = text("SELECT * FROM subcategorias")
         subcat = db.execute(obtenerSubcat).fetchall()
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 96e69ba71d54557ad9e5ffa5ce6529d7c9ae019c
         #muestra la información de los insumos
         MostrarInsumos = text("SELECT i.id, i.nombre, i.tipo_insumo, i.descripcion, cp.composicion, i.frecuencia_aplicacion, i.compatibilidad, i.precauciones, sub.subcategoria FROM insumos i INNER JOIN insumos_subcategoria s ON i.id = s.insumo_id INNER JOIN subcategorias sub ON sub.id = s.subcategoria_id INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id")
 
         Insumos = db.execute(MostrarInsumos).fetchall()
+<<<<<<< HEAD
         
+=======
+>>>>>>> 96e69ba71d54557ad9e5ffa5ce6529d7c9ae019c
 
         return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, insumos=Insumos)
     else:

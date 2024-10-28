@@ -13,10 +13,15 @@ Insumos | El Jaboncillo
             </button>
         </form>
         <div>
-            <button class="btn" id="btn-add-user">Agregar insumo</button>
+            <button class="btn btn-add-insumos" id="btn-add-insumos">Agregar insumo</button>
         </div>
     </div>
     <div class="container-table-inputs">
+        {%if insumos == [] %}
+        <div class="table-insumos">
+            <h3>No hay insumos en la lista</h3>
+        </div>
+        {%else%}
         <div class="table-insumos">
             <table class="table">
                 <thead>
@@ -66,20 +71,21 @@ Insumos | El Jaboncillo
                 </tbody>
             </table>
         </div>
+        {%endif%}
         <div class="container-inputinsumos">
-            <div class="inputUser-title">
+            <div class="inputinsumos-title">
                 <h3>Nuevo insumo</h3>
             </div>
-            <form class="formUser" action="/insumos" id="form_user" method="post">
-                <section class="input-users">
+            <form class="form-insumos" action="/insumos" id="form_insumos" method="post">
+                <section class="inputs-insumos">
                     <div>
                         <label for="">Insumo</label>
-                        <input type="text" id="nombre_insumo" class="input input-user" name="nombre_insumo"
+                        <input type="text" id="nombre_insumo" class="input input-insumos" name="nombre_insumo"
                             placeholder="Ingrese el insumo">
                     </div>
                     <div>
                         <label for="">Tipo de insumo</label>
-                        <select class="input input-user" id="tipoInsumo" name="idtipoInsumo">
+                        <select class="input input-insumos" id="tipoInsumo" name="idtipoInsumo">
                             {% for tiposInsumo in TiposInsumo %}
                             <option value="{{tiposInsumo[1]}}">{{tiposInsumo[1]}}</option>
                             {% endfor %}
@@ -87,12 +93,12 @@ Insumos | El Jaboncillo
                     </div>
                     <div>
                         <label for="">Descripción</label>
-                        <input type="text" id="descripción_insumo" class="input input-user" name="descripcion_insumo"
+                        <input type="text" id="descripción_insumo" class="input input-insumos" name="descripcion_insumo"
                             placeholder="Ingrese una descripción para este insumo">
                     </div>
                     <div>
                         <label for="">Seleccione una subcategoria</label>
-                        <select class="input input-user" id="subcat" name="idsubcat">
+                        <select class="input input-insumos" id="subcat" name="idsubcat">
                             {% for subcat in Subcat %}
                             <option value="{{subcat[0]}}">{{subcat[2]}}</option>
                             {% endfor %}
@@ -100,39 +106,32 @@ Insumos | El Jaboncillo
                     </div>
                     <div>
                         <label for="">Composición principal</label>
-                        <select class="input input-user" id="ComposicionP" name="idComposicionP">
+                        <select class="input input-insumos" id="ComposicionP" name="idComposicionP">
                             {% for composicionp in Composicionp %}
                             <option value="{{composicionp[0]}}">{{composicionp[1]}}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div>
-                        <label for="">Aplicacion ideal</label>
-                        <select class="input input-user" id="idaplicaIdeal" name="idaplicaIdeal">
-                            {% for aplicaIdeal in Aplicaideal %}
-                            <option name="idaplicaIdeal" value="{{aplicaIdeal[0]}}">{{aplicaIdeal[1]}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+
                     <div>
                         <label for="">Frecuencia de aplicacion</label>
-                        <input type="text" id="frecuenciaAplicacion_insumo" class="input input-user"
+                        <input type="text" id="frecuenciaAplicacion_insumo" class="input input-insumos"
                             name="frecuenciaAplicacion_insumo"
                             placeholder="Ingrese una descripción para este insumo acerca de la frecuencia de aplicacion">
                     </div>
                     <div>
                         <label for="">Durabilidad</label>
-                        <input type="text" id="durabilidad" class="input input-user" name="durabilidad"
+                        <input type="text" id="durabilidad" class="input input-insumos" name="durabilidad"
                             placeholder="Ingrese durabilidad aproximada para este insumo">
                     </div>
                     <div>
                         <label for="">Compatibilidad</label>
-                        <input type="text" id="compatibilidad" class="input input-user" name="compatibilidad"
+                        <input type="text" id="compatibilidad" class="input input-insumos" name="compatibilidad"
                             placeholder="Ingrese durabilidad aproximada para este insumo">
                     </div>
                     <div>
                         <label for="">Precauciones</label>
-                        <input type="text" id="precauciones" class="input input-user" name="precauciones"
+                        <input type="text" id="precauciones" class="input input-insumos" name="precauciones"
                             placeholder="Ingrese durabilidad aproximada para este insumo">
                     </div>
                 </section>
