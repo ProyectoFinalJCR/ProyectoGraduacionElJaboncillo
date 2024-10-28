@@ -17,24 +17,26 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
     //Obtener datos para mostrar en el modal de editar
-    const modal = document.querySelectorById("myModal");
-    const btnsEdit = document.querySelectorAll(".btn-edit");
-    const inputId  = document.querySelectorById("id_editar");
-    const inputNombre = document.querySelectorById("nombrePlanta_editar")
-    const inputDescripcion = document.querySelectorById("descripcion_editar")
-    const inputColor = document.querySelectorById("idColor_editar")
-    const inputSubcategoria =  document.querySelectorById("idSubcategoria_editar")
-    const inputRango = document.querySelectorById("idRango_editar")
-    const inputEntorno = document.querySelectorById("idEntorno_editar")
-    const inputAgua = document.querySelectorById("idAgua_editar")
-    const inputSuelo = document.querySelectorById("idSuelo_editar")
-    const inputTemporada = document.querySelectorById("idTemporada_editar")
+    const modal = document.getElementById("myModal");
+    const btnsEdit = document.querySelectorAll(".plantas-btn-edit");
+    const inputId  = document.getElementById("id_editar");
+    const inputNombre = document.getElementById("nombrePlanta_editar")
+    const inputDescripcion = document.getElementById("descripcion_editar")
+    const inputColor = document.getElementById("idColor_editar")
+    const inputSubcategoria =  document.getElementById("idSubcategoria_editar")
+    const inputRango = document.getElementById("idRango_editar")
+    const inputEntorno = document.getElementById("idEntorno_editar")
+    const inputAgua = document.getElementById("idAgua_editar")
+    const inputSuelo = document.getElementById("idSuelo_editar")
+    const inputTemporada = document.getElementById("idTemporada_editar")
 
     // Agregar evento para abrir el modal en cada botón de edición
     btnsEdit.forEach((btn) => {
         btn.addEventListener('click', (event) => {
           // Obtener la fila de la tabla donde se hizo clic
           const row = event.target.closest("tr");
+          console.log("esta en plantas.js")
+          // console.log("esta entrando en este js");
   
           // Obtener los datos de la categoría de esa fila
           const PlantaId = row.cells[0].innerText;
@@ -49,12 +51,24 @@ document.addEventListener("DOMContentLoaded", function(){
           const PlantaTemporada = row.cells[9].innerText;
 
           // Rellenar los campos del modal con los datos obtenidos
-          inputId.value = categoriaId;
-          inputNombreCat.value = categoriaNombreCat;
-          inputNombreSub.value = categoriaNombreSub;
-          inputNombreSub.textContent = categoriaNombreSub;
-          inputDescripcion.value = categoriaDescripcion;
-          inputDescripcion.textContent = categoriaDescripcion;
+          inputId.value = PlantaId;
+          inputNombre.value = PlantaNombre;
+          inputDescripcion.value = PlantaDescripcion;
+          inputDescripcion.textContent = PlantaDescripcion;
+          inputColor.value = PlantaColor;
+          inputColor.textContent = PlantaColor;
+          inputSubcategoria.value = PlantaSubcategoria;
+          inputSubcategoria.textContent = PlantaSubcategoria;
+          inputRango.value = PlantaRango;
+          inputRango.textContent = PlantaRango;
+          inputEntorno.value = PlantaEntorno;
+          inputEntorno.textContent = PlantaEntorno;
+          inputAgua.value = PlantaAgua;
+          inputAgua.textContent = PlantaAgua;
+          inputSuelo.value = PlantaSuelo;
+          inputSuelo.textContent = PlantaSuelo;
+          inputTemporada.value = PlantaTemporada;
+          inputTemporada.textContent = PlantaTemporada;
   
           // Mostrar el modal
           modal.style.display = "block";

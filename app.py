@@ -366,17 +366,14 @@ def insumos():
         
         obtenerSubcat = text("SELECT * FROM subcategorias")
         subcat = db.execute(obtenerSubcat).fetchall()
-        
-        obtenerApliacionideal = text("SELECT * FROM condiciones_almacenamiento")
-        aplicaIdeal = db.execute(obtenerApliacionideal).fetchall()
 
         #muestra la información de los insumos
-        MostrarInsumos = text("SELECT i.id, i.nombre, i.tipo_insumo, i.descripcion, cp.composicion, i.frecuencia_aplicacion, i.durabilidad, c.condicion, i.compatibilidad, i.precauciones, sub.subcategoria FROM insumos i INNER JOIN insumos_subcategoria s ON i.id = s.insumo_id INNER JOIN subcategorias sub ON sub.id = s.subcategoria_id INNER JOIN condiciones_almacenamiento c ON i.condiciones_almacenamiento_id = c.id INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id")
+        MostrarInsumos = text("SELECT i.id, i.nombre, i.tipo_insumo, i.descripcion, cp.composicion, i.frecuencia_aplicacion, i.compatibilidad, i.precauciones, sub.subcategoria FROM insumos i INNER JOIN insumos_subcategoria s ON i.id = s.insumo_id INNER JOIN subcategorias sub ON sub.id = s.subcategoria_id INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id")
 
         Insumos = db.execute(MostrarInsumos).fetchall()
-        print(Insumos[0])
+        
 
-        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, Aplicaideal = aplicaIdeal, insumos=Insumos)
+        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, insumos=Insumos)
     else:
         insumo = request.form.get('nombre_insumo')
         tipoInsumo = request.form.get('idtipoInsumo')
@@ -384,8 +381,6 @@ def insumos():
         subcatInsumo = request.form.get('idsubcat')
         composicionInsumo = request.form.get('idComposicionP')
         frecuenciaInsumo = request.form.get('frecuenciaAplicacion_insumo')
-        aplicacionideal = request.form.get("idaplicaIdeal")
-        durabilidadInsumo = request.form.get('durabilidad')
         compatibilidadInsumo = request.form.get('compatibilidad')
         precaucionesInsumo = request.form.get('precauciones')
 
@@ -409,13 +404,6 @@ def insumos():
             flash(('Ingrese la frecuencia de aplicación', 'error', '¡Error!'))
             return redirect(url_for('insumos'))
         
-        if not aplicacionideal:
-            flash(('Seleccione una aplicación ideal', 'error', '¡Error!'))
-            return redirect(url_for('insumos'))
-        
-        if not durabilidadInsumo:
-            flash(('Ingrese la durabilidad', 'error', '¡Error!'))
-            return redirect(url_for('insumos'))
         
         if not compatibilidadInsumo:
             flash(('Ingrese la compatibilidad', 'error', '¡Error!'))
@@ -431,7 +419,7 @@ def insumos():
             return redirect(url_for('insumos'))
         else:
             insertarInsumo = text("INSERT INTO insumos (nombre, tipo_insumo, descripcion, composicion_principal_id, frecuencia_aplicacion, durabilidad, condiciones_almacenamiento_id, compatibilidad, precauciones) VALUES (:insumo, :tipoInsumo, :descripcionInsumo, :composicionInsumo, :frecuenciaInsumo, :durabilidadInsumo,:codiciones_almacenamiento_id ,:compatibilidadInsumo, :precaucionesInsumo)")
-            db.execute(insertarInsumo, {"insumo": insumo, "tipoInsumo": tipoInsumo, "descripcionInsumo": descripcionInsumo, "composicionInsumo": composicionInsumo, "frecuenciaInsumo": frecuenciaInsumo, "durabilidadInsumo": durabilidadInsumo,"codiciones_almacenamiento_id": aplicacionideal, "compatibilidadInsumo": compatibilidadInsumo, "precaucionesInsumo": precaucionesInsumo})
+            db.execute(insertarInsumo, {"insumo": insumo, "tipoInsumo": tipoInsumo, "descripcionInsumo": descripcionInsumo, "composicionInsumo": composicionInsumo, "frecuenciaInsumo": frecuenciaInsumo, "compatibilidadInsumo": compatibilidadInsumo, "precaucionesInsumo": precaucionesInsumo})
 
             selectInsumoId = text("SELECT id FROM insumos WHERE nombre=:insumo")
             insumoId = db.execute(selectInsumoId, {'insumo': insumo}).fetchone()
@@ -495,14 +483,6 @@ def editarinsumo():
        
        if not frecuenciaInsumo_editar:
            flash(('Ingrese la frecuencia de aplicación', 'error', '¡Error!'))
-           return redirect(url_for('insumos'))
-       
-       if not aplicacionideal_editar:
-           flash(('Seleccione una aplicación ideal', 'error', '¡Error!'))
-           return redirect(url_for('insumos'))
-       
-       if not durabilidadInsumo_editar:
-           flash(('Ingrese la durabilidad', 'error', '¡Error!'))
            return redirect(url_for('insumos'))
        
        if not compatibilidadInsumo_editar:
