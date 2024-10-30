@@ -27,9 +27,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const inputDescripcionInsumo_editar = document.getElementById("descripcion_insumo_editar");
     const inputSubcatInsumo_editar = document.getElementById("subcat_editar");
     const inputComposicionInsumo_editar = document.getElementById("ComposicionP_editar");
-    const inputAplicacionIdeal_editar = document.getElementById("idaplicaIdeal_editar");
+    const inputUnidadMedida_editar = document.getElementById("unidadMedida_editar");
     const inputFrecuenciaInsumo_editar = document.getElementById("frecuenciaAplicacion_insumo_editar");
-    const inputDurabilidadInsumo_editar = document.getElementById("durabilidad_editar");
+    const inputColoresInsumo_editar = document.getElementById("coloresInsumo_editar");
+    const inputFechaVencimientoInsumo_editar = document.getElementById("fechaVencimientoInsumo_editar");
+    const inputPrecioVentaInsumo_editar = document.getElementById("precioVentaInsumo_editar");
     const inputCompatibilidadInsumo_editar = document.getElementById("compatibilidad_editar");
     const inputPrecaucionesInsumo_editar = document.getElementById("precauciones_editar");
 
@@ -46,10 +48,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
           const descripcion = row.cells[3].innerText;
           const composicionInsumo = row.cells[4].innerText;
           const frecuenciaInsumo = row.cells[5].innerText;
-          const durabilidadInsumo = row.cells[6].innerText;
-          const aplicacionIdeal = row.cells[7].innerText;
-          const compatibilidadInsumo = row.cells[8].innerText;
-          const precaucionesInsumo = row.cells[9].innerText;
+          const compatibilidadInsumo = row.cells[6].innerText;
+          const precaucionesInsumo = row.cells[7].innerText;
+          const subcategoriaInsumo = row.cells[8].innerText;
+          const UnidadMedida = row.cells[9].innerText;
+          const coloresInsumo = row.cells[10].innerText;
+          const fechaVencimientoInsumo = row.cells[11].innerText;
+          const precioVentaInsumo = row.cells[12].innerText;
+          const imagenInsumo = row.cells[13].innerText;
   
   
           // Rellenar los campos del modal con los datos obtenidos
@@ -63,27 +69,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
           inputtipoInsumo_editar.value = tipoInsumo;     
           inputtipoInsumo_editar.textContent = tipoInsumo;
 
-
           inputDescripcionInsumo_editar.value = descripcion;
           inputDescripcionInsumo_editar.textContent = descripcion;
-
+         
+          
           inputComposicionInsumo_editar.value = composicionInsumo;
           inputComposicionInsumo_editar.value = composicionInsumo;
-
-          inputAplicacionIdeal_editar.value = aplicacionIdeal;
-          inputAplicacionIdeal_editar.value = aplicacionIdeal;
           
           inputFrecuenciaInsumo_editar.value = frecuenciaInsumo;
           inputFrecuenciaInsumo_editar.textContent = frecuenciaInsumo;
-
-          inputDurabilidadInsumo_editar.value = durabilidadInsumo;
-          inputDurabilidadInsumo_editar.textContent = durabilidadInsumo;
-
+          
           inputCompatibilidadInsumo_editar.value = compatibilidadInsumo;
           inputCompatibilidadInsumo_editar.textContent = compatibilidadInsumo;
-
+          
           inputPrecaucionesInsumo_editar.value = precaucionesInsumo;
           inputPrecaucionesInsumo_editar.textContent = precaucionesInsumo;
+
+          inputSubcatInsumo_editar.value = subcategoriaInsumo;
+          inputSubcatInsumo_editar.textContent = subcategoriaInsumo;
+
+          inputUnidadMedida_editar.value = UnidadMedida;
+          inputUnidadMedida_editar.value = UnidadMedida;
+
+          inputColoresInsumo_editar.value = coloresInsumo;
+          inputColoresInsumo_editar.value = coloresInsumo;
+
+          inputFechaVencimientoInsumo_editar.value = fechaVencimientoInsumo;
+          inputFechaVencimientoInsumo_editar.textContent = fechaVencimientoInsumo;
+
+          inputPrecioVentaInsumo_editar.value = precioVentaInsumo;
+          inputPrecioVentaInsumo_editar.textContent = precioVentaInsumo;
+        
   
           // Mostrar el modal
           modal.style.display = "block";

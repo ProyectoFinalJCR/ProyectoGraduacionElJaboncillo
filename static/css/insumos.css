@@ -17,7 +17,7 @@
   height: 100%;
   padding: 20px;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: start;
   overflow-x: auto;
   overflow-y: auto;
@@ -86,28 +86,49 @@
     display: none; 
     position: fixed; 
     z-index: 1; 
-    right: 0;
+    left: 0;
     top: 0;
-    width: 83%;
+    width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
   }
   
   /* Contenido del Modal */
   .modal-content-insumos {
-    background-color: white;    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -42%); /* Centra el modal */
+    background-color: #fff;
     padding: 20px;
-    border: 1px solid #888;
+    border-radius: 8px;
     width: 100%;
-    max-width: 475px;
-    border-radius: 10px;
-    text-align: center;
+    max-width: 950px;
+    height: 684px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .modal-content-insumos .form_edit_insumo{
+    width: 100%;
+    height: 80%;
+
   }
   .modal-content-insumos .inputs-insumos{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding-bottom: 20px;
+  } 
+  .modal-content-insumos .inputs-insumos .input-insumos{
+    width: 100%;
+    margin-top: 8px ;
     display: flex;
     flex-direction: column;
-  } 
-  .modal-content .input-categories #descripcion_editar{
+    gap: 10px;
+    font-weight: bold;
+  }
+  .modal-content-insumos .input-categories #descripcion_editar{
     height: 85px;
   } 
 

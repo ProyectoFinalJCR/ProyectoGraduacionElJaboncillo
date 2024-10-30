@@ -3,11 +3,14 @@
     height: 100%;
     padding: 20px;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: start;
+    overflow-x: auto;
+    overflow-y: auto;
 }
 .container-table-inputs .table-plantas table{
     width: 90%;
+    max-width: 90%;
     border-collapse: collapse;
     text-align: center;
 }
@@ -22,6 +25,8 @@
     justify-content: start;
     align-items: center;
     padding: 20px;
+  overflow-y: auto;
+
 }
 /*Aplciamos el grid, las diviciones*/
 .container-table-inputs.active{

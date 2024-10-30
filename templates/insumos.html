@@ -32,11 +32,14 @@ Insumos | El Jaboncillo
                         <th>Descripción</th>
                         <th>composición principal</th>
                         <th>Frecuencia de aplicación</th>
-                        <th>Durabilidad</th>
-                        <th>Aplicacion ideal</th>
                         <th>Compatibilidad</th>
                         <th>Precauciones</th>
                         <th>Subcategoria</th>
+                        <th>Unidad de Medida</th>
+                        <th>Colores</th>
+                        <th>Fecha de Vencimiento</th>
+                        <th>Precio de Venta</th>
+                        <th>Imagen</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -54,6 +57,9 @@ Insumos | El Jaboncillo
                         <td>{{insumo[8]}}</td>
                         <td>{{insumo[9]}}</td>
                         <td>{{insumo[10]}}</td>
+                        <td>{{insumo[11]}}</td>
+                        <td>{{insumo[12]}}</td>
+                        <td>{{insumo[13]}}</td>
                         <td class="btn-acciones">
                             <button class="btn-edit editar-insumo" id="openModalInsumo">
                                 <i class="material-icons">edit</i>
@@ -120,11 +126,6 @@ Insumos | El Jaboncillo
                             placeholder="Ingrese una descripción para este insumo acerca de la frecuencia de aplicacion">
                     </div>
                     <div>
-                        <label for="">Durabilidad</label>
-                        <input type="text" id="durabilidad" class="input input-insumos" name="durabilidad"
-                            placeholder="Ingrese durabilidad aproximada para este insumo">
-                    </div>
-                    <div>
                         <label for="">Compatibilidad</label>
                         <input type="text" id="compatibilidad" class="input input-insumos" name="compatibilidad"
                             placeholder="Ingrese durabilidad aproximada para este insumo">
@@ -133,6 +134,38 @@ Insumos | El Jaboncillo
                         <label for="">Precauciones</label>
                         <input type="text" id="precauciones" class="input input-insumos" name="precauciones"
                             placeholder="Ingrese durabilidad aproximada para este insumo">
+                    </div>
+                    <div>
+                        <label for="">Subir imagen</label>
+                        <!-- <input type="file" id="imgInsumo" name="imgInsumo" class="input input-insumos" accept="image/*"> -->
+                        <input type="text" id="imgInsumo" name="imgInsumo" class="input input-insumos">
+                    </div>
+                    <div>
+                        <label for="">Fecha de vencimiento</label>
+                        <input type="date" id="fecha_vencimiento" name="fecha_vencimiento" class="input input-insumos">
+                    </div>
+
+                    <div>
+                        <label for="">Precio de venta</label>
+                        <input type="number" id="precio_venta" name="precio_venta" class="input input-insumos">
+                    </div>
+                    <div>
+                        <label for="">Unidades medidas</label>
+                        <select class="input input-insumos" id="unidad-medida" name="idUnidadMedida">
+                            {% for unidadmedida in UnidadesMedida %}
+                            <option value="{{unidadmedida[0]}}">{{unidadmedida[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="">Colores</label>
+                        <select class="input input-insumos" id="colores" name="idcolor">
+                            <option> No aplica </option>
+                            {% for color in Colores %}
+                            <option value="{{color[0]}}">{{color[1]}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </section>
                 <section class="btn-agregar">
@@ -145,9 +178,8 @@ Insumos | El Jaboncillo
 </section>
 
 <!-- Modal editar usuarios -->
-
-<div id="myModal" class="modal">
-    <div class="modal-content form-subcat">
+<div id="myModal" class="modal-insumos">
+    <div class="modal-content-insumos form-insumos">
         <span class="close">&times;</span>
         <h2>Editar insumos</h2>
         <form action="/editarInsumo" method="post" class="form_edit_insumo">
@@ -156,7 +188,7 @@ Insumos | El Jaboncillo
                     <input type="hidden" id="id_editar_insumo" name="id_editar_insumo" value="{{insumos.id}}">
                     <label for="">Nombre completo</label>
                     <input type="text" id="insumo_editar" class="input" name="insumo_editar" value="">
-                    
+
                     <label for="">Tipo de insumo</label>
                     <select type="text" id="tipoInsumo_editar" name="tipoInsumo_editar" class="input">
                         {% for tiposInsumo in TiposInsumo %}
@@ -164,7 +196,7 @@ Insumos | El Jaboncillo
                         {% endfor %}
                     </select>
                 </div>
-                <div class="inputs-modal-insumos">
+                <div class="input-insumos">
                     <label for="">Descripción</label>
                     <input type="text" id="descripcion_insumo_editar" class="input" name="descripcion_insumo_editar"
                         value="">
@@ -175,21 +207,21 @@ Insumos | El Jaboncillo
                         {% endfor %}
                     </select>
                 </div>
-                <div class="inputs-modal-insumos">
+                <div class="input-insumos">
                     <label for="">Composición principal</label>
                     <select type="text" id="ComposicionP_editar" name="ComposicionP_editar" class="input">
                         {% for composicionp in Composicionp %}
                         <option name="idComposicionP" value="{{composicionp[0]}}">{{composicionp[1]}}</option>
                         {% endfor %}
                     </select>
-                    <label for="">Aplicacion ideal</label>
-                    <select type="text" id="idaplicaIdeal_editar" name="idaplicaIdeal_editar" class="input">
-                        {% for aplicaIdeal in Aplicaideal %}
-                        <option name="idaplicaIdeal" value="{{aplicaIdeal[0]}}">{{aplicaIdeal[1]}}</option>
+                    <label for="">Inidad medidad</label>
+                    <select type="text" id="unidadMedida_editar" name="unidadMedida_editar" class="input">
+                        {% for unidad in UnidadesMedida %}
+                        <option name="idunidadMedida" value="{{unidad[0]}}">{{unidad[1]}}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="inputs-modal-insumos">
+                <div class="input-insumos">
                     <label for="">Frecuencia de aplicacion</label>
                     <input type="text" id="frecuenciaAplicacion_insumo_editar" class="input"
                         name="frecuenciaAplicacion_insumo_editar" value="">
@@ -197,20 +229,42 @@ Insumos | El Jaboncillo
                     <label for="">Durabilidad</label>
                     <input type="text" id="durabilidad_editar" class="input" name="durabilidad_editar" value="">
                 </div>
-                <div class="inputs-modal-insumos">
+                <div class="input-insumos">
                     <label for="">Compatibilidad</label>
                     <input type="text" id="compatibilidad_editar" class="input" name="compatibilidad_editar" value="">
                     <label for="">Precauciones</label>
                     <input type="text" id="precauciones_editar" class="input" name="precauciones_editar" value="">
+
+                </div>
+                <div class="input-insumos">
+                    <label for="">Colores</label>
+                    <select type="text" id="coloresInsumo_editar" name="coloresInsumo_editar" class="input">
+                        {% for colores in Colores %}
+                        <option name="idColor" value="{{colores[0]}}">{{colores[1]}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="">Fecha de vencimiento</label>
+                    <input type="date" id="fechaVencimientoInsumo_editar" class="input"
+                        name="fechaVencimientoInsumo_editar" value="">
+                </div>
+                <div class="input-insumos">
+                    <label for="">Precio de venta</label>
+                    <input type="number" id="precioVentaInsumo_editar" class="input" name="precioVentaInsumo_editar"
+                        value="">
+                </div>
+                <div class="input-insumos">
+                    <div class="btn-modal">
+                        <button type="button" class="btn close-modal">Cancelar</button>
+                        <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
+                    </div>
                 </div>
             </div>
-            <div class="btn-modal">
-                <button type="button" class="btn close-modal">Cancelar</button>
-                <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
-            </div>
+            
         </form>
     </div>
 </div>
+
+
 
 
 <!-- Mostrar mensaje de éxito -->
