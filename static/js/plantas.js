@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function(){
         });
       });
 
-
+      //Select2 para seleccionar opciones
       $(document).ready(function() {
         // Inicializar Select2 en modo múltiple
         $('#color').select2({

@@ -44,38 +44,34 @@ document.addEventListener("DOMContentLoaded", function(event) {
           // Obtener los datos de la categoría de esa fila
           const insumoID = row.cells[0].innerText;
           const insumo = row.cells[1].innerText;
-          const tipoInsumo = row.cells[2].innerText;
-          const descripcion = row.cells[3].innerText;
-          const composicionInsumo = row.cells[4].innerText;
-          const frecuenciaInsumo = row.cells[5].innerText;
-          const compatibilidadInsumo = row.cells[6].innerText;
-          const precaucionesInsumo = row.cells[7].innerText;
-          const subcategoriaInsumo = row.cells[8].innerText;
-          const UnidadMedida = row.cells[9].innerText;
-          const coloresInsumo = row.cells[10].innerText;
-          const fechaVencimientoInsumo = row.cells[11].innerText;
-          const precioVentaInsumo = row.cells[12].innerText;
-          const imagenInsumo = row.cells[13].innerText;
+          const tipoInsumo = row.cells[3].innerText;
+          const descripcion = row.cells[4].innerText;
+          const composicionInsumo = row.cells[6].innerText;
+          const frecuenciaInsumo = row.cells[7].innerText;
+          const compatibilidadInsumo = row.cells[8].innerText;
+          const precaucionesInsumo = row.cells[9].innerText;
+          const subcategoriaInsumo = row.cells[11].innerText;
+          const UnidadMedida = row.cells[13].innerText;
+          const coloresInsumo = row.cells[15].innerText;
+          const fechaVencimientoInsumo = row.cells[16].innerText;
+          const precioVentaInsumo = row.cells[17].innerText;
+          const imagenInsumo = row.cells[18].innerText;
   
   
           // Rellenar los campos del modal con los datos obtenidos
           inputId_insumo.value = insumoID;
-
-          inputtipoInsumo_editar.value = insumoID;
   
           inputinsumo_editar.value = insumo;
           inputinsumo_editar.textContent = insumo;
         
-          inputtipoInsumo_editar.value = tipoInsumo;     
-          inputtipoInsumo_editar.textContent = tipoInsumo;
+          inputtipoInsumo_editar.value = tipoInsumo;
 
           inputDescripcionInsumo_editar.value = descripcion;
           inputDescripcionInsumo_editar.textContent = descripcion;
          
           
           inputComposicionInsumo_editar.value = composicionInsumo;
-          inputComposicionInsumo_editar.value = composicionInsumo;
-          
+                
           inputFrecuenciaInsumo_editar.value = frecuenciaInsumo;
           inputFrecuenciaInsumo_editar.textContent = frecuenciaInsumo;
           
@@ -86,12 +82,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
           inputPrecaucionesInsumo_editar.textContent = precaucionesInsumo;
 
           inputSubcatInsumo_editar.value = subcategoriaInsumo;
-          inputSubcatInsumo_editar.textContent = subcategoriaInsumo;
 
           inputUnidadMedida_editar.value = UnidadMedida;
-          inputUnidadMedida_editar.value = UnidadMedida;
 
-          inputColoresInsumo_editar.value = coloresInsumo;
           inputColoresInsumo_editar.value = coloresInsumo;
 
           inputFechaVencimientoInsumo_editar.value = fechaVencimientoInsumo;
@@ -105,4 +98,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
           modal.style.display = "block";
         });
       });
+
+        //ALERTA EDITAR
+  const form_editar = document.querySelector('.form_edit_insumo');
+
+  form_editar.addEventListener('submit', function(event) {
+    event.preventDefault();
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, editar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) =>{
+        if (result.isConfirmed) {
+            event.target.submit();  
+        }
+    });
+  });
 });

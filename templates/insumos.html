@@ -49,17 +49,22 @@ Insumos | El Jaboncillo
                         <td>{{insumo[0]}}</td>
                         <td>{{insumo[1]}}</td>
                         <td>{{insumo[2]}}</td>
-                        <td>{{insumo[3]}}</td>
+                        <td style="display: none;">{{insumo[3]}}</td>
                         <td>{{insumo[4]}}</td>
-                        <td>{{insumo[5]}}</td>
-                        <td>{{insumo[6]}}</td>
+                        <td>{{insumo[5]}}</td>  
+                        <td style="display: none;">{{insumo[6]}}</td>
                         <td>{{insumo[7]}}</td>
                         <td>{{insumo[8]}}</td>
                         <td>{{insumo[9]}}</td>
                         <td>{{insumo[10]}}</td>
-                        <td>{{insumo[11]}}</td>
+                        <td style="display: none;">{{insumo[11]}}</td>
                         <td>{{insumo[12]}}</td>
-                        <td>{{insumo[13]}}</td>
+                        <td style="display: none;">{{insumo[13]}}</td>
+                        <td>{{insumo[14]}}</td>
+                        <td style="display: none;">{{insumo[15]}}</td>
+                        <td>{{insumo[16]}}</td>
+                        <td>{{insumo[17]}}</td>
+                        <td>{{insumo[18]}}</td>
                         <td class="btn-acciones">
                             <button class="btn-edit editar-insumo" id="openModalInsumo">
                                 <i class="material-icons">edit</i>
@@ -182,7 +187,7 @@ Insumos | El Jaboncillo
     <div class="modal-content-insumos form-insumos">
         <span class="close">&times;</span>
         <h2>Editar insumos</h2>
-        <form action="/editarInsumo" method="post" class="form_edit_insumo">
+        <form action="/editarinsumo" method="post" class="form_edit_insumo">
             <div class="inputs-insumos">
                 <div class="input-insumos">
                     <input type="hidden" id="id_editar_insumo" name="id_editar_insumo" value="{{insumos.id}}">
@@ -190,9 +195,9 @@ Insumos | El Jaboncillo
                     <input type="text" id="insumo_editar" class="input" name="insumo_editar" value="">
 
                     <label for="">Tipo de insumo</label>
-                    <select type="text" id="tipoInsumo_editar" name="tipoInsumo_editar" class="input">
+                    <select type="text" id="tipoInsumo_editar" name="idtipoInsumo_editar" class="input">
                         {% for tiposInsumo in TiposInsumo %}
-                        <option name="idtipoInsumo" value="{{tiposInsumo[0]}}">{{tiposInsumo[1]}}</option>
+                        <option name="idtipoInsumo_editar" value="{{tiposInsumo[0]}}">{{tiposInsumo[1]}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -201,7 +206,7 @@ Insumos | El Jaboncillo
                     <input type="text" id="descripcion_insumo_editar" class="input" name="descripcion_insumo_editar"
                         value="">
                     <label for="">Subcategoria</label>
-                    <select type="text" id="subcat_editar" name="subcat_editar" class="input">
+                    <select type="text" id="subcat_editar" name="idsubcat_editar" class="input">
                         {% for subcat in Subcat %}
                         <option name="idsubcat" value="{{subcat[0]}}">{{subcat[2]}}</option>
                         {% endfor %}
@@ -209,12 +214,12 @@ Insumos | El Jaboncillo
                 </div>
                 <div class="input-insumos">
                     <label for="">Composición principal</label>
-                    <select type="text" id="ComposicionP_editar" name="ComposicionP_editar" class="input">
+                    <select type="text" id="ComposicionP_editar" name="idComposicionP_editar" class="input">
                         {% for composicionp in Composicionp %}
                         <option name="idComposicionP" value="{{composicionp[0]}}">{{composicionp[1]}}</option>
                         {% endfor %}
                     </select>
-                    <label for="">Inidad medidad</label>
+                    <label for="">Unidad medidad</label>
                     <select type="text" id="unidadMedida_editar" name="unidadMedida_editar" class="input">
                         {% for unidad in UnidadesMedida %}
                         <option name="idunidadMedida" value="{{unidad[0]}}">{{unidad[1]}}</option>
@@ -226,14 +231,17 @@ Insumos | El Jaboncillo
                     <input type="text" id="frecuenciaAplicacion_insumo_editar" class="input"
                         name="frecuenciaAplicacion_insumo_editar" value="">
 
-                    <label for="">Durabilidad</label>
-                    <input type="text" id="durabilidad_editar" class="input" name="durabilidad_editar" value="">
-                </div>
-                <div class="input-insumos">
                     <label for="">Compatibilidad</label>
                     <input type="text" id="compatibilidad_editar" class="input" name="compatibilidad_editar" value="">
+                </div>
+                <div class="input-insumos">
+
                     <label for="">Precauciones</label>
                     <input type="text" id="precauciones_editar" class="input" name="precauciones_editar" value="">
+
+                    <label for="">Fecha de vencimiento</label>
+                    <input type="date" id="fechaVencimientoInsumo_editar" class="input"
+                        name="fechaVencimientoInsumo_editar" value="">
 
                 </div>
                 <div class="input-insumos">
@@ -243,14 +251,14 @@ Insumos | El Jaboncillo
                         <option name="idColor" value="{{colores[0]}}">{{colores[1]}}</option>
                         {% endfor %}
                     </select>
-                    <label for="">Fecha de vencimiento</label>
-                    <input type="date" id="fechaVencimientoInsumo_editar" class="input"
-                        name="fechaVencimientoInsumo_editar" value="">
-                </div>
-                <div class="input-insumos">
+
                     <label for="">Precio de venta</label>
                     <input type="number" id="precioVentaInsumo_editar" class="input" name="precioVentaInsumo_editar"
                         value="">
+
+                </div>
+                <div class="input-insumos">
+
                 </div>
                 <div class="input-insumos">
                     <div class="btn-modal">
@@ -259,7 +267,7 @@ Insumos | El Jaboncillo
                     </div>
                 </div>
             </div>
-            
+
         </form>
     </div>
 </div>
