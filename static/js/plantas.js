@@ -74,4 +74,24 @@ document.addEventListener("DOMContentLoaded", function(){
           modal.style.display = "block";
         });
       });
+
+
+      $(document).ready(function() {
+        // Inicializar Select2 en modo múltiple
+        $('#color').select2({
+            placeholder: "Seleccione una o más opciones",
+            allowClear: true,
+            multiple: true
+        });
+        $('#sub').select2({
+            placeholder: "Seleccione una o más opciones",
+            allowClear: true,
+            multiple: true
+        });
+        $('#rango').select2({
+            placeholder: "Seleccione una o más opciones",
+            allowClear: true,
+            multiple: true
+        });
+    });
 })

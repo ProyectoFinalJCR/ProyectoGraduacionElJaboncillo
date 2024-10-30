@@ -540,7 +540,7 @@ def plantas():
                plantas.nombre AS nombre, 
                plantas.descripcion AS descripcion, 
                subcategorias.subcategoria AS subcategoria, 
-               colores.color AS color, 
+               STRING_AGG(DISTINCT colores.color, ', ') AS color,
                rangos.rango AS rango, 
                entornos_ideales.entorno AS entorno, 
                requerimientos_agua.requerimiento_agua AS agua, 
@@ -557,6 +557,9 @@ def plantas():
         JOIN requerimientos_agua ON plantas.requerimiento_agua_id = requerimientos_agua.id
         JOIN tipos_suelos ON plantas.tipo_suelo_id = tipos_suelos.id
         JOIN temporadas_plantacion ON plantas.temporada_plantacion_id = temporadas_plantacion.id
+        GROUP BY plantas.id, plantas.nombre, plantas.descripcion, subcategorias.subcategoria, rangos.rango, 
+             entornos_ideales.entorno, requerimientos_agua.requerimiento_agua, tipos_suelos.tipo_suelo, 
+             temporadas_plantacion.temporada
     """)
         infoPlantas = db.execute(obtenerInfo).fetchall()
 
@@ -564,19 +567,24 @@ def plantas():
     else:
         nombrePlanta = request.form.get('nombrePlanta')
         descripcion = request.form.get('descripcion')
-        color = request.form.get('idColor')
-        subcategoria = request.form.get('idSub')
-        rango = request.form.get('idRango')
+        precio = request.form.get('precio')
+        color = request.form.getlist('idColor')
+        subcategoria = request.form.getlist('idSub')
+        rango = request.form.getlist('idRango')
         entorno = request.form.get('idEntorno')
         agua = request.form.get('idAgua')
         suelo = request.form.get('idSuelo')
         temporada = request.form.get('idTemporada')
 
+        print(color)
         if not nombrePlanta:
             flash(('Ingrese el nombre', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
         if not descripcion:
             flash(('Ingrese la descripcion', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not precio:
+            flash(('Ingrese el precio', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
         if not color:
             flash(('Seleccione el color', 'error', '¡Error!'))
@@ -605,19 +613,22 @@ def plantas():
             flash(('La planta ya existe', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
         else:
-            insertarPlanta = text("INSERT INTO plantas (nombre, descripcion, entorno_ideal_id, requerimiento_agua_id, tipo_suelo_id, temporada_plantacion_id) VALUES (:nombre, :descripcion, :entorno_ideal_id, :requerimiento_agua_id, :tipo_suelo_id, :temporada_plantacion_id)")
-            db.execute(insertarPlanta, {'nombre': nombrePlanta, 'descripcion': descripcion, 'entorno_ideal_id':entorno, 'requerimiento_agua_id': agua, 'tipo_suelo_id': suelo, 'temporada_plantacion_id': temporada})
+            insertarPlanta = text("INSERT INTO plantas (nombre, descripcion, entorno_ideal_id, requerimiento_agua_id, tipo_suelo_id, temporada_plantacion_id, precio_venta) VALUES (:nombre, :descripcion, :entorno_ideal_id, :requerimiento_agua_id, :tipo_suelo_id, :temporada_plantacion_id, :precio_venta)")
+            db.execute(insertarPlanta, {'nombre': nombrePlanta, 'descripcion': descripcion, 'entorno_ideal_id':entorno, 'requerimiento_agua_id': agua, 'tipo_suelo_id': suelo, 'temporada_plantacion_id': temporada, 'precio_venta': precio})
 
             plantaId = db.execute(text("SELECT * FROM plantas ORDER BY id DESC LIMIT 1")).fetchone()[0]
 
-            insertarPlantasSub = text("INSERT INTO plantas_subcategoria (subcategoria_id, planta_id) VALUES (:subcategoria_id, :planta_id)")
-            db.execute(insertarPlantasSub, {'subcategoria_id': subcategoria, 'planta_id': plantaId})
+            for sub_id in subcategoria:
+                insertarPlantasSub = text("INSERT INTO plantas_subcategoria (subcategoria_id, planta_id) VALUES (:subcategoria_id, :planta_id)")
+                db.execute(insertarPlantasSub, {'subcategoria_id': int(sub_id), 'planta_id': plantaId})
 
-            insertarColores = text("INSERT INTO colores_plantas (color_id, planta_id) VALUES (:color_id, :planta_id)")
-            db.execute(insertarColores, {'color_id': color, 'planta_id': plantaId})
+            for colores_id in color:
+                insertarColores = text("INSERT INTO colores_plantas (color_id, planta_id) VALUES (:color_id, :planta_id)")
+                db.execute(insertarColores, {'color_id': int(colores_id), 'planta_id': plantaId})
 
-            insertarRangos = text("INSERT INTO rangos_medidas (rango_id, planta_id) VALUES (:rango_id, :planta_id)")
-            db.execute(insertarRangos, {'rango_id': rango, 'planta_id': plantaId})
+            for rangos_id in rango:
+                insertarRangos = text("INSERT INTO rangos_medidas (rango_id, planta_id) VALUES (:rango_id, :planta_id)")
+                db.execute(insertarRangos, {'rango_id': rangos_id, 'planta_id': plantaId})
 
             db.commit()
         flash(('La planta se ha agregado correctamente', 'success', '¡Exito!'))
