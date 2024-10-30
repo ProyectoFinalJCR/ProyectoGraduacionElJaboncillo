@@ -372,13 +372,16 @@ def insumos():
         
         obtenerSubcat = text("SELECT * FROM subcategorias INNER JOIN categorias ON subcategorias.categoria_id = categorias.id WHERE categorias.categoria = 'Insumos'")
         subcat = db.execute(obtenerSubcat).fetchall()
-        
         #muestra la información de los insumos
         MostrarInsumos = text("SELECT i.id, i.nombre, i.tipo_insumo, i.descripcion, cp.composicion, i.frecuencia_aplicacion, i.compatibilidad, i.precauciones, sub.subcategoria, unidad.unidad_medida, c.color, i.fecha_vencimiento, i.precio_venta, i.imagen_url FROM insumos i INNER JOIN insumos_subcategoria s ON i.id = s.insumo_id INNER JOIN subcategorias sub ON sub.id = s.subcategoria_id INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id INNER JOIN insumos_unidades iu ON i.id = iu.insumo_id INNER JOIN unidades_medidas unidad ON unidad.id = iu.unidad_medida_id INNER JOIN colores_insumos ci ON ci.insumo_id = i.id INNER JOIN colores c ON c.id = ci.color_id")
 
         Insumos = db.execute(MostrarInsumos).fetchall()
 
+
         return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, UnidadesMedida = unidadMedida, Colores = color, insumos=Insumos)
+
+        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, insumos=Insumos)
+
     else:
         insumo = request.form.get('nombre_insumo')
         tipoInsumo = request.form.get('idtipoInsumo')
@@ -386,7 +389,9 @@ def insumos():
         subcatInsumo = request.form.get('idsubcat')
         composicionInsumo = request.form.get('idComposicionP')
         frecuenciaInsumo = request.form.get('frecuenciaAplicacion_insumo')
+
         aplicacionideal = request.form.get("idaplicaIdeal")
+
         compatibilidadInsumo = request.form.get('compatibilidad')
         precaucionesInsumo = request.form.get('precauciones')
         # imgInsumo = request.files.get('imgInsumo')
@@ -419,7 +424,6 @@ def insumos():
             flash(('Ingrese la frecuencia de aplicación', 'error', '¡Error!'))
             return redirect(url_for('insumos'))
 
-                
         if not compatibilidadInsumo:
             flash(('Ingrese la compatibilidad', 'error', '¡Error!'))
             return redirect(url_for('insumos'))
@@ -457,8 +461,8 @@ def insumos():
             flash(('Ya existe un insumo con ese nombre', 'error', '¡Error!'))
             return redirect(url_for('insumos'))
         else:
-            insertarInsumo = text("INSERT INTO insumos (nombre, tipo_insumo, descripcion, composicion_principal_id, frecuencia_aplicacion,compatibilidad, precauciones, imagen_url, fecha_vencimiento, precio_venta) VALUES (:insumo, :tipoInsumo, :descripcionInsumo, :composicionInsumo, :frecuenciaInsumo,:compatibilidadInsumo, :precaucionesInsumo, :imgInsumo, :fechaVencimientoInsumo, :precioVenta)")
-            db.execute(insertarInsumo, {"insumo": insumo, "tipoInsumo": tipoInsumo, "descripcionInsumo": descripcionInsumo, "composicionInsumo": composicionInsumo, "frecuenciaInsumo": frecuenciaInsumo,"codiciones_almacenamiento_id": aplicacionideal, "compatibilidadInsumo": compatibilidadInsumo, "precaucionesInsumo": precaucionesInsumo, "imgInsumo": imgInsumo, "fechaVencimientoInsumo": fechaVencimientoInsumo, "precioVenta": precioVentaInsumo})
+            insertarInsumo = text("INSERT INTO insumos (nombre, tipo_insumo, descripcion, composicion_principal_id, frecuencia_aplicacion, durabilidad, condiciones_almacenamiento_id, compatibilidad, precauciones) VALUES (:insumo, :tipoInsumo, :descripcionInsumo, :composicionInsumo, :frecuenciaInsumo, :durabilidadInsumo,:codiciones_almacenamiento_id ,:compatibilidadInsumo, :precaucionesInsumo)")
+            db.execute(insertarInsumo, {"insumo": insumo, "tipoInsumo": tipoInsumo, "descripcionInsumo": descripcionInsumo, "composicionInsumo": composicionInsumo, "frecuenciaInsumo": frecuenciaInsumo, "compatibilidadInsumo": compatibilidadInsumo, "precaucionesInsumo": precaucionesInsumo})
 
             selectInsumoId = text("SELECT id FROM insumos WHERE nombre=:insumo")
             insumoId = db.execute(selectInsumoId, {'insumo': insumo}).fetchone()
@@ -530,14 +534,6 @@ def editarinsumo():
            flash(('Ingrese la frecuencia de aplicación', 'error', '¡Error!'))
            return redirect(url_for('insumos'))
        
-       if not aplicacionideal_editar:
-           flash(('Seleccione una aplicación ideal', 'error', '¡Error!'))
-           return redirect(url_for('insumos'))
-       
-       if not durabilidadInsumo_editar:
-           flash(('Ingrese la durabilidad', 'error', '¡Error!'))
-           return redirect(url_for('insumos'))
-       
        if not compatibilidadInsumo_editar:
            flash(('Ingrese la compatibilidad', 'error', '¡Error!'))
            return redirect(url_for('insumos'))
@@ -596,7 +592,7 @@ def plantas():
                plantas.nombre AS nombre, 
                plantas.descripcion AS descripcion, 
                subcategorias.subcategoria AS subcategoria, 
-               colores.color AS color, 
+               STRING_AGG(DISTINCT colores.color, ', ') AS color,
                rangos.rango AS rango, 
                entornos_ideales.entorno AS entorno, 
                requerimientos_agua.requerimiento_agua AS agua, 
@@ -613,6 +609,9 @@ def plantas():
         JOIN requerimientos_agua ON plantas.requerimiento_agua_id = requerimientos_agua.id
         JOIN tipos_suelos ON plantas.tipo_suelo_id = tipos_suelos.id
         JOIN temporadas_plantacion ON plantas.temporada_plantacion_id = temporadas_plantacion.id
+        GROUP BY plantas.id, plantas.nombre, plantas.descripcion, subcategorias.subcategoria, rangos.rango, 
+             entornos_ideales.entorno, requerimientos_agua.requerimiento_agua, tipos_suelos.tipo_suelo, 
+             temporadas_plantacion.temporada
     """)
         infoPlantas = db.execute(obtenerInfo).fetchall()
 
@@ -620,19 +619,24 @@ def plantas():
     else:
         nombrePlanta = request.form.get('nombrePlanta')
         descripcion = request.form.get('descripcion')
-        color = request.form.get('idColor')
-        subcategoria = request.form.get('idSub')
-        rango = request.form.get('idRango')
+        precio = request.form.get('precio')
+        color = request.form.getlist('idColor')
+        subcategoria = request.form.getlist('idSub')
+        rango = request.form.getlist('idRango')
         entorno = request.form.get('idEntorno')
         agua = request.form.get('idAgua')
         suelo = request.form.get('idSuelo')
         temporada = request.form.get('idTemporada')
 
+        print(color)
         if not nombrePlanta:
             flash(('Ingrese el nombre', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
         if not descripcion:
             flash(('Ingrese la descripcion', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if not precio:
+            flash(('Ingrese el precio', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
         if not color:
             flash(('Seleccione el color', 'error', '¡Error!'))
@@ -661,19 +665,22 @@ def plantas():
             flash(('La planta ya existe', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
         else:
-            insertarPlanta = text("INSERT INTO plantas (nombre, descripcion, entorno_ideal_id, requerimiento_agua_id, tipo_suelo_id, temporada_plantacion_id) VALUES (:nombre, :descripcion, :entorno_ideal_id, :requerimiento_agua_id, :tipo_suelo_id, :temporada_plantacion_id)")
-            db.execute(insertarPlanta, {'nombre': nombrePlanta, 'descripcion': descripcion, 'entorno_ideal_id':entorno, 'requerimiento_agua_id': agua, 'tipo_suelo_id': suelo, 'temporada_plantacion_id': temporada})
+            insertarPlanta = text("INSERT INTO plantas (nombre, descripcion, entorno_ideal_id, requerimiento_agua_id, tipo_suelo_id, temporada_plantacion_id, precio_venta) VALUES (:nombre, :descripcion, :entorno_ideal_id, :requerimiento_agua_id, :tipo_suelo_id, :temporada_plantacion_id, :precio_venta)")
+            db.execute(insertarPlanta, {'nombre': nombrePlanta, 'descripcion': descripcion, 'entorno_ideal_id':entorno, 'requerimiento_agua_id': agua, 'tipo_suelo_id': suelo, 'temporada_plantacion_id': temporada, 'precio_venta': precio})
 
             plantaId = db.execute(text("SELECT * FROM plantas ORDER BY id DESC LIMIT 1")).fetchone()[0]
 
-            insertarPlantasSub = text("INSERT INTO plantas_subcategoria (subcategoria_id, planta_id) VALUES (:subcategoria_id, :planta_id)")
-            db.execute(insertarPlantasSub, {'subcategoria_id': subcategoria, 'planta_id': plantaId})
+            for sub_id in subcategoria:
+                insertarPlantasSub = text("INSERT INTO plantas_subcategoria (subcategoria_id, planta_id) VALUES (:subcategoria_id, :planta_id)")
+                db.execute(insertarPlantasSub, {'subcategoria_id': int(sub_id), 'planta_id': plantaId})
 
-            insertarColores = text("INSERT INTO colores_plantas (color_id, planta_id) VALUES (:color_id, :planta_id)")
-            db.execute(insertarColores, {'color_id': color, 'planta_id': plantaId})
+            for colores_id in color:
+                insertarColores = text("INSERT INTO colores_plantas (color_id, planta_id) VALUES (:color_id, :planta_id)")
+                db.execute(insertarColores, {'color_id': int(colores_id), 'planta_id': plantaId})
 
-            insertarRangos = text("INSERT INTO rangos_medidas (rango_id, planta_id) VALUES (:rango_id, :planta_id)")
-            db.execute(insertarRangos, {'rango_id': rango, 'planta_id': plantaId})
+            for rangos_id in rango:
+                insertarRangos = text("INSERT INTO rangos_medidas (rango_id, planta_id) VALUES (:rango_id, :planta_id)")
+                db.execute(insertarRangos, {'rango_id': rangos_id, 'planta_id': plantaId})
 
             db.commit()
         flash(('La planta se ha agregado correctamente', 'success', '¡Exito!'))

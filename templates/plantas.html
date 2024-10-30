@@ -54,7 +54,7 @@ Plantas | El Jaboncillo
                     <td>{{infoPlantas.temporada}}</td>
                      <td style="display: none;"></td>
                     <td class="btn-acciones">
-                        <button class="btn-edit" id="openModalPlantas">
+                        <button class="btn-edit plantas-btn-edit" id="openModalPlantas">
                             <i class="material-icons">edit</i>
                         </button>
                         <form action="/eliminarPlanta" method="post" class="form-eliminar">
@@ -77,14 +77,22 @@ Plantas | El Jaboncillo
         <form action="/plantas" id="form-plantas" method="post" class="form-plantas">
             <section class="input-plantas">
                 <div>
+                    <label for="">Nombre</label>
                     <input type="text" id="nombrePlanta" class="input input-plantas" name="nombrePlanta"
                         placeholder="Nombre planta">
                 </div>
                 <div>
+                    <label>Descripcion</label>
                     <input type="text" id="descripcion" class="input input-plantas" name="descripcion"
                         placeholder="Descripcion">
                 </div>
                 <div>
+                    <label>Precio unitario</label>
+                    <input type="number" id="precio" class="input input-plantas" name="precio"
+                        placeholder="Descripcion">
+                </div>
+                <div>
+                    <label>Colores</label>
                     <select class="input input-plantas" id="color" name="idColor">
                         {% for colores in Colores %}
                         <option value="{{ colores[0] }}">{{ colores[1] }}</option>
@@ -92,6 +100,7 @@ Plantas | El Jaboncillo
                     </select>
                 </div>
                 <div>
+                    <label>Subcategorias</label>
                     <select class="input input-plantas" id="sub" name="idSub">
                         {% for subcategoria in Subcategorias %}
                         <option value="{{ subcategoria[0] }}">{{ subcategoria[2] }}</option>
@@ -99,6 +108,7 @@ Plantas | El Jaboncillo
                     </select>
                 </div>
                 <div>
+                    <label>Rangos de tamaño</label>
                     <select class="input input-plantas" id="rango" name="idRango">
                         {% for rango in Rangos %}
                         <option value="{{ rango[0] }}">{{ rango[1] }}</option>
@@ -106,6 +116,7 @@ Plantas | El Jaboncillo
                     </select>
                 </div>
                 <div>
+                    <label>Entorno ideal</label>
                     <select class="input input-plantas" id="entorno" name="idEntorno">
                         {% for entorno in Entornos %}
                         <option value="{{ entorno[0] }}">{{ entorno[1] }}</option>
@@ -113,6 +124,7 @@ Plantas | El Jaboncillo
                     </select>
                 </div>
                 <div>
+                    <label>Requerimiento de agua</label>
                     <select class="input input-plantas" id="agua" name="idAgua">
                         {% for agua in Agua %}
                         <option value="{{ agua[0] }}">{{ agua[1] }}</option>
@@ -120,6 +132,7 @@ Plantas | El Jaboncillo
                     </select>
                 </div>
                 <div>
+                    <label>Tipo de suelo</label>
                     <select class="input input-plantas" id="suelo" name="idSuelo">
                         {% for suelo in Suelos %}
                         <option value="{{ suelo[0] }}">{{ suelo[1] }}</option>
@@ -127,6 +140,7 @@ Plantas | El Jaboncillo
                     </select>
                 </div>
                 <div>
+                    <label>Temporada de plantacion</label>
                     <select class="input input-plantas" id="temporada" name="idTemporada">
                         {% for temporada in Temporada %}
                         <option value="{{ temporada[0] }}">{{ temporada[1] }}</option>

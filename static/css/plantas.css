@@ -64,3 +64,8 @@
     margin-top: 35px;
     gap: 15px;
 }
+
+/* Ajusta el ancho del contenedor de Select2 */
+.select2-container {
+    width: 100% !important;
+}
