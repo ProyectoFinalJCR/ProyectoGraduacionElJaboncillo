@@ -32,52 +32,115 @@
     text-align: center;
 }
 .container-table-inputs .container-inputPlantas{
-    display: none;
+    /* display: none;
     flex-direction: column;
     justify-content: start;
     align-items: center;
     padding: 20px;
     overflow-y: auto;
+     */
+     display: none; 
+     position: fixed; 
+     z-index: 1; 
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.5);
+     justify-content: center;
 
 }
+.container-table-inputs .container-inputPlantas .agregar-plantas{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-36%, -42%); /* Centra el modal */
+    background-color: #fff;
+    padding: 0px 50px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 1100px;
+    height: 684px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
 /*Aplciamos el grid, las diviciones*/
-.container-table-inputs.active{
+/* .container-table-inputs.active{
     grid-template-columns: 2fr 1fr;
 }
 .container-inputPlantas.show {
-    display: flex; /* Muestra el formulario al activar la clase 'show' */   
-}
+    display: flex; /* Muestra el formulario al activar la clase 'show' 
+} */    
+   
 .container-table-inputs .container-inputPlantas .inputPlantas-title{
     width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #000;
+  margin-bottom: 25px;
 }
 .container-table-inputs .container-inputPlantas .form-plantas{
     width: 100%;
     height: auto;
 }
-.container-table-inputs .container-inputPlantas .form-plantas  .input-plantas{
+.container-table-inputs .container-inputPlantas .form-plantas  .inputs-plantas{
+    /* display: flex;
+    flex-direction: column;
+    gap: 20px; */
+    display: grid;
+    grid-template-columns:repeat(3, 1fr); 
+    gap: 20px;
+    padding-bottom: 20px;
+}
+.container-table-inputs .container-inputPlantas .form-plantas .inputs-plantas .inputs-cont{
     display: flex;
     flex-direction: column;
-    gap: 35px;
 }
-.container-table-inputs .container-inputPlantas .form-plantas .input-plantas .input-plantas{
+.container-table-inputs .container-inputPlantas .form-plantas .inputs-plantas .columna-1, .columna-2, .columna-3{
     width: 100%;
-    margin-top: 8px ;
+    justify-content: space-between;
+    gap: 60px;
+
+}
+
+.inputs-select{
+    display: flex;
+    flex-direction: column;
+}
+
+.container-table-inputs .container-inputPlantas .form-plantas .inputs-plantas .input-plantas{
+    width: 100%;
+    margin-top: 8px;
+    border-radius: 10px;
+    background-color: #ECFFED;
 }
 .container-table-inputs .container-inputPlantas .btn-agregar{
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: end;
-    margin-top: 35px;
+    justify-content: space-between;
+    margin-top: 20px;
     gap: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #000;
+    margin-bottom: 10px;
 }
-
-/* Ajusta el ancho del contenedor de Select2 */
-.select2-container {
-    width: 100% !important;
-}
+.container-table-inputs .container-inputPlantas .btn-agregar .logo-btn-add{
+    width: 220px;
+    height: 40px;
+  }
+  
+  .container-table-inputs .container-inputPlantas .btn-agregar .btn{
+    width: 150px;
+    border-radius: 15px;
+  }
+  .container-table-inputs .container-inputPlantas .btn-agregar .btn-cancel{
+    width: 120px;
+    background-color: #CF696B;
+    
+  }

@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from flask import Flask, jsonify, render_template, redirect, request, session, flash, url_for
+from flask_socketio import SocketIO, emit
 from flask_session import Session
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -17,6 +18,7 @@ app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+socketio = SocketIO(app)
 
 #Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
@@ -374,18 +376,70 @@ def insumos():
         subcat = db.execute(obtenerSubcat).fetchall()
 
         #muestra la información de los insumos
-        MostrarInsumos = text("SELECT i.id, i.nombre, ap.aplicacion, ap.id, i.descripcion, cp.composicion, cp.id, i.frecuencia_aplicacion, i.compatibilidad, i.precauciones, sub.subcategoria, sub.id, unidad.unidad_medida, unidad.id, c.color, c.id, i.fecha_vencimiento, i.precio_venta, i.imagen_url FROM insumos i INNER JOIN insumos_subcategoria s ON i.id = s.insumo_id INNER JOIN subcategorias sub ON sub.id = s.subcategoria_id INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id INNER JOIN insumos_unidades iu ON i.id = iu.insumo_id INNER JOIN unidades_medidas unidad ON unidad.id = iu.unidad_medida_id INNER JOIN colores_insumos ci ON ci.insumo_id = i.id INNER JOIN colores c ON c.id = ci.color_id INNER JOIN aplicaciones_insumos api ON api.insumo_id = i.id INNER JOIN aplicaciones ap ON ap.id = api.aplicacion_id")
+        MostrarInsumos = text("""SELECT i.id,
+                               i.nombre, 
+                              ap.aplicacion,
+                               ap.id,
+                               i.descripcion,
+                               cp.composicion,
+                               cp.id,
+                               i.frecuencia_aplicacion,
+                               i.compatibilidad,
+                               i.precauciones,
+                               STRING_AGG(DISTINCT sub.subcategoria, ', ') AS subcategoria,
+                               STRING_AGG(DISTINCT sub.id::text, ', ') AS sub_id,  -- Concatenar subcategorias id
+                               unidad.unidad_medida,
+                               unidad.id,
+                               STRING_AGG(DISTINCT c.color, ', ') as color,
+                                STRING_AGG(DISTINCT c.id::text, ', ') AS color_id,                               
+                               i.fecha_vencimiento,
+                               i.precio_venta,
+                               i.imagen_url 
+                              FROM insumos i
+                              INNER JOIN insumos_subcategoria s ON i.id = s.insumo_id 
+                              INNER JOIN subcategorias sub ON sub.id = s.subcategoria_id
+                              INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id
+                              INNER JOIN insumos_unidades iu ON i.id = iu.insumo_id
+                              INNER JOIN unidades_medidas unidad ON unidad.id = iu.unidad_medida_id
+                              INNER JOIN colores_insumos ci ON ci.insumo_id = i.id 
+                              INNER JOIN colores c ON c.id = ci.color_id 
+                              INNER JOIN aplicaciones_insumos api ON api.insumo_id = i.id
+                              INNER JOIN aplicaciones ap ON ap.id = api.aplicacion_id 
+                               GROUP BY 
+                              i.id, 
+                              i.nombre, 
+                              ap.aplicacion, 
+                              ap.id, 
+                              i.descripcion, 
+                              cp.composicion, 
+                              cp.id, 
+                              i.frecuencia_aplicacion, 
+                              i.compatibilidad, 
+                              i.precauciones,
+                              unidad.unidad_medida, 
+                              unidad.id,
+                              i.fecha_vencimiento, 
+                              i.precio_venta, 
+                              i.imagen_url; 
+                              """)
 
         Insumos = db.execute(MostrarInsumos).fetchall()
 
+        obtenerCategorias = text("SELECT * FROM categorias order by id asc")
+        rows = db.execute(obtenerCategorias).fetchall()
 
-        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, UnidadesMedida = unidadMedida, Colores = color, insumos=Insumos)
+        obtenerSubcategorias = text("SELECT subcategorias.id AS id, categorias.id AS id_categoria, categorias.categoria AS categoria, subcategorias.subcategoria AS subcategoria, subcategorias.descripcion AS descripcion FROM subcategorias JOIN categorias ON subcategorias.categoria_id = categorias.id")
+        rows2 = db.execute(obtenerSubcategorias).fetchall()
+        
+
+
+        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, UnidadesMedida = unidadMedida, Colores = color, insumos=Insumos, categorias=rows, subcategorias=rows2)
 
     else:
         insumo = request.form.get('nombre_insumo')
         tipoInsumo = request.form.get('idtipoInsumo')
         descripcionInsumo = request.form.get('descripcion_insumo')
-        subcatInsumo = request.form.get('idsubcat')
+        subcatInsumo = request.form.getlist('idsubcat')
         composicionInsumo = request.form.get('idComposicionP')
         frecuenciaInsumo = request.form.get('frecuenciaAplicacion_insumo')
         compatibilidadInsumo = request.form.get('compatibilidad')
@@ -397,7 +451,7 @@ def insumos():
         fecha_actual = datetime.now().date()
         precioVentaInsumo = request.form.get("precio_venta")
         unidadMedidaInsumo = request.form.get('idUnidadMedida')
-        coloresInsumo = request.form.get('idcolor')
+        coloresInsumo = request.form.getlist('idcolor')
 
 
         if not insumo:
@@ -428,9 +482,9 @@ def insumos():
             flash(('Ingrese las precauciones', 'error', '¡Error!'))
             return redirect(url_for('insumos'))
         
-        if not imgInsumo:
-            flash(("No se ha seleccionado ninguna imagen", 'error', '¡Error!'))
-            return redirect(url_for('insumos'))
+        # if not imgInsumo:
+        #     flash(("No se ha seleccionado ninguna imagen", 'error', '¡Error!'))
+        #     return redirect(url_for('insumos'))
         
         if not fechaVencimientoInsumo:
             flash(("No se ha seleccionado la fecha de vencimiento", 'error', '¡Error!'))
@@ -457,21 +511,25 @@ def insumos():
             flash(('Ya existe un insumo con ese nombre', 'error', '¡Error!'))
             return redirect(url_for('insumos'))
         else:
-            insertarInsumo = text("INSERT INTO insumos (nombre, tipo_insumo, descripcion, composicion_principal_id, frecuencia_aplicacion,compatibilidad, precauciones, fecha_vencimiento, precio_venta, imagen_url) VALUES (:insumo, :tipoInsumo, :descripcionInsumo, :composicionInsumo, :frecuenciaInsumo,:compatibilidadInsumo, :precaucionesInsumo, :fecha_vencimiento, :precio_venta, :imagen_url)")
+
+            insertarInsumo = text("INSERT INTO insumos (nombre, tipo_insumo, descripcion, composicion_principal_id, frecuencia_aplicacion, compatibilidad, precauciones, fecha_vencimiento, precio_venta, imagen_url) VALUES (:insumo, :tipoInsumo, :descripcionInsumo, :composicionInsumo, :frecuenciaInsumo,:compatibilidadInsumo, :precaucionesInsumo, :fecha_vencimiento, :precio_venta, :imagen_url)")
             db.execute(insertarInsumo, {"insumo": insumo, "tipoInsumo": tipoInsumo, "descripcionInsumo": descripcionInsumo, "composicionInsumo": composicionInsumo, "frecuenciaInsumo": frecuenciaInsumo, "compatibilidadInsumo": compatibilidadInsumo, "precaucionesInsumo": precaucionesInsumo, "fecha_vencimiento": fecha_vencimiento, "precio_venta": precioVentaInsumo, "imagen_url": imgInsumo})
 
             selectInsumoId = text("SELECT id FROM insumos WHERE nombre=:insumo")
             insumoId = db.execute(selectInsumoId, {'insumo': insumo}).fetchone()
 
-            insertSubcatInsumo = text("INSERT INTO insumos_subcategoria (subcategoria_id, insumo_id) VALUES (:subcatInsumo, :insumoId)")
-            db.execute(insertSubcatInsumo, {"subcatInsumo": subcatInsumo, "insumoId": insumoId[0]})
+            for subcat in subcatInsumo:
+                insertSubcatInsumo = text("INSERT INTO insumos_subcategoria (subcategoria_id, insumo_id) VALUES (:subcatInsumo, :insumoId)")
+                db.execute(insertSubcatInsumo, {"subcatInsumo": int(subcat), "insumoId": insumoId[0]})
 
-            insertarInsumoIdColor = text("INSERT INTO colores_insumos (insumo_id, color_id) VALUES (:insumoId, :coloresId)")
-            db.execute(insertarInsumoIdColor, {"insumoId": insumoId[0], "coloresId": coloresInsumo})
+            for colores in coloresInsumo:
+                insertarInsumoIdColor = text("INSERT INTO colores_insumos (insumo_id, color_id) VALUES (:insumoId, :coloresId)")
+                db.execute(insertarInsumoIdColor, {"insumoId": insumoId[0], "coloresId": int(colores)})
 
             insertarInsumoIdUnidad = text("INSERT INTO insumos_unidades (insumo_id, unidad_medida_id) VALUES (:insumoId, :unidadMedidaId)")
             db.execute(insertarInsumoIdUnidad, {"insumoId": insumoId[0], "unidadMedidaId": unidadMedidaInsumo})
-
+            
+            
             insertarInsumoIdAplicacion = text("INSERT INTO aplicaciones_insumos (insumo_id, aplicacion_id) VALUES (:insumoId, :aplicacionId)")
             db.execute(insertarInsumoIdAplicacion, {"insumoId": insumoId[0], "aplicacionId": tipoInsumo})
 
@@ -494,6 +552,18 @@ def eliminarInsumos():
     flash(('El insumo se ha sido eliminado con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('insumos'))
 
+@socketio.on("addImgInsumo")
+def agregarImgInsumo(data):
+    print(data)
+    insumo = data['idIns']
+    imagen = data['url']
+
+    print(f"{insumo} id de la comunidad" )
+    print(f"{imagen} imagen de la comunidad")
+    query = text("UPDATE insumos SET imagen_url = :imagen WHERE id =:id")
+    db.execute(query,{"imagen": imagen, "id": insumo})
+    db.commit()
+    
 @app.route('/editarinsumo', methods=["POST"])
 def editarinsumo():
     if request.method == "POST":
@@ -512,7 +582,7 @@ def editarinsumo():
        precio_ventaInsumo_editar = request.form.get('precioVentaInsumo_editar')
        coloresInsumo_editar = request.form.get('coloresInsumo_editar')
        unidadMedida_editar = request.form.get('unidadMedida_editar')
-       imgInsumo = request.form.get('imgInsumo')
+    #    imgInsumo = request.form.get('imagenInsumo')
 
        if not insumo_editar:
            flash(('Ingrese el nombre del insumo', 'error', '¡Error!'))
@@ -575,8 +645,8 @@ def editarinsumo():
            # VALIDANDO SI EXISTE UN INSUMO CON ESE ID
            obtenerInsumo = text("SELECT * FROM insumos WHERE id=:id")
            if db.execute(obtenerInsumo, {'id': insumo_ID}).rowcount > 0:
-               editarInsumo = text("UPDATE insumos SET nombre=:nombre, tipo_insumo=:tipoInsumo, descripcion=:descripcion, composicion_principal_id=:composicionInsumo, frecuencia_aplicacion=:frecuenciaInsumo,compatibilidad=:compatibilidadInsumo, precauciones=:precauciones, fecha_vencimiento=:fechaVencimiento, precio_venta=:precioVenta, imagen_url=:imagen_url WHERE id =:id")
-               db.execute(editarInsumo, {"id":insumo_ID, "nombre":insumo_editar, "tipoInsumo":tipoInsumo_editar, "descripcion":descripcionInsumo_editar, "composicionInsumo":composicionInsumo_editar, "frecuenciaInsumo":frecuenciaInsumo_editar,"compatibilidadInsumo": compatibilidadInsumo_editar, "precauciones": precaucionesInsumo_editar, "fechaVencimiento": fecha_vencimiento, "precioVenta": precio_ventaInsumo_editar, "imagen_url": imgInsumo})
+               editarInsumo = text("UPDATE insumos SET nombre=:nombre, tipo_insumo=:tipoInsumo, descripcion=:descripcion, composicion_principal_id=:composicionInsumo, frecuencia_aplicacion=:frecuenciaInsumo,compatibilidad=:compatibilidadInsumo, precauciones=:precauciones, fecha_vencimiento=:fechaVencimiento, precio_venta=:precioVenta WHERE id =:id")
+               db.execute(editarInsumo, {"id":insumo_ID, "nombre":insumo_editar, "tipoInsumo":tipoInsumo_editar, "descripcion":descripcionInsumo_editar, "composicionInsumo":composicionInsumo_editar, "frecuenciaInsumo":frecuenciaInsumo_editar,"compatibilidadInsumo": compatibilidadInsumo_editar, "precauciones": precaucionesInsumo_editar, "fechaVencimiento": fecha_vencimiento, "precioVenta": precio_ventaInsumo_editar})
 
                editarSubcategoria = text("UPDATE insumos_subcategoria SET subcategoria_id=:subcategoria_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
                db.execute(editarSubcategoria, {"subcategoria_id": subcatInsumo_editar, "insumo_id":insumo_ID})
@@ -598,6 +668,25 @@ def editarinsumo():
        
        flash(('Los datos han sido editados con éxito.', 'success', '¡Éxito!'))
        return redirect(url_for('insumos'))
+
+@app.route('/agregarSubcategoriaInsumos', methods=["POST"])
+def agregarSubcategoriaInsumos():
+    nombreSub = request.form.get('nombreSub')
+    descripcion = request.form.get('descripcion')
+    idCat = request.form.get('idCat')
+    obtenerSub = text("SELECT * FROM subcategorias WHERE subcategoria=:subcategoria")
+    
+    if db.execute(obtenerSub, {'subcategoria': nombreSub}).rowcount > 0:
+           flash(('Ya existe una subcategoria con ese nombre', 'error', '¡Error!'))
+           return redirect(url_for('subCategorias'))
+    else:
+           insertarSub = text("INSERT INTO subcategorias (categoria_id, subcategoria, descripcion) VALUES (:categoria_id, :subcategoria, :descripcion)")
+    db.execute(insertarSub, {"categoria_id": idCat, "subcategoria": nombreSub, "descripcion": descripcion})
+    db.commit()
+    
+    return jsonify({"success": True, "message": "La subcategoría ha sido agregada con éxito."})
+    # return flash(('La subcategoría ha sido agregada con éxito.', 'success', '¡Éxito!'))
+       
 
 @app.route('/plantas', methods=["GET", "POST"])
 def plantas():

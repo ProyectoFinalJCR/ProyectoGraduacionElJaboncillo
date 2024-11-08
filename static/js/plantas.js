@@ -1,19 +1,26 @@
 document.addEventListener("DOMContentLoaded", function(){
     //Evento para mostrar formulario
     document.querySelector('.btn-add-planta').addEventListener('click', function(){
-        const container_table_inputs = document.querySelector(".container-table-inputs");        
-        const form_Plantas = document.querySelector(".container-inputPlantas");
+        // const container_table_inputs = document.querySelector(".container-table-inputs");        
+        // const form_Plantas = document.querySelector(".container-inputPlantas");
   
-        //alternar clases para expandir la tabla y mostrar el formulario
-        container_table_inputs.classList.toggle("active");
-        form_Plantas.classList.toggle("show");
-        console.log("este se activa")
-        //btn cancelar regresa la tabla al centro, quitandole las clases
+        // //alternar clases para expandir la tabla y mostrar el formulario
+        // container_table_inputs.classList.toggle("active");
+        // form_Plantas.classList.toggle("show");
+        // console.log("este se activa")
+        // //btn cancelar regresa la tabla al centro, quitandole las clases
+        // document.getElementById("btn-cancel").addEventListener("click", function(){
+        //     form_Plantas.classList.remove("show")
+        //     container_table_inputs.classList.remove("active")
+        //     console.log("este se activa")
+        // });
+        const container_table_inputs = document.querySelector(".container-inputPlantas");  
+        container_table_inputs.style.display = "block";
         document.getElementById("btn-cancel").addEventListener("click", function(){
-            form_Plantas.classList.remove("show")
-            container_table_inputs.classList.remove("active")
-            console.log("este se activa")
+            container_table_inputs.style.display="none";
         });
+
+        
     });
 
     //Obtener datos para mostrar en el modal de editar
@@ -94,4 +101,6 @@ document.addEventListener("DOMContentLoaded", function(){
             multiple: true
         });
     });
+
 })
+
