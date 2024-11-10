@@ -105,8 +105,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
       inputPrecioVentaInsumo_editar.value = precioVentaInsumo;
       inputPrecioVentaInsumo_editar.textContent = precioVentaInsumo;
 
-
-      // Mostrar el modal
+         // Mostrar el modal
       modal.style.display = "block";
 
       document.getElementById("btn-cancel-edit").addEventListener("click", function () {
@@ -171,13 +170,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
       placeholder: "Seleccione una o más opciones",
       allowClear: true,
       multiple: true,
-      dropdownParent: $('.agregar-insumos') // Ajusta el selector al ID de tu modal
     });
     $('#coloresInsumo_editar').select2({
       placeholder: "Seleccione una o más opciones",
       allowClear: true,
       multiple: true,
-      dropdownParent: $('.agregar-insumos') // Ajusta el selector al ID de tu modal
     });
   });
 
