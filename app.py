@@ -653,6 +653,95 @@ def eliminarPlanta():
     flash(('La planta se ha sido eliminado con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('plantas'))   
 
+@app.route('/proveedores', methods=["GET", "POST"])
+def proveedores():
+    if request.method == "POST":
+        nombreProveedor = request.form.get('nombre')
+        correoProveedor = request.form.get('correoProveedor')
+        telefonoProveedor = request.form.get('numeroTelefono')
+        direccionProveedor = request.form.get('direccion')
+
+        if not nombreProveedor:
+            flash(('Ingrese el nombre', 'error', '¡Error!'))
+            return redirect(url_for('proveedores'))
+        if not correoProveedor:
+            flash(('Ingrese el correo electronico', 'error', '¡Error!'))
+            return redirect(url_for('proveedores'))
+        if not telefonoProveedor:
+            flash(('Ingrese el telefono', 'error', '¡Error!'))
+            return redirect(url_for('proveedores'))
+        if not direccionProveedor:
+            flash(('Ingrese la direccion', 'error', '¡Error!'))
+            return redirect(url_for('proveedores'))
+        
+        obtenerProveedores = text("SELECT * FROM proveedores WHERE correo_electronico=:correo_electronico")
+        if db.execute(obtenerProveedores, {'correo_electronico': correoProveedor}).rowcount > 0:
+            flash(('El proveedor ya existe', 'error', '¡Error!'))
+            return redirect(url_for('proveedores'))
+        else:
+            insertarProveedor = text("INSERT INTO proveedores (nombre_proveedor, correo_electronico, telefono, direccion) VALUES (:nombre_proveedor, :correo_proveedor, :telefono, :direccion)")
+            db.execute(insertarProveedor, {"nombre_proveedor": nombreProveedor, "correo_proveedor": correoProveedor, "telefono": telefonoProveedor, "direccion": direccionProveedor})
+        
+            db.commit()
+        flash(('El proveedor se ha agregado correctamente', 'success', '¡Exito!'))
+        return redirect(url_for('proveedores'))
+    else:
+        obtenerProveedores = text("SELECT * FROM proveedores")
+        proveedores = db.execute(obtenerProveedores).fetchall()
+        return render_template('proveedores.html', Proveedores = proveedores)
+
+@app.route('/bajaProveedor', methods=["GET", "POST"])
+def bajaProveedor():
+    idProveedor = request.form.get('id_baja')
+    eliminarProveedor = text("DELETE FROM proveedores WHERE id = :id")
+    db.execute(eliminarProveedor, {"id": idProveedor})
+    db.commit()
+    flash(('El proveedor se ha eliminado con éxito.', 'success', '¡Éxito'))
+    return redirect(url_for('proveedores'))
+
+@app.route('/editarProveedores', methods=["GET", "POST"])
+def editarProveedores():
+    idProveedor = request.form.get('id_editar')
+    nombre_editar = request.form.get('nombre_editar')
+    correo_editar = request.form.get('correo_editar')
+    telefono_editar = request.form.get('telefono_editar')
+    direccion_editar = request.form.get('direccion_editar')
+
+    if not idProveedor:
+        flash(('No está recibiendo el id', 'error', '¡Error!'))
+        return redirect(url_for('proveedores'))
+    if not nombre_editar:
+        flash(('Ingrese el nombre', 'error', '¡Error!'))
+        return redirect(url_for('proveedores'))
+    if not correo_editar:
+        flash(('Ingrese un correo electronico', 'error', '¡Error!'))
+        return redirect(url_for('proveedores'))
+    if not telefono_editar:
+        flash(('Ingrese un numero', 'error', '¡Error!'))
+        return redirect(url_for('proveedores'))
+    if not direccion_editar:
+        flash(('Ingrese la direccion', 'error', '¡Error!'))
+        return redirect(url_for('proveedores'))
+    
+    # VALIDANDO SI HAY UNA CATEGORIA CON ESE NOMBRE
+    validandoProveedor = text("SELECT * FROM proveedores WHERE correo_electronico=:correo_electronico AND id!=:id")
+    if db.execute(validandoProveedor, {'correo_electronico': correo_editar, 'id': idProveedor}).rowcount > 0:
+        flash(('Ya existe un proveedor con ese correo', 'error', '¡Error!'))
+        return redirect(url_for('proveedores'))
+
+    else:
+        obtenerProveedor = text("SELECT nombre_proveedor FROM proveedores WHERE id=:id")
+
+        if db.execute(obtenerProveedor, {'id': idProveedor}).rowcount > 0:
+            editarProveedor = text("UPDATE proveedores SET nombre_proveedor=:nombre_proveedor, correo_electronico=:correo_electronico, telefono=:telefono, direccion=:direccion WHERE id =:id")
+            db.execute(editarProveedor, {"id":idProveedor, "nombre_proveedor":nombre_editar, "correo_electronico":correo_editar, "telefono":telefono_editar, "direccion": direccion_editar})
+            db.commit()
+        else:
+            flash("Ha ocurrido un error", 'error', '¡Error!')
+            return redirect(url_for('proveedores'))
+
+    flash(('El proveedor ha sido editado con éxito.', 'success', '¡Éxito!'))
+    return redirect(url_for('proveedores'))
 
 @app.route('/catalogo')
 def catalogo():
