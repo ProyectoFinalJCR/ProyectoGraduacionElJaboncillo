@@ -3,9 +3,8 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Noto Sans", sans-serif;
-
+    scroll-behavior: smooth;
 }
-
 .navbar{
     width: 100%;
     height: 85px;
@@ -102,8 +101,9 @@
 
 /*Seccion nosotros*/
 .seccion-nosotros{
-    width: 100%;
+    max-width: 100%;
     height: 100vh;
+    margin-bottom: 50px;
 }
 .nosotrostxt{
     width: 100%;
@@ -160,6 +160,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    box-sizing: border-box;
  }
  .cards-plantas .card-plantas .img-card{
     width: 100%;
@@ -236,7 +237,7 @@
    }
 /* Seccion servicios */
 .seccion-servicios{
-  width: 100%;
+  max-width: 100%;
   height: 100vh;
   background-color: #ededee;
   margin-top: 50px;
@@ -487,3 +488,38 @@
     flex-direction: column;
     background-color: #60a381;
 }
+/* MEDIA QUERIES */
+/* Para dispositivos pequeños, como teléfonos pequeños (320px a 375px) */
+@media (min-width: 315px) and (max-width: 424px) {
+
+  }
+  
+  
+  /* Para teléfonos móviles grandes o tablets pequeñas (425px a 768px) */
+  @media (min-width: 425px) and (max-width: 767px) {
+    
+  }
+  
+  /* Para tablets y pantallas medianas (768px a 1024px) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+   
+  }
+  
+  /* Para pantallas grandes (1024px a 1440px) */
+  @media (min-width: 1024px) and (max-width: 1439px) {
+    /* Tus estilos para pantallas entre 1024px y 1439px */
+  }
+  
+  /* Para pantallas muy grandes (1440px a 2560px) */
+  @media (min-width: 1440px) and (max-width: 2559px) {
+    /* Tus estilos para pantallas entre 1440px y 2559px */
+   
+  }
+  
+  /* Para pantallas ultra grandes (2560px en adelante) */
+  @media (min-width: 2560px) {
+    /* Tus estilos para pantallas mayores a 2560px */
+   
+  }
+
+  

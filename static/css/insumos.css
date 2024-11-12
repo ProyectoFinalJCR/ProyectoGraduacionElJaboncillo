@@ -6,7 +6,7 @@
 /*Tabla de insumos*/
 .container-table-inputs{
   width: 100%;
-  height: 70vh;
+  height: 72vh;
   display:grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
@@ -29,56 +29,223 @@
   border-collapse: collapse;
   text-align: center;
 }
+.container-table-inputs .table-insumos table .mini-imgInsumo{
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  object-fit: cover;
+}
 .container-table-inputs .table-insumos table thead{
   width: 100%;
   height: 55px;
   text-align: center;
 }
+/*File upload*/
+.image-upload {
+  position: relative;
+  width: 100px; /* Ajusta el tamaño según tus necesidades */
+  height: 100px; /* Ajusta el tamaño según tus necesidades */
+  border: 2px dashed #ccc; /* Estilo del borde */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.image-upload:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Color al hacer hover */
+}
+
+.file-input {
+  display: none; /* Oculta el input de archivo */
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.upload-icon {
+  font-size: 24px; /* Tamaño del icono */
+}
+
+.upload-text {
+  margin-top: 5px; /* Espaciado entre el icono y el texto */
+  font-size: 14px; /* Tamaño del texto */
+}
 /*Formulario*/
 .container-table-inputs .container-inputinsumos{
-  display: none;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  padding: 20px;
-  overflow-y: auto;
+  /*MDOAL*/
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
 }
-/*Aplciamos el grid, las diviciones*/
-.container-table-inputs.active{
-  grid-template-columns: 2fr 1fr;
+.container-table-inputs .container-inputinsumos .agregar-insumos{
+  position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-36%, -42%); /* Centra el modal */
+    background-color: #fff;
+    padding: 0px 50px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 1100px;
+    height: 684px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    scrollbar-width: none;
 }
-.container-inputinsumos.show {
-  display: flex; /* Muestra el formulario al activar la clase 'show' */   
-}
+
 .container-table-inputs .container-inputinsumos .inputinsumos-title{
   width: 100%;
-  height: auto;
+  height: 80px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
+  border-bottom: 1px solid #000;
+  margin-bottom: 25px;
 }
 .container-table-inputs .container-inputinsumos .form-insumos{
   width: 100%;
   height: auto;
 }
 .container-table-inputs .container-inputinsumos .form-insumos  .inputs-insumos{
+  font-weight: bold;
+  display: grid;
+  grid-template-columns:repeat(3, 1fr); 
+  gap: 20px;
+  padding-bottom: 20px;
+}
+.container-inputinsumos .agregar-insumos .inputs-insumos .inputs-cont {
   display: flex;
   flex-direction: column;
-  gap: 35px;
-  font-weight: bold;
 }
-.container-table-inputs .container-inputinsumos .form-insumos .inputs-insumos .input-insumos{
+.container-inputinsumos .agregar-insumos .inputs-insumos .columna-1, .columna-2{
+width: 100%;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+.container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 textarea{
+  width: 100%;           /* Ancho completo del contenedor */
+  max-width: 330px;      /* Ancho máximo de 500px */
+  height: 100px;         /* Altura inicial de 150px */
+  max-height: 100px;
+  min-width:330px 
+}
+.container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 .input-subcat{
   width: 100%;
-  margin-top: 8px ;
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  align-items:center;
+  gap: 15px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+.container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 .agregar-subcat{
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: start;
+gap: 10px;
+}
+.container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 
+.btn-agregar-subcat{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 .input-colores
+{
+  display: flex;
+  flex-direction: column;
+}
+.container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 .btn-agregar-subcate a button{
+  width: 65px;
+  height: 50px;
+  border-radius: 10px;
+  background-color: #a8f7ab;
+  border: none;
+  cursor:pointer;
+}
+.container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 .btn-agregar-subcate a button:hover{
+  background-color: #a9f1ab;
+}
+
+.container-table-inputs .container-inputinsumos .form-insumos .inputs-insumos .inputs-cont .input-insumos{
+  width: 100%;
+  margin-top:2px;
+  border-radius: 10px;
+  background-color: #ECFFED;
+
 }
 .container-table-inputs .container-inputinsumos .btn-agregar{
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: end;
-  margin-top: 35px;
+  justify-content: space-between;
+  margin-top: 20px;
   gap: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #000;
+  margin-bottom: 10px;
+}
+.container-table-inputs .container-inputinsumos .btn-agregar .logo-btn-add{
+  width: 220px;
+  height: 40px;
+}
+
+.container-table-inputs .container-inputinsumos .btn-agregar .btn{
+  width: 150px;
+  border-radius: 15px;
+}
+.container-table-inputs .container-inputinsumos .btn-agregar .btn-cancel{
+  width: 120px;
+  background-color: #CF696B;
+  
+}
+
+/*SELECT 2*/
+/* Ajusta el campo de entrada de Select2 */
+/* .select2-container--default .select2-selection--multiple {
+  border: 1px solid #ced4da;
+  background-color: #ECFFED;
+  border-radius: 4px;
+  padding: 5px;
+  font-size: 14px;
+} */
+.select2-container--default .select2-selection--multiple {
+  background-color: #ECFFED !important;
+  width: 100% !important;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  cursor: text;
+  padding-bottom: 5px;
+  padding-right: 5px;
+  position: relative;
+  width: 75%;
+}
+
+
+/* Ajusta las opciones seleccionadas */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #fff !important;
+  color: #000;
+  border: 1px solid #007bff;
+  border-radius: 2px;
+  padding: 3px 5px;
 }
 
 /* Modal editar */
@@ -86,28 +253,102 @@
     display: none; 
     position: fixed; 
     z-index: 1; 
-    right: 0;
+    left: 0;
     top: 0;
-    width: 83%;
+    width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
   }
   
   /* Contenido del Modal */
   .modal-content-insumos {
-    background-color: white;    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -42%); /* Centra el modal */
+    background-color: #fff;
     padding: 20px;
-    border: 1px solid #888;
+    border-radius: 8px;
     width: 100%;
-    max-width: 475px;
-    border-radius: 10px;
-    text-align: center;
+    max-width: 950px;
+    height: 684px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .modal-content-insumos .inputinsumos-title{
+    width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #000;
+  margin-bottom: 25px;
+  }
+  .modal-content-insumos .form_edit_insumo{
+    width: 100%;
+    height: 80%;
   }
   .modal-content-insumos .inputs-insumos{
+    /* display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+    padding-bottom: 20px; */
+
+  display: grid;
+  grid-template-columns:repeat(3, 1fr); 
+  gap: 20px;
+  padding-bottom: 20px;
+  } 
+.input-insumos {
+    width: 100%;
+    margin-top: 2px;
+    border-radius: 10px;
+    background-color: #ECFFED;
+}
+
+  .modal-content-insumos .inputs-insumos .columna-1, .columna-2{
+    width: 100%;
     display: flex;
     flex-direction: column;
-  } 
-  .modal-content .input-categories #descripcion_editar{
+    justify-content: space-between;
+    }
+
+.modal-content-insumos .form_edit_insumo .inputs-insumos .columna-3 textarea{
+  width: 100%;           /* Ancho completo del contenedor */
+  max-width: 330px;      /* Ancho máximo de 500px */
+  height: 100px;         /* Altura inicial de 150px */
+  max-height: 100px;
+  min-width:330px 
+}
+
+.modal-content-insumos .form_edit_insumo .btn-agregar{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #000;
+  margin-bottom: 10px;
+}
+.modal-content-insumos .form_edit_insumo .btn-agregar .logo-btn-add{
+  width: 220px;
+  height: 40px;
+}
+.modal-content-insumos .form_edit_insumo .btn-agregar .btn{
+  width: 150px;
+  border-radius: 15px;
+}
+.modal-content-insumos .form_edit_insumo .btn-agregar .btn-cancel{
+  width: 120px;
+  background-color: #CF696B;
+  
+}
+
+  .modal-content-insumos .input-categories #descripcion_editar{
     height: 85px;
   } 
 

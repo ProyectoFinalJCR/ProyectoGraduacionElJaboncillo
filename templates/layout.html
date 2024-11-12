@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/static/css/plantas.css">
     <link rel="stylesheet" href="/static/css/insumos.css"> 
     <link rel="stylesheet" href="/static/css/proveedores.css"> 
+    <link rel="stylesheet" href="/static/css/insumos.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,6 +107,13 @@
                     </div>
                 </div>
             </div>
+            <div class="configuracion">
+                <button class="btn-items">
+                    <i class="material-icons">settings</i>
+                    configuracion del sistema
+                    <i class="material-icons key">keyboard_arrow_left</i>
+                </button>
+            </div>
         </div>
         <main class="main">
             {% block main %}
@@ -121,11 +129,21 @@
 <script src="/static/js/subcategoria.js"></script>
 <script src="/static/js/insumos.js"></script>
 <script src="/static/js/proveedores.js"></script>
+<script src="/static/js/plantas.js"></script>
+<script src="/static/js/socket.io.min.js"></script>
+
 <!-- Carga jQuery primero -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <!-- Luego carga Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-<script src="/static/js/plantas.js"></script>
+<!-- Carga Axios para Cloudinary -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Cargar Socket.io desde un CDN -->
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+<script src="path/to/insumos.js"></script>
+<script src="path/to/plantas.js"></script>
+
 </html>

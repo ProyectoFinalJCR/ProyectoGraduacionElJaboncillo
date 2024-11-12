@@ -26,39 +26,67 @@ Insumos | El Jaboncillo
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Imagen</th>
                         <th>Id</th>
                         <th>Insumo</th>
                         <th>Tipo Insumo</th>
-                        <th>Descripción</th>
+                        <th style="display: none;">Descripción</th>
                         <th>composición principal</th>
-                        <th>Frecuencia de aplicación</th>
-                        <th>Durabilidad</th>
-                        <th>Aplicacion ideal</th>
-                        <th>Compatibilidad</th>
-                        <th>Precauciones</th>
+                        <th style="display: none;">Frecuencia de aplicación</th>
+                        <th style="display: none;">Compatibilidad</th>
+                        <th style="display: none;">Precauciones</th>
                         <th>Subcategoria</th>
+                        <th>Unidad de Medida</th>
+                        <th style="display: none;">Colores</th>
+                        <th>Fecha de Vencimiento</th>
+                        <th>Precio de Venta</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         {% for insumo in insumos %}
+                        <td id="insumo-{{ insumo[0] }}">
+                            {% if insumo[18] %}
+                            <!-- Si hay imagen cargada -->
+                            <div class="img-container">
+                                <img class="mini-imgInsumo" src="{{ insumo[18] }}" alt="Insumo">
+                                <!-- <input type="file" class="upload-input" onchange="uploadImage(this)" style="display: none;"> -->
+                            </div>
+                            {% else %}
+                                <div class="image-upload">
+                                    <input type="hidden" name="id_insumo" id="id_insumo" value="{{insumo[0]}}">
+                                        <input type="file" id="file-input" class="file-input" accept="image/*">
+                                        <label for="file-input" class="upload-label">
+                                            <span class="upload-icon">📁</span> <!-- Icono de archivo -->
+                                            <span class="upload-text">Subir imagen</span>
+                                        </label>
+                                </div>
+                            {% endif %}
+                        </td>
+                        <!-- <td><img class="mini-imgInsumo" src="{{insumo[18]}}" alt="Insumo"></td> -->
                         <td>{{insumo[0]}}</td>
                         <td>{{insumo[1]}}</td>
                         <td>{{insumo[2]}}</td>
-                        <td>{{insumo[3]}}</td>
-                        <td>{{insumo[4]}}</td>
-                        <td>{{insumo[5]}}</td>
-                        <td>{{insumo[6]}}</td>
-                        <td>{{insumo[7]}}</td>
-                        <td>{{insumo[8]}}</td>
-                        <td>{{insumo[9]}}</td>
-                        <td>{{insumo[10]}}</td>
+                        <td style="display: none;">{{insumo[3]}}</td>
+                        <td style="display: none;">{{insumo[4]}}</td>
+                        <td >{{insumo[5]}}</td>
+                        <td style="display: none;">{{insumo[6]}}</td>
+                        <td style="display: none;">{{insumo[7]}}</td>
+                        <td style="display: none;">{{insumo[8]}}</td>
+                        <td style="display: none;">{{insumo[9]}}</td>
+                        <td >{{insumo[10]}}</td>
+                        <td style="display: none;">{{insumo[11]}}</td>
+                        <td >{{insumo[12]}}</td>
+                        <td style="display: none;">{{insumo[13]}}</td>
+                        <td style="display: none;">{{insumo[14]}}</td>
+                        <td style="display: none;">{{insumo[15]}}</td>
+                        <td>{{insumo[16]}}</td>
+                        <td>{{insumo[17]}}</td>
                         <td class="btn-acciones">
                             <button class="btn-edit editar-insumo" id="openModalInsumo">
                                 <i class="material-icons">edit</i>
                             </button>
-
                             <form action="/eliminarInsumo" method="post" class="form-eliminar">
                                 <input type="hidden" class="id_eliminar" name="id_insumo" value="{{insumos[0]}}">
                                 <button class="btn-delete" id="btn-eliminar" type="submit">
@@ -73,144 +101,308 @@ Insumos | El Jaboncillo
         </div>
         {%endif%}
         <div class="container-inputinsumos">
-            <div class="inputinsumos-title">
-                <h3>Nuevo insumo</h3>
-            </div>
-            <form class="form-insumos" action="/insumos" id="form_insumos" method="post">
-                <section class="inputs-insumos">
-                    <div>
-                        <label for="">Insumo</label>
-                        <input type="text" id="nombre_insumo" class="input input-insumos" name="nombre_insumo"
-                            placeholder="Ingrese el insumo">
-                    </div>
-                    <div>
-                        <label for="">Tipo de insumo</label>
-                        <select class="input input-insumos" id="tipoInsumo" name="idtipoInsumo">
-                            {% for tiposInsumo in TiposInsumo %}
-                            <option value="{{tiposInsumo[1]}}">{{tiposInsumo[1]}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <label for="">Descripción</label>
-                        <input type="text" id="descripción_insumo" class="input input-insumos" name="descripcion_insumo"
-                            placeholder="Ingrese una descripción para este insumo">
-                    </div>
-                    <div>
-                        <label for="">Seleccione una subcategoria</label>
-                        <select class="input input-insumos" id="subcat" name="idsubcat">
-                            {% for subcat in Subcat %}
-                            <option value="{{subcat[0]}}">{{subcat[2]}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <label for="">Composición principal</label>
-                        <select class="input input-insumos" id="ComposicionP" name="idComposicionP">
-                            {% for composicionp in Composicionp %}
-                            <option value="{{composicionp[0]}}">{{composicionp[1]}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+            <div class="agregar-insumos">
+                <div class="inputinsumos-title">
+                    <h3>AGREGAR INSUMO</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <form class="form-insumos" action="/insumos" id="form_insumos" method="post">
+                    <section class="inputs-insumos">
+                        <div class="inputs-cont columna-1">
+                            <div>
+                                <label for="">Insumo</label>
+                                <input type="text" id="nombre_insumo" class="input input-insumos" name="nombre_insumo"
+                                    placeholder="Ingrese el insumo">
+                            </div>
+                            <div>
+                                <label for="">Composición principal</label>
+                                <select class="input input-insumos" id="ComposicionP" name="idComposicionP">
+                                    {% for composicionp in Composicionp %}
+                                    <option value="{{composicionp[0]}}">{{composicionp[1]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="">Unidades medidas</label>
+                                <select class="input input-insumos" id="unidad-medida" name="idUnidadMedida">
+                                    {% for unidadmedida in UnidadesMedida %}
+                                    <option value="{{unidadmedida[0]}}">{{unidadmedida[1]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="">Imagen</label>
+                                <input type="file" id="img-uploader-insu" name="imagenInsumo" class="input input-insumos">
+                            </div>
+                            <!-- <div>
+                                <label for="">Imagen</label>
+                                <input type="text" id="imagenInsumo" name="imagenInsumo" class="input input-insumos"
+                                    required>
+                            </div> -->
+                        </div>
 
-                    <div>
-                        <label for="">Frecuencia de aplicacion</label>
-                        <input type="text" id="frecuenciaAplicacion_insumo" class="input input-insumos"
-                            name="frecuenciaAplicacion_insumo"
-                            placeholder="Ingrese una descripción para este insumo acerca de la frecuencia de aplicacion">
-                    </div>
-                    <div>
-                        <label for="">Durabilidad</label>
-                        <input type="text" id="durabilidad" class="input input-insumos" name="durabilidad"
-                            placeholder="Ingrese durabilidad aproximada para este insumo">
-                    </div>
-                    <div>
-                        <label for="">Compatibilidad</label>
-                        <input type="text" id="compatibilidad" class="input input-insumos" name="compatibilidad"
-                            placeholder="Ingrese durabilidad aproximada para este insumo">
-                    </div>
-                    <div>
-                        <label for="">Precauciones</label>
-                        <input type="text" id="precauciones" class="input input-insumos" name="precauciones"
-                            placeholder="Ingrese durabilidad aproximada para este insumo">
-                    </div>
-                </section>
-                <section class="btn-agregar">
-                    <button type="button" class="btn" id="btn-cancel">Cancelar</button>
-                    <button type="submit" class="btn " id="btn-add-users">Agregar</button>
-                </section>
-            </form>
+                        <div class="inputs-cont columna-2">
+                            <div>
+                                <label for="">Tipo de insumo</label>
+                                <select class="input input-insumos" id="tipoInsumo" name="idtipoInsumo">
+                                    {% for tiposInsumo in TiposInsumo %}
+                                    <option value="{{tiposInsumo[0]}}">{{tiposInsumo[1]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="">Frecuencia de aplicacion</label>
+                                <input type="text" id="frecuenciaAplicacion_insumo" class="input input-insumos"
+                                    name="frecuenciaAplicacion_insumo"
+                                    placeholder="Ingrese una frecuencia de aplicacion para este insumo">
+                            </div>
+                            <div>
+                                <label for="">Compatibilidad</label>
+                                <input type="text" id="compatibilidad" class="input input-insumos" name="compatibilidad"
+                                    placeholder="Ingrese compatibilidad aproximada para este insumo">
+                            </div>
+                            <div>
+                                <label for="">Precio de venta</label>
+                                <input type="number" id="precio_venta" name="precio_venta" class="input input-insumos">
+                            </div>
+
+                        </div>
+                        <div class="inputs-cont columna-3">
+                            <div>
+                                <div>
+                                    <label for="">Descripción</label>
+                                    <textarea class="input input-insumos" id="descripcion_insumo"
+                                        name="descripcion_insumo"
+                                        placeholder="Ingrese una descripción para este insumo"></textarea>
+                                </div>
+                            </div>
+                            <div class="input-subcat">
+                                <div class="agregar-subcat">
+                                    <label for="">Seleccione una subcategoria</label>
+                                    <select class="input input-insumos" id="subcat" name="idsubcat">
+                                        {% for subcat in Subcat %}
+                                        <option value="{{subcat[0]}}">{{subcat[2]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="btn-agregar-subcate">
+                                    <a href="#" class=" btn-modal-insumos" id="btn-modal-subcate"><button type="button">
+                                            <i class="material-icons">library_add</i></button></a>
+                                    <!-- <button type="button" class="btn-modal-insumos" id="btn-modal-subcate"> <i class="material-icons">library_add</i></button> -->
+                                </div>
+                            </div>
+                            <div class="input-colores">
+                                <label for="">Colores</label>
+                                <select class="input input-insumos" id="colores" name="idcolor">
+                                    {% for color in Colores %}
+                                    <option value="{{color[0]}}">{{color[1]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="">Precauciones</label>
+                                <input type="text" id="precauciones" class="input input-insumos" name="precauciones"
+                                    placeholder="Ingrese durabilidad aproximada para este insumo">
+                            </div>
+                            <div>
+                                <label for="">Fecha de vencimiento</label>
+                                <input type="date" id="fecha_vencimiento" name="fecha_vencimiento"
+                                    class="input input-insumos" required>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="btn-agregar">
+                        <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                        <div>
+                            <button type="button" class="btn btn-cancel" id="btn-cancel">Cancelar</button>
+                            <button type="submit" class="btn " id="btn-add-insumos">Agregar</button>
+                        </div>
+                    </section>
+                </form>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- Modal editar usuarios -->
-
-<div id="myModal" class="modal">
+<!-- Modal agregar subcategoria
+<div id="myModalSub" class="modal">
     <div class="modal-content form-subcat">
         <span class="close">&times;</span>
-        <h2>Editar insumos</h2>
-        <form action="/editarInsumo" method="post" class="form_edit_insumo">
-            <div class="inputs-insumos">
-                <div class="input-insumos">
-                    <input type="hidden" id="id_editar_insumo" name="id_editar_insumo" value="{{insumos.id}}">
-                    <label for="">Nombre completo</label>
-                    <input type="text" id="insumo_editar" class="input" name="insumo_editar" value="">
-                    
-                    <label for="">Tipo de insumo</label>
-                    <select type="text" id="tipoInsumo_editar" name="tipoInsumo_editar" class="input">
-                        {% for tiposInsumo in TiposInsumo %}
-                        <option name="idtipoInsumo" value="{{tiposInsumo[0]}}">{{tiposInsumo[1]}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="inputs-modal-insumos">
-                    <label for="">Descripción</label>
-                    <input type="text" id="descripcion_insumo_editar" class="input" name="descripcion_insumo_editar"
-                        value="">
-                    <label for="">Subcategoria</label>
-                    <select type="text" id="subcat_editar" name="subcat_editar" class="input">
-                        {% for subcat in Subcat %}
-                        <option name="idsubcat" value="{{subcat[0]}}">{{subcat[2]}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="inputs-modal-insumos">
-                    <label for="">Composición principal</label>
-                    <select type="text" id="ComposicionP_editar" name="ComposicionP_editar" class="input">
-                        {% for composicionp in Composicionp %}
-                        <option name="idComposicionP" value="{{composicionp[0]}}">{{composicionp[1]}}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="">Aplicacion ideal</label>
-                    <select type="text" id="idaplicaIdeal_editar" name="idaplicaIdeal_editar" class="input">
-                        {% for aplicaIdeal in Aplicaideal %}
-                        <option name="idaplicaIdeal" value="{{aplicaIdeal[0]}}">{{aplicaIdeal[1]}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="inputs-modal-insumos">
-                    <label for="">Frecuencia de aplicacion</label>
-                    <input type="text" id="frecuenciaAplicacion_insumo_editar" class="input"
-                        name="frecuenciaAplicacion_insumo_editar" value="">
-
-                    <label for="">Durabilidad</label>
-                    <input type="text" id="durabilidad_editar" class="input" name="durabilidad_editar" value="">
-                </div>
-                <div class="inputs-modal-insumos">
-                    <label for="">Compatibilidad</label>
-                    <input type="text" id="compatibilidad_editar" class="input" name="compatibilidad_editar" value="">
-                    <label for="">Precauciones</label>
-                    <input type="text" id="precauciones_editar" class="input" name="precauciones_editar" value="">
-                </div>
+        <h2>Agregar subcategoria</h2>
+        <form action="/agregarSubcategoriaInsumos" method="post" class="form_edit">
+            <div class="input-subcategories">
+                <input type="hidden" id="id_editar" name="id_editar">
+                <label for="">Seleccione una categoria</label>
+                <select class="input" id="idCat" name="idCat">
+                    {% for rows in categorias %}
+                    <option name="idCat" value="{{rows[0]}}">{{rows[1]}}</option>
+                    {% endfor %}
+                </select>
+                <label for="">Nombre subcategoria</label>
+                <input type="text" id="nombreSub" class="input" name="nombreSub">
+                <label for="">Descripción</label>
+                <input type="text" id="descripcion" class="input" name="descripcion">
             </div>
             <div class="btn-modal">
-                <button type="button" class="btn close-modal">Cancelar</button>
-                <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
+                <button type="button" class="btn close_modal" id="close_modal">Cancelar</button>
+                <button type="submit" class="btn" id="btn-edit-categories">Agregar</button>
+            </div>
+        </form>
+    </div>
+</div> -->
+<div id="myModalSub" class="modal">
+    <div class="modal-content form-subcat">
+        <span class="close">&times;</span>
+        <h2>Agregar subcategoria</h2>
+        <form method="post" class="form_edit" id="formSubcategoria">
+            <div class="input-subcategories">
+                <input type="hidden" id="id_editar" name="id_editar">
+                <label for="">Seleccione una categoria</label>
+                <select class="input" id="idCat" name="idCat">
+                    {% for rows in categorias %}
+                    <option name="idCat" value="{{rows[0]}}">{{rows[1]}}</option>
+                    {% endfor %}
+                </select>
+                <label for="">Nombre subcategoria</label>
+                <input type="text" id="nombreSub" class="input" name="nombreSub">
+                <label for="">Descripción</label>
+                <textarea id="descripcion" class="input" name="descripcion"> </textarea>
+            </div>
+            <div class="btn-modal">
+                <button type="button" class="btn close_modal" id="close_modal">Cancelar</button>
+                <button class="btn" id="btn-edit-categories">Agregar</button>
             </div>
         </form>
     </div>
 </div>
+
+
+<!-- Modal editar usuarios -->
+<div id="myModal" class="modal-insumos">
+    <div class="modal-content-insumos form-insumos">
+        <div class="inputinsumos-title">
+            <h2>Editar insumos</h2>
+            <span class="close-edit">&times;</span>
+        </div>
+        <form action="/editarinsumo" method="post" class="form_edit_insumo">
+            <section class="inputs-insumos">
+                <div class="inputs-cont columna-1">
+                    <div>
+                        <input type="hidden" id="id_editar_insumo" name="id_editar_insumo" value="{{insumos.id}}">
+                        <label for="">Insumo</label>
+                        <input type="text" id="insumo_editar" class="input input-insumos" name="insumo_editar" value="">
+                    </div>
+                    <div>
+                        <label for="">Composición principal</label>
+                        <select type="text" id="ComposicionP_editar" name="idComposicionP_editar"
+                            class="input input-insumos">
+                            {% for composicionp in Composicionp %}
+                            <option name="idComposicionP" value="{{composicionp[0]}}">{{composicionp[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Unidad medidad</label>
+                        <select type="text" id="unidadMedida_editar" name="unidadMedida_editar"
+                            class="input input-insumos">
+                            {% for unidad in UnidadesMedida %}
+                            <option name="idunidadMedida" value="{{unidad[0]}}">{{unidad[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Imagen</label>
+                        <input type="file" id="img_uploader_insu_editar" name="imagenInsumo" class="input input-insumos">
+                    </div>
+                    <!-- <div>
+                        <label for="">Imagen</label>
+                        <input type="text" id="imagenInsumo" name="imagenInsumo" class="input input-insumos" required>
+                    </div> -->
+                </div>
+                <div class="inputs-cont columna-2">
+                    <div>
+                        <label for="">Tipo de insumo</label>
+                        <select type="text" id="tipoInsumo_editar" name="idtipoInsumo_editar"
+                            class="input input-insumos">
+                            {% for tiposInsumo in TiposInsumo %}
+                            <option name="idtipoInsumo_editar" value="{{tiposInsumo[0]}}">{{tiposInsumo[1]}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Frecuencia de aplicacion</label>
+                        <input type="text" id="frecuenciaAplicacion_insumo_editar" class="input input-insumos"
+                            name="frecuenciaAplicacion_insumo_editar" value="">
+                    </div>
+                    <div>
+                        <label for="">Compatibilidad</label>
+                        <input type="text" id="compatibilidad_editar" class="input input-insumos"
+                            name="compatibilidad_editar" value="">
+                    </div>
+                    <div>
+                        <label for="">Precio de venta</label>
+                        <input type="number" id="precioVentaInsumo_editar" class="input input-insumos"
+                            name="precioVentaInsumo_editar" value="" required>
+                    </div>
+
+                </div>
+                <div class="inputs-cont columna-3">
+                    <div>
+                        <div>
+                            <label for="">Descripción</label>
+                            <textarea class="input input-insumos" id="descripcion_insumo_editar"
+                                name="descripcion_insumo_editar"
+                                placeholder="Ingrese una descripción para este insumo"></textarea>
+                            <!-- 
+                                <input type="text" id="descripcion_insumo_editar" class="input"
+                                name="descripcion_insumo_editar" value=""> -->
+                        </div>
+                    </div>
+                    <div class="input-subcat">
+                        <label for="">Subcategoria</label>
+                        <select type="text" id="subcat_editar" name="idsubcat_editar" class="input">
+                            {% for subcat in Subcat %}
+                            <!-- <option name="idsubcat" value="{{subcat[0]}}">{{subcat[2]}}</option> -->
+                            <option value="{{ subcat[0] }}" {% if subcat[0] in Subcat %} selected {% endif %}>
+                                {{ subcat[2] }}
+                                {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-colores">
+                        <label for="">Colores</label>
+                        <select type="text" id="coloresInsumo_editar" name="coloresInsumo_editar" class="input">
+                            {% for colores in Colores %}
+                            <option name="idColor" value="{{colores[0]}}">{{colores[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Precauciones</label>
+                        <input type="text" id="precauciones_editar" class="input input-insumos"
+                            name="precauciones_editar" value="">
+                    </div>
+                    <div>
+                        <label for="">Fecha de vencimiento</label>
+                        <input type="date" id="fechaVencimientoInsumo_editar" class="input input-insumos"
+                            name="fechaVencimientoInsumo_editar" value="" required>
+                    </div>
+                </div>
+            </section>
+            <section class="btn-agregar">
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                <div>
+                    <div>
+                        <button type="button" class="btn btn-cancel" id="btn-cancel-edit">Cancelar</button>
+                        <button type="submit" class="btn " id="btn-edit-categories">Editar</button>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+</div>
+
+
 
 
 <!-- Mostrar mensaje de éxito -->

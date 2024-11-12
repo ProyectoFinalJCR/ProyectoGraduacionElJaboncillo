@@ -93,6 +93,7 @@ class Insumos(db.Model):
     precio_venta = db.Column(db.Float, nullable=False)
 
 class Insumos_Unidades(db.Model):
+    __tablename__ = 'insumos_unidades'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True )
     unidad_medida_id = db.Column(db.Integer, db.ForeignKey('unidades_medidas.id'), nullable = False)
     insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = False)
@@ -104,7 +105,7 @@ class Aplicaciones_Insumos (db.Model):
     insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = False) 
 
 class Colores_Insumos (db.Model):
-    __tablename__ = 'condiciones_insumos'
+    __tablename__ = 'colores_insumos'
     id =db.Column (db.Integer, primary_key=True, autoincrement =True)
     color_id =db.Column (db.Integer, db.ForeignKey('colores.id'), nullable = False) 
     insumo_id =db.Column (db.Integer, db.ForeignKey('insumos.id'), nullable = False) 
