@@ -62,9 +62,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
       const frecuenciaInsumo = row.cells[8].innerText;
       const compatibilidadInsumo = row.cells[9].innerText;
       const precaucionesInsumo = row.cells[10].innerText;
-      const subcategoriaInsumo = row.cells[12].innerText;
+      const subcategoriaInsumo = row.cells[12].innerText.split(', ');
       const UnidadMedida = row.cells[14].innerText;
-      const coloresInsumo = row.cells[16].innerText;
+      const coloresInsumo = row.cells[16].innerText.split(', ');
       const fechaVencimientoInsumo = row.cells[17].innerText;
       const precioVentaInsumo = row.cells[18].innerText;
 
@@ -105,7 +105,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
       inputPrecioVentaInsumo_editar.value = precioVentaInsumo;
       inputPrecioVentaInsumo_editar.textContent = precioVentaInsumo;
 
-         // Mostrar el modal
+      // Asigna los valores y actualiza cada Select2
+      $('#subcat_editar').val(subcategoriaInsumo).trigger('change');
+      $('#coloresInsumo_editar').val(coloresInsumo).trigger('change');
+
+      // Mostrar el modal
       modal.style.display = "block";
 
       document.getElementById("btn-cancel-edit").addEventListener("click", function () {
@@ -118,33 +122,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
   });
 
-
-
-  //ALERTA EDITAR
-  const form_editar = document.querySelector('.form_edit_insumo');
-
-  form_editar.addEventListener('submit', function (event) {
-    event.preventDefault();
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "¡No podrás revertir esta acción!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, editar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        event.target.submit();
-      }
-    });
-  });
-
-  document.getElementById("btn-cancel-edit").addEventListener("click", function () {
-    const modaleditar = document.querySelector(".container-inputinsumos");
-    modaleditar.style.display = "none";
-  });
 
   //Select2 para seleccionar opciones
   $(document).ready(function () {
@@ -261,14 +238,81 @@ document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   });
-
-
-
-
 });
 
 //SOCKETS Cloudinary
+/* MDOAL AGREGAR*/
+document.addEventListener("DOMContentLoaded", function () {
+  const fileInput = document.getElementById("file-input");
+  const id_insumo = document.getElementById("id_insumo").value;
+  const socket = io();
+  socket.on('connect', () => {
+    console.log('Cliente conectado a SocketIO');
+});
+  // Escuchar el evento 'addImgInsumo' del servidor
+    socket.on('addImgInsumo', function (data) {
+        const idInsumo = data.idIns;
+        const imagenUrl = data.url;
 
+        console.log("Recibido en el cliente: ", idInsumo, imagenUrl);
+
+        // Actualizar el contenedor de imagen correspondiente
+        const imgContainer = document.querySelector(`#insumo-${idInsumo} .img-container`);
+
+        if (imgContainer) {
+            // console.log("Actualizando imagen con URL:", imagenUrl);
+            // imgContainer.innerHTML = `<img class="mini-imgInsumo" src="${imagenUrl}" alt="Insumo">`;
+            console.log("Actualizando imagen con URL:", imagenUrl);
+        
+            // Verifica si ya existe una imagen dentro del contenedor
+            const oldImg = imgContainer.querySelector('.mini-imgInsumo');
+            
+            if (oldImg) {
+                // Actualiza la imagen existente
+                oldImg.src = imagenUrl;
+            } else {
+                // Si no existe, agrega una nueva imagen
+                const newImg = document.createElement('img');
+                newImg.classList.add('mini-imgInsumo');
+                newImg.src = imagenUrl;
+                newImg.alt = "Insumo";
+                imgContainer.appendChild(newImg);
+            }
+        }
+    });
+
+  const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "rn94xkdi";
+
+  fileInput.addEventListener("change", async function () {
+      const file = fileInput.files[0];
+      if (file) {
+          // Mostrar vista previa de la imagen
+          const reader = new FileReader();
+          
+          reader.readAsDataURL(file);
+
+          // Crear el FormData y realizar la subida a Cloudinary
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+              const res = await axios.post(CLOUDINARY_URL, formData, {
+                  headers: { "Content-Type": "multipart/form-data" }
+              });
+
+              const url = res.data.url;
+              console.log("URL de la imagen subida:", url);
+
+              // Emitir la URL y el ID del insumo a través del socket
+              socket.emit("addImgInsumo", { url: url, idIns: id_insumo });
+
+            
+      }
+  });
+});
+
+/* MDOAL EDITAR*/
 document.addEventListener("DOMContentLoaded", function () {
 
   document.querySelectorAll(".form_edit_insumo").forEach(function (form) {

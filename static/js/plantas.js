@@ -39,9 +39,9 @@ document.addEventListener("DOMContentLoaded", function(){
           const PlantaId = row.cells[1].innerText;
           const PlantaNombre = row.cells[2].innerText;
           const PlantaDescripcion = row.cells[3].innerText;
-          const PlantaColor = row.cells[13].innerText;
-          const PlantaSubcategoria = row.cells[12].innerText; 
-          const PlantaRango = row.cells[14].innerText;
+          const PlantaColor = row.cells[13].innerText.split(', ');
+          const PlantaSubcategoria = row.cells[12].innerText.split(', '); 
+          const PlantaRango = row.cells[14].innerText.split(', ');
           const PlantaEntorno = row.cells[15].innerText;
           const PlantaAgua = row.cells[16].innerText;
           const PlantaSuelo = row.cells[17].innerText;
@@ -73,6 +73,11 @@ document.addEventListener("DOMContentLoaded", function(){
           
           inputPrecio.value = PlantaPrecio;
           inputPrecio.textContent = PlantaPrecio;
+
+           // Asigna los valores y actualiza cada Select2
+        $('#idColor_editar').val(PlantaColor).trigger('change');
+        $('#idSubcategoria_editar').val(PlantaSubcategoria).trigger('change');
+        $('#idRango_editar').val(PlantaRango).trigger('change');
 
             
 
@@ -136,7 +141,31 @@ document.addEventListener("DOMContentLoaded", function(){
 
 })
 
+//ALERTA EDITAR
+const form_editar = document.querySelector('.form_edit_plantas');
 
+form_editar.addEventListener('submit', function (event) {
+  event.preventDefault();
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: "¡No podrás revertir esta acción!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, editar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      event.target.submit();
+    }
+  });
+});
+
+document.getElementById("btn-cancel-edit").addEventListener("click", function () {
+  const modaleditar = document.querySelector(".container-inputinsumos");
+  modaleditar.style.display = "none";
+});
 
 //SOCKETS Cloudinary
 

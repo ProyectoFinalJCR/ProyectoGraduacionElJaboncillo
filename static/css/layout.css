@@ -127,6 +127,15 @@
 .btn-items i:nth-child(2){  
     margin-left: auto;
 }
+.sidebar .configuracion{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 50px;
+    gap: 8px;
+    margin-top: 80px;
+}
 
 .main { 
     grid-area: main;

@@ -40,6 +40,41 @@
   height: 55px;
   text-align: center;
 }
+/*File upload*/
+.image-upload {
+  position: relative;
+  width: 100px; /* Ajusta el tamaño según tus necesidades */
+  height: 100px; /* Ajusta el tamaño según tus necesidades */
+  border: 2px dashed #ccc; /* Estilo del borde */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.image-upload:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Color al hacer hover */
+}
+
+.file-input {
+  display: none; /* Oculta el input de archivo */
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.upload-icon {
+  font-size: 24px; /* Tamaño del icono */
+}
+
+.upload-text {
+  margin-top: 5px; /* Espaciado entre el icono y el texto */
+  font-size: 14px; /* Tamaño del texto */
+}
 /*Formulario*/
 .container-table-inputs .container-inputinsumos{
   /*MDOAL*/

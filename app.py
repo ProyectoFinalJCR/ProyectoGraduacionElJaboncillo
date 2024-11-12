@@ -563,7 +563,9 @@ def agregarImgInsumo(data):
     query = text("UPDATE insumos SET imagen_url = :imagen WHERE id =:id")
     db.execute(query,{"imagen": imagen, "id": insumo})
     db.commit()
-    
+     # Emitir un evento al cliente para actualizar la imagen en la interfaz
+    emit('addImgInsumo', {'idIns': insumo, 'url': imagen}, broadcast=True)
+
 @app.route('/editarinsumo', methods=["POST"])
 def editarinsumo():
     if request.method == "POST":
@@ -571,7 +573,7 @@ def editarinsumo():
        insumo_editar = request.form.get('insumo_editar')
        tipoInsumo_editar = request.form.get('idtipoInsumo_editar')
        descripcionInsumo_editar = request.form.get('descripcion_insumo_editar')
-       subcatInsumo_editar = request.form.get('idsubcat_editar')
+       subcatInsumo_editar = request.form.getlist('idsubcat_editar')
        composicionInsumo_editar = request.form.get('idComposicionP_editar')
        frecuenciaInsumo_editar = request.form.get('frecuenciaAplicacion_insumo_editar')
        compatibilidadInsumo_editar = request.form.get('compatibilidad_editar')
@@ -580,7 +582,7 @@ def editarinsumo():
        fecha_vencimiento = datetime.strptime(fechaVencimientoInsumo_editar, "%Y-%m-%d").date()
        fecha_actual = datetime.now().date()
        precio_ventaInsumo_editar = request.form.get('precioVentaInsumo_editar')
-       coloresInsumo_editar = request.form.get('coloresInsumo_editar')
+       coloresInsumo_editar = request.form.getlist('coloresInsumo_editar')
        unidadMedida_editar = request.form.get('unidadMedida_editar')
     #    imgInsumo = request.form.get('imagenInsumo')
 
@@ -648,19 +650,71 @@ def editarinsumo():
                editarInsumo = text("UPDATE insumos SET nombre=:nombre, tipo_insumo=:tipoInsumo, descripcion=:descripcion, composicion_principal_id=:composicionInsumo, frecuencia_aplicacion=:frecuenciaInsumo,compatibilidad=:compatibilidadInsumo, precauciones=:precauciones, fecha_vencimiento=:fechaVencimiento, precio_venta=:precioVenta WHERE id =:id")
                db.execute(editarInsumo, {"id":insumo_ID, "nombre":insumo_editar, "tipoInsumo":tipoInsumo_editar, "descripcion":descripcionInsumo_editar, "composicionInsumo":composicionInsumo_editar, "frecuenciaInsumo":frecuenciaInsumo_editar,"compatibilidadInsumo": compatibilidadInsumo_editar, "precauciones": precaucionesInsumo_editar, "fechaVencimiento": fecha_vencimiento, "precioVenta": precio_ventaInsumo_editar})
 
-               editarSubcategoria = text("UPDATE insumos_subcategoria SET subcategoria_id=:subcategoria_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
-               db.execute(editarSubcategoria, {"subcategoria_id": subcatInsumo_editar, "insumo_id":insumo_ID})
+            #    editarSubcategoria = text("UPDATE insumos_subcategoria SET subcategoria_id=:subcategoria_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
+            #    db.execute(editarSubcategoria, {"subcategoria_id": subcatInsumo_editar, "insumo_id":insumo_ID})
 
                editarUnidadMedida = text("UPDATE insumos_unidades SET unidad_medida_id=:unidad_medida_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
                db.execute(editarUnidadMedida, {"unidad_medida_id": unidadMedida_editar, "insumo_id": insumo_ID})
 
-               editarColores = text("UPDATE colores_insumos SET color_id=:color_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
-               db.execute(editarColores, {"color_id": coloresInsumo_editar, "insumo_id": insumo_ID})
+            #    editarColores = text("UPDATE colores_insumos SET color_id=:color_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
+            #    db.execute(editarColores, {"color_id": coloresInsumo_editar, "insumo_id": insumo_ID})
 
                editaraplicacion = text("UPDATE aplicaciones_insumos SET aplicacion_id=:aplicacion_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
                db.execute(editaraplicacion, {"aplicacion_id": tipoInsumo_editar, "insumo_id": insumo_ID})   
 
                db.commit()
+
+                # Insertar nuevas subcategorías seleccionadas que no existan para este insumo
+               subcategorias_seleccionadas = subcatInsumo_editar
+            #    subcategorias_seleccionadas = [int(x) for x in subcatInsumo_editar.split(",")]
+               print("son las subcategorias seleccionadas", subcategorias_seleccionadas)
+
+                # Obtener las subcategorías actualmente asociadas con el insumo en la base de datos
+               obtenerSubcategoriasExistentes = text("""
+                    SELECT subcategoria_id FROM insumos_subcategoria WHERE insumo_id = :insumo_id
+                """)
+               subcategorias_existentes = [row[0] for row in db.execute(obtenerSubcategoriasExistentes, {'insumo_id': insumo_ID}).fetchall()]
+               print("son las subcategorias existentes", subcategorias_existentes)
+
+            #    #Insertar las subcategorías que no existan
+            #    for subcategoria in subcategorias_seleccionadas:
+            #         if subcategoria not in subcategorias_existentes:
+            #             insertarSubcategoria = text("""
+            #                 INSERT INTO insumos_subcategoria (subcategoria_id, insumo_id) 
+            #                 VALUES (:subcategoria_id, :insumo_id)
+            #             """)
+            #             db.execute(insertarSubcategoria, {"subcategoria_id": subcategoria, "insumo_id": insumo_ID})
+            #             db.commit()
+
+               for subcategoria_id in subcategorias_seleccionadas:
+                    # Verificar si la subcategoría ya está asociada con el insumo
+                    obtenerInsumoSub = text("""
+                        SELECT * FROM insumos_subcategoria 
+                        WHERE insumo_id = :insumo_id AND subcategoria_id = :subcategoria_id
+                    """)
+                    if db.execute(obtenerInsumoSub, {'insumo_id': insumo_ID, 'subcategoria_id': subcategoria_id}).rowcount == 0:
+                        # Insertar la relación si no existe
+                        insertarInsumoSub = text("""
+                            INSERT INTO insumos_subcategoria (subcategoria_id, insumo_id) 
+                            VALUES (:subcategoria_id, :insumo_id)
+                        """)
+                        db.execute(insertarInsumoSub, {"subcategoria_id": subcategoria_id, "insumo_id": insumo_ID})
+                        db.commit()
+     
+                        # Eliminar subcategorías existentes que ya no están seleccionadas
+  
+              
+            #         if db.execute(obtenerInsumoSub, {'insumo_id': insumo_ID, 'subcategoria_id': subcategoria_id}) != subcategorias_seleccionadas:
+            #             # Insertar la relación si no existe
+            #             eliminarInsumoSub = text(""" DELETE FROM insumos_subcategoria  WHERE insumo_id = :insumo_id AND subcategoria_id = :subcategoria_id""")
+            #             db.execute(eliminarInsumoSub, {"insumo_id": insumo_ID, "subcategoria_id": subcategoria_id})
+            #             db.commit()
+                    # if subcategoria_id not in subcategorias_seleccionadas:
+                    #     eliminarInsumoSub = text(""" DELETE FROM insumos_subcategoria  WHERE insumo_id = :insumo_id AND subcategoria_id = :subcategoria_id""")
+                    #     db.execute(eliminarInsumoSub, {"insumo_id": insumo_ID, "subcategoria_id": subcategoria_id})
+                    #     print(f"Subcategoría {subcategoria_id} eliminada.")
+                    #     db.commit()
+
            else:
                flash("Ha ocurrido un error", 'error', '¡Error!')
                return redirect(url_for('insumos'))
@@ -694,7 +748,7 @@ def plantas():
         obtenerColores = text("SELECT * FROM colores")
         colores = db.execute(obtenerColores).fetchall()
 
-        obtenerSubcategorias = text("SELECT * FROM subcategorias")
+        obtenerSubcategorias = text("SELECT * FROM subcategorias INNER JOIN categorias ON subcategorias.categoria_id = categorias.id WHERE categorias.categoria = 'Plantas Ornamentales'")
         subcategorias = db.execute(obtenerSubcategorias).fetchall()
 
         obtenerRangos = text("SELECT * FROM rangos")
@@ -891,7 +945,7 @@ def editarplantas():
        plantas_editar = request.form.get('nombrePlanta_editar')
        descripcioPlanta_editar = request.form.get('descripcion_editar')
        coloresplanta_editar = request.form.get('idColor_editar')
-       subcatplanta_editar = request.form.get('idSubcategoria_editar')
+       subcatplanta_editar = request.form.getlist('idSubcategoria_editar')
        idrango_editar = request.form.get('idRango_editar')
        identorno_editar = request.form.get('idEntorno_editar')
        idagua_editar = request.form.get('idAgua_editar')
@@ -955,9 +1009,8 @@ def editarplantas():
                db.execute(editarPlanta, {"id":planta_ID, "nombre":plantas_editar, "descripcion":descripcioPlanta_editar, "entorno": identorno_editar, "agua": idagua_editar, "suelo": idSuelo_editar, "temporada": idTemporada_editar, "precio": precio_editar})
                db.commit()
 
-               
-               editarSubcategoria = text("UPDATE plantas_subcategoria SET subcategoria_id=:subcategoria_id, planta_id=:planta_id WHERE planta_id=:planta_id")
-               db.execute(editarSubcategoria, {"subcategoria_id": subcatplanta_editar, "planta_id":planta_ID})
+            #    editarSubcategoria = text("UPDATE plantas_subcategoria SET subcategoria_id=:subcategoria_id, planta_id=:planta_id WHERE planta_id=:planta_id")
+            #    db.execute(editarSubcategoria, {"subcategoria_id": subcatplanta_editar, "planta_id":planta_ID})
 
                editarColores = text("UPDATE colores_plantas SET color_id=:color_id, planta_id=:planta_id WHERE planta_id=:planta_id AND color_id=:color_id")
                db.execute(editarColores, {"color_id": coloresplanta_editar, "planta_id": planta_ID})
@@ -966,6 +1019,20 @@ def editarplantas():
                db.execute(editarRango, {"rango_id": idrango_editar, "planta_id": planta_ID})
 
                db.commit()
+
+               subcategorias_seleccionadas = subcatplanta_editar
+               print(subcategorias_seleccionadas)
+
+               obtenerSubcatPlanta = text("SELECT subcategoria_id FROM plantas_subcategoria WHERE planta_id=:planta_id")
+               subcategoriasPlantas_existentes = [row[0] for row in db.execute(obtenerSubcatPlanta, {'planta_id': planta_ID}).fetchall()]
+               print("estas son las subcategorias existentes", subcategoriasPlantas_existentes)
+            
+               for subcat in subcategorias_seleccionadas:
+                   obtenerPlanta = text("SELECT * FROM plantas_subcategoria WHERE subcategoria_id=:subcategoria_id AND planta_id=:planta_id")
+                   if db.execute(obtenerPlanta, {"subcategoria_id": subcat, "planta_id": planta_ID}).rowcount == 0:
+                       insertarSubcategoria = text("INSERT INTO plantas_subcategoria (subcategoria_id, planta_id) VALUES (:subcategoria_id, :planta_id)")
+                       db.execute(insertarSubcategoria, {"subcategoria_id": subcat, "planta_id": planta_ID})
+                       db.commit()
            else:
                flash("Ha ocurrido un error", 'error', '¡Error!')
                return redirect(url_for('plantas'))
@@ -974,7 +1041,6 @@ def editarplantas():
        flash(('Los datos han sido editados con éxito.', 'success', '¡Éxito!'))
        return redirect(url_for('plantas'))
     
-
 @app.route('/catalogo')
 def catalogo():
     return render_template('catalogo.html')

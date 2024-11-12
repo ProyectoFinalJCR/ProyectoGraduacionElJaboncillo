@@ -46,7 +46,25 @@ Insumos | El Jaboncillo
                 <tbody>
                     <tr>
                         {% for insumo in insumos %}
-                        <td><img class="mini-imgInsumo" src="{{insumo[18]}}" alt="Insumo"></td>
+                        <td id="insumo-{{ insumo[0] }}">
+                            {% if insumo[18] %}
+                            <!-- Si hay imagen cargada -->
+                            <div class="img-container">
+                                <img class="mini-imgInsumo" src="{{ insumo[18] }}" alt="Insumo">
+                                <!-- <input type="file" class="upload-input" onchange="uploadImage(this)" style="display: none;"> -->
+                            </div>
+                            {% else %}
+                                <div class="image-upload">
+                                    <input type="hidden" name="id_insumo" id="id_insumo" value="{{insumo[0]}}">
+                                        <input type="file" id="file-input" class="file-input" accept="image/*">
+                                        <label for="file-input" class="upload-label">
+                                            <span class="upload-icon">📁</span> <!-- Icono de archivo -->
+                                            <span class="upload-text">Subir imagen</span>
+                                        </label>
+                                </div>
+                            {% endif %}
+                        </td>
+                        <!-- <td><img class="mini-imgInsumo" src="{{insumo[18]}}" alt="Insumo"></td> -->
                         <td>{{insumo[0]}}</td>
                         <td>{{insumo[1]}}</td>
                         <td>{{insumo[2]}}</td>
