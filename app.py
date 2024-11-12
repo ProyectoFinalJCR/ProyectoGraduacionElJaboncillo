@@ -925,18 +925,6 @@ def eliminarPlanta():
     flash(('La planta se ha sido eliminado con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('plantas'))   
 
-@socketio.on("addImgPlanta")
-def agregarImgPlanta(data):
-    print(data)
-    planta = data['idPlan']
-    imagen = data['url']
-    print(f"{planta} id de la planta" )
-    print(f"{imagen} imagen de la comunidad")
-    query = text("UPDATE plantas SET imagen_url = :imagen WHERE id =:id")
-    db.execute(query,{"imagen": imagen, "id": planta})
-    db.commit()
-
-
 @app.route('/proveedores', methods=["GET", "POST"])
 def proveedores():
     if request.method == "POST":
@@ -1027,6 +1015,16 @@ def editarProveedores():
     flash(('El proveedor ha sido editado con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('proveedores'))
 
+@socketio.on("addImgPlanta")
+def agregarImgPlanta(data):
+    print(data)
+    planta = data['idPlan']
+    imagen = data['url']
+    print(f"{planta} id de la planta" )
+    print(f"{imagen} imagen de la comunidad")
+    query = text("UPDATE plantas SET imagen_url = :imagen WHERE id =:id")
+    db.execute(query,{"imagen": imagen, "id": planta})
+    db.commit()
    
 
 @app.route('/editarPlantas', methods=["POST"])
