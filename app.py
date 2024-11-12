@@ -1020,12 +1020,12 @@ def agregarImgPlanta(data):
     print(data)
     planta = data['idPlan']
     imagen = data['url']
-
     print(f"{planta} id de la planta" )
     print(f"{imagen} imagen de la comunidad")
     query = text("UPDATE plantas SET imagen_url = :imagen WHERE id =:id")
     db.execute(query,{"imagen": imagen, "id": planta})
     db.commit()
+   
 
 @app.route('/editarPlantas', methods=["POST"])
 def editarplantas():
