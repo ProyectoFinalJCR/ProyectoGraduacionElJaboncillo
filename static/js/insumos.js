@@ -1,27 +1,15 @@
 document.addEventListener("DOMContentLoaded", function (event) {
   //Evento para mostrar formulario
   document.querySelector('#btn-add-insumos').addEventListener('click', function () {
-    // const container_table_inputs = document.querySelector(".container-table-inputs");        
-    // const form_insumos = document.querySelector(".container-inputinsumos");
-
-    // //alternar clases para expandir la tabla y mostrar el formulario
-    // container_table_inputs.classList.toggle("active");
-    // form_insumos.classList.toggle("show");
-    // console.log("este se activa")
-    // //btn cancelar regresa la tabla al centro, quitandole las clases
-    // document.getElementById("btn-cancel").addEventListener("click", function(){
-    //     form_insumos.classList.remove("show")
-    //     container_table_inputs.classList.remove("active")
-    //     console.log("este se activa")
-    // });
-
+    
     const modalAgregar = document.querySelector(".container-inputinsumos");
     modalAgregar.style.display = "block";
 
     document.getElementById("btn-cancel").addEventListener("click", function () {
       modalAgregar.style.display = "none";
-
-
+    });
+    document.getElementById("close").addEventListener("click", function () {
+      modalAgregar.style.display = "none";
     });
 
   });
@@ -70,8 +58,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
       // Rellenar los campos del modal con los datos obtenidos
       inputId_insumo.value = insumoID;
-      // inputImagenInsumo_editar.value = imagenInsumo;
-      // inputImagenInsumo_editar.textContent = imagenInsumo;
 
       inputinsumo_editar.value = insumo;
       inputinsumo_editar.textContent = insumo;
@@ -112,13 +98,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
       // Mostrar el modal
       modal.style.display = "block";
 
-      document.getElementById("btn-cancel-edit").addEventListener("click", function () {
-
-        modal.style.display = "none";
-      });
-      document.querySelector(".close-edit").addEventListener("click", function () {
-        modal.style.display = "none";
-      });
     });
   });
 
@@ -153,8 +132,38 @@ document.addEventListener("DOMContentLoaded", function (event) {
       allowClear: true,
       multiple: true,
     });
+
   });
 
+  //ALERTA EDITAR
+  const form_editar = document.querySelector('.form_edit_insumo');
+
+  form_editar.addEventListener('submit', function (event) {
+    event.preventDefault();
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¡No podrás revertir esta acción!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, editar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        event.target.submit();
+      }
+    });
+  });
+
+  document.getElementById("btn-cancel-edit").addEventListener("click", function () {
+    const modaleditar = document.querySelector(".modal-insumos");
+    modaleditar.style.display = "none";
+  });
+  document.getElementById("close-edit").addEventListener("click", function () {
+    const modaleditar = document.querySelector(".modal-insumos");
+    modaleditar.style.display = "none";
+  });
 
   document.getElementById("btn-modal-subcate").addEventListener("click", function (event) {
 
@@ -238,47 +247,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   });
+
 });
 
 //SOCKETS Cloudinary
 /* MDOAL AGREGAR*/
 document.addEventListener("DOMContentLoaded", function () {
-  const fileInput = document.getElementById("file-input");
+  const fileInput = document.getElementById("file_input");
   const id_insumo = document.getElementById("id_insumo").value;
+  const formagregarimg = document.getElementById("form_agregarimg");
   const socket = io();
   socket.on('connect', () => {
     console.log('Cliente conectado a SocketIO');
-});
-  // Escuchar el evento 'addImgInsumo' del servidor
-    socket.on('addImgInsumo', function (data) {
-        const idInsumo = data.idIns;
-        const imagenUrl = data.url;
-
-        console.log("Recibido en el cliente: ", idInsumo, imagenUrl);
-
-        // Actualizar el contenedor de imagen correspondiente
-        const imgContainer = document.querySelector(`#insumo-${idInsumo} .img-container`);
-
-        if (imgContainer) {
-            // console.log("Actualizando imagen con URL:", imagenUrl);
-            // imgContainer.innerHTML = `<img class="mini-imgInsumo" src="${imagenUrl}" alt="Insumo">`;
-            console.log("Actualizando imagen con URL:", imagenUrl);
-        
-            // Verifica si ya existe una imagen dentro del contenedor
-            const oldImg = imgContainer.querySelector('.mini-imgInsumo');
-            
-            if (oldImg) {
-                // Actualiza la imagen existente
-                oldImg.src = imagenUrl;
-            } else {
-                // Si no existe, agrega una nueva imagen
-                const newImg = document.createElement('img');
-                newImg.classList.add('mini-imgInsumo');
-                newImg.src = imagenUrl;
-                newImg.alt = "Insumo";
-                imgContainer.appendChild(newImg);
-            }
-        }
     });
 
   const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
@@ -304,10 +284,10 @@ document.addEventListener("DOMContentLoaded", function () {
               const url = res.data.url;
               console.log("URL de la imagen subida:", url);
 
-              // Emitir la URL y el ID del insumo a través del socket
-              socket.emit("addImgInsumo", { url: url, idIns: id_insumo });
+        
+        socket.emit("addImgInsumo", { url: url, idIns: id_insumo });
 
-            
+        formagregarimg.submit(); // Enviar el formulario de agregar imagen
       }
   });
 });
@@ -343,9 +323,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Emitir la URL y el ID del insumo a través del socket
         socket.emit("addImgInsumo", { 'url': url, 'idIns': idInsumoEditar });
-
         // Aquí puedes proceder con el envío del formulario al servidor, si es necesario.
-        form.submit(); // Descomenta si deseas enviar el formulario después de subir la imagen
+
+        form.submit();
       }
     });
   });

@@ -188,5 +188,45 @@ document.addEventListener("DOMContentLoaded", function (event) {
         });
     });
 
-    
+    //Buscar usuarios
+    document.getElementById('search').addEventListener('input', function() {
+    const valorBuscar = this.value;
+
+
+    fetch(`/buscar_productos?valorBuscar=${valorBuscar}`)
+    .then(response => response.json())
+    .then(data => {
+        const tableBody = document.getElementById('tabla-usuarios');
+        tableBody.innerHTML = '';  // Limpiar tabla
+
+        if (data.length === 0)
+        {tableBody.innerHTML = "<tr><td colspan='6' style='text-align: center;'>No hay resultados</td></tr>"}
+        else{
+          data.forEach(usuario => {
+            const row = `<tr>
+            <td>${usuario.id}</td>
+            <td>${usuario.nombre_completo}</td>
+            <td>${usuario.correo}</td>
+            <td>${usuario.rol}</td>
+                <td style="display: none;">${usuario.rol_id}</td>
+                
+                <td class="btn-acciones"> 
+                    <button class="btn-edit" id="openModalUser">
+                            <i class="material-icons">edit</i>
+                            </button>
+                            
+                            <form action="/eliminarUsuarios" method="post" class="form-eliminar" >
+                        <input type="hidden" class="id_eliminar" name="id_usuario" value="${usuario.id}">
+                        <button class="btn-delete" id="btn-eliminar" type="submit">
+                        <i class="material-icons">delete</i>
+                        </button>
+                        </form>
+                        </td>
+                        </tr>`;
+                        tableBody.insertAdjacentHTML('beforeend', row);
+                      });
+                    }
+    })
+    .catch(error => console.error('Error:', error));
+    });
 });

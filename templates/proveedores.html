@@ -4,17 +4,22 @@ Proveedores | El Jaboncillo
 {% endblock %}
 
 {% block main %}
-<div class="search">
-    <form action="#">
-        <input class="input" name="search" id="search" placeholder="Buscar proveedores">
-        <button class="btn-search" type="submit">
+<section class="bienvenida">
+    <h2>Buenos dias, </h2>
+    <p>Bienvenida Janixa Centeno</p>
+</section>
+<section class="busqueda">
+    <div class="search">
+        <div class="seccion-buscar">
             <i class="material-icons">search</i>
-        </button>
-    </form>
-    <div>
-        <button class="btn-add-proveedores btn">Agregar proveedores</button>
+            <input class="input-search" name="search" id="search" placeholder="Buscar proveedores">
+        </div>
+        <div>
+            <button class="btn-add-proveedores btn">Agregar proveedores</button>
+        </div>
     </div>
-</div>
+</section>
+
 <div class="container-table-inputs">
     {%if proveedores == [] %}
     <div class="table-insumos">

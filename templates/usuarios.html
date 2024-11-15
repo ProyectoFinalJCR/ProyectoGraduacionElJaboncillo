@@ -4,17 +4,21 @@ Usuarios | El Jaboncillo
 {% endblock %}
 
 {% block main %}
+<section class="bienvenida">
+    <h2>Buenos dias, </h2>
+    <p>Bienvenida Janixa Centeno</p>
+</section>
+<section class="busqueda">
 <div class="search">
-    <form action="#">
+    <div class="seccion-buscar">
+        <i class="material-icons">search</i>
         <input class="input-search" name="search" id="search" placeholder="Buscar usuarios">
-        <button class="btn-search" type="submit"  onclick="searchUsers()">
-            <i class="material-icons">search</i>
-        </button>
-    </form>
+    </div>
     <div>
         <button class="btn" id="btn-add-user">Agregar usuarios</button>
     </div>
 </div>
+</section>
 <div class="container-table-inputs">
     {%if usuario == [] %}
     <div class="table-insumos">
@@ -22,7 +26,7 @@ Usuarios | El Jaboncillo
     </div>
     {%else%}
     <div class="table-categories">
-        <table class="table">
+        <table class="table table-striped table-bordered" id="table-users">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -32,7 +36,7 @@ Usuarios | El Jaboncillo
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tabla-usuarios">
                 {% for usuario in usuario%}
                 <tr>
                     <td>{{usuario[0]}}</td>

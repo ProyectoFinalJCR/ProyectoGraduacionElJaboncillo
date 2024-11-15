@@ -27,7 +27,7 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('layout.html')
 
 
 @app.route('/login', methods = ["GET", "POST"])
@@ -219,7 +219,6 @@ def usuarios():
             db.close()
             flash(('Usuario agregado con éxito.', 'success', '¡Éxito!'))
             return redirect("/usuarios")     
-
 
 @app.route('/eliminarUsuarios', methods=["GET", "POST"])
 def eliminarUsuarios():
@@ -420,7 +419,8 @@ def insumos():
                               unidad.id,
                               i.fecha_vencimiento, 
                               i.precio_venta, 
-                              i.imagen_url; 
+                              i.imagen_url
+                              ORDER BY i.id ASC; 
                               """)
 
         Insumos = db.execute(MostrarInsumos).fetchall()
@@ -444,7 +444,6 @@ def insumos():
         frecuenciaInsumo = request.form.get('frecuenciaAplicacion_insumo')
         compatibilidadInsumo = request.form.get('compatibilidad')
         precaucionesInsumo = request.form.get('precauciones')
-        # imgInsumo = request.files.get('imgInsumo')
         imgInsumo = request.form.get('imgInsumo')
         fechaVencimientoInsumo = request.form.get('fecha_vencimiento')
         fecha_vencimiento = datetime.strptime(fechaVencimientoInsumo, "%Y-%m-%d").date()
@@ -481,10 +480,6 @@ def insumos():
         if not precaucionesInsumo:
             flash(('Ingrese las precauciones', 'error', '¡Error!'))
             return redirect(url_for('insumos'))
-        
-        # if not imgInsumo:
-        #     flash(("No se ha seleccionado ninguna imagen", 'error', '¡Error!'))
-        #     return redirect(url_for('insumos'))
         
         if not fechaVencimientoInsumo:
             flash(("No se ha seleccionado la fecha de vencimiento", 'error', '¡Error!'))
@@ -584,7 +579,6 @@ def editarinsumo():
        precio_ventaInsumo_editar = request.form.get('precioVentaInsumo_editar')
        coloresInsumo_editar = request.form.getlist('coloresInsumo_editar')
        unidadMedida_editar = request.form.get('unidadMedida_editar')
-    #    imgInsumo = request.form.get('imagenInsumo')
 
        if not insumo_editar:
            flash(('Ingrese el nombre del insumo', 'error', '¡Error!'))
@@ -644,47 +638,35 @@ def editarinsumo():
            flash(('Ya existe un insumo con ese nombre', 'error', '¡Error!'))
            return redirect(url_for('insumos'))
        else:
+           
            # VALIDANDO SI EXISTE UN INSUMO CON ESE ID
            obtenerInsumo = text("SELECT * FROM insumos WHERE id=:id")
            if db.execute(obtenerInsumo, {'id': insumo_ID}).rowcount > 0:
                editarInsumo = text("UPDATE insumos SET nombre=:nombre, tipo_insumo=:tipoInsumo, descripcion=:descripcion, composicion_principal_id=:composicionInsumo, frecuencia_aplicacion=:frecuenciaInsumo,compatibilidad=:compatibilidadInsumo, precauciones=:precauciones, fecha_vencimiento=:fechaVencimiento, precio_venta=:precioVenta WHERE id =:id")
                db.execute(editarInsumo, {"id":insumo_ID, "nombre":insumo_editar, "tipoInsumo":tipoInsumo_editar, "descripcion":descripcionInsumo_editar, "composicionInsumo":composicionInsumo_editar, "frecuenciaInsumo":frecuenciaInsumo_editar,"compatibilidadInsumo": compatibilidadInsumo_editar, "precauciones": precaucionesInsumo_editar, "fechaVencimiento": fecha_vencimiento, "precioVenta": precio_ventaInsumo_editar})
 
-            #    editarSubcategoria = text("UPDATE insumos_subcategoria SET subcategoria_id=:subcategoria_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
-            #    db.execute(editarSubcategoria, {"subcategoria_id": subcatInsumo_editar, "insumo_id":insumo_ID})
-
                editarUnidadMedida = text("UPDATE insumos_unidades SET unidad_medida_id=:unidad_medida_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
                db.execute(editarUnidadMedida, {"unidad_medida_id": unidadMedida_editar, "insumo_id": insumo_ID})
-
-            #    editarColores = text("UPDATE colores_insumos SET color_id=:color_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
-            #    db.execute(editarColores, {"color_id": coloresInsumo_editar, "insumo_id": insumo_ID})
 
                editaraplicacion = text("UPDATE aplicaciones_insumos SET aplicacion_id=:aplicacion_id, insumo_id=:insumo_id WHERE insumo_id=:insumo_id")
                db.execute(editaraplicacion, {"aplicacion_id": tipoInsumo_editar, "insumo_id": insumo_ID})   
 
                db.commit()
+              
 
                 # Insertar nuevas subcategorías seleccionadas que no existan para este insumo
-               subcategorias_seleccionadas = subcatInsumo_editar
-            #    subcategorias_seleccionadas = [int(x) for x in subcatInsumo_editar.split(",")]
-               print("son las subcategorias seleccionadas", subcategorias_seleccionadas)
+               subcategorias_seleccionadass = subcatInsumo_editar
+               print("Sson las subcategorias seleccionadas", subcategorias_seleccionadass)
 
                 # Obtener las subcategorías actualmente asociadas con el insumo en la base de datos
                obtenerSubcategoriasExistentes = text("""
                     SELECT subcategoria_id FROM insumos_subcategoria WHERE insumo_id = :insumo_id
                 """)
-               subcategorias_existentes = [row[0] for row in db.execute(obtenerSubcategoriasExistentes, {'insumo_id': insumo_ID}).fetchall()]
-               print("son las subcategorias existentes", subcategorias_existentes)
+               subcategorias_existentess = [row[0] for row in db.execute(obtenerSubcategoriasExistentes, {'insumo_id': insumo_ID}).fetchall()]
+               print("son las Ssubcategorias existentes", subcategorias_existentess)
 
-            #    #Insertar las subcategorías que no existan
-            #    for subcategoria in subcategorias_seleccionadas:
-            #         if subcategoria not in subcategorias_existentes:
-            #             insertarSubcategoria = text("""
-            #                 INSERT INTO insumos_subcategoria (subcategoria_id, insumo_id) 
-            #                 VALUES (:subcategoria_id, :insumo_id)
-            #             """)
-            #             db.execute(insertarSubcategoria, {"subcategoria_id": subcategoria, "insumo_id": insumo_ID})
-            #             db.commit()
+               subcategorias_seleccionadas = sorted([int(subcat) for subcat in subcategorias_seleccionadass])
+               subcategorias_existentes = sorted([int(subcat) for subcat in subcategorias_existentess])
 
                for subcategoria_id in subcategorias_seleccionadas:
                     # Verificar si la subcategoría ya está asociada con el insumo
@@ -699,21 +681,29 @@ def editarinsumo():
                             VALUES (:subcategoria_id, :insumo_id)
                         """)
                         db.execute(insertarInsumoSub, {"subcategoria_id": subcategoria_id, "insumo_id": insumo_ID})
-                        db.commit()
+                
+               if sorted(subcategorias_seleccionadas) == sorted(subcategorias_existentes):
+                   print("No hay cambios en las subcategorías")
+
+               else:
+                    print((subcategorias_existentes))
+                    print((subcategorias_seleccionadas))
+                    print("Hay cambios en las subcategorías")
+                    # Encontrar los números que están en subcategorias_existentes pero no en subcategorias_seleccionadas
+                    diferencias = [subcat for subcat in subcategorias_existentes if subcat not in subcategorias_seleccionadas]
+
+                    print("Subcategorías a eliminar:", diferencias)
+
+                    for subcategoria_id in diferencias:
+                        eliminarInsumoSub = text("""
+                            DELETE FROM insumos_subcategoria 
+                            WHERE insumo_id = :insumo_id AND subcategoria_id = :subcategoria_id
+                        """)
+                        db.execute(eliminarInsumoSub, {"insumo_id": insumo_ID, "subcategoria_id": subcategoria_id})
+                        print(f"Eliminando subcategoría con ID: {subcategoria_id}")
+               db.commit()
      
-                        # Eliminar subcategorías existentes que ya no están seleccionadas
-  
-              
-            #         if db.execute(obtenerInsumoSub, {'insumo_id': insumo_ID, 'subcategoria_id': subcategoria_id}) != subcategorias_seleccionadas:
-            #             # Insertar la relación si no existe
-            #             eliminarInsumoSub = text(""" DELETE FROM insumos_subcategoria  WHERE insumo_id = :insumo_id AND subcategoria_id = :subcategoria_id""")
-            #             db.execute(eliminarInsumoSub, {"insumo_id": insumo_ID, "subcategoria_id": subcategoria_id})
-            #             db.commit()
-                    # if subcategoria_id not in subcategorias_seleccionadas:
-                    #     eliminarInsumoSub = text(""" DELETE FROM insumos_subcategoria  WHERE insumo_id = :insumo_id AND subcategoria_id = :subcategoria_id""")
-                    #     db.execute(eliminarInsumoSub, {"insumo_id": insumo_ID, "subcategoria_id": subcategoria_id})
-                    #     print(f"Subcategoría {subcategoria_id} eliminada.")
-                    #     db.commit()
+                
 
            else:
                flash("Ha ocurrido un error", 'error', '¡Error!')
@@ -1034,56 +1024,14 @@ def editarplantas():
        planta_ID = request.form.get('id_editar_planta')
        plantas_editar = request.form.get('nombrePlanta_editar')
        descripcioPlanta_editar = request.form.get('descripcion_editar')
-       coloresplanta_editar = request.form.get('idColor_editar')
+       coloresplanta_editar = request.form.getlist('idColor_editar')
        subcatplanta_editar = request.form.getlist('idSubcategoria_editar')
-       idrango_editar = request.form.get('idRango_editar')
+       idrango_editar = request.form.getlist('idRango_editar')
        identorno_editar = request.form.get('idEntorno_editar')
        idagua_editar = request.form.get('idAgua_editar')
        idSuelo_editar = request.form.get('idSuelo_editar')
        idTemporada_editar = request.form.get('idTemporada_editar')
        precio_editar = request.form.get('precio_editar')
-    #    imgInsumo = request.form.get('imagenInsumo')
-
-       
-    #    if not plantas_editar:
-    #         flash(('Ingrese el nombre de la planta', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
-
-    #    if not descripcioPlanta_editar:
-    #         flash(('Ingrese la descripción de la planta', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
-
-    #    if not coloresplanta_editar:
-    #         flash(('Seleccione un color para la planta', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
-
-    #    if not subcatplanta_editar:
-    #         flash(('Seleccione una subcategoría para la planta', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
-
-    #    if not idrango_editar:
-    #         flash(('Seleccione un rango de altura', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
-
-    #    if not identorno_editar:
-    #         flash(('Seleccione un entorno adecuado para la planta', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
-
-    #    if not idagua_editar:
-    #         flash(('Seleccione un nivel de agua necesario para la planta', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
-
-    #    if not idSuelo_editar:
-    #         flash(('Seleccione un tipo de suelo adecuado para la planta', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
-
-    #    if not idTemporada_editar:
-    #         flash(('Seleccione una temporada de crecimiento', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
-
-    #    if not precio_editar:
-    #         flash(('Ingrese el precio de la planta', 'error', '¡Error!'))
-    #         return redirect(url_for('plantas'))
        
        # VALIDANDO SI EXISTE UNA PLANTA CON ESE ID
        obtenerPlanta = text("SELECT * FROM plantas WHERE nombre=:nombre AND id!=:id")
@@ -1099,23 +1047,15 @@ def editarplantas():
                db.execute(editarPlanta, {"id":planta_ID, "nombre":plantas_editar, "descripcion":descripcioPlanta_editar, "entorno": identorno_editar, "agua": idagua_editar, "suelo": idSuelo_editar, "temporada": idTemporada_editar, "precio": precio_editar})
                db.commit()
 
-            #    editarSubcategoria = text("UPDATE plantas_subcategoria SET subcategoria_id=:subcategoria_id, planta_id=:planta_id WHERE planta_id=:planta_id")
-            #    db.execute(editarSubcategoria, {"subcategoria_id": subcatplanta_editar, "planta_id":planta_ID})
-
-               editarColores = text("UPDATE colores_plantas SET color_id=:color_id, planta_id=:planta_id WHERE planta_id=:planta_id AND color_id=:color_id")
-               db.execute(editarColores, {"color_id": coloresplanta_editar, "planta_id": planta_ID})
-
-               editarRango = text("UPDATE rangos_medidas SET rango_id=:rango_id, planta_id=:planta_id WHERE planta_id=:planta_id")
-               db.execute(editarRango, {"rango_id": idrango_editar, "planta_id": planta_ID})
-
-               db.commit()
-
-               subcategorias_seleccionadas = subcatplanta_editar
-               print(subcategorias_seleccionadas)
+               subcategorias_seleccionadass = subcatplanta_editar
+               print(subcategorias_seleccionadass)
 
                obtenerSubcatPlanta = text("SELECT subcategoria_id FROM plantas_subcategoria WHERE planta_id=:planta_id")
-               subcategoriasPlantas_existentes = [row[0] for row in db.execute(obtenerSubcatPlanta, {'planta_id': planta_ID}).fetchall()]
-               print("estas son las subcategorias existentes", subcategoriasPlantas_existentes)
+               subcategoriasPlantas_existentess = [row[0] for row in db.execute(obtenerSubcatPlanta, {'planta_id': planta_ID}).fetchall()]
+               print("estas son las subcategorias existentes", subcategoriasPlantas_existentess)
+
+               subcategorias_seleccionadas = sorted([int(subcat) for subcat in subcategorias_seleccionadass])
+               subcategorias_existentes = sorted([int(subcat) for subcat in subcategoriasPlantas_existentess])
             
                for subcat in subcategorias_seleccionadas:
                    obtenerPlanta = text("SELECT * FROM plantas_subcategoria WHERE subcategoria_id=:subcategoria_id AND planta_id=:planta_id")
@@ -1123,6 +1063,97 @@ def editarplantas():
                        insertarSubcategoria = text("INSERT INTO plantas_subcategoria (subcategoria_id, planta_id) VALUES (:subcategoria_id, :planta_id)")
                        db.execute(insertarSubcategoria, {"subcategoria_id": subcat, "planta_id": planta_ID})
                        db.commit()
+               
+               if sorted(subcategorias_seleccionadas) == sorted(subcategorias_existentes):
+                   print("No hay cambios en las subcategorías")
+
+               else:
+                    print((subcategorias_existentes))
+                    print((subcategorias_seleccionadas))
+                    print("Hay cambios en las subcategorías")
+                    # Encontrar los números que están en subcategorias_existentes pero no en subcategorias_seleccionadas
+                    diferencias = [subcat for subcat in subcategorias_existentes if subcat not in subcategorias_seleccionadas]
+                    print("Subcategorías a eliminar:", diferencias)
+                    for subcategoria_id in diferencias:
+                        eliminarPlantaSub = text("""
+                            DELETE FROM plantas_subcategoria 
+                            WHERE planta_id = :planta_id AND subcategoria_id = :subcategoria_id
+                        """)
+                        db.execute(eliminarPlantaSub, {"planta_id": planta_ID, "subcategoria_id": subcategoria_id})
+                        print(f"Eliminando subcategoría con ID: {subcategoria_id}")
+               
+
+               
+                # manejar los colores
+               colores_seleccionadoss = coloresplanta_editar
+               print("colores seleccionados", colores_seleccionadoss)
+               obtenerColoresPlanta = text("SELECT * FROM colores_plantas WHERE planta_id=:planta_id")
+               coloresPlanta_existentess = [row[0] for row in db.execute(obtenerColoresPlanta, {'planta_id': planta_ID}).fetchall()]
+               print("colores existentes", coloresPlanta_existentess)
+
+               colores_seleccionados = sorted(int(colores) for colores in colores_seleccionadoss)
+               colores_Plantas_existentes = sorted(int(colores) for colores in coloresPlanta_existentess)
+               
+               for colores in colores_seleccionados:
+                   obtenerColores = text("SELECT * FROM colores_plantas WHERE color_id=:colores AND planta_id=:planta_id")
+                   if db.execute(obtenerColores, {"colores": colores, "planta_id": planta_ID}).rowcount == 0:
+                       insertarColores = text("INSERT INTO colores_plantas (color_id, planta_id) VALUES (:colores, :planta_id)")
+                       db.execute(insertarColores, {"colores": colores, "planta_id": planta_ID})
+                       db.commit()
+               
+               if sorted(colores_seleccionados) == sorted(colores_Plantas_existentes):
+                   print("No hay cambios en los colores")   
+               else:
+                    print((colores_Plantas_existentes))
+                    print((colores_seleccionados))
+                    print("Hay cambios en los colores")
+                    # Encontrar los números que están en colores_Plantas_existentes pero no en colores_seleccionados
+                    diferencias = [colores for colores in colores_Plantas_existentes if colores not in colores_seleccionados]
+                    print("Colores a eliminar:", diferencias)
+                    for colores in diferencias:
+                        eliminarColores = text("""
+                            DELETE FROM colores_plantas 
+                            WHERE planta_id = :planta_id AND color_id = :colores
+                        """)
+                        db.execute(eliminarColores, {"planta_id": planta_ID, "colores": colores})
+                        print(f"Eliminando colores con ID: {colores}")
+
+
+                # manejar los rangos
+               rangos_seleccionadoss = idrango_editar
+               print("rangos seleccionados", rangos_seleccionadoss)
+               obtenerRangosPlanta = text("SELECT * FROM rangos_medidas WHERE planta_id=:planta_id")
+               rangosPlanta_existentess = [row[0] for row in db.execute(obtenerRangosPlanta, {'planta_id': planta_ID}).fetchall()]
+               print("rangos existentes", rangosPlanta_existentess)
+
+               rangos_seleccionados = sorted([int(rango) for rango in rangos_seleccionadoss])
+               rangos_Plantas_existentes = sorted([int(rango) for rango in rangosPlanta_existentess])
+               
+               for rangos in rangos_seleccionados:
+                   obtenerRangos = text("SELECT * FROM rangos_medidas WHERE rango_id=:rangos AND planta_id=:planta_id")
+                   if db.execute(obtenerRangos, {"rangos": rangos, "planta_id": planta_ID}).rowcount == 0:
+                    insertarRangos = text("INSERT INTO rangos_medidas (rango_id, planta_id) VALUES (:rangos, :planta_id)")
+                    db.execute(insertarRangos, {"rangos": rangos, "planta_id": planta_ID})
+                    
+               if sorted(rangos_seleccionados) == sorted(rangos_Plantas_existentes):
+                   print("No hay cambios en los rangos")
+
+               else:
+                    print((rangos_Plantas_existentes))
+                    print((rangos_seleccionados))
+                    print("Hay cambios en los rangos")
+                    # Encontrar los números que están en rangos_Plantas_existentes pero no en rangos_seleccionados
+                    diferencias = [rango for rango in rangos_Plantas_existentes if rango not in rangos_seleccionados]
+                    print("Rangos a eliminar:", diferencias)
+                    for rango in diferencias:
+                        eliminarRangos = text("""
+                            DELETE FROM rangos_medidas 
+                            WHERE planta_id = :planta_id AND rango_id = :rango
+                        """)
+                        db.execute(eliminarRangos, {"planta_id": planta_ID, "rango": rango})
+                        print(f"Eliminando rango con ID: {rango}")
+                        
+               db.commit()
            else:
                flash("Ha ocurrido un error", 'error', '¡Error!')
                return redirect(url_for('plantas'))
@@ -1135,6 +1166,40 @@ def editarplantas():
 def catalogo():
     return render_template('catalogo.html')
 
+#---------------- rutas para buscar info en cada search
+@app.route('/buscar_productos', methods=['GET'])
+def buscar_productos():
+    valorBuscar = request.args.get('valorBuscar', '').lower()
+    valorBuscar = f"%{valorBuscar}%"
+    print("valor de busqueda", valorBuscar)
+    usuariosquery = text("""SELECT * FROM usuarios INNER JOIN roles ON usuarios.rol_id = roles.id WHERE LOWER(nombre_completo) LIKE :valorBuscar OR LOWER(correo) LIKE :valorBuscar OR LOWER(roles.rol) LIKE :valorBuscar""")
+    usuarios = db.execute(usuariosquery, {'valorBuscar': valorBuscar}).fetchall()
+
+     # Serializar los datos solo si hay resultados
+    usuarios_json = [
+        {'id': usuario[0], 'nombre_completo': usuario[1], 'correo': usuario[2], 'rol': usuario[6]}
+        for usuario in usuarios
+    ]
+    print("Resultado de la consulta:", usuarios_json)   
+    return jsonify(usuarios_json)
+
+@app.route("/buscar_plantas", methods=["GET"])
+def buscar_plantas():
+    valorBuscar = request.args.get('valorBuscar', '').lower()
+    valorBuscar = f"%{valorBuscar}%"
+    print("valor de busqueda", valorBuscar)
+    plantasquery = text("""SELECT p.imagen_url, p.nombre, s.subcategoria, p.color, p.tamaño, p.precio FROM plantas p INNER JOIN plantas_subcategoria ON plantas.id = plantas_subcategoria.planta_id INNER JOIN subcategorias s ON plantas_subcategoria.subcategoria_id = s.id WHERE LOWER(nombre) LIKE :valorBuscar OR LOWER(s.subcategoria) LIKE :valorBuscar OR LOWER(p.color) LIKE :valorBuscar OR LOWER(p.tamaño) LIKE :valorBuscar OR LOWER(p.precio) LIKE :valorBuscar OR LOWER (p.tipo_suelo) LIKE :valorBuscar OR LOWER(p.entorno_ideal) LIKE :valorBuscar OR LOWER(p.requerimiento_agua) LIKE :valorBuscar OR LOWER(p.fecha_vencimiento) LIKE :valorBuscar OR LOWER (p.temporada_plantacion) LIKE :valorBuscar""")
+    plantas = db.execute(plantasquery, {'valorBuscar': valorBuscar}).fetchall()
+
+     # Serializar los datos solo si hay resultados
+    plantas_json = [
+        {'imagen_url': planta[0], 'nombre': planta[1], 'subcategoria': planta[2], 'color': planta[3], 'tamaño': planta[4], 'precio': planta[5]}
+        for planta in plantas
+    ]
+    print("Resultado de la consulta:", plantas_json)   
+    return jsonify(plantas_json)
+
+  
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
  
