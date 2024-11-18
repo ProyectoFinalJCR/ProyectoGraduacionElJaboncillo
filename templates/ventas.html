@@ -1,0 +1,178 @@
+{% extends "layout.html" %}
+{% block title %}
+Ventas | El Jaboncillo
+{% endblock %}
+
+{% block main %}
+<div class="search">
+    <form action="#">
+        <input class="input" name="search" id="search" placeholder="Buscar ventas">
+        <button class="btn-search" type="submit">
+            <i class="material-icons">search</i>
+        </button>
+    </form>
+    <div>
+        <button class="btn-add-venta btn">Nueva venta</button>
+    </div>
+</div>
+<div class="container-table-inputs">
+    <div class="table-venta">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Cliente</th>
+                    <th>Vendedor</th>
+                    <th>Fecha</th>
+                    <th>Nota</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead> 
+            
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td class="btn-acciones">
+                        <button class="btn-edit" id="openModalCat">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <form action="#" method="post" class="form-baja">
+                            <input type="hidden" id="id_anular" name="id_anular">
+                            <button class="btn-delete" type="submit">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="container-inputVenta">
+        <div class="nueva-venta">
+            <div class="inputVenta-title">
+                <h3>NUEVA VENTA</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form action="/ventas" id="form-venta" method="post" class="form-venta">
+                <section class="inputs-venta" id="lista-productos">
+                    <div class="inputs-cont row-1">
+                        <div>
+                            <label for="">Cliente</label>
+                            <input type="text" id="nombreCliente" class="input input-plantas" name="nombreCliente"
+                                placeholder="Nombre Cliente">
+                        </div>
+                        <div>
+                            <label>Subcategorias</label>
+                            <select class="input input-plantas" id="subcategoria-select" name="subcategoria-select">
+                                {% for infoSubcat in InfoSubcat %}
+                                <option name="subcategoria-select" value="{{infoSubcat[0]}}">{{infoSubcat[2]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label>Fecha</label>
+                            <input type="date" id="fecha" class="input input-plantas" name="fecha"
+                                placeholder="fecha">
+                        </div>
+                    </div>
+                    <div class="inputs-cont row-2">
+                        <div>
+                            <label>Producto</label>
+                            <select class="input input-plantas" id="producto" name="producto">
+                                <option value="">Selecciona un producto</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Cantidad</label>
+                            <input type="text" id="cantidad" class="input input-plantas" name="cantidad"
+                                placeholder="Cantidad">
+                        </div>
+                        <div>
+                            <label>Precio</label>
+                            <input type="number" id="precio" class="input input-plantas" name="precio"
+                                placeholder="Precio">
+                        </div>
+                        <div>
+                            <input type="hidden" name="idProd" id="idProd">
+                        </div>
+                        <button type="button" class="btn agregar_producto" id="agregar_producto">Agregar</button>
+                    </div>
+                </section>
+                <section>
+                    
+                    <div class="productos">
+                        <table id="lista-productos-seleccionados">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unit</th>
+                                    <th>Subtotal</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                </section>
+                <section class="inputs-venta">
+                    <div class="inputs-cont row-4">
+                        <div>
+                            <label>Divisas</label>
+                            <select class="input input-plantas" id="divisa-select" name="divisa-select">
+                                {% for infoDivisas in InfoDivisas %}
+                                <option name="divisa-select" value="{{infoDivisas[3]}}">{{infoDivisas[1]}}</option>
+                                <input type="hidden" name="divisa-id" value="{{infoDivisas[0]}}">
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label>Subtotal</label>
+                            <input type="number" id="subtotal" class="input input-plantas" name="subtotal"
+                                placeholder="Subtotal">
+                        </div>
+                        <div>
+                            <label>Total</label>
+                            <input type="number" id="total" class="input input-plantas" name="total"
+                                placeholder="Precio">
+                        </div>
+                        <div>
+                            <label>Nota</label>
+                            <input type="text" id="nota-venta" class="input input-plantas" name="nota-venta"
+                                placeholder="Agregar nota">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="btn-agregar">
+                    <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                    <div>
+                        <div id="productos-dinamicos"></div>
+                        <button type="button" class="btn btn-cancel" id="btn-cancel">Cancelar</button>
+                        <button type="submit" class="btn" id="btn-add-venta">Agregar</button>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Mostrar mensaje de éxito -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <script>
+    Swal.fire({
+      title:'{{ messages[0][2] }}',
+      text: '{{ messages[0][0] }}',
+      icon: '{{ messages[0][1] }}',
+      confirmButtonText: 'OK'
+    });
+  </script>
+{% endif %}
+{% endwith %}
+{% endblock %}
