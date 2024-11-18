@@ -4,17 +4,18 @@ Ventas | El Jaboncillo
 {% endblock %}
 
 {% block main %}
-<div class="search">
-    <form action="#">
-        <input class="input" name="search" id="search" placeholder="Buscar ventas">
-        <button class="btn-search" type="submit">
+<section class="busqueda">
+    <div class="search">
+        <div class="seccion-buscar">
             <i class="material-icons">search</i>
-        </button>
-    </form>
-    <div>
-        <button class="btn-add-venta btn">Nueva venta</button>
+            <input class="input-search" name="search" id="search" placeholder="Buscar ventas">
+            
+        </div>
+        <div>
+            <button class="btn-add-venta btn">Nueva venta</button>
+        </div>
     </div>
-</div>
+</section>
 <div class="container-table-inputs">
     <div class="table-venta">
         <table class="table">
