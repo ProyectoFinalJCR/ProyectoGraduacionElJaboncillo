@@ -18,7 +18,7 @@ Categorias | El Jaboncillo
         <div>
             <button class="btn-add btn">Agregar categoria</button>
         </div>
-    </div>  
+    </div>
 </section>
 <div class="container-table-inputs">
     {%if categorias == [] %}
@@ -60,25 +60,33 @@ Categorias | El Jaboncillo
     </div>
     {%endif%}
     <div class="container-inputsCat">
-        <div class="inputCat-title">
-            <h3>Nuevo Categoria</h3>
+        <div class="agregar-cat">
+            <div class="inputCat-title">
+                <h3>Nuevo Categoria</h3>
+                <span class="close" id="close_agregar">&times;</span>
+            </div>
+            <form action="/categorias" id="form-cat" method="post" class="form-cat">
+                <section class="agregar-categorias">
+                    <div class="input-contenido">
+                        <label for="">Categoria</label>
+                        <input type="text" id="nombre" class="input input-insumos" name="Categoria"
+                            placeholder="Nombre de categoria">
+                    </div>
+                    <div class="input-contenido">
+                        <label for="">Descripción</label>
+                        <input type="text" id="descripcion" class="input input-insumos" name="descripcion"
+                            placeholder="Descripción">
+                    </div>
+                </section>
+                <section class="btn-agregar-cate">
+                    <img class="img-btn-add" src="/static/img/logoElJaboncillo.png" alt="logo">
+                    <div class="btn-agregar">
+                        <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+                        <button type="submit" class="btn opacity" id="btn-add-categories" disabled>Agregar</button>
+                    </div>
+                </section>
+            </form>
         </div>
-        <form action="/categorias" id="form-cat" method="post" class="form-cat">
-            <section class="input-categories">
-                <div>
-                    <input type="text" id="nombre" class="input input-categories" name="nombre"
-                        placeholder="Nombre categoria">
-                </div>
-                <div>
-                    <input type="text" id="descripcion" class="input input-categories" name="descripcion"
-                        placeholder="Descripcion">
-                </div>
-            </section>
-            <section class="btn-agregar">
-                <button type="button" class="btn" id="btn-cancel">Cancelar</button>
-                <button type="submit" class="btn opacity" id="btn-add-categories" disabled>Agregar</button>
-            </section>
-        </form>
     </div>
 </div>
 

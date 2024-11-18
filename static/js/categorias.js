@@ -1,15 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelector('.btn-add').addEventListener('click', function () {
-    const container_table_inputs = document.querySelector(".container-table-inputs");
     const form_cat = document.querySelector(".container-inputsCat");
+    form_cat.style.display = "block";
 
-    //alternar clases para expandir la tabla y mostrar el formulario
-    container_table_inputs.classList.toggle("active");
-    form_cat.classList.toggle("show");
-    //btn cancelar regresa la tabla al centro, quitandole las clases
-    document.getElementById("btn-cancel").addEventListener("click", function () {
-      form_cat.classList.remove("show")
-      container_table_inputs.classList.remove("active")
+    document-getElementById("btn-cancel").addEventListener("click", function () {
+      form_cat.style.display = "none";
+    });
+
+    document.getElementById("btn-save").addEventListener("click", function () {
+      form_cat.style.display = "none";
     });
   });
 
