@@ -2,17 +2,17 @@ document.addEventListener('DOMContentLoaded', function(){
 
     //Evento para mostrar formulario
     document.querySelector('.btn-add-sub').addEventListener('click', function(){
-        const container_table_inputs = document.querySelector(".container-table-inputs");        
-        const form_Subcat = document.querySelector(".container-inputSubcat");
-  
-        //alternar clases para expandir la tabla y mostrar el formulario
-        container_table_inputs.classList.toggle("active");
-        form_Subcat.classList.toggle("show");
-        //btn cancelar regresa la tabla al centro, quitandole las clases
-        document.getElementById("btn-cancel").addEventListener("click", function(){
-            form_Subcat.classList.remove("show")
-            container_table_inputs.classList.remove("active")
-        });
+       const container_table_inputs = document.querySelector(".container-inputSubcat");
+       container_table_inputs.style.display = "block";
+
+       document.getElementById("btn_cancel_agregar").addEventListener("click", function () {
+         const modalgregar = document.querySelector(".container-inputSubcat");
+         modalgregar.style.display = "none";
+       });
+       document.getElementById("close_agregar").addEventListener("click", function () {
+         const modalgregar = document.querySelector(".container-inputSubcat");
+         modalgregar.style.display = "none";
+       });
       });
 
     //Validacion de los campos del formulario
@@ -72,41 +72,6 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    // ABRIR Y OBTENER DATOS PARA EL MODAL
-    // Obtener el modal y los elementos que queremos manipular
-    const modal = document.getElementById("myModal");
-    const btnsEdit = document.querySelectorAll(".btn-edit");
-    const inputId = document.getElementById("id_editar");
-    const inputNombreSub = document.getElementById("nombreSub_editar");
-    const inputNombreCat = document.getElementById("idCat_editar");
-    const inputDescripcion = document.getElementById("descripcion_editar");
-    // Agregar evento para abrir el modal en cada botón de edición
-    btnsEdit.forEach((btn) => {
-      btn.addEventListener('click', (event) => {
-        // Obtener la fila de la tabla donde se hizo clic
-        const row = event.target.closest("tr");
-
-        // Obtener los datos de la categoría de esa fila
-        const categoriaId = row.cells[0].innerText;
-        const categoriaNombreCat = row.cells[4].innerText;
-        const categoriaNombreSub = row.cells[2].innerText;
-        const categoriaDescripcion = row.cells[3].innerText;
-
-
-        // Rellenar los campos del modal con los datos obtenidos
-        inputId.value = categoriaId;
-        inputNombreCat.value = categoriaNombreCat;
-        inputNombreSub.value = categoriaNombreSub;
-        inputNombreSub.textContent = categoriaNombreSub;
-        inputDescripcion.value = categoriaDescripcion;
-        inputDescripcion.textContent = categoriaDescripcion;
-
-        // Mostrar el modal
-        modal.style.display = "block";
-      });
-    });
-
-
 
     // ALERTAS
     // alerta btn eliminar 
@@ -133,6 +98,103 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
   });
+
+  //buscar subcategorias -----------------------------------
+  let subcategoriasData = [];
+  // Cargar datos una sola vez cuando la página carga
+  fetch(`/generar_json_subcategorias`)
+    .then(response => response.json())
+    .then(data => {
+      subcategoriasData = data;
+      mostrarSubcategorias(subcategoriasData);  // Mostrar todas las subcategorias inicialmente
+    })
+    .catch(error => console.error('Error:', error));
+
+  // Escuchar el evento 'input' para la búsqueda
+document.getElementById("search").addEventListener('input', function() { 
+    const valorBuscar = this.value.toLowerCase();
+
+    // Filtrar resultados cuando hay texto en el input
+    const resultados = valorBuscar === "" ? subcategoriasData : 
+      subcategoriasData.filter(subcategoria => 
+        subcategoria.subcategoria.toLowerCase().includes(valorBuscar) ||
+        subcategoria.descripcion.toLowerCase().includes(valorBuscar) ||
+        subcategoria.categoria.toLowerCase().includes(valorBuscar)
+      );
+
+    // Mostrar resultados filtrados o todas las subcategorias si el input está vacío
+    mostrarSubcategorias(resultados);
+  });
+  // Función para mostrar subcategorias en la tabla
+  function mostrarSubcategorias(data) {
+    const tableBody = document.getElementById('tabla_subcategorias');
+    tableBody.innerHTML = '';  // Limpiar tabla
+
+    if (data.length === 0) {
+      tableBody.innerHTML = "<tr><td colspan='6' style='text-align: center;'>No hay resultados</td></tr>";
+    } else {
+      data.forEach(subcategoria => {
+        const row = `<tr>
+          <td>${subcategoria.id}</td>
+          <td>${subcategoria.subcategoria}</td>
+          <td>${subcategoria.categoria}</td>
+          <td>${subcategoria.descripcion}</td>
+          <td style="display: none;">${subcategoria.id_categoria}</td>
+          <td class="btn-acciones"> 
+            <button class="btn-edit btn-edit-subcategorias" data-id="${subcategoria.id}">
+              <i class="material-icons">edit</i>
+            </button>
+            <form action="/eliminarSubcategoria" method="post" class="form-eliminar">
+              <input type="hidden" class="id_eliminar" name="id_subcategoria" value="${subcategoria.id}">
+              <button class="btn-delete" type="submit">
+                <i class="material-icons">delete</i>
+              </button>
+            </form>
+          </td>
+        </tr>`;
+        tableBody.insertAdjacentHTML('beforeend', row);
+      });
+    }
+  }
+  // Agregar event listener para delegación de eventos
+  document.getElementById('tabla_subcategorias').addEventListener('click', function (event) {
+      if (event.target.closest('.btn-edit-subcategorias')) {
+        const button = event.target.closest('.btn-edit-subcategorias');
+        const subcategoriaID = button.getAttribute('data-id');
+        console.log("Subcategoria ID:", subcategoriaID);
+        
+        // ABRIR Y OBTENER DATOS PARA EL MODAL
+    // Obtener el modal y los elementos que queremos manipular
+    const modal = document.getElementById("myModal");
+    const btnsEdit = document.querySelectorAll(".btn-edit");
+    const inputId = document.getElementById("id_editar");
+    const inputNombreSub = document.getElementById("nombreSub_editar");
+    const inputNombreCat = document.getElementById("idCat_editar");
+    const inputDescripcion = document.getElementById("descripcion_editar");
+    
+        // Obtener la fila de la tabla donde se hizo clic
+        const row = event.target.closest("tr");
+
+        // Obtener los datos de la categoría de esa fila
+        const categoriaId = row.cells[0].innerText;
+        const categoriaNombreSub = row.cells[1].innerText;
+        const categoriaNombreCat = row.cells[4].innerText;
+        const categoriaDescripcion = row.cells[3].innerText;
+
+
+        // Rellenar los campos del modal con los datos obtenidos
+        inputId.value = categoriaId;
+        inputNombreCat.value = categoriaNombreCat;
+        inputNombreSub.value = categoriaNombreSub;
+        inputNombreSub.textContent = categoriaNombreSub;
+        inputDescripcion.value = categoriaDescripcion;
+        inputDescripcion.textContent = categoriaDescripcion;
+
+        // Mostrar el modal
+        modal.style.display = "block";
+    
+      }
+ });
 
 
   //ALERTA EDITAR

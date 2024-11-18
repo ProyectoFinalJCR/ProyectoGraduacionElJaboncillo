@@ -5,58 +5,73 @@ Plantas | El Jaboncillo
 
 {% block main %}
 <section class="all-screen-plantas">
-
-    <div class="search">
-        <form action="#">
-            <input class="input" name="search" id="search" placeholder="Buscar planta">
-            <button class="btn-search" type="submit">
+    <section class="bienvenida">
+        <h2>Buenos dias, </h2>
+        <p>Bienvenida Janixa Centeno</p>
+    </section>
+    <section class="busqueda">
+        <div class="search">
+            <div class="seccion-buscar">
                 <i class="material-icons">search</i>
-            </button>
-        </form>
-        <div>
-            <button class="btn-add-planta btn">Agregar planta</button>
+                <input class="input-search" name="search" id="buscar_plantas" placeholder="Buscar plantas">
+            </div>
+            <div>
+                <button class="btn-add-planta btn">Agregar planta</button>
+            </div>
         </div>
-    </div>
-    </div>
+    </section>
     <div class="container-table-inputs">
         {%if InfoPlanta == [] %}
         <div class="table-insumos">
             <h3>No hay plantas en la lista</h3>
         </div>
         {%else%}
-        <div class="table-plantas">
+        <div class="table-plantas" id="tabla-plantas">
             <table class="table">
                 <thead>
                     <tr>
                         <th>Imágen</th>
-                        <th>Id</th>
                         <th>Planta</th>
-                        <th>Descripcion</th>
                         <th>Subcategoria</th>
                         <th>Color</th>
                         <th>Tamaño</th>
-                        <th>Entorno</th>
-                        <th>Requerimiento de agua</th>
-                        <th>Tipo de suelo</th>
-                        <th>Temporada</th>
                         <th>Precio</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tabla_plantas">
                     <tr>
                         {% for infoPlantas in InfoPlanta %}
-                        <td><img src="{{infoPlantas.imagen_url}}" alt="planta" class="mini-imgInsumo"></td>
-                        <td>{{infoPlantas.id}}</td>
+                        <td id="planta-{{ infoPlantas.id }}">
+                            {% if infoPlantas.imagen_url %}
+                            <div class="img-container">
+                                <img src="{{infoPlantas.imagen_url}}" alt="planta" class="mini-imgInsumo">
+                            </div>
+                            {% else %}
+                            <div class="image-upload">
+                                <form action="/plantas" class="form_agregarimgplanta" id="form_agregarimgplanta">
+                                    <input type="hidden" name="id_planta" class="id_planta_agregar" id="id_planta_agregar"
+                                        value="{{infoPlantas.id}}">
+                                    <input type="file" id="file_input_agregar" class="file-input"
+                                        accept=".png, .jpg, .jpeg">
+                                    <label for="file_input_agregar" class="upload-label">
+                                        <span class="upload-icon">📁</span> <!-- Icono de archivo -->
+                                        <span class="upload-text">Subir imagen</span>
+                                    </label>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td style="display: none;">{{infoPlantas.id}}</td>
                         <td>{{infoPlantas.nombre}}</td>
-                        <td>{{infoPlantas.descripcion}}</td>
+                        <td style="display: none;">{{infoPlantas.descripcion}}</td>
                         <td>{{infoPlantas.subcategoria}}</td>
                         <td>{{infoPlantas.color}}</td>
                         <td>{{infoPlantas.rango}}</td>
-                        <td>{{infoPlantas.entorno}}</td>
-                        <td>{{infoPlantas.agua}}</td>
-                        <td>{{infoPlantas.suelo}}</td>
-                        <td>{{infoPlantas.temporada}}</td>
+                        <td style="display: none;">{{infoPlantas.entorno}}</td>
+                        <td style="display: none;">{{infoPlantas.agua}}</td>
+                        <td style="display: none;">{{infoPlantas.suelo}}</td>
+                        <td style="display: none;">{{infoPlantas.temporada}}</td>
                         <td>{{infoPlantas.precio_venta}}</td>
                         <td style="display: none;">{{infoPlantas.id_subcategoria}}</td>
                         <td style="display: none;">{{infoPlantas.id_color}}</td>
@@ -66,7 +81,7 @@ Plantas | El Jaboncillo
                         <td style="display: none;">{{infoPlantas.id_suelo}}</td>
                         <td style="display: none;">{{infoPlantas.id_temporada}}</td>
                         <td class="btn-acciones">
-                            <button class="btn-edit plantas-btn-edit" id="openModalPlantas">
+                            <button class="btn-edit btn-edit-plantas">
                                 <i class="material-icons">edit</i>
                             </button>
                             <form action="/eliminarPlanta" method="post" class="form-eliminar">
@@ -86,7 +101,7 @@ Plantas | El Jaboncillo
             <div class="agregar-plantas">
                 <div class="inputPlantas-title">
                     <h3>AGREGAR PLANTA</h3>
-                    <span class="close">&times;</span>
+                    <span class="close" id="close_agregar">&times;</span>
                 </div>
                 <form action="/plantas" id="form-plantas" method="post" class="form-plantas">
                     <section class="inputs-plantas">
@@ -110,7 +125,7 @@ Plantas | El Jaboncillo
                         <div class="inputs-cont columna-2">
                             <div class="inputs-select">
                                 <label>Colores</label>
-                                <select class="input input-plantas" id="color" name="idColor">
+                                <select class="input input-plantas" id="color" name="idColor" required>
                                     {% for colores in Colores %}
                                     <option value="{{ colores[0] }}">{{ colores[1] }}</option>
                                     {% endfor %}
@@ -118,7 +133,7 @@ Plantas | El Jaboncillo
                             </div>
                             <div class="inputs-select">
                                 <label>Subcategorias</label>
-                                <select class="input input-plantas" id="sub" name="idSub">
+                                <select class="input input-plantas" id="sub" name="idSub" required>
                                     {% for subcategoria in Subcategorias %}
                                     <option value="{{ subcategoria[0] }}">{{ subcategoria[2] }}</option>
                                     {% endfor %}
@@ -126,7 +141,7 @@ Plantas | El Jaboncillo
                             </div>
                             <div class="inputs-select">
                                 <label>Rangos de tamaño</label>
-                                <select class="input input-plantas" id="rango" name="idRango">
+                                <select class="input input-plantas" id="rango" name="idRango" required>
                                     {% for rango in Rangos %}
                                     <option value="{{ rango[0] }}">{{ rango[1] }}</option>
                                     {% endfor %}
@@ -136,7 +151,7 @@ Plantas | El Jaboncillo
                         <div class="inputs-cont columna-3">
                             <div>
                                 <label>Entorno ideal</label>
-                                <select class="input input-plantas" id="entorno" name="idEntorno">
+                                <select class="input input-plantas" id="entorno" name="idEntorno" required>
                                     {% for entorno in Entornos %}
                                     <option value="{{ entorno[0] }}">{{ entorno[1] }}</option>
                                     {% endfor %}
@@ -144,7 +159,7 @@ Plantas | El Jaboncillo
                             </div>
                             <div>
                                 <label>Requerimiento de agua</label>
-                                <select class="input input-plantas" id="agua" name="idAgua">
+                                <select class="input input-plantas" id="agua" name="idAgua" required>
                                     {% for agua in Agua %}
                                     <option value="{{ agua[0] }}">{{ agua[1] }}</option>
                                     {% endfor %}
@@ -152,7 +167,7 @@ Plantas | El Jaboncillo
                             </div>
                             <div>
                                 <label>Tipo de suelo</label>
-                                <select class="input input-plantas" id="suelo" name="idSuelo">
+                                <select class="input input-plantas" id="suelo" name="idSuelo" required>
                                     {% for suelo in Suelos %}
                                     <option value="{{ suelo[0] }}">{{ suelo[1] }}</option>
                                     {% endfor %}
@@ -162,7 +177,7 @@ Plantas | El Jaboncillo
                                 <label>Temporada de plantacion</label>
                                 <select class="input input-plantas" id="temporada" name="idTemporada">
                                     {% for temporada in Temporada %}
-                                    <option value="{{ temporada[0] }}">{{ temporada[1] }}</option>
+                                    <option value="{{ temporada[0] }}">{{ temporada[1] }}</option required>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -172,7 +187,7 @@ Plantas | El Jaboncillo
                     <section class="btn-agregar">
                         <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
                         <div>
-                            <button type="button" class="btn btn-cancel" id="btn-cancel">Cancelar</button>
+                            <button type="button" class="btn btn-cancel" id="btn_cancel_agregar">Cancelar</button>
                             <button type="submit" class="btn" id="btn-add-plantas">Agregar</button>
                         </div>
                     </section>
@@ -181,111 +196,110 @@ Plantas | El Jaboncillo
         </div>
     </div>
 </section>
-    <!-- Modal editar planta -->
-    <div id="myModal" class="modal-plantas">
-        <div class="modal-content-plantas form-plantas">
-            <div class="inputplantas-title">
-                <h2>Editar Plantas</h2>
-                <i class="material-icons close">
-                    close
-                    </i>
-                <!-- <span class="close">&times;</span> -->
-            </div>
-            <form action="/editarPlantas" method="post" class="form_edit_plantas">
-                <section class="inputs-plantas">
-                    <div class="inputs-cont columna-1">
-                        <div>
-                            <input type="hidden" id="id_editar_planta" name="id_editar_planta">
-                            <label for="">Nombre</label>
-                            <input type="text" id="nombrePlanta_editar" class="input input-plantas"
-                                name="nombrePlanta_editar" value="">
-                        </div>
-                        <div>
-                            <label for="">Descripción</label>
-                            <textarea id="descripcion_editar" class="input input-plantas" name="descripcion_editar"
-                                value=""></textarea>
-                        </div>
-                        <div>
-                            <label for="">Precio unitario</label>
-                            <input type="number" id="precio_editar" class="input input-plantas" name="precio_editar" value="">
-                        </div>
-                        <div>
-                            <label for="">Imagen</label>
-                            <input type="file" id="img_uploader_plantas_editar" name="imagenPlanta"
-                                class="input input-plantas">
-                        </div>
-                    </div>
-                    <div class="inputs-cont columna-2">
-                        <div class="input-colores">
-                            <label for="">Colores</label>
-                            <select class="input input-plantas" id="idColor_editar" name="idColor_editar">
-                                {% for colores in Colores %}
-                                <option name="idColor" value="{{colores[0]}}">{{colores[1]}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="input-subcat">
-                            <label for="">Subcategorias</label>
-                            <select class="input input-plantas" id="idSubcategoria_editar" name="idSubcategoria_editar">
-                                {% for subcat in Subcategorias %}
-                                <option name="idSub" value="{{ subcat[0] }}">{{ subcat[2] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="input-rango">
-                            <label for="">Rangos de tamaño</label>
-                            <select class="input input-plantas" id="idRango_editar" name="idRango_editar">
-                                {% for rango in Rangos %}
-                                <option name="idRango" value="{{ rango[0] }}">{{ rango[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="inputs-cont columna-3">
-                        <div>
-                            <label for="">Entorno ideal</label>
-                            <select class="input input-plantas" id="idEntorno_editar" name="idEntorno_editar">
-                                {% for entorno in Entornos %}
-                                <option name="idEntorno" value="{{ entorno[0] }}">{{ entorno[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div>
-                            <label for="">Requerimiento de agua</label>
-                            <select class="input input-plantas" id="idAgua_editar" name="idAgua_editar">
-                                {% for agua in Agua %}
-                                <option value="{{ agua[0] }}">{{ agua[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div>
-                            <label for="">Tipo de suelo</label>
-                            <select class="input input-plantas" id="idSuelo_editar" name="idSuelo_editar">
-                                {% for suelo in Suelos %}
-                                <option name="idSuelo" value="{{ suelo[0] }}">{{ suelo[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div>
-                            <label for="">Temporada de plantacion</label>
-                            <select class="input input-plantas" id="idTemporada_editar" name="idTemporada_editar">
-                                {% for temporada in Temporada %}
-                                <option name="idTemporada" value="{{ temporada[0] }}">{{ temporada[1] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </section>
-                <div class="btn-agregar">
-                    <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+<!-- Modal editar planta -->
+<div id="myModal" class="modal-plantas">
+    <div class="modal-content-plantas form-plantas">
+        <div class="inputplantas-title">
+            <h2>Editar Plantas</h2>
+            <span class="close" id="close-edit">&times;</span>
+        </div>
+        <form action="/editarPlantas" method="post" class="form_editar_plantas">
+            <section class="inputs-plantas">
+                <div class="inputs-cont columna-1">
                     <div>
-                        <button type="button" class="btn btn-cancel" id="btn-cancel-edit">Cancelar</button>
-                        <button type="submit" class="btn" id="btn-add-plantas">Editar</button>
+                        <input type="hidden" id="id_editar_planta" name="id_editar_planta">
+                        <label for="">Nombre</label>
+                        <input type="text" id="nombrePlanta_editar" class="input input-plantas"
+                            name="nombrePlanta_editar" value="">
+                    </div>
+                    <div>
+                        <label for="">Descripción</label>
+                        <textarea id="descripcion_editar" class="input input-plantas" name="descripcion_editar"
+                            value=""></textarea>
+                    </div>
+                    <div>
+                        <label for="">Precio unitario</label>
+                        <input type="number" id="precio_editar" class="input input-plantas" name="precio_editar"
+                            value="" placeholder="Ingrese el precio unitario">
+                    </div>
+                    <div>
+                        <label for="">Imagen</label>
+                        <input type="file" id="img_uploader_plantas_editar" name="imagenPlanta"
+                            class="input input-plantas">
                     </div>
                 </div>
-            </form>
-        </div>
+                <div class="inputs-cont columna-2">
+                    <div class="input-colores">
+                        <label for="">Colores</label>
+                        <select class="input input-plantas" id="idColor_editar" name="idColor_editar" required>
+                            {% for colores in Colores %}
+                            <option name="idColor" value="{{colores[0]}}">{{colores[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-subcat">
+                        <label for="">Subcategorias</label>
+                        <select class="input input-plantas" id="idSubcategoria_editar" name="idSubcategoria_editar"
+                            required>
+                            {% for subcat in Subcategorias %}
+                            <option name="idSub" value="{{ subcat[0] }}">{{ subcat[2] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="input-rango">
+                        <label for="">Rangos de tamaño</label>
+                        <select class="input input-plantas" id="idRango_editar" name="idRango_editar" required>
+                            {% for rango in Rangos %}
+                            <option name="idRango" value="{{ rango[0] }}">{{ rango[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="inputs-cont columna-3">
+                    <div>
+                        <label for="">Entorno ideal</label>
+                        <select class="input input-plantas" id="idEntorno_editar" name="idEntorno_editar" required>
+                            {% for entorno in Entornos %}
+                            <option name="idEntorno" value="{{ entorno[0] }}">{{ entorno[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Requerimiento de agua</label>
+                        <select class="input input-plantas" id="idAgua_editar" name="idAgua_editar" required>
+                            {% for agua in Agua %}
+                            <option value="{{ agua[0] }}">{{ agua[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Tipo de suelo</label>
+                        <select class="input input-plantas" id="idSuelo_editar" name="idSuelo_editar">
+                            {% for suelo in Suelos %}
+                            <option name="idSuelo" value="{{ suelo[0] }}">{{ suelo[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="">Temporada de plantacion</label>
+                        <select class="input input-plantas" id="idTemporada_editar" name="idTemporada_editar">
+                            {% for temporada in Temporada %}
+                            <option name="idTemporada" value="{{ temporada[0] }}">{{ temporada[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </section>
+            <div class="btn-agregar">
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                <div>
+                    <button type="button" class="btn btn-cancel" id="btn-cancel-edit">Cancelar</button>
+                    <button type="submit" class="btn" id="btn-edit-plantas">Editar</button>
+                </div>
+            </div>
+        </form>
     </div>
+</div>
 
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
@@ -301,53 +315,3 @@ Plantas | El Jaboncillo
 {% endif %}
 {% endwith %}
 {%endblock%}
-
-
-
-<!-- <input type="hidden" id="id_editar" name="id_editar">
-
-                <input type="text" id="nombrePlanta_editar" class="input" name="nombrePlanta_editar">
-
-                <input type="text" id="descripcion_editar" class="input" name="descripcion_editar">
-
-                <select class="input" id="idColor_editar" name="idColor_editar">
-                    {% for colores in Colores %}
-                    <option name="idColor_editar" value="{{colores[0]}}">{{colores[1]}}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idSubcategoria_editar" name="idSubcategoria_editar">
-                    {% for subcategoria in Subcategorias %}
-                    <option name="idSubcategoria_editar" value="{{ subcategoria[0] }}">{{ subcategoria[2] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idRango_editar" name="idRango_editar">
-                    {% for rango in Rangos %}
-                    <option name="idRango_editar" value="{{ rango[0] }}">{{ rango[1] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idEntorno_editar" name="idEntorno_editar">
-                    {% for entorno in Entornos %}
-                    <option name="idEntorno_editar" value="{{ entorno[0] }}">{{ entorno[1] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idAgua_editar" name="idAgua_editar">
-                    {% for agua in Agua %}
-                    <option name="idAgua_editar" value="{{ agua[0] }}">{{ agua[1] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idSuelo_editar" name="idSuelo_editar">
-                    {% for suelo in Suelos %}
-                    <option name="idSuelo_editar" value="{{ suelo[0] }}">{{ suelo[1] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idTemporada_editar" name="idTemporada_editar">
-                    {% for temporada in Temporada %}
-                    <option name="idTemporada_editar" value="{{ temporada[0] }}">{{ temporada[1] }}</option>
-                    {% endfor %}
-                </select> 
-                <div class="btn-modal">
-                <button type="button" class="btn close-modal">Cancelar</button>
-                <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
-
-            </div>
-                -->

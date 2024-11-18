@@ -1,20 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/layout.css">  
-    <link rel="stylesheet" href="/static/css/categorias.css">  
+    <link rel="stylesheet" href="/static/css/layout.css">
+    <link rel="stylesheet" href="/static/css/categorias.css">
     <link rel="stylesheet" href="/static/css/sub_categorias.css">
-    <link rel="stylesheet" href="/static/css/usuarios.css">  
+    <link rel="stylesheet" href="/static/css/usuarios.css">
     <link rel="stylesheet" href="/static/css/plantas.css">
     <link rel="stylesheet" href="/static/css/proveedores.css"> 
     <link rel="stylesheet" href="/static/css/insumos.css">
     <link rel="stylesheet" href="/static/css/ventas.css">
+    <link rel="stylesheet" href="/static/css/proveedores.css">
+    <link rel="stylesheet" href="/static/css/inicio_admin.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
     <link rel="shortcut icon" href="/static/img/logoElJaboncilloflor.png">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- select2 -->
@@ -25,38 +29,30 @@
 </head>
 <body>
     <section class="all-screen">
-        <div class="navbar">
-            <div class="logo">
-                <img src="/static/img/logoElJaboncillo.png" alt="">
-            </div>
-            <div class="fecha">
-                <p id="fecha"></p>
-                <p id="hora"></p>
-            </div>
-        </div>
-        <div class="sidebar">
-            <div class="sidebar-title">                
-                <h2>Menu Principal</h2>
+        <aside class="sidebar">
+            <div class="sidebar-titulo-user">
+                <h2>Janixa Centeno</h2>
+                <p>ADMINISTRADOR</p>
             </div>
             <div class="items">
                 <div>
                     <button class="btn-items">
                         <i class="material-icons">inventory</i>
-                        Gestion stock
+                        <p class="btn_texto">Gestion stock</p>
                         <i class="material-icons key">keyboard_arrow_left</i>
                     </button>
                     <div class="options">
-                        <ul>
-                            <li ><a href="/plantas">Plantas</a></li>
-                            <li ><a href="/insumos">Insumos</a></li>
-                            <li ><a href="#">Stock</a></li>
+                        <ul class="list-options">
+                            <li><a href="/plantas">Plantas</a></li>
+                            <li><a href="/insumos">Insumos</a></li>
+                            <li><a href="#">Stock</a></li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <button class="btn-items">
                         <i class="material-icons">payments</i>
-                        Gestion facturación
+                        <p class="btn_texto">Gestion facturación</p>
                         <i class="material-icons key">keyboard_arrow_left</i>
                     </button>
                     <div class="options">
@@ -64,64 +60,79 @@
                             <li ><a href="/ventas">Venta</a></li>
                             <li ><a href="#">Devoluciones</a></li>
                             <li ><a href="#">Reportes</a></li>
+                        <ul class="list-options">
+                            <li><a href="#">Venta</a></li>
+                            <li><a href="#">Devoluciones</a></li>
+                            <li><a href="#">Reportes</a></li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <button class="btn-items">
                         <i class="material-icons">local_mall</i>
-                        Gestion compras
+                        <p class="btn_texto">Gestion compras</p>
                         <i class="material-icons key">keyboard_arrow_left</i>
                     </button>
                     <div class="options">
-                        <ul>
-                            <li ><a href="/proveedores">Proveedores</a></li>
-                            <li ><a href="#">Compras</a></li>
-                            <li ><a href="#">Reportes</a></li>
+                        <ul class="list-options">
+                            <li><a href="/proveedores">Proveedores</a></li>
+                            <li><a href="#">Compras</a></li>
+                            <li><a href="#">Reportes</a></li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <button class="btn-items">
                         <i class="material-icons">group_add</i>
-                        Gestion usuarios
+                        <p class="btn_texto">Gestion usuarios</p>
                         <i class="material-icons key">keyboard_arrow_left</i>
                     </button>
                     <div class="options">
-                        <ul>
-                            <li ><a href="usuarios">Usuarios</a></li>
+                        <ul class="list-options">
+                            <li><a href="usuarios">Usuarios</a></li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <button class="btn-items">
                         <i class="material-icons">category</i>
-                        Gestion categorias
+                        <p class="btn_texto">Gestion categorias</p>
                         <i class="material-icons key">keyboard_arrow_left</i>
                     </button>
                     <div class="options">
-                        <ul>
-                            <li ><a href="categorias">Categorias</a></li>
-                            <li ><a href="subCategorias">Subcategorias</a></li>
+                        <ul class="list-options">
+                            <li><a href="categorias">Categorias</a></li>
+                            <li><a href="subCategorias">Subcategorias</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="configuracion">
-                <button class="btn-items">
+                <button class="btn-items-config">
                     <i class="material-icons">settings</i>
-                    configuracion del sistema
-                    <i class="material-icons key">keyboard_arrow_left</i>
+                    <p>Configuración del sistema</p>
                 </button>
             </div>
-        </div>
+    </aside>
+    <section id="wrapper" class="seccion-wrapper">
+        <nav class="navbar">
+            <img src="/static/img/logoElJaboncillo.png" alt="logo">
+            <div class="navbar-content">
+                <div class="fecha">
+                    <p id="fecha"></p>
+                    <p>/</p>
+                    <p id="hora"></p>
+                </div>
+                <i class="material-icons">menu</i>
+            </div>
+        </nav>
         <main class="main">
             {% block main %}
-            
+
             {% endblock %}
-        </main>  
+        </main>
     </section>
-</body>
+</section>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/static/js/layout.js"></script>
@@ -146,5 +157,7 @@
 
 <script src="path/to/insumos.js"></script>
 <script src="path/to/plantas.js"></script>
+          
+</body>
 
 </html>
