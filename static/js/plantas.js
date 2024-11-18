@@ -4,33 +4,140 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const container_table_inputs = document.querySelector(".container-inputPlantas");
     container_table_inputs.style.display = "block";
-    document.getElementById("btn-cancel").addEventListener("click", function () {
-      container_table_inputs.style.display = "none";
-    });
 
+
+    document.getElementById("btn_cancel_agregar").addEventListener("click", function () {
+      const modalgregar = document.querySelector(".container-inputPlantas");
+      modalgregar.style.display = "none";
+    });
+    document.getElementById("close_agregar").addEventListener("click", function () {
+      const modalgregar = document.querySelector(".container-inputPlantas");
+      modalgregar.style.display = "none";
+    });
 
   });
 
-  //Obtener datos para mostrar en el modal de editar
-  const modal = document.getElementById("myModal");
-  const btnsEdit = document.querySelectorAll(".plantas-btn-edit");
 
-  const inputId = document.getElementById("id_editar_planta");
-  const inputNombre = document.getElementById("nombrePlanta_editar")
-  const inputDescripcion = document.getElementById("descripcion_editar")
-  const inputColor = document.getElementById("idColor_editar")
-  const inputSubcategoria = document.getElementById("idSubcategoria_editar")
-  const inputRango = document.getElementById("idRango_editar")
-  const inputEntorno = document.getElementById("idEntorno_editar")
-  const inputAgua = document.getElementById("idAgua_editar")
-  const inputSuelo = document.getElementById("idSuelo_editar")
-  const inputTemporada = document.getElementById("idTemporada_editar")
-  const inputPrecio = document.getElementById("precio_editar")
+  //buscar plantas
+  let plantasData = [];
+  // Cargar datos una sola vez cuando la página carga
+  fetch(`/generar_json_plantas`)
+    .then(response => response.json())
+    .then(data => {
+      plantasData = data;
+      mostrarPlantas(plantasData);  // Mostrar todos los plantas inicialmente
+    })
+    .catch(error => console.error('Error:', error));
 
-  // Agregar evento para abrir el modal en cada botón de edición
-  btnsEdit.forEach((btn) => {
-    btn.addEventListener('click', (event) => {
-      // Obtener la fila de la tabla donde se hizo clic
+
+
+  //Escuchar el evento 'input' para la búsqueda
+  document.getElementById("buscar_plantas").addEventListener('input', function () {
+    const valorBuscar = this.value.toLowerCase();
+
+    // Filtrar resultados cuando hay texto en el input
+    const resultados = valorBuscar === "" ? plantasData :
+      plantasData.filter(planta =>
+        planta.nombre.toLowerCase().includes(valorBuscar) ||
+        (planta.subcategoria || "").toLowerCase().includes(valorBuscar) ||
+        (planta.color || "").toLowerCase().includes(valorBuscar) ||
+        (planta.rango || "").toLowerCase().includes(valorBuscar) ||
+        (planta.precio ? planta.precio.toString().toLowerCase() : "").includes(valorBuscar.toLowerCase()) ||
+        (planta.entorno || "").toLowerCase().includes(valorBuscar) ||
+        (planta.agua || "").toLowerCase().includes(valorBuscar) ||
+        (planta.suelo || "").toLowerCase().includes(valorBuscar) ||
+        (planta.temporada || "").toLowerCase().includes(valorBuscar)
+      );
+
+    // Mostrar resultados filtrados o todos los plantas si el input está vacío
+    mostrarPlantas(resultados);
+  });
+  // Función para mostrar plantas en la tabla
+  function mostrarPlantas(data) {
+    const tableBody = document.getElementById('tabla_plantas');
+    tableBody.innerHTML = '';  // Limpiar tabla
+
+    if (data.length === 0) {
+      tableBody.innerHTML = "<tr><td colspan='12' style='text-align: center;'>No hay resultados</td></tr>";
+    } else {
+      data.forEach(planta => {
+        const row = `<tr>
+       <td id="planta-${planta.id}">
+        ${planta.imagen_url ? `
+          <div class="img-container">
+            <img class="mini-imgInsumo" src="${planta.imagen_url}" alt="planta">
+          </div>
+        ` : `
+          <div class="image-upload">
+            <form action="/plantas" class="form_agregarimgplanta" id="form_agregarimgplanta">
+              <input type="hidden" class="id_planta_agregar" name="id_planta" id="id_planta_agregar" value="${planta.id}">
+              <input type="file" id="file_input_agregar" class="file-input" accept=".png, .jpg, .jpeg">
+              <label for="file_input_agregar" class="upload-label">
+                <span class="upload-icon">📁</span> <!-- Icono de archivo -->
+                <span class="upload-text">Subir imagen</span>
+              </label>
+            </form>
+          </div>
+        `}
+      </td>
+      <td style="display: none;">${planta.id}</td>
+       <td>${planta.nombre}</td>
+       <td style="display: none;">${planta.descripcion}</td>
+       <td>${planta.subcategoria}</td>
+       <td>${planta.color}</td>
+       <td>${planta.rango}</td>
+       <td style="display: none;">${planta.entorno}</td>
+       <td style="display: none;">${planta.agua}</td>
+       <td style="display: none;">${planta.suelo}</td>
+       <td style="display: none;">${planta.temporada}</td>
+       <td>${planta.precio_venta}</td>
+       <td style="display: none;">${planta.id_subcategoria}</td>
+       <td style="display: none;">${planta.id_color}</td>
+       <td style="display: none;">${planta.id_rango}</td>
+       <td style="display: none;">${planta.id_entorno}</td>
+       <td style="display: none;">${planta.id_agua}</td>
+       <td style="display: none;">${planta.id_suelo}</td>
+       <td style="display: none;">${planta.id_temporada}</td>
+       <td class="btn-acciones">
+          <button class="btn-edit btn-edit-plantas" data-id="${planta.id}">
+              <i class="material-icons">edit</i>
+          </button>
+          <form action="/eliminarPlanta" method="post" class="form-eliminar">
+              <input type="hidden" id="id_eliminar" name="id_eliminar" value="${planta.id}">
+              <button class="btn-delete" type="submit">
+                  <i class="material-icons">delete</i>
+              </button>
+          </form>
+        </td>
+
+      </tr>`;
+        tableBody.insertAdjacentHTML('beforeend', row);
+      });
+    }
+  }
+  // Agregar event listener para delegación de eventos
+  document.getElementById('tabla_plantas').addEventListener('click', function (event) {
+    if (event.target.closest('.btn-edit-plantas')) {
+      const button = event.target.closest('.btn-edit-plantas');
+      const plantasID = button.getAttribute('data-id');
+      console.log("Planta ID:", plantasID);
+
+      // ABRIR Y OBTENER DATOS PARA EL MODAL
+      //Obtener datos para mostrar en el modal de editar
+      const modal = document.getElementById("myModal");
+      const inputId = document.getElementById("id_editar_planta");
+      const inputNombre = document.getElementById("nombrePlanta_editar")
+      const inputDescripcion = document.getElementById("descripcion_editar")
+      const inputColor = document.getElementById("idColor_editar")
+      const inputSubcategoria = document.getElementById("idSubcategoria_editar")
+      const inputRango = document.getElementById("idRango_editar")
+      const inputEntorno = document.getElementById("idEntorno_editar")
+      const inputAgua = document.getElementById("idAgua_editar")
+      const inputSuelo = document.getElementById("idSuelo_editar")
+      const inputTemporada = document.getElementById("idTemporada_editar")
+      const inputPrecio = document.getElementById("precio_editar")
+
+
       const row = event.target.closest("tr");
       console.log("esta en plantas.js")
       // console.log("esta entrando en este js");
@@ -91,18 +198,10 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("close-edit").addEventListener("click", function () {
         modal.style.display = "none";
       });
-      
-    });
+
+    }
   });
 
-  document.getElementById("btn_cancel_agregar").addEventListener("click", function () {
-    const modalgregar = document.querySelector(".container-inputPlantas");
-    modalgregar.style.display = "none";
-  });
-  document.getElementById("close_agregar").addEventListener("click", function () {
-    const modalgregar = document.querySelector(".container-inputPlantas");
-    modalgregar.style.display = "none";
-  });
   //Select2 para seleccionar opciones
   $(document).ready(function () {
     // Inicializar Select2 en modo múltiple
@@ -151,142 +250,61 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-  document.getElementsByClassName("btn-cancel-edit").addEventListener("click", function () {
-    const modalcontentplantas = document.querySelector(".modal-plantas");
-    modalcontentplantas.style.display = "none";
-  });
-  document.querySelector(".close-edit").addEventListener("click", function () {
-    const modalcontentplantas = document.querySelector(".modal-plantas");
-    modalcontentplantas.style.display = "none";
-  });
 
+  //SOCKETS Cloudinary
+  /* MDOAL AGREGAR*/
+    const socket = io();
+    socket.on('connect', () => {
+      console.log('Cliente conectado a SocketIO');
+    });
 
-  
-  //buscar plantas
-  document.getElementById('search_plantas').addEventListener('input', function () {
-    const valorBuscar = this.value;
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
+    const CLOUDINARY_UPLOAD_PRESET = "rn94xkdi";
 
+    // Usar delegación de eventos para inputs dinámicos
+    document.addEventListener("change", async function (event) {
+      // Verificar si el evento proviene de un input de archivo con la clase específica
+      if (event.target && event.target.classList.contains("file-input")) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+        if (file) {
+          // Obtener el ID relacionado con el input actual
+          const id_planta = fileInput.closest("form").querySelector(".id_planta_agregar").value;
 
+          const reader = new FileReader();
 
-    fetch(`/buscar_plantas?valorBuscar=${valorBuscar}`)
-      .then(response => response.json())
-      .then(data => {
-        const tableBody = document.getElementById('tabla_plantas');
-        tableBody.innerHTML = '';  // Limpiar tabla
+          reader.readAsDataURL(file);
 
-        if (data.length === 0) {
-          tableBody.innerHTML = "<tr><td colspan='18' style='text-align: center;'>No hay resultados</td></tr>";
-        } else {
-          data.forEach(planta => {
-            const imageCell = planta.imagen_url
-              ? `<div class="img-container"><img src="${planta.imagen_url}" alt="planta" class="mini-imgInsumo"></div>`
-              : `
-                  <div class="image-upload">
-                      <form action="/plantas" class="form_agregarimg" id="form_agregarimg">
-                          <input type="hidden" name="id_planta" id="id_planta" value="${planta.id}">
-                          <input type="file" id="file_input" class="file-input" accept="image/*">
-                          <label for="file_input" class="upload-label">
-                              <span class="upload-icon">📁</span>
-                              <span class="upload-text">Subir imagen</span>
-                          </label>
-                      </form>
-                  </div>`;
+          // Crear el FormData para la subida a Cloudinary
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
 
-            const row = `
-                  <tr>
-                      <td id="planta-${planta.id}">
-                          ${imageCell}
-                      </td>
-                      <td style="display: none;">${planta.id}</td>
-                      <td>${planta.nombre}</td>
-                      <td style="display: none;">${planta.descripcion}</td>
-                      <td>${planta.subcategoria}</td>
-                      <td>${planta.color}</td>
-                      <td>${planta.rango}</td>
-                      <td style="display: none;">${planta.entorno}</td>
-                      <td style="display: none;">${planta.agua}</td>
-                      <td style="display: none;">${planta.suelo}</td>
-                      <td style="display: none;">${planta.temporada}</td>
-                      <td>${planta.precio_venta}</td>
-                      <td style="display: none;">${planta.id_subcategoria}</td>
-                      <td style="display: none;">${planta.id_color}</td>
-                      <td style="display: none;">${planta.id_rango}</td>
-                      <td style="display: none;">${planta.id_entorno}</td>
-                      <td style="display: none;">${planta.id_agua}</td>
-                      <td style="display: none;">${planta.id_suelo}</td>
-                      <td style="display: none;">${planta.id_temporada}</td>
-                      <td class="btn-acciones">
-                          <button class="btn-edit plantas-btn-edit" id="openModalPlantas">
-                              <i class="material-icons">edit</i>
-                          </button>
-                          <form action="/eliminarPlanta" method="post" class="form-eliminar">
-                              <input type="hidden" id="id_eliminar" name="id_eliminar" value="${planta.id}">
-                              <button class="btn-delete" type="submit">
-                                  <i class="material-icons">delete</i>
-                              </button>
-                          </form>
-                      </td>
-                  </tr>`;
-            tableBody.insertAdjacentHTML('beforeend', row);
+          const res = await axios.post(CLOUDINARY_URL, formData, {
+            headers: { "Content-Type": "multipart/form-data" }
           });
+
+          const url = res.data.url;
+          console.log("URL de la imagen subida:", url);
+
+
+          socket.emit("addImgPlanta", { 'url': url, 'idPlan': id_planta });
+          console.log("Enviado a la planta en agregarplanta: ", id_planta);
         }
-      })
-      .catch(error => console.error('Error:', error));
 
+        // Enviar el formulario (opcional si es necesario)
+        const formagregarimg = fileInput.closest(".form_agregarimgplanta");
+        formagregarimg.submit();
+      }
+    });
 
-  });
 });
-
-//SOCKETS Cloudinary
-/* MDOAL AGREGAR*/
-document.addEventListener("DOMContentLoaded", function () {
-  const fileInput = document.getElementById("file_input_agregar");
-  const id_planta = document.getElementById("id_planta_agregar").value;
-  const formagregarimg = document.getElementById("form_agregarimgplanta");
-  const socket = io();
-  socket.on('connect', () => {
-    console.log('Cliente conectado a SocketIO');
-  });
-
-  const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
-  const CLOUDINARY_UPLOAD_PRESET = "rn94xkdi";
-
-  fileInput.addEventListener("change", async function () {
-    const file = fileInput.files[0];
-    if (file) {
-      // Mostrar vista previa de la imagen
-      const reader = new FileReader();
-
-      reader.readAsDataURL(file);
-
-      // Crear el FormData y realizar la subida a Cloudinary
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-
-      const res = await axios.post(CLOUDINARY_URL, formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
-
-      const url = res.data.url;
-      console.log("URL de la imagen subida:", url);
-
-
-      socket.emit("addImgPlanta", { 'url': url, 'idPlan': id_planta });
-
-      formagregarimg.submit(); // Enviar el formulario de agregar imagen
-    }
-  });
-});
-
 
 /* MDOAL EDITAR*/
 document.addEventListener("DOMContentLoaded", function () {
-  
-    //ALERTA EDITAR
-    const form_editar_planta = document.querySelectorAll('.form_editar_plantas');
+  const form_editar_planta = document.querySelectorAll(".form_editar_plantas");
 
-    // Itera sobre cada formulario y agrega el evento de submit
+  // Itera sobre cada formulario y agrega el evento de submit
   form_editar_planta.forEach(form => {
     form.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -341,7 +359,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
-
 });
 
 

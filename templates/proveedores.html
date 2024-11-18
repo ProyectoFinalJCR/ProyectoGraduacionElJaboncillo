@@ -12,7 +12,7 @@ Proveedores | El Jaboncillo
     <div class="search">
         <div class="seccion-buscar">
             <i class="material-icons">search</i>
-            <input class="input-search" name="search" id="search" placeholder="Buscar proveedores">
+            <input class="input-search" name="search" id="buscar_proveedores" placeholder="Buscar proveedores">
         </div>
         <div>
             <button class="btn-add-proveedores btn">Agregar proveedores</button>
@@ -38,7 +38,7 @@ Proveedores | El Jaboncillo
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tabla_proveedores">
                 {% for proveedores in Proveedores %}
                 <tr>
                     <td>{{proveedores.id }}</td>
@@ -47,7 +47,7 @@ Proveedores | El Jaboncillo
                     <td>{{proveedores.telefono}}</td>
                     <td>{{proveedores.direccion}}</td>
                     <td class="btn-acciones">
-                        <button class="btn-edit" id="openModalCat">
+                        <button class="btn-edit btn-edit-proveedores">
                             <i class="material-icons">edit</i>
                         </button>
                         <form action="/bajaProveedor" method="post" class="form-baja">

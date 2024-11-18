@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/static/css/plantas.css">
     <link rel="stylesheet" href="/static/css/insumos.css">
     <link rel="stylesheet" href="/static/css/proveedores.css">
+    <link rel="stylesheet" href="/static/css/inicio_admin.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -127,127 +128,30 @@
             </main>
         </section>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/static/js/layout.js"></script>
+    <script src="/static/js/categorias.js"></script>
+    <script src="/static/js/usuarios.js"></script>
+    <script src="/static/js/subcategoria.js"></script>
+    <script src="/static/js/insumos.js"></script>
+    <script src="/static/js/plantas.js"></script>
+    <script src="/static/js/socket.io.min.js"></script>
+    
+    <script src="/static/js/proveedores.js"></script>
+    <!-- Carga jQuery primero -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- Luego carga Select2 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    
+    <!-- Carga Axios para Cloudinary -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Cargar Socket.io desde un CDN -->
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+    
+    <script src="path/to/insumos.js"></script>
+    <script src="path/to/plantas.js"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/static/js/layout.js"></script>
-<script src="/static/js/categorias.js"></script>
-<script src="/static/js/usuarios.js"></script>
-<script src="/static/js/subcategoria.js"></script>
-<script src="/static/js/insumos.js"></script>
-<script src="/static/js/plantas.js"></script>
-<script src="/static/js/socket.io.min.js"></script>
-
-<script src="/static/js/proveedores.js"></script>
-<!-- Carga jQuery primero -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-<!-- Luego carga Select2 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-<!-- Carga Axios para Cloudinary -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!-- Cargar Socket.io desde un CDN -->
-<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-
-<script src="path/to/insumos.js"></script>
-<script src="path/to/plantas.js"></script>
 
 </html>
-<!-- <section class="bienvenida">
-                <h2>Buenos dias, </h2>
-                <p>Bienvenida Janixa Centeno</p>
-            </section> -->
-<!-- <div class="navbar">
-        <div class="logo">
-            <img src="/static/img/logoElJaboncillo.png" alt="">
-        </div>
-        <div class="fecha">
-            <p id="fecha"></p>
-            <p id="hora"></p>
-        </div>
-    </div>
-    <div class="sidebar">
-        <div class="sidebar-title">                
-            <h2>Menu Principal</h2>
-        </div>
-        <div class="items">
-            <div>
-                <button class="btn-items">
-                    <i class="material-icons">inventory</i>
-                    Gestion stock
-                    <i class="material-icons key">keyboard_arrow_left</i>
-                </button>
-                <div class="options">
-                    <ul>
-                        <li ><a href="/plantas">Plantas</a></li>
-                        <li ><a href="/insumos">Insumos</a></li>
-                        <li ><a href="#">Stock</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div>
-                <button class="btn-items">
-                    <i class="material-icons">payments</i>
-                    Gestion facturación
-                    <i class="material-icons key">keyboard_arrow_left</i>
-                </button>
-                <div class="options">
-                    <ul>
-                        <li ><a href="#">Venta</a></li>
-                        <li ><a href="#">Devoluciones</a></li>
-                        <li ><a href="#">Reportes</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div>
-                <button class="btn-items">
-                    <i class="material-icons">local_mall</i>
-                    Gestion compras
-                    <i class="material-icons key">keyboard_arrow_left</i>
-                </button>
-                <div class="options">
-                    <ul>
-                        <li ><a href="/proveedores">Proveedores</a></li>
-                        <li ><a href="#">Compras</a></li>
-                        <li ><a href="#">Reportes</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div>
-                <button class="btn-items"> 
-                    <i class="material-icons">group_add</i>
-                    Gestion usuarios
-                    <i class="material-icons key">keyboard_arrow_left</i>
-                </button>
-                <div class="options">
-                    <ul>
-                        <li ><a href="usuarios">Usuarios</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div>
-                <button class="btn-items">
-                    <i class="material-icons">category</i>
-                    Gestion categorias
-                    <i class="material-icons key">keyboard_arrow_left</i>
-                </button>
-                <div class="options">
-                    <ul>
-                        <li ><a href="categorias">Categorias</a></li>
-                        <li ><a href="subCategorias">Subcategorias</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="configuracion">
-            <button class="btn-items">
-                <i class="material-icons">settings</i>
-                configuracion del sistema
-                <i class="material-icons key">keyboard_arrow_left</i>
-            </button>
-        </div>
-    </div>
-    <main class="main">
-       
-    </main>  
-</section> -->

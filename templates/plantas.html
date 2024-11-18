@@ -13,7 +13,7 @@ Plantas | El Jaboncillo
         <div class="search">
             <div class="seccion-buscar">
                 <i class="material-icons">search</i>
-                <input class="input-search" name="search" id="search_plantas" placeholder="Buscar plantas">
+                <input class="input-search" name="search" id="buscar_plantas" placeholder="Buscar plantas">
             </div>
             <div>
                 <button class="btn-add-planta btn">Agregar planta</button>
@@ -26,7 +26,7 @@ Plantas | El Jaboncillo
             <h3>No hay plantas en la lista</h3>
         </div>
         {%else%}
-        <div class="table-plantas" id="tabla_plantas">
+        <div class="table-plantas" id="tabla-plantas">
             <table class="table">
                 <thead>
                     <tr>
@@ -39,7 +39,7 @@ Plantas | El Jaboncillo
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tabla_plantas">
                     <tr>
                         {% for infoPlantas in InfoPlanta %}
                         <td id="planta-{{ infoPlantas.id }}">
@@ -50,7 +50,7 @@ Plantas | El Jaboncillo
                             {% else %}
                             <div class="image-upload">
                                 <form action="/plantas" class="form_agregarimgplanta" id="form_agregarimgplanta">
-                                    <input type="hidden" name="id_planta" id="id_planta_agregar"
+                                    <input type="hidden" name="id_planta" class="id_planta_agregar" id="id_planta_agregar"
                                         value="{{infoPlantas.id}}">
                                     <input type="file" id="file_input_agregar" class="file-input"
                                         accept=".png, .jpg, .jpeg">
@@ -62,7 +62,6 @@ Plantas | El Jaboncillo
                             </div>
                             {% endif %}
                         </td>
-                        <!-- <td><img src="{{infoPlantas.imagen_url}}" alt="planta" class="mini-imgInsumo"></td> -->
                         <td style="display: none;">{{infoPlantas.id}}</td>
                         <td>{{infoPlantas.nombre}}</td>
                         <td style="display: none;">{{infoPlantas.descripcion}}</td>
@@ -82,7 +81,7 @@ Plantas | El Jaboncillo
                         <td style="display: none;">{{infoPlantas.id_suelo}}</td>
                         <td style="display: none;">{{infoPlantas.id_temporada}}</td>
                         <td class="btn-acciones">
-                            <button class="btn-edit plantas-btn-edit" id="openModalPlantas">
+                            <button class="btn-edit btn-edit-plantas">
                                 <i class="material-icons">edit</i>
                             </button>
                             <form action="/eliminarPlanta" method="post" class="form-eliminar">
@@ -221,7 +220,7 @@ Plantas | El Jaboncillo
                     <div>
                         <label for="">Precio unitario</label>
                         <input type="number" id="precio_editar" class="input input-plantas" name="precio_editar"
-                            value="">
+                            value="" placeholder="Ingrese el precio unitario">
                     </div>
                     <div>
                         <label for="">Imagen</label>
@@ -316,53 +315,3 @@ Plantas | El Jaboncillo
 {% endif %}
 {% endwith %}
 {%endblock%}
-
-
-
-<!-- <input type="hidden" id="id_editar" name="id_editar">
-
-                <input type="text" id="nombrePlanta_editar" class="input" name="nombrePlanta_editar">
-
-                <input type="text" id="descripcion_editar" class="input" name="descripcion_editar">
-
-                <select class="input" id="idColor_editar" name="idColor_editar">
-                    {% for colores in Colores %}
-                    <option name="idColor_editar" value="{{colores[0]}}">{{colores[1]}}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idSubcategoria_editar" name="idSubcategoria_editar">
-                    {% for subcategoria in Subcategorias %}
-                    <option name="idSubcategoria_editar" value="{{ subcategoria[0] }}">{{ subcategoria[2] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idRango_editar" name="idRango_editar">
-                    {% for rango in Rangos %}
-                    <option name="idRango_editar" value="{{ rango[0] }}">{{ rango[1] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idEntorno_editar" name="idEntorno_editar">
-                    {% for entorno in Entornos %}
-                    <option name="idEntorno_editar" value="{{ entorno[0] }}">{{ entorno[1] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idAgua_editar" name="idAgua_editar">
-                    {% for agua in Agua %}
-                    <option name="idAgua_editar" value="{{ agua[0] }}">{{ agua[1] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idSuelo_editar" name="idSuelo_editar">
-                    {% for suelo in Suelos %}
-                    <option name="idSuelo_editar" value="{{ suelo[0] }}">{{ suelo[1] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="input" id="idTemporada_editar" name="idTemporada_editar">
-                    {% for temporada in Temporada %}
-                    <option name="idTemporada_editar" value="{{ temporada[0] }}">{{ temporada[1] }}</option>
-                    {% endfor %}
-                </select> 
-                <div class="btn-modal">
-                <button type="button" class="btn close-modal">Cancelar</button>
-                <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
-
-            </div>
-                -->

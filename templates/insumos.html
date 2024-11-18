@@ -17,7 +17,7 @@ Insumos | El Jaboncillo
         <div class="search">
             <div class="seccion-buscar">
                 <i class="material-icons">search</i>
-                <input class="input-search" name="search" id="search" placeholder="Buscar insumos">
+                <input class="input-search" name="search" id="buscar_insumos" placeholder="Buscar insumos">
             </div>
             <div>
                 <button class="btn btn-add-insumos" id="btn-add-insumos">Agregar insumo</button>
@@ -50,7 +50,7 @@ Insumos | El Jaboncillo
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tabla_insumos">
                     <tr>
                         {% for insumo in insumos %}
                         <td id="insumo-{{ insumo[0] }}">
@@ -60,19 +60,19 @@ Insumos | El Jaboncillo
                                 <img class="mini-imgInsumo" src="{{ insumo[18] }}" alt="Insumo">
                             </div>
                             {% else %}
-                            <div class="image-upload">
-                                <form action="/insumos" class="form_agregarimg" id="form_agregarimg">
-                                    <input type="hidden" name="id_insumo" id="id_insumo" value="{{insumo[0]}}">
-                                    <input type="file" id="file_input" class="file-input" accept=".png, .jpg, .jpeg">
-                                    <label for="file_input" class="upload-label">
-                                        <span class="upload-icon">📁</span> <!-- Icono de archivo -->
-                                        <span class="upload-text">Subir imagen</span>
-                                    </label>
-                                </form>
-                            </div>
+                                <div class="image-upload">
+                                    <form action="/insumos" class="form_agregarimg">
+                                        <input type="hidden" name="id_insumo" class="id_insumo_agregar" value="{{insumo[0]}}">
+                                        <input type="file" class="file-input"
+                                            accept=".png, .jpg, .jpeg" id="subir">
+                                        <label for="subir" class="upload-label">
+                                            <span class="upload-icon">📁</span>
+                                            <span class="upload-text">Subir imagen</span>
+                                        </label>
+                                    </form>
+                                </div>
                             {% endif %}
                         </td>
-                        <!-- <td><img class="mini-imgInsumo" src="{{insumo[18]}}" alt="Insumo"></td> -->
                         <td style="display: none;">{{insumo[0]}}</td>
                         <td>{{insumo[1]}}</td>
                         <td>{{insumo[2]}}</td>
@@ -85,14 +85,14 @@ Insumos | El Jaboncillo
                         <td style="display: none;">{{insumo[9]}}</td>
                         <td>{{insumo[10]}}</td>
                         <td style="display: none;">{{insumo[11]}}</td>
-                        <td>{{insumo[12]}}</td>
+                        <td style="display: none;">{{insumo[12]}}</td>
                         <td style="display: none;">{{insumo[13]}}</td>
                         <td style="display: none;">{{insumo[14]}}</td>
                         <td style="display: none;">{{insumo[15]}}</td>
                         <td>{{insumo[16]}}</td>
                         <td>{{insumo[17]}}</td>
                         <td class="btn-acciones">
-                            <button class="btn-edit editar-insumo" id="openModalInsumo">
+                            <button class="btn-edit btn-edit-insumos" data-id="{{insumos[0]}}">
                                 <i class="material-icons">edit</i>
                             </button>
                             <form action="/eliminarInsumo" method="post" class="form-eliminar">
@@ -138,11 +138,11 @@ Insumos | El Jaboncillo
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label for="">Imagen</label>
                                 <input type="file" id="img-uploader-insu" name="imagenInsumo"
                                     class="input input-insumos" accept=".png, .jpg, .jpeg">
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="inputs-cont columna-2">
@@ -176,8 +176,8 @@ Insumos | El Jaboncillo
                                 <div>
                                     <label for="">Descripción</label>
                                     <textarea class="input input-insumos" id="descripcion_insumo"
-                                        name="descripcion_insumo"
-                                        placeholder="Ingrese una descripción para este insumo" required></textarea>
+                                        name="descripcion_insumo" placeholder="Ingrese una descripción para este insumo"
+                                        required></textarea>
                                 </div>
                             </div>
                             <div class="input-subcat">
@@ -211,7 +211,7 @@ Insumos | El Jaboncillo
                             <div>
                                 <label for="">Fecha de vencimiento</label>
                                 <input type="date" id="fecha_vencimiento" name="fecha_vencimiento"
-                                    class="input input-insumos" required>
+                                    class="input input-insumos">
                             </div>
                         </div>
                     </section>
@@ -262,7 +262,7 @@ Insumos | El Jaboncillo
         <div class="inputinsumos-title">
             <h2>Editar insumos</h2>
             <span class="close" id="close-edit">&times;</span>
-           
+
         </div>
         <form action="/editarinsumo" method="post" class="form_edit_insumo">
             <section class="inputs-insumos">
@@ -275,7 +275,7 @@ Insumos | El Jaboncillo
                     <div>
                         <label for="">Composición principal</label>
                         <select type="text" id="ComposicionP_editar" name="idComposicionP_editar"
-                            class="input input-insumos"> 
+                            class="input input-insumos">
                             {% for composicionp in Composicionp %}
                             <option name="idComposicionP" value="{{composicionp[0]}}">{{composicionp[1]}}</option>
                             {% endfor %}
@@ -352,7 +352,8 @@ Insumos | El Jaboncillo
                     </div>
                     <div class="input-colores">
                         <label for="">Colores</label>
-                        <select type="text" id="coloresInsumo_editar" name="coloresInsumo_editar" class="input" required>
+                        <select type="text" id="coloresInsumo_editar" name="coloresInsumo_editar" class="input"
+                            required>
                             {% for colores in Colores %}
                             <option name="idColor" value="{{colores[0]}}">{{colores[1]}}</option>
                             {% endfor %}

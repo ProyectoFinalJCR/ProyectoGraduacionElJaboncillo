@@ -36,14 +36,14 @@ Categorias | El Jaboncillo
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tabla_categorias">
                 {% for rows in categorias %}
                 <tr>
                     <td>{{rows.id}}</td>
                     <td>{{rows.categoria}}</td>
                     <td>{{rows.descripcion}}</td>
                     <td class="btn-acciones">
-                        <button class="btn-edit" id="openModalCat">
+                        <button class="btn-edit btn-edit-categorias">
                             <i class="material-icons">edit</i>
                         </button>
                         <form action="/eliminarCategoria" method="post" class="form-eliminar">
