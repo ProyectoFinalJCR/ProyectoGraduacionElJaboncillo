@@ -1131,6 +1131,140 @@ def editarplantas():
        flash(('Los datos han sido editados con éxito.', 'success', '¡Éxito!'))
        return redirect(url_for('plantas'))
     
+@app.route('/ventas', methods=["GET", "POST"])
+def ventas():
+    if request.method == 'GET':
+        ObtenerSubcat = text("SELECT * FROM subcategorias")
+        ObtenerDivisas = text("SELECT * FROM divisas")
+        infoSubcat = db.execute(ObtenerSubcat).fetchall()
+        infoDivisas = db.execute(ObtenerDivisas).fetchall()
+        return render_template('ventas.html', InfoSubcat = infoSubcat, InfoDivisas = infoDivisas)
+    else:
+        cliente = request.form.get('nombreCliente');
+        fecha = request.form.get('fecha')
+        divisa = request.form.get('divisa-id')
+        subtotal = request.form.get('subtotal')
+        total = request.form.get('total')
+        nota = request.form.get('nota-venta')
+
+        productos = []
+        index = 0
+        while True:
+            id = request.form.get(f'productos[{index}][id]')
+            producto = request.form.get(f'productos[{index}][nombre]')
+            cantidad = request.form.get(f'productos[{index}][cantidad]')
+            precio = request.form.get(f'productos[{index}][precio]')
+
+            if not producto:  # Termina cuando no encuentra más productos
+                break
+            productos.append({
+                'id': int(id),
+                'producto': producto,
+                'cantidad': int(cantidad),
+                'precio': float(precio)
+            })
+            index += 1
+
+        if not cliente:
+            flash(('Ingrese el nombre del cliente', 'error', '¡Error!'))
+            return redirect(url_for('ventas'))
+        if not fecha:
+            flash(('Ingrese la fehca', 'error', '¡Error!'))
+            return redirect(url_for('ventas'))
+        if not productos:
+            flash(('Ingrese al menos un producto', 'error', '¡Error!'))
+        if not divisa:
+            flash(('Ingrese la divisa', 'error', '¡Error!'))
+            return redirect(url_for('ventas'))
+        if not subtotal:
+            flash(('Ingrese un subtotal', 'error', '¡Error!'))
+            return redirect(url_for('ventas'))
+        if not total:
+            flash(('Ingrese el total', 'error', '¡Error!'))
+            return redirect(url_for('ventas'))
+        
+        print(productos)
+        insertarVenta = text("INSERT INTO ventas (nombre_cliente, usuario_id, fecha_venta, divisa_id, nota, total, estado) VALUES (:nombre_cliente, :usuario_id, :fecha_venta, :divisa_id, :nota,:total, :estado)")
+        db.execute(insertarVenta, {"nombre_cliente": cliente, "usuario_id": '1', "fecha_venta": fecha, "divisa_id": divisa, "nota": nota, "total": total, "estado": 'true'})
+
+        for producto in productos: 
+            insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+            db.execute(insertarKardex, {"planta_id": producto['id'], "cantidad": producto['cantidad'], "tipo_movimiento_id": '2', "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": nota})
+
+        ventaId = db.execute(text("SELECT * FROM ventas ORDER BY id DESC LIMIT 1")).fetchone()[0]
+        kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
+
+        for producto in productos:
+            insertarProductos = text("INSERT INTO detalle_ventas (planta_id, venta_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:planta_id, :venta_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
+            db.execute(insertarProductos, {"planta_id": producto['id'], "venta_id": ventaId, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal":subtotal})
+
+        db.commit()
+        flash(('La planta se ha agregado correctamente', 'success', '¡Exito!'))
+        return redirect(url_for('ventas'))
+    
+
+@app.route('/get_products', methods=["POST"])
+def get_products():
+    subcategoria = request.json.get('subcategoria', '')
+    print(subcategoria)
+
+    ObtenerProd = text("""
+        SELECT
+            stock.id AS id,
+            stock.cantidad AS cantidad_disponible,
+            plantas.id AS planta_id,
+            plantas.nombre AS nombre_planta,
+            plantas.precio_venta AS precio_planta,
+            subcategorias.subcategoria AS subcategoria,
+            insumos.id AS insumo_id,
+            insumos.nombre AS nombre_insumo,
+            insumos.precio_venta AS precio_insumo
+        FROM
+            stock
+        LEFT JOIN
+            plantas ON stock.planta_id = plantas.id
+        LEFT JOIN
+            insumos ON stock.insumo_id = insumos.id
+        LEFT JOIN
+            plantas_subcategoria ON plantas.id = plantas_subcategoria.planta_id
+        LEFT JOIN
+            insumos_subcategoria ON insumos.id = insumos_subcategoria.insumo_id
+        LEFT JOIN
+            subcategorias ON 
+                (plantas_subcategoria.subcategoria_id = subcategorias.id OR 
+                insumos_subcategoria.subcategoria_id = subcategorias.id)
+        LEFT JOIN
+            categorias ON subcategorias.categoria_id = categorias.id
+        WHERE
+            subcategorias.id = :subcategoria
+        ORDER BY 
+            stock.id,
+            plantas.id,
+            plantas.nombre,
+            plantas.precio_venta,
+            subcategorias.subcategoria,
+            insumos.id,
+            insumos.nombre,
+            insumos.precio_venta,
+            stock.cantidad;
+    """)
+    
+    infoProd = db.execute(ObtenerProd, {'subcategoria': subcategoria}).fetchall()
+    print (infoProd)
+    productos = [
+    {
+        'id': prod.id,
+        'idProd': prod.planta_id if prod.planta_id is not None else prod.insumo_id, 
+        'nombre': prod.nombre_planta if prod.nombre_planta else prod.nombre_insumo,
+        'precio': prod.precio_planta if prod.precio_planta is not None else prod.precio_insumo,
+        'cantidad': prod.cantidad_disponible
+    }
+    for prod in infoProd
+]
+
+    # print(productos)
+    return jsonify(productos)
+
 @app.route('/catalogo')
 def catalogo():
     return render_template('catalogo.html')
