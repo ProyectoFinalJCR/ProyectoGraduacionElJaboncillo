@@ -1333,6 +1333,51 @@ def ventas():
             insertarProductos = text("INSERT INTO detalle_ventas (planta_id, insumo_id, venta_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:planta_id, :insumo_id, :venta_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
             db.execute(insertarProductos, {"planta_id": planta_id, "insumo_id": insumo_id, "venta_id": ventaId, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal":subtotal})
 
+        for producto in productos:
+            stock_query = text("""
+                    SELECT id, cantidad
+                    FROM stock 
+                    WHERE 
+                        (planta_id = :planta_id OR :planta_id IS NULL)
+                        AND 
+                        (insumo_id = :insumo_id OR :insumo_id IS NULL)
+            """)
+            stockInfo = db.execute(
+                stock_query, 
+                {
+                    "planta_id": producto['id'] if producto['tipo'] == 'planta' else None,
+                    "insumo_id": producto['id'] if producto['tipo'] == 'insumo' else None
+                }
+            ).mappings().fetchone()
+        
+            stock_cantidad = int(stockInfo['cantidad'])
+            nuevaCantidad = stock_cantidad - int(producto['cantidad'])
+
+            if producto['tipo'] == 'planta':
+                obtenerPrecioBd = text("SELECT precio_venta FROM plantas where id=:id")
+                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
+                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
+            else:
+                obtenerPrecioBd = text("SELECT precio_venta FROM insumos where id=:id")
+                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
+                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
+
+            if stockInfo['id']:
+                actualizar_stock = text("""
+                    UPDATE stock 
+                    SET cantidad=:cantidad, kardex_id=:kardex_id, precio_total_inversion=:precio_total_inversion 
+                    WHERE id=:id
+                """)
+                db.execute(
+                    actualizar_stock, 
+                    {
+                        "cantidad": nuevaCantidad, 
+                        "kardex_id": kardexId, 
+                        "precio_total_inversion": nuevoPrecioInversion, 
+                        "id": stockInfo['id']
+                    }
+                )
+
         db.commit()
         flash(('La Venta se ha realizado correctamente', 'success', '¡Exito!'))
         return redirect(url_for('ventas'))
@@ -1341,8 +1386,8 @@ def ventas():
 def anularVenta():
     idVenta = request.form.get('id_anular')
 
-    ObtenerVenta = text("UPDATE ventas SET estado=:estado WHERE id=:id")
-    db.execute(ObtenerVenta, {"id": idVenta, "estado": 'false'})
+    ActualizarVenta = text("UPDATE ventas SET estado=:estado WHERE id=:id")
+    db.execute(ActualizarVenta, {"id": idVenta, "estado": 'false'})
     db.commit()
     flash(('La venta se ha anulado correctamente', 'success', '¡Exito!'))
     return redirect(url_for('ventas'))
@@ -1394,7 +1439,7 @@ def get_products():
     """)
     
     infoProd = db.execute(ObtenerProd, {'subcategoria': subcategoria}).fetchall()
-    print (infoProd)
+    # print (infoProd)
     productos = [
     {
         'id': prod.id,

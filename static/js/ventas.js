@@ -65,6 +65,7 @@ const subtotalInput = document.querySelector('#subtotal');
 const totalInput = document.querySelector('#total');
 const botonAgregar = document.querySelector('#agregar_producto');
 const divisaSelect = document.querySelector('#divisa-select');
+const divisaIdInput = document.getElementById("divisa-id");
 const form = document.querySelector('#form-venta');
 const productosDinamicos = document.querySelector('#productos-dinamicos');
 let articulosLista = [];
@@ -153,6 +154,10 @@ function agregarProducto(e) {
             divisaSelect.addEventListener('change', actualizarTotales);
 
             function actualizarTotales() {
+                const selectedOption = this.options[this.selectedIndex];
+                const divisaId = selectedOption.getAttribute("data-id");
+                divisaIdInput.value = divisaId;
+
                 const tasaCambio = parseFloat(divisaSelect.value);
                 subtotal = `${articulosLista.reduce((acum, producto) => acum + (producto.cantidad * producto.precio), 0).toFixed(2)}`;
                 total = `${articulosLista.reduce((acum, producto) => acum + (producto.cantidad * producto.precio), 0).toFixed(2)}`;
