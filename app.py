@@ -121,7 +121,7 @@ def categorias():
         return render_template('categorias.html', categorias=rows)
     
     else:
-        categoria = request.form.get('nombre')
+        categoria = request.form.get('categoria')
         descripcionCategoria = request.form.get('descripcion')
 
         obtenerCat = text("SELECT * FROM categorias WHERE categoria=:categoria")
@@ -206,6 +206,20 @@ def usuarios():
         rol_id = request.form.get("idrol")
 
         hashed_contraseña = generate_password_hash(contraseña)
+
+            # Validaciones
+        if not nombre_completo:
+            flash(('El nombre completo es obligatorio', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
+        if not correo:
+            flash(('El correo electrónico es obligatorio', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
+        if not contraseña:
+            flash(('La contraseña es obligatoria', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
+        if not rol_id:
+            flash(('Debe seleccionar un rol', 'error', '¡Error!'))
+            return redirect(url_for('usuarios'))
         
         obtenerUser = text("SELECT * FROM usuarios WHERE correo =:correo")
 
@@ -1068,6 +1082,42 @@ def editarplantas():
        idSuelo_editar = request.form.get('idSuelo_editar')
        idTemporada_editar = request.form.get('idTemporada_editar')
        precio_editar = request.form.get('precio_editar')
+
+       # Validaciones
+       if not planta_ID:
+           flash(('Falta el ID de la planta a editar', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not plantas_editar:
+           flash(('Ingrese el nombre de la planta', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not descripcioPlanta_editar:
+           flash(('Ingrese la descripción de la planta', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not precio_editar:
+           flash(('Ingrese el precio de la planta', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not coloresplanta_editar:
+           flash(('Seleccione al menos un color', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not subcatplanta_editar:
+           flash(('Seleccione al menos una subcategoría', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not idrango_editar:
+           flash(('Seleccione un rango válido', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not identorno_editar:
+           flash(('Seleccione un entorno ideal', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not idagua_editar:
+           flash(('Seleccione el requerimiento de agua', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not idSuelo_editar:
+           flash(('Seleccione el tipo de suelo', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+       if not idTemporada_editar:
+           flash(('Seleccione la temporada adecuada', 'error', '¡Error!'))
+           return redirect(url_for('plantas'))
+
        
        # VALIDANDO SI EXISTE UNA PLANTA CON ESE ID
        obtenerPlanta = text("SELECT * FROM plantas WHERE nombre=:nombre AND id!=:id")

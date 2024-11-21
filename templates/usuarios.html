@@ -9,15 +9,15 @@ Usuarios | El Jaboncillo
     <p>Bienvenida Janixa Centeno</p>
 </section>
 <section class="busqueda">
-<div class="search">
-    <div class="seccion-buscar">
-        <i class="material-icons">search</i>
-        <input class="input-search" name="search" id="buscar_usuarios" placeholder="Buscar usuarios">
+    <div class="search">
+        <div class="seccion-buscar">
+            <i class="material-icons">search</i>
+            <input class="input-search" name="search" id="buscar_usuarios" placeholder="Buscar usuarios">
+        </div>
+        <div>
+            <button class="btn" id="btn-add-user">Agregar usuarios</button>
+        </div>
     </div>
-    <div>
-        <button class="btn" id="btn-add-user">Agregar usuarios</button>
-    </div>
-</div>
 </section>
 <div class="container-table-inputs">
     {%if usuario == [] %}
@@ -45,86 +45,104 @@ Usuarios | El Jaboncillo
                     <td>{{usuario[3]}}</td>
                     <td style="display: none;">{{usuario[4]}}</td>
 
-                    <td class="btn-acciones"> 
-                        
+                    <td class="btn-acciones">
+
                         <button class="btn-edit btn-edit-usuario">
-                                <i class="material-icons">edit</i>
-                            </button>
-                       
-                        <form action="/eliminarUsuarios" method="post" class="form-eliminar" >
+                            <i class="material-icons">edit</i>
+                        </button>
+
+                        <form action="/eliminarUsuarios" method="post" class="form-eliminar">
                             <input type="hidden" class="id_eliminar" name="id_usuario" value="{{usuario[0]}}">
                             <button class="btn-delete" type="submit">
                                 <i class="material-icons">delete</i>
                             </button>
                         </form>
                     </td>
-            {% endfor %}
+                    {% endfor %}
                 </tr>
             </tbody>
         </table>
     </div>
     {%endif%}
     <div class="container-inputsUser">
-        <div class="inputUser-title">
-            <h3>Nuevo Usuario</h3>
+        <div class="agregar-usuario">
+            <div class="inputUser-title">
+                <h2>Nuevo Usuario</h2>
+                <span class="close" id="close_agregar_user">&times;</span>
+            </div>
+            <form class="formUser" action="/usuarios" id="formUser" method="post">
+                <section class="input-users">
+                    <div class="input-contenido">
+                        <label for="">Nombre Completo</label>
+                        <input type="text" id="nombre" class="input input-user input-insumos" name="nombre"
+                            placeholder="Nombre completo">
+                    </div>
+                    <div>
+                        <label for="">Correo</label>
+                        <input type="text" id="correo" class="input input-user input-insumos" name="correo" placeholder="Correo">
+                    </div>
+                    <div>
+                        <label for="">Contraseña</label>
+                        <input type="password" id="contraseña" class="input input-user input-insumos" name="contraseña"
+                            placeholder="Contraseña">
+                    </div>
+                    <div>
+                        <label for="">Seleccione Rol</label>
+
+                        <select class="input input-user input-insumos" id="rol" name="idrol">
+                            {% for rol in Roles %}
+                            <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </section>
+                <section class="btn-agregar-user">
+                    <img class="img-btn-add" src="/static/img/logoElJaboncillo.png" alt="logo">
+                    <div class="btn-agregar">
+                        <button type="button" class=" btn-cancel-user" id="btn-cancel-user ">Cancelar</button>
+                        <button type="submit" class="btn btn-agregar-users opacity" id="btn-agregar-user" disabled>Agregar</button>
+                    </div>
+                </section>
+            </form>
         </div>
-        <form class="formUser" action="/usuarios" id="form_user" method="post"> 
-            <section class="input-users">
-                <div>
-                    <label for="">Nombre Completo</label>
-                    <input type="text" id="nombre" class="input input-user" name="nombre" placeholder="Nombre completo">
-                </div>
-                <div>
-                    <label for="">Correo</label>
-                    <input type="text" id="correo" class="input input-user" name="correo" placeholder="Correo">
-                </div>
-                <div>
-                    <label for="">Contraseña</label>
-
-                    <input type="password" id="contraseña" class="input input-user" name="contraseña" placeholder="Contraseña">
-                </div>
-                <div>
-                    <label for="">Seleccione Rol</label>
-
-                    <select class="input input-user" id="rol" name="idrol">
-                        {% for rol in Roles %}
-                        <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </section>
-            <section class="btn-agregar">
-                <button type="button" class="btn" id="btn-cancel">Cancelar</button>
-                <button type="submit" class="btn opacity" id="btn-add-users" disabled>Agregar</button>
-            </section>
-        </form>
     </div>
 </div>
 <!-- Modal editar usuarios -->
 
-<div id="myModal" class="modal">
+<div id="myModal" class="modal-editar-usuario">
     <div class="modal-content form-subcat">
-        <span class="close">&times;</span>
-        <h2>Editar Usuario</h2>
+        <div class="usuario-title">
+            <h2>Editar Usuario</h2>
+            <span class="close close-modal-editar">&times;</span>
+        </div>
         <form action="/editarUsuario" method="post" class="form_edit_user">
             <div class="input-usuario">
-                <input type="hidden" id="id_editar_usuario" name="id_editar_usuario" value="{{usuario.id}}">
-                <label for="">Nombre completo</label>
-                <input type="text" id="nombreUsuario_editar" class="input" name="nombreUsuario_editar"
-                    value="">
-                <label for="">Correo</label>
-                <input type="text" id="correo_editar" class="input" name="correo_editar"
-                    value="">
-                <label for="">Rol</label>
-                <select type="text" id="rol_editar" name="rol_editar" class="input">
-                    {% for rol in Roles %}
+                <div class="input-contenido">
+                    <input type="hidden" id="id_editar_usuario" name="id_editar_usuario" value="{{usuario.id}}">
+                    <label for="">Nombre completo</label>
+                    <input type="text" id="nombreUsuario_editar" class="input input-user input-insumos"
+                        name="nombreUsuario_editar" value="">
+                </div>
+                <div class="input-contenido">
+                    <label for="">Correo</label>
+                    <input type="text" id="correo_editar" class="input input-user input-insumos" name="correo_editar"
+                        value="">
+                </div>
+                <div class="input-contenido">
+                    <label for="">Rol</label>
+                    <select type="text" id="rol_editar" name="rol_editar" class="input input-user input-insumos">
+                        {% for rol in Roles %}
                         <option name="idrol" value="{{rol[0]}}" selected>{{rol[1]}}</option>
-                    {% endfor %}
-                </select>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
             <div class="btn-modal">
-                <button type="button" class="btn close-modal">Cancelar</button>
-                <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="img-modal">
+                <div class="btn-agregar">
+                    <button type="button" class="btn close-modal btn-cancel-user">Cancelar</button>
+                    <button type="submit" class="btn btn-agregar-user" id="btn-edit-usuarios">Editar</button>
+                </div>
             </div>
         </form>
     </div>
@@ -133,14 +151,14 @@ Usuarios | El Jaboncillo
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-  <script>
+<script>
     Swal.fire({
-      title:'{{ messages[0][2] }}',
-      text: '{{ messages[0][0] }}',
-      icon: '{{ messages[0][1] }}',
-      confirmButtonText: 'OK'
+        title: '{{ messages[0][2] }}',
+        text: '{{ messages[0][0] }}',
+        icon: '{{ messages[0][1] }}',
+        confirmButtonText: 'OK'
     });
-  </script>
+</script>
 {% endif %}
 {% endwith %}
 {% endblock %}

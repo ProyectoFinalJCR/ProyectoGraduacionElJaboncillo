@@ -3,12 +3,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const form_cat = document.querySelector(".container-inputsCat");
     form_cat.style.display = "block";
 
-    document-getElementById("btn-cancel").addEventListener("click", function () {
-      form_cat.style.display = "none";
+    document.getElementById("btn_cancel_cat").addEventListener("click", function () {
+      const modal = document.querySelector(".container-inputsCat");
+      modal.style.display = "none";
     });
 
-    document.getElementById("btn-save").addEventListener("click", function () {
-      form_cat.style.display = "none";
+    document.getElementById("close_agregar_cat").addEventListener("click", function () {
+      const modal = document.querySelector(".container-inputsCat");
+      modal.style.display = "none";
     });
   });
 
@@ -46,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
   };
   //opacidad y habilitacion del boton agregar
   document.getElementById('form-cat').addEventListener('input', function () {
-    const inputs = document.querySelectorAll('.input-categories[type="text"]');
+    const inputs = document.querySelectorAll('.input-cat[type="text"]');
     const btnSend = document.querySelector('#btn-add-categories')
     let fields = true;
 
@@ -66,6 +68,59 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
+  // validacion de campos editar categoria ------------------
+  const categoriaEditar = document.querySelector('#nombre_editar');
+  const categoriaDescripcionEditar = document.querySelector('#descripcion_editar');
+
+  categoriaEditar.addEventListener('input', validar);
+  categoriaDescripcionEditar.addEventListener('input', validar);
+
+  function validar(e) {
+    if (e.target.value.trim() === '') {
+      mostrarError(`El campo es obligatorio`, e.target.parentElement);
+      return;
+    }
+
+    limpiarAlerta(e.target.parentElement);
+  };
+
+  function mostrarError(mensaje, referencia) {
+    //Validar si ya existe una alerta
+    limpiarAlerta(referencia);
+
+    const error = document.createElement('P');
+    error.textContent = mensaje;
+    error.classList.add('error');
+    referencia.appendChild(error);
+  };
+
+  function limpiarAlerta(referencia) {
+    const alerta = referencia.querySelector('.error');
+    if (alerta) {
+      alerta.remove();
+    }
+  };
+  //opacidad y habilitacion del boton agregar
+  document.getElementById('form_cat_edit').addEventListener('input', function () {
+    const inputs = document.querySelectorAll('.input-cateEditar [type="text"]');
+    const btnSend = document.querySelector('#btn-edit-categories')
+    let fields = true;
+
+    inputs.forEach(input => {
+      if (input.value.trim() === '') {
+        fields = false;
+      }
+    });
+
+    // Habilita o deshabilita el botón según el estado de la variable fields
+    if (fields) {
+      btnSend.disabled = false;
+      btnSend.classList.remove('opacity');
+    } else {
+      btnSend.disabled = true;
+      btnSend.classList.add('opacity');
+    }
+  });
   //buscar categorias -----------------------------------
   categoriasData = [];
   console.log(categoriasData);
