@@ -32,25 +32,24 @@ Ventas | El Jaboncillo
             </thead> 
             
             <tbody>
+                {% for infoVentas in InfoVentas %}
                 <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
+                    <td>{{infoVentas.id}}</td>
+                    <td>{{infoVentas.nombre}}</td>
+                    <td>{{infoVentas.fecha}}</td>
+                    <td>{{infoVentas.total}}</td>
+                    <td>{{infoVentas.nota}}</td>
+                    <td>{{infoVentas.estado}}</td>
                     <td class="btn-acciones">
-                        <button class="btn-edit" id="openModalCat">
-                            <i class="material-icons">edit</i>
-                        </button>
-                        <form action="#" method="post" class="form-baja">
-                            <input type="hidden" id="id_anular" name="id_anular">
+                        <form action="/anularVenta" method="post" class="form-baja">
+                            <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
                             <button class="btn-delete" type="submit">
                                 <i class="material-icons">delete</i>
                             </button>
                         </form>
                     </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -102,6 +101,12 @@ Ventas | El Jaboncillo
                         <div>
                             <input type="hidden" name="idProd" id="idProd">
                         </div>
+                        <div>
+                            <input type="hidden" name="cantidadDispo" id="cantidadDispo">
+                        </div>
+                        <div>
+                            <input type="hidden" name="tipoProducto" id="tipoProducto">
+                        </div>
                         <button type="button" class="btn agregar_producto" id="agregar_producto">Agregar</button>
                     </div>
                 </section>
@@ -121,6 +126,7 @@ Ventas | El Jaboncillo
                             <tbody>
                             </tbody>
                         </table>
+                    </div>
                 </section>
                 <section class="inputs-venta">
                     <div class="inputs-cont row-4">

@@ -43,16 +43,22 @@ document.addEventListener("DOMContentLoaded", function(){
             if (selectedProduct) {
                 $('#precio').val(selectedProduct.precio);
                 $('#idProd').val(selectedProduct.idProd); 
+                $('#cantidadDispo').val(selectedProduct.cantidad); 
+                $('#tipoProducto').val(selectedProduct.tipo); 
             } else {
                 $('#precio').val(''); 
                 $('#idProd').val('');
+                $('#cantidadDispo').val('');
+                $('#tipoProducto').val('');
             }
         });
     });
 
 const productosSeleccionados = document.querySelector('#lista-productos-seleccionados tbody');
-const idInput = document.querySelector('#idProd')
+const idInput = document.querySelector('#idProd');
+const tipoInput = document.querySelector('#tipoProducto');
 const productoInput = document.querySelector('#producto');
+const cantidadDispoInput = document.querySelector('#cantidadDispo');
 const cantidadInput = document.querySelector('#cantidad');
 const precioInput = document.querySelector('#precio');
 const subtotalInput = document.querySelector('#subtotal');
@@ -67,6 +73,7 @@ listaEventListeners();
 
 function listaEventListeners() {
     botonAgregar.addEventListener("click", agregarProducto);
+    productosSeleccionados.addEventListener("click", eliminarProducto);
 }
 
 function agregarProducto(e) {
@@ -75,6 +82,7 @@ function agregarProducto(e) {
     // Leer información del producto desde los inputs
     const infoProducto = {
         id: parseFloat(idInput.value) || 0,
+        tipo: tipoInput.value || '',
         nombre: productoInput.options[productoInput.selectedIndex].text,
         precio: parseFloat(precioInput.value) || 0,
         cantidad: parseInt(cantidadInput.value) || 1,
@@ -82,7 +90,24 @@ function agregarProducto(e) {
 
 
     if (!infoProducto.nombre || infoProducto.precio <= 0 || infoProducto.cantidad <= 0) {
-        alert("Por favor, ingrese datos válidos para el producto.");
+        Swal.fire({
+            title: 'Error',
+            text: 'Por favor, ingrese datos válidos para el producto.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+
+    const cantidadDisponible = parseInt(cantidadDispoInput.value) || 0;
+    if(infoProducto.cantidad > cantidadDisponible){
+        Swal.fire({
+            title: 'Stock insuficiente',
+            text: `Solo hay ${cantidadDisponible} unidades disponibles para este producto.`,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -101,12 +126,12 @@ function agregarProducto(e) {
         articulosLista = [...articulosLista, infoProducto];
     }
 
-    console.log(articulosLista);
+    // console.log(articulosLista);
     actualizarTabla();
     }
 
     function actualizarTabla() {
-        productosSeleccionados.innerHTML = '';
+        limpiarListaHtml();
     
         articulosLista.forEach( producto =>{
             const {id, nombre, precio, cantidad} = producto;
@@ -119,15 +144,9 @@ function agregarProducto(e) {
                 <td> ${precio}</td>
                 <td> ${(cantidad * precio).toFixed(2)}</td>
                 <td class="btn-acciones">
-                    <button class="btn-edit" id="openModalCat">
-                        <i class="material-icons">edit</i>
-                    </button>
-                    <form action="#" method="post" class="form-baja">
-                        <input type="hidden" id="id_anular" name="id_anular">
-                        <button class="btn-delete" type="submit">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </form>
+                    <div class="btn-delete">
+                        <i class="material-icons eliminar_producto" data-id=${id}>delete</i>
+                    </div>
                 </td>
             `;
 
@@ -150,7 +169,29 @@ function agregarProducto(e) {
         });
     }
 
+    // Funcion para eliminar un articulo del carrito
+    function eliminarProducto(e) {
+        if (e.target.classList.contains("eliminar_producto")) {
+            const productoId = e.target.getAttribute("data-id");
+
+            //en este nuevo arreglo es igual al los articulos excepto el que queremos eliminar
+            articulosLista = articulosLista.filter(producto => producto.id !== parseInt(productoId, 10));
+
+            // Actualizar el carrito en el DOM
+            actualizarTabla();
+        }
+    }
+
+    //Funcion para limpiar el html de carrito
+    function limpiarListaHtml() {
+
+    while(productosSeleccionados.firstChild){
+        productosSeleccionados.removeChild(productosSeleccionados.firstChild);
+    }
+}
+
     form.addEventListener('submit', (e) => {
+        // e.preventDefault();
         productosDinamicos.innerHTML = '';
     
         articulosLista.forEach((producto, index) => {
