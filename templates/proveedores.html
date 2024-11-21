@@ -64,56 +64,85 @@ Proveedores | El Jaboncillo
     </div>
     {%endif%}
     <div class="container-inputsProveedores">
-        <div class="inputProveedores-title">
-            <h3>Nuevo Proveedor</h3>
+        <div class="agregar-proveedor">
+            <div class="inputProveedores-title">
+                <h3>Nuevo Proveedor</h3>
+                <span class="close" id="close_agregar_proveedor">&times;</span>
+            </div>
+            <form action="/proveedores" id="form-proveedores" method="post" class="form-proveedores">
+                <section class="input-proveedores">
+                    <div class="input-contenido">
+                        <label >Nombre del Proveedor</label>
+                        <input type="text" id="nombreprov" class="input input-proveedor input-insumos" name="nombre"
+                            placeholder="Nombre del Proveedor">
+                    </div>
+                    <div class="input-contenido">
+                        <label >Correo Electronico</label>
+                        <input type="text" id="correoProveedor" class="input input-proveedor input-insumos" name="correoProveedor"
+                            placeholder="Correo Electronico">
+                    </div>
+                    <div class="input-contenido">
+                        <label >Telefono</label>   
+                        <input type="number" id="numeroTelefono" class="input input-proveedor input-insumos" name="numeroTelefono"
+                            placeholder="Telefono">
+                    </div>
+                    <div class="input-contenido">
+                        <label >Direccion</label>
+                        <input type="text" id="direccionprov" class="input input-proveedor input-insumos" name="direccion"
+                            placeholder="Direccion">
+                    </div>
+                </section>
+                <section class="btn-agregar-proveedor">
+                    <img class="img-btn-add" src="/static/img/logoElJaboncillo.png" alt="logo">
+                    <div class="btn-agregar">
+                        <button type="button" class="btn btn-cancel" id="btn_cancel_proveedor">Cancelar</button>
+                        <button type="submit" class="btn btn-proveedor-agregar opacity" id="btn-add-proveedores" disabled>Agregar</button>
+                    </div>
+                    <!-- <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn" id="btn-add-proveedores">Agregar</button> -->
+                </section>
+            </form>
         </div>
-        <form action="/proveedores" id="form-proveedores" method="post" class="form-proveedores">
-            <section class="input-proveedores">
-                <div>
-                    <input type="text" id="nombre" class="input input-proveedores" name="nombre"
-                        placeholder="Nombre del Proveedor">
-                </div>
-                <div>
-                    <input type="text" id="correoProveedor" class="input input-proveedores" name="correoProveedor"
-                        placeholder="Correo Electronico">
-                </div>
-                <div>
-                    <input type="number" id="numeroTelefono" class="input input-proveedores" name="numeroTelefono"
-                        placeholder="Telefono">
-                </div>
-                <div>
-                    <input type="text" id="direccion" class="input input-proveedores" name="direccion"
-                        placeholder="Direccion">
-                </div>
-            </section>
-            <section class="btn-agregar">
-                <button type="button" class="btn" id="btn-cancel">Cancelar</button>
-                <button type="submit" class="btn" id="btn-add-proveedores">Agregar</button>
-            </section>
-        </form>
     </div>
 </div>
 
 <!-- Modal editar categoria -->
 <div id="myModal" class="modal">
-    <div class="modal-content form-proveedores">
-        <span class="close">&times;</span>
-        <h2>Editar proveedor</h2>
-        <form action="/editarProveedores" method="post" class="form-proveedores">
+    <div class="modal-content form-proveedoress">
+        <div class="proveedor-title">
+            <h2>Editar proveedor</h2>
+            <span class="close">&times;</span>
+        </div>
+        <form action="/editarProveedores" method="post" class="form-proveedores form_edit">
             <div class="input-proveedores">
-                <input type="hidden" id="id_editar" name="id_editar" value="{{Proveedores.id}}">
-                <input type="text" id="nombre_editar" class="input" name="nombre_editar"
+                <div class="input-contenido">
+                    <input type="hidden" id="id_editar" name="id_editar" value="{{Proveedores.id}}">
+                    <label for="">Nombre del Proveedor</label>
+                    <input type="text" id="nombre_editar" class="input input-proveedor input-insumos" name="nombre_editar"
                     value="{{Proveedores.nombre_proveedor}}">
-                <input type="text" id="correo_editar" class="input" name="correo_editar"
+                </div>
+                <div class="input-contenido">
+                    <label for="">Correo Electronico</label>
+                    <input type="text" id="correo_editar" class="input input-proveedor input-insumos" name="correo_editar"
                     value="{{Proveedores.correo_electronico}}">
-                <input type="text" id="telefono_editar" class="input" name="telefono_editar"
+                </div>
+                <div class="input-contenido">
+                    <label for="">Telefono</label>
+                    <input type="text" id="telefono_editar" class="input input-proveedor input-insumos" name="telefono"
                     value="{{Proveedores.direccion}}">
-                <input type="text" id="direccion_editar" class="input" name="direccion_editar"
+                </div>
+                <div class="input-contenido">
+                    <label for="">Direccion</label>
+                    <input type="text" id="direccion_editar" class="input input-proveedor input-insumos" name="direccion"
                     value="{{Proveedores.direccion}}">
+                </div>
             </div>
             <div class="btn-modal">
-                <button type="button" class="btn close-modal">Cancelar</button>
-                <button type="submit" class="btn" id="btn-edit-proveedores">Editar</button>
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="img-modal">
+                <div class="btn-agregar">
+                    <button type="button" class="btn btn-cancel close-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-proveedor-agregar" id="btn-edit-proveedores">Editar</button>
+                </div>
             </div>
         </form>
     </div>
@@ -122,14 +151,14 @@ Proveedores | El Jaboncillo
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-  <script>
+<script>
     Swal.fire({
-      title:'{{ messages[0][2] }}',
-      text: '{{ messages[0][0] }}',
-      icon: '{{ messages[0][1] }}',
-      confirmButtonText: 'OK'
+        title: '{{ messages[0][2] }}',
+        text: '{{ messages[0][0] }}',
+        icon: '{{ messages[0][1] }}',
+        confirmButtonText: 'OK'
     });
-  </script>
+</script>
 {% endif %}
 {% endwith %}
 {% endblock %}

@@ -72,6 +72,41 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
+    //validar campos editar subcategoria ------------------
+    //Validacion de los campos del formulario
+    const nombreSubEditar = document.querySelector('#nombreSub_editar');
+    const nombreCatEditar = document.querySelector('#idCat_editar');
+    const descripcionSubEditar = document.querySelector('#descripcion_editar');
+
+    nombreSubEditar.addEventListener('input', validar);
+    nombreCatEditar.addEventListener('change', validar);
+    descripcionSubEditar.addEventListener('input', validar);
+
+    function validar(e){
+        if(e.target.value.trim() === ''){
+            mostrarMensaje(`El campo es obligatorio`, e.target.parentElement);
+            return;
+        }
+        limpiarAlerta(e.target.parentElement);
+    };
+
+    function mostrarMensaje(mensaje, referencia){
+        //Validar si ya existe una alerta
+        limpiarAlerta(referencia);
+
+        const error = document.createElement('P');
+        error.textContent = mensaje;
+        error.classList.add('error');
+        referencia.appendChild(error);
+    };
+
+    function limpiarAlerta(referencia){
+        const alerta = referencia.querySelector('.error');
+        if(alerta){
+            alerta.remove();
+        }
+    };
+
 
     // ALERTAS
     // alerta btn eliminar 
@@ -198,7 +233,7 @@ document.getElementById("search").addEventListener('input', function() {
 
 
   //ALERTA EDITAR
-  const form_editar = document.querySelector('.form_edit');
+  const form_editar = document.querySelector('.form_subt');
 
   form_editar.addEventListener('submit', function(event) {
     event.preventDefault();

@@ -18,7 +18,7 @@ Categorias | El Jaboncillo
         <div>
             <button class="btn-add btn">Agregar categoria</button>
         </div>
-    </div>  
+    </div>
 </section>
 <div class="container-table-inputs">
     {%if categorias == [] %}
@@ -60,44 +60,61 @@ Categorias | El Jaboncillo
     </div>
     {%endif%}
     <div class="container-inputsCat">
-        <div class="inputCat-title">
-            <h3>Nuevo Categoria</h3>
+        <div class="agregar-cat">
+            <div class="inputCat-title">
+                <h3>Nuevo Categoria</h3>
+                <span class="close" id="close_agregar_cat">&times;</span>
+            </div>
+            <form action="/categorias" id="form-cat" method="post" class="form-cat">
+                <section class="agregar-categorias">
+                    <div class="input-contenido">
+                        <label for="">Categoria</label>
+                        <input type="text" id="nombre" class="input input-cat input-insumos" name="categoria" placeholder="Nombre de categoria">
+                    </div>
+                    <div class="input-contenido">
+                        <label for="">Descripción</label>
+                        <input type="text" id="descripcion" class="input input-cat input-insumos" name="descripcion"
+                            placeholder="Descripción">
+                    </div>
+                </section>
+                <section class="btn-agregar-cate">
+                    <img class="img-btn-add" src="/static/img/logoElJaboncillo.png" alt="logo">
+                    <div class="btn-agregar">
+                        <button type="button" class="btn btn-cancel" id="btn_cancel_cat">Cancelar</button>
+                        <button type="submit" class="btn btn-cat-agregar opacity" id="btn-add-categories" disabled>Agregar</button>
+                    </div>
+                </section>
+            </form>
         </div>
-        <form action="/categorias" id="form-cat" method="post" class="form-cat">
-            <section class="input-categories">
-                <div>
-                    <input type="text" id="nombre" class="input input-categories" name="nombre"
-                        placeholder="Nombre categoria">
-                </div>
-                <div>
-                    <input type="text" id="descripcion" class="input input-categories" name="descripcion"
-                        placeholder="Descripcion">
-                </div>
-            </section>
-            <section class="btn-agregar">
-                <button type="button" class="btn" id="btn-cancel">Cancelar</button>
-                <button type="submit" class="btn opacity" id="btn-add-categories" disabled>Agregar</button>
-            </section>
-        </form>
     </div>
 </div>
 
 <!-- Modal editar categoria -->
 <div id="myModal" class="modal">
     <div class="modal-content form-categories">
-        <span class="close">&times;</span>
-        <h2>Editar categoria</h2>
-        <form action="/editarCategoria" method="post" class="form_edit">
+        <div class="categoria-title">
+            <h2>Editar categoria</h2>
+            <span class="close">&times;</span>
+        </div>
+        <form action="/editarCategoria" method="post" class="form_edit" id="form_cat_edit">
             <div class="input-categories">
-                <input type="hidden" id="id_editar" name="id_editar" value="{{categorias.id}}">
-                <input type="text" id="nombre_editar" class="input" name="nombre_editar"
-                    value="{{categorias.categoria}}">
-                <input type="text" id="descripcion_editar" class="input" name="descripcion_editar"
+                <div class="input-contenido">
+                    <label for="">Categoria</label>
+                    <input type="hidden" id="id_editar" name="id_editar" value="{{categorias.id}}">
+                    <input type="text" id="nombre_editar" class="input input-cateEditar input-insumos" name="nombre_editar" value="{{categorias.categoria}}">
+                </div>
+                <div class="input-contenido">
+                    <label for="">Descripción</label>
+                    <input type="text" id="descripcion_editar" class="input input-cateEditar  input-insumos" name="descripcion_editar"
                     value="{{categorias.descripcion}}">
+                </div>
             </div>
             <div class="btn-modal">
-                <button type="button" class="btn close-modal">Cancelar</button>
-                <button type="submit" class="btn" id="btn-edit-categories">Editar</button>
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="img-modal">
+                <div class="btn-agregar">
+                    <button type="button" class="btn btn-sub-eliminar close-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-sun-agregar opacity" id="btn-edit-categories" disabled>Editar</button>
+                </div>
             </div>
         </form>
     </div>
