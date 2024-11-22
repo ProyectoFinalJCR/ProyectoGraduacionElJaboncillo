@@ -1263,9 +1263,11 @@ def ventas():
     if request.method == 'GET':
         ObtenerSubcat = text("SELECT * FROM subcategorias")
         ObtenerDivisas = text("SELECT * FROM divisas")
+        ObtenerVentas = text("SELECT id, nombre_cliente AS nombre, fecha_venta AS fecha, total, nota, estado FROM ventas")
         infoSubcat = db.execute(ObtenerSubcat).fetchall()
         infoDivisas = db.execute(ObtenerDivisas).fetchall()
-        return render_template('ventas.html', InfoSubcat = infoSubcat, InfoDivisas = infoDivisas)
+        infoVentas = db.execute(ObtenerVentas).fetchall()
+        return render_template('ventas.html', InfoSubcat = infoSubcat, InfoDivisas = infoDivisas, InfoVentas = infoVentas)
     else:
         cliente = request.form.get('nombreCliente');
         fecha = request.form.get('fecha')
@@ -1278,6 +1280,7 @@ def ventas():
         index = 0
         while True:
             id = request.form.get(f'productos[{index}][id]')
+            tipo = request.form.get(f'productos[{index}][tipo]')
             producto = request.form.get(f'productos[{index}][nombre]')
             cantidad = request.form.get(f'productos[{index}][cantidad]')
             precio = request.form.get(f'productos[{index}][precio]')
@@ -1286,6 +1289,7 @@ def ventas():
                 break
             productos.append({
                 'id': int(id),
+                'tipo': tipo,
                 'producto': producto,
                 'cantidad': int(cantidad),
                 'precio': float(precio)
@@ -1310,30 +1314,98 @@ def ventas():
             flash(('Ingrese el total', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
         
-        print(productos)
         insertarVenta = text("INSERT INTO ventas (nombre_cliente, usuario_id, fecha_venta, divisa_id, nota, total, estado) VALUES (:nombre_cliente, :usuario_id, :fecha_venta, :divisa_id, :nota,:total, :estado)")
         db.execute(insertarVenta, {"nombre_cliente": cliente, "usuario_id": '1', "fecha_venta": fecha, "divisa_id": divisa, "nota": nota, "total": total, "estado": 'true'})
 
-        for producto in productos: 
-            insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
-            db.execute(insertarKardex, {"planta_id": producto['id'], "cantidad": producto['cantidad'], "tipo_movimiento_id": '2', "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": nota})
+
+        for producto in productos:
+            if producto['tipo'] == 'planta':
+                planta_id = producto['id']
+                insumo_id = None
+            elif producto['tipo'] == 'insumo':
+                planta_id = None
+                insumo_id = producto['id']
+
+            insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": '2', "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": nota})
 
         ventaId = db.execute(text("SELECT * FROM ventas ORDER BY id DESC LIMIT 1")).fetchone()[0]
         kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
 
         for producto in productos:
-            insertarProductos = text("INSERT INTO detalle_ventas (planta_id, venta_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:planta_id, :venta_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
-            db.execute(insertarProductos, {"planta_id": producto['id'], "venta_id": ventaId, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal":subtotal})
+            if producto['tipo'] == 'planta':
+                planta_id = producto['id']
+                insumo_id = None
+            elif producto['tipo'] == 'insumo':
+                planta_id = None
+                insumo_id = producto['id']
+
+            insertarProductos = text("INSERT INTO detalle_ventas (planta_id, insumo_id, venta_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:planta_id, :insumo_id, :venta_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
+            db.execute(insertarProductos, {"planta_id": planta_id, "insumo_id": insumo_id, "venta_id": ventaId, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal":subtotal})
+
+        for producto in productos:
+            stock_query = text("""
+                    SELECT id, cantidad
+                    FROM stock 
+                    WHERE 
+                        (planta_id = :planta_id OR :planta_id IS NULL)
+                        AND 
+                        (insumo_id = :insumo_id OR :insumo_id IS NULL)
+            """)
+            stockInfo = db.execute(
+                stock_query, 
+                {
+                    "planta_id": producto['id'] if producto['tipo'] == 'planta' else None,
+                    "insumo_id": producto['id'] if producto['tipo'] == 'insumo' else None
+                }
+            ).mappings().fetchone()
+        
+            stock_cantidad = int(stockInfo['cantidad'])
+            nuevaCantidad = stock_cantidad - int(producto['cantidad'])
+
+            if producto['tipo'] == 'planta':
+                obtenerPrecioBd = text("SELECT precio_venta FROM plantas where id=:id")
+                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
+                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
+            else:
+                obtenerPrecioBd = text("SELECT precio_venta FROM insumos where id=:id")
+                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
+                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
+
+            if stockInfo['id']:
+                actualizar_stock = text("""
+                    UPDATE stock 
+                    SET cantidad=:cantidad, kardex_id=:kardex_id, precio_total_inversion=:precio_total_inversion 
+                    WHERE id=:id
+                """)
+                db.execute(
+                    actualizar_stock, 
+                    {
+                        "cantidad": nuevaCantidad, 
+                        "kardex_id": kardexId, 
+                        "precio_total_inversion": nuevoPrecioInversion, 
+                        "id": stockInfo['id']
+                    }
+                )
 
         db.commit()
-        flash(('La planta se ha agregado correctamente', 'success', '¡Exito!'))
+        flash(('La Venta se ha realizado correctamente', 'success', '¡Exito!'))
         return redirect(url_for('ventas'))
-    
+
+@app.route('/anularVenta', methods=['POST'])
+def anularVenta():
+    idVenta = request.form.get('id_anular')
+
+    ActualizarVenta = text("UPDATE ventas SET estado=:estado WHERE id=:id")
+    db.execute(ActualizarVenta, {"id": idVenta, "estado": 'false'})
+    db.commit()
+    flash(('La venta se ha anulado correctamente', 'success', '¡Exito!'))
+    return redirect(url_for('ventas'))
 
 @app.route('/get_products', methods=["POST"])
 def get_products():
     subcategoria = request.json.get('subcategoria', '')
-    print(subcategoria)
+    # print(subcategoria)
 
     ObtenerProd = text("""
         SELECT
@@ -1377,14 +1449,15 @@ def get_products():
     """)
     
     infoProd = db.execute(ObtenerProd, {'subcategoria': subcategoria}).fetchall()
-    print (infoProd)
+    # print (infoProd)
     productos = [
     {
         'id': prod.id,
         'idProd': prod.planta_id if prod.planta_id is not None else prod.insumo_id, 
         'nombre': prod.nombre_planta if prod.nombre_planta else prod.nombre_insumo,
         'precio': prod.precio_planta if prod.precio_planta is not None else prod.precio_insumo,
-        'cantidad': prod.cantidad_disponible
+        'cantidad': prod.cantidad_disponible,
+        'tipo': 'planta' if prod.planta_id is not None else 'insumo'
     }
     for prod in infoProd
 ]

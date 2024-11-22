@@ -141,3 +141,13 @@
 .productos table{
     width: 80%;
 }
+.btn-acciones .btn-delete i{
+   background-color: #f84444;
+   color: #fff;
+   border-radius: 3px;
+   padding: 4px;
+   margin: 2px;
+ }
+ .btn-acciones .btn-delete i:hover{
+   cursor: pointer;
+ }
