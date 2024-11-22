@@ -1454,7 +1454,14 @@ def get_products():
 
     # print(productos)
     return jsonify(productos)
-
+@app.route('/compras', methods=['GET', 'POST'])
+def compras():
+    if request.method == 'GET':
+        ObtenerSubcat = text("SELECT * FROM subcategorias")
+        subcategorias = db.execute(ObtenerSubcat).fetchall()
+        return render_template('compras.html', Subcategorias = subcategorias)
+    
+    
 @app.route('/catalogo')
 def catalogo():
     return render_template('catalogo.html')
