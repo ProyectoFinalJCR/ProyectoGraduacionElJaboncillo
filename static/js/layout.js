@@ -49,6 +49,16 @@ document.addEventListener('DOMContentLoaded', function(){
             }
         });
     });
+    
+    // Ocultar el sidebar
+    const menuToggle = document.querySelector(".menu-toggle"); // Menú hamburguesa
+    const allScreen = document.querySelector(".all-screen"); // Contenedor principal
+    const sidebar = document.querySelector(".sidebar"); // Sidebar
+
+    menuToggle.addEventListener("click", () => {
+        allScreen.classList.toggle("hidden-sidebar"); // Cambia la estructura del grid
+        sidebar.classList.toggle("hidden"); // Oculta o muestra el sidebar
+    });
 })
 
 // Modal

@@ -25,9 +25,17 @@ document.addEventListener("DOMContentLoaded", function(){
                     productos = data;
                     $('#producto').empty();
                     
-                    productos.forEach(function(producto) {
-                        $('#producto').append(new Option(producto.nombre, producto.id));
-                    });
+                    if (productos.length === 0) {
+                        console.log("No hay productos disponibles");
+                        $('#producto').append(new Option("No hay productos disponibles", ''));
+                    }
+                    else {
+                        $('#producto').append(new Option("Seleccione un producto", ''));
+                        productos.forEach(function(producto) {
+                            $('#producto').append(new Option(producto.nombre, producto.id));
+                       }); 
+                    }
+
                 }
             });
         });

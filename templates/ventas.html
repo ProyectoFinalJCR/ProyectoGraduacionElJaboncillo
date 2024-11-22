@@ -73,6 +73,7 @@ Ventas | El Jaboncillo
                                 {% for infoSubcat in InfoSubcat %}
                                 <option name="subcategoria-select" value="{{infoSubcat[0]}}">{{infoSubcat[2]}}</option>
                                 {% endfor %}
+                                <option value="" selected>Selecciona una subcategoria</option>
                             </select>
                         </div>
                         <div>
@@ -85,7 +86,7 @@ Ventas | El Jaboncillo
                         <div>
                             <label>Producto</label>
                             <select class="input input-plantas" id="producto" name="producto">
-                                <option value="">Selecciona un producto</option>
+                                <option value="" selected>Selecciona un producto</option>
                             </select>
                         </div>
                         <div>
@@ -141,6 +142,19 @@ Ventas | El Jaboncillo
                             </select>
                             <input type="hidden" id="divisa-id" name="divisa-id" value="">
                         </div>
+<<<<<<< HEAD
+=======
+                        
+                        <!-- <div>
+                            <label>Divisas</label>
+                            <select class="input input-plantas" id="divisa-select" name="divisa-select">
+                                {% for infoDivisas in InfoDivisas %}
+                                <option name="divisa-select" value="{{infoDivisas[3]}}">{{infoDivisas[1]}}</option>
+                                {% endfor %}
+                                <option value="" selected>Selecciona una divisa</option>
+                            </select>
+                        </div> -->
+>>>>>>> 937710cb0a6805075ea43c39b8ac6a15cd8ac080
                         <div>
                             <label>Subtotal</label>
                             <input type="number" id="subtotal" class="input input-plantas" name="subtotal"

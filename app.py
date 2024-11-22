@@ -27,7 +27,7 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route('/')
 def index():
-    return render_template('layout.html')
+    return render_template('index.html')
 
 
 @app.route('/login', methods = ["GET", "POST"])
@@ -785,6 +785,8 @@ def agregarSubcategoriaInsumos():
 @app.route('/plantas', methods=["GET", "POST"])
 def plantas():
     if request.method == "GET":
+        id_planta = request.args.get("id_editar_planta")
+
         obtenerColores = text("SELECT * FROM colores")
         colores = db.execute(obtenerColores).fetchall()
 
@@ -805,6 +807,14 @@ def plantas():
 
         obtenerTemporada = text("SELECT * FROM temporadas_plantacion")
         temporada = db.execute(obtenerTemporada).fetchall()
+
+        tiposmovimientosquery = text("""SELECT id, tipo_movimiento from tipo_movimientos WHERE tipo_movimiento = 'Producción' OR tipo_movimiento = 'Cantidad inicial'""")
+        tiposmovimientos = db.execute(tiposmovimientosquery).fetchall()
+
+        imagenquery = text("SELECT * FROM plantas WHERE id = :id_planta")
+        Imagen = db.execute(imagenquery, {"id_planta": id_planta}).fetchall()
+
+
 
         obtenerInfo = text("""SELECT 
     plantas.id AS id, 
@@ -875,7 +885,7 @@ GROUP BY
         
         infoPlantas = db.execute(obtenerInfo).fetchall()
 
-        return render_template('plantas.html', InfoPlanta = infoPlantas, Colores = colores, Subcategorias = subcategorias, Rangos = rangos, Entornos = entornos, Agua = agua, Suelos = suelos, Temporada = temporada)
+        return render_template('plantas.html', InfoPlanta = infoPlantas, Colores = colores, Subcategorias = subcategorias, Rangos = rangos, Entornos = entornos, Agua = agua, Suelos = suelos, Temporada = temporada, movimientos = tiposmovimientos, imagen = Imagen)
     else:
         nombrePlanta = request.form.get('nombrePlanta')
         descripcion = request.form.get('descripcion')
@@ -1688,7 +1698,34 @@ def generar_json_insumos():
 
     return jsonify(insumos_json)
 
+@app.route('/produccion', methods=["GET", "POST"])
+def produccion():
+    if request.method == 'POST':
+        
+        idPlanta = request.form.get("id_planta_produccion")
+        tipoMovimiento = request.form.get("tipomovi")
+        precio = request.form.get("precioPlanta")
+        nota = request.form.get("nota")
+        catidad = request.form.get("cantidad")
+        fechaactual = datetime.now().date()
 
+        print(idPlanta, tipoMovimiento, precio, nota, catidad, fechaactual)
+
+        if not nota or not catidad:
+            flash('Verifique los campos, estan vacios', "error")
+            return redirect(url_for("plantas")) 
+
+        insertarPlantaquery = text("INSERT INTO movimientos_kardex (planta_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+        db.execute(insertarPlantaquery, {"planta_id": idPlanta, "cantidad": catidad, "tipo_movimiento_id": tipoMovimiento, "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
+
+        db.commit()
+
+        flash(('La planta se ha agregado correctamente', 'success'))
+        return redirect(url_for("plantas"))
+    
+    return redirect(url_for('plantas'))
+    
+    
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)

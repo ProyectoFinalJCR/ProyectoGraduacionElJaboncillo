@@ -389,12 +389,11 @@
 }
 .paisaje-contenedor{
     width: 85%;
-    height: 80%;
+    height: 85%;
     display: grid;
     grid-template-columns: 1fr 1.1fr;
     background-color: #fff;
     padding: 55px;
-    border: 1px solid #000;
 }
 .paisaje-contenedor .paisaje-info{
     width: 85%;
@@ -403,9 +402,8 @@
     justify-content: start;
     align-items: center;
     flex-direction: column;
-    gap: 55px;
-    padding: 20px 0px;
-    border: 1px solid #000;
+    gap: 20px;
+    padding: 15px 0px;
 
 }
 .paisaje-contenedor .paisaje-info .paisaje-titulo-contenedor{
@@ -413,43 +411,60 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    border: 1px solid #000;
+    margin: 15px 0px;
 
 }
 .paisaje-contenedor .paisaje-info .paisaje-titulo-contenedor p{
-    font-size: 45px;
+    font-size: 40px;
     color: #000;
     font-weight: 700;
-    letter-spacing: 7px;
+    letter-spacing: 10px;
 }
 .paisaje-contenedor .paisaje-info .paisaje-informacion-contenedor{
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    border: 1px solid blue;
+}
 
-}
-.paisaje-contenedor .paisaje-info .paisaje-informacion-contenedor .paisaje-texto-contenedor{
-    display: flex;
-    justify-content: start;
-    flex-direction: column;
-    gap: 10px;
-    border: 1px solid red;
-}
-.paisaje-contenedor .paisaje-info .paisaje-informacion-contenedor .paisaje-texto-contenedor .paisaje-parr{
-    border: 1px solid #000;
-    padding: 10px 0px;
-    width: 460px;
-}
 .paisaje-texto{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
     gap: 20px;
+}
+.paisaje-texto .icono-contenedor{
+    width: 55px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #3BB64A;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+.paisaje-texto:nth-of-type(2) .icono-contenedor {
+    background-color: #04793B; 
+    color: white;
+}
+
+.paisaje-texto:nth-of-type(3) .icono-contenedor {
+    background-color: #00431B;
+    color: white;
+}
+*
+.paisaje-contenedor .paisaje-info .paisaje-informacion-contenedor .paisaje-texto-contenedor{
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    gap: 10px;
+}
+.paisaje-contenedor .paisaje-info .paisaje-informacion-contenedor .paisaje-texto-contenedor .paisaje-parr{
+    padding: 10px 0px;
+    width: 460px;
 }
 .paisaje-texto .paisaje-tit{
     width: 100%;
@@ -465,16 +480,7 @@
     color: #5E6282;
     font-weight: normal;
 }
-.paisaje-texto .icono-contenedor{
-    width: 100px;
-    height: 68px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #3BB64A;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-}
+
 .paisaje-texto .icono-contenedor i{
     color: #fff;
 }
@@ -486,8 +492,198 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: #60a381;
 }
+.paisaje-contenedor .paisaje-img .contenedor-card{
+    width: 480px;
+    height: 525px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr .4fr .5fr;
+    background-color: #fff;
+    border-radius: 20px;
+    position: relative;
+    -webkit-box-shadow: 78px -56px 130px -66px rgba(89,230,98,1);
+-moz-box-shadow: 78px -56px 130px -66px rgba(89,230,98,1);
+box-shadow: 78px -56px 130px -66px rgba(89,230,98,1);
+
+}
+.paisaje-contenedor .paisaje-img .contenedor-card .card-img-contenedor{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 20px 20px 0px 0px;
+    padding: 25px;
+}
+.paisaje-contenedor .paisaje-img .contenedor-card .card-img-contenedor .card-img{
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+.paisaje-contenedor .paisaje-img .contenedor-card .card-texto-contenedor{
+    width: 100%;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    border-radius: 0px 0px 20px 20px;
+}
+.paisaje-contenedor .paisaje-img .contenedor-card .card-texto-contenedor .card-texto{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    border-radius: 0px 0px 20px 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #000;
+    letter-spacing: 2px;
+    padding-left: 20px;
+}
+.paisaje-contenedor .paisaje-img .contenedor-card .card-logo-contenedor{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    flex-direction: column;
+    padding: 8px 0px;
+    border-radius: 0px 0px 20px 20px;
+    -webkit-box-shadow: 0px 14px 33px -6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 14px 33px -6px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 10px 15px -8px rgba(0, 0, 0, 0.25);
+}
+.paisaje-contenedor .paisaje-img .contenedor-card .card-logo-contenedor .card-logo{
+    width: 270px;
+    height: 50px;
+    border-radius: 0px 0px 20px 20px;
+    
+}
+/* FOOTER */
+.footer{
+    width: 100%;
+    height: 500px;
+    background-color: #EDEDEE;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr .3fr;
+    padding: 0px 150px  ;
+}
+.footer .footer-texto-contenedor{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr;
+}
+.footer .footer-texto-contenedor .columna1{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+.footer .footer-texto-contenedor .columna1 .img-cont .footer-logo{
+    width: 320px;
+}
+.footer .footer-texto-contenedor .columna1 .titulo-cont .footer-titulo{
+    font-size: 25px;
+    color: #686F69;
+    font-weight: 600;
+    letter-spacing: 10px;
+}
+.footer .footer-texto-contenedor .columna1 .direccion-cont .direccion{
+    font-size: 16px;
+    color: #686F69;
+    font-weight: 400;
+    letter-spacing: 5px;
+}
+.footer .footer-texto-contenedor .columna1 .telefono-cont .telefono{
+    font-size: 16px;
+    color: #686F69;
+    font-weight: 400;
+    letter-spacing: 5px;
+}
+.footer .footer-texto-contenedor .columna2{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+.footer .footer-texto-contenedor .columna2 .titulo-columna2{
+    font-size: 25px;
+    color: #686F69;
+    font-weight: 600;
+    letter-spacing: 10px;
+    padding-top: 50px;
+}
+.footer .footer-texto-contenedor .columna2 .horario-columna2{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+.footer .footer-texto-contenedor .columna2 .horario-columna2 .horario{
+    font-size: 16px;
+    color: #686F69;
+    font-weight: 400;
+    letter-spacing: 5px;
+}
+.footer .footer-texto-contenedor .columna2 .iconos-cont{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+.footer .footer-texto-contenedor .columna2 .iconos-cont .icono{
+    width: 40px;
+    height: 40px;
+}
+.footer .footer-texto-contenedor .columna3{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+.footer .footer-texto-contenedor .columna3 .titulo-columna3{
+    font-size: 25px;
+    color: #686F69;
+    font-weight: 600;
+    letter-spacing: 10px;
+    padding-top: 36px;
+    padding-left:40px;
+}
+
+.footer .footer-creditos-conteiner{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.footer .footer-creditos-conteiner .footer-creditos{
+    font-size: 20px;
+    color: #686F69;
+    font-weight: 400;
+    letter-spacing: 5px;
+}
+
+
 /* MEDIA QUERIES */
 /* Para dispositivos pequeños, como teléfonos pequeños (320px a 375px) */
 @media (min-width: 315px) and (max-width: 424px) {
@@ -523,3 +719,4 @@
   }
 
   
+
