@@ -225,7 +225,6 @@ class Detalle_ventas (db.Model):
 class Devoluciones (db.Model):
     __tablename__ = 'devoluciones'
     id =db.Column (db.Integer, primary_key=True, autoincrement =True)
-    kardex_id =db.Column (db.Integer, db.ForeignKey('movimientos_kardex.id'), nullable = False)
     venta_id = db.Column (db.Integer, db.ForeignKey('ventas.id'), nullable = True)
     cantidad_producto = db.Column (db.Float, nullable=False)
     motivo = db.Column (db.String, nullable=False)
@@ -238,6 +237,7 @@ class Detalle_devoluciones (db.Model):
     devolucion_id = db.Column (db.Integer, db.ForeignKey('devoluciones.id'), nullable = False)
     planta_id = db.Column (db.Integer, db.ForeignKey('plantas.id'), nullable = True)
     insumo_id = db.Column (db.Integer, db.ForeignKey('insumos.id'), nullable = True)
+    kardex_id =db.Column (db.Integer, db.ForeignKey('movimientos_kardex.id'), nullable = False)
     cantidad = db.Column (db.Float, nullable=False)
     precio_unitario = db.Column (db.Float, nullable=False)
     subtotal = db.Column (db.Float, nullable=False)
@@ -267,6 +267,20 @@ class Detalles_Compra(db.Model):
     cantidad = db.Column(db.Float, nullable=False)
     precio_unitario = db.Column(db.Float, nullable=False)
     subtotal = db.Column(db.Float, nullable=False) 
+    
+class Produccion(db.Model):
+    __tablename__ = 'produccion'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nota = db.Column(db.String, nullable=False)
+    fecha = db.Column(db.Date, nullable=False)
+
+class Detalle_produccion(db.Model):
+    __tablename__ = 'detalle_produccion'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    produccion_id = db.Column(db.Integer, db.ForeignKey('produccion.id'), nullable = False)
+    planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = True)
+    kardex_id = db.Column(db.Integer, db.ForeignKey('movimientos_kardex.id'), nullable = False)
+    cantidad = db.Column(db.integer, nullable=False)
 
 class Listas_deseo(db.Model):
     __tablename__ = 'listas_deseo'

@@ -74,6 +74,7 @@ Ventas | El Jaboncillo
                                 {% for infoSubcat in InfoSubcat %}
                                 <option name="subcategoria-select" value="{{infoSubcat[0]}}">{{infoSubcat[2]}}</option>
                                 {% endfor %}
+                                <option value="" selected>Selecciona una subcategoria</option>
                             </select>
                         </div>
                         <div>
@@ -86,7 +87,7 @@ Ventas | El Jaboncillo
                         <div>
                             <label>Producto</label>
                             <select class="input input-plantas" id="producto" name="producto">
-                                <option value="">Selecciona un producto</option>
+                                <option value="" selected>Selecciona un producto</option>
                             </select>
                         </div>
                         <div>
@@ -129,8 +130,8 @@ Ventas | El Jaboncillo
                             <select class="input input-plantas" id="divisa-select" name="divisa-select">
                                 {% for infoDivisas in InfoDivisas %}
                                 <option name="divisa-select" value="{{infoDivisas[3]}}">{{infoDivisas[1]}}</option>
-                                <input type="hidden" name="divisa-id" value="{{infoDivisas[0]}}">
                                 {% endfor %}
+                                <option value="" selected>Selecciona una divisa</option>
                             </select>
                         </div>
                         <div>

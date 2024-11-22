@@ -45,13 +45,14 @@ Plantas | El Jaboncillo
                         <td id="planta-{{ infoPlantas.id }}">
                             {% if infoPlantas.imagen_url %}
                             <div class="img-container">
-                                <img src="{{infoPlantas.imagen_url}}" alt="planta" class="mini-imgInsumo">
+                                <img src="{{infoPlantas.imagen_url}}" alt="planta" class="mini-imgInsumo"
+                                    id="imagen-planta">
                             </div>
                             {% else %}
                             <div class="image-upload">
                                 <form action="/plantas" class="form_agregarimgplanta" id="form_agregarimgplanta">
-                                    <input type="hidden" name="id_planta" class="id_planta_agregar" id="id_planta_agregar"
-                                        value="{{infoPlantas.id}}">
+                                    <input type="hidden" name="id_planta" class="id_planta_agregar"
+                                        id="id_planta_agregar" value="{{infoPlantas.id}}">
                                     <input type="file" id="file_input_agregar" class="file-input"
                                         accept=".png, .jpg, .jpeg">
                                     <label for="file_input_agregar" class="upload-label">
@@ -83,6 +84,9 @@ Plantas | El Jaboncillo
                         <td class="btn-acciones">
                             <button class="btn-edit btn-edit-plantas">
                                 <i class="material-icons">edit</i>
+                            </button>
+                            <button class="btn-produccion btn-produccion-plantas" data-id="${planta.id}">
+                                <i class="material-icons">compost</i>
                             </button>
                             <form action="/eliminarPlanta" method="post" class="form-eliminar">
                                 <input type="hidden" id="id_eliminar" name="id_eliminar" value="{{infoPlantas.id}}">
@@ -300,6 +304,75 @@ Plantas | El Jaboncillo
         </form>
     </div>
 </div>
+<!-- modal produccion -->
+<div id="ModalProduccion" class="modal-produccion">
+    <div class="modal-content-produccion">
+        <div class="inputplantas-title">
+            <h2>Agregar plantas de producción</h2>
+            <span class="close" id="close-pro">&times;</span>
+        </div>
+        <form action="/produccion" class="form-produccion" method="post">
+            <div class="img-info-cont">
+                <div class="img-cont">
+                    <img alt="planta" class="imgProduccion" src="">                     
+                </div>
+                
+                <div class="info-planta-cont">
+                    <div class="fecha-cont">
+                        <div class="fecha">
+                            <label for="">Fecha: </label>
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="textos-cont">
+                        <div class="textos">
+                            <input type="hidden" name="id_planta_produccion" id="planta-idProduccion" value="">
+                            <label for="">Nombre: </label>
+                            <input type="text" id="nombrePlantaproduccion" name="nombrePlanta" class="sinborde nombreplanta" readonly value="">
+                        </div>
+                        <div class="textos">
+                            <label for="">Descripción: </label>
+                            <input type="text" name="descripcionPlanta" id="descripcionPlanta" class="sinborde" readonly value="">
+                        </div>
+                        <div class="textos">
+                            <label for="">Precio unitario: </label>
+                            <input type="text" class="sinborde" readonly name="precioPlanta" id="precioPlanta" value="">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="cantidad-cont">
+                <div>
+                    <label for="">Nota</label>
+                    <textarea name="nota" class="textarea input-plantas" id="nota"></textarea>
+                </div>
+                <div class="tipomovi">
+                    <label for="">Tipo de movimiento</label>
+                    <select class="input input-plantas" id="tipomovi" name="tipomovi">
+                        {% for tipomovi in movimientos %}
+                        <option value="{{ tipomovi[0] }}">{{ tipomovi[1] }}</option>
+                        {% else %}
+                        <option value="">No hay tipos de movimiento disponibles</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="">Cantidad</label>
+                    <input type="number" class="input input-plantas" name="cantidad" id="cantidad">
+                </div>
+            </div>
+            <div class="btn-agregar">
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                <div>
+                    <button type="button" class="btn btn-cancel" id="btn-cancel-pro">Cancelar</button>
+                    <button type="submit" class="btn" id="btn-edit-plantas">Agregar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
