@@ -43,7 +43,7 @@
     justify-content: center;
 
 }
-.container-table-inputs .container-inputcompra .nueva-compra{
+.container-table-inputs .container-inputCompra .nueva-compra{
    position: absolute;
    top: 50%;
    left: 50%;
@@ -73,9 +73,9 @@
     height: auto;
  }
  .container-table-inputs .container-inputCompra .form-compra  .inputs-compra{
-    display: grid;
+    /* display: grid;
     grid-template-rows:repeat(2, 1fr); 
-    gap: 20px;
+    gap: 20px; */
     padding-bottom: 20px;
  }
  .container-table-inputs .container-inputCompra .form-compra .inputs-compra .inputs-cont{
@@ -83,7 +83,7 @@
     flex-direction: row;
     justify-content: space-between;
  }
- .container-table-inputs .container-inputCompra .form-venta .inputs-compra .row-3{
+ .container-table-inputs .container-inputCompra .form-compra .inputs-compra .row-3{
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -91,7 +91,7 @@
     gap: 60px;
  }
  
- .container-table-inputs .container-inputCompra .form-venta .inputs-compra .input-compra{
+ .container-table-inputs .container-inputCompra .form-compra .inputs-compra .inputs-compra{
     width: 100%;
     margin-top: 8px;
     border-radius: 10px;
@@ -121,5 +121,8 @@
     width: 120px;
     background-color: #CF696B;
     
+  }
+  .inputs-hidden{
+   display: none;
   }
  

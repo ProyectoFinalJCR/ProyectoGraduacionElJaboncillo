@@ -28,29 +28,19 @@ Compras | El Jaboncillo
             </thead> 
             
             <tbody>
-                <!-- {% for infoVentas in InfoVentas %}
+                {% for compras in Compras %}
                 <tr>
-                    <td>{{infoVentas.id}}</td>
-                    <td>{{infoVentas.nombre}}</td>
-                    <td>{{infoVentas.fecha}}</td>
-                    <td>{{infoVentas.total}}</td>
-                    <td>{{infoVentas.nota}}</td>
-                    <td>{{infoVentas.estado}}</td>
-                    <td class="btn-acciones">
-                        <form action="/anularVenta" method="post" class="form-baja">
-                            <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
-                            <button class="btn-delete" type="submit">
-                                <i class="material-icons">delete</i>
-                            </button>
-                        </form>
-                    </td>
+                    <td>{{compras.id}}</td>
+                    <td>{{compras.nombre_proveedor}}</td>
+                    <td>{{compras.fecha_compra}}</td>
+                    <td>{{compras.total}}</td>
                 </tr>
-                {% endfor %} -->
+                {% endfor %}
             </tbody>
         </table>
     </div>
     <div class="container-inputCompra">
-        <div class="nueva-venta">
+        <div class="nueva-compra">
             <div class="inputCompra-title">
                 <h3>NUEVA COMPRA</h3>
                 <span class="close">&times;</span>
@@ -60,15 +50,16 @@ Compras | El Jaboncillo
                     <div class="inputs-cont row-1">
                         <div>
                             <label>Proveedor</label>
-                            <select class="input input-compra" id="proveedor-select" name="proveedor-select">
+                            <select class="input inputs-compra" id="proveedor-select" name="proveedor-select">
+                                <option value="">Selecciona un proveedor</option>
                                 {% for proveedores in Proveedores %}
-                                <option name="subcategoria-select" value="{{proveedores[0]}}">{{proveedores[2]}}</option>
+                                <option name="proveedor-select" value="{{proveedores[0]}}">{{proveedores[1]}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div>
                             <label>Subcategorias</label>
-                            <select class="input input-compra" id="subcategoria-select" name="subcategoria-select">
+                            <select class="input inputs-compra" id="subcategoria-select" name="subcategoria-select">
                                 {% for subcategorias in Subcategorias %}
                                 <option name="subcategoria-select" value="{{subcategorias[0]}}">{{subcategorias[2]}}</option>
                                 {% endfor %}
@@ -76,37 +67,37 @@ Compras | El Jaboncillo
                         </div>
                         <div>
                             <label>Fecha</label>
-                            <input type="date" id="fecha" class="input input-compra" name="fecha"
+                            <input type="date" id="fecha" class="input inputs-compra" name="fecha"
                                 placeholder="fecha">
                         </div>
                     </div>
                     <div class="inputs-cont row-2">
                         <div>
                             <label>Producto</label>
-                            <select class="input input-compra" id="producto" name="producto">
+                            <select class="input inputs-compra" id="producto" name="producto">
                                 <option value="">Selecciona un producto</option>
                             </select>
                         </div>
                         <div>
                             <label>Cantidad</label>
-                            <input type="text" id="cantidad" class="input input-compra" name="cantidad"
+                            <input type="number" id="cantidad" class="input inputs-compra" name="cantidad"
                                 placeholder="Cantidad">
                         </div>
                         <div>
                             <label>Precio</label>
-                            <input type="number" id="precio" class="input input-compra" name="precio"
+                            <input type="number" id="precio" class="input inputs-compra" name="precio"
                                 placeholder="Precio">
                         </div>
-                        <div>
+                        <div class="inputs-hidden">
                             <input type="hidden" name="idProd" id="idProd">
                         </div>
-                        <div>
+                        <div class="inputs-hidden">
                             <input type="hidden" name="cantidadDispo" id="cantidadDispo">
                         </div>
-                        <div>
+                        <div class="inputs-hidden">
                             <input type="hidden" name="tipoProducto" id="tipoProducto">
                         </div>
-                        <button type="button" class="btn agregar_producto" id="agregar_producto">Agregar</button>
+                        <button type="button" class="btn agregar_producto-compra" id="agregar_producto-compra">Agregar</button>
                     </div>
                 </section>
                 <section>
@@ -127,14 +118,14 @@ Compras | El Jaboncillo
                         </table>
                     </div>
                 </section>
-                <section class="inputs-venta">
+                <section class="inputs-compra">
                     <div class="inputs-cont row-4">
                         <div>
                             <label>Divisas</label>
-                            <select class="input input-compra" id="divisa-select" name="divisa-select">
-                                {% for infoDivisas in InfoDivisas %}
-                                <option value="{{infoDivisas[3]}}" data-id="{{infoDivisas[0]}}">
-                                    {{infoDivisas[1]}}
+                            <select class="input inputs-compra" id="divisa-select" name="divisa-select">
+                                {% for divisas in Divisas %}
+                                <option value="{{divisas[3]}}" data-id="{{divisas[0]}}">
+                                    {{divisas[1]}}
                                 </option>
                                 {% endfor %}
                             </select>
@@ -142,17 +133,17 @@ Compras | El Jaboncillo
                         </div>
                         <div>
                             <label>Subtotal</label>
-                            <input type="number" id="subtotal" class="input input-compra" name="subtotal"
+                            <input type="number" id="subtotal" readonly class="input inputs-compra" name="subtotal"
                                 placeholder="Subtotal">
                         </div>
                         <div>
                             <label>Total</label>
-                            <input type="number" id="total" class="input input-compra" name="total"
+                            <input type="number" id="total" readonly class="input inputs-compra" name="total"
                                 placeholder="Precio">
                         </div>
                         <div>
                             <label>Nota</label>
-                            <input type="text" id="nota-venta" class="input input-compra" name="nota-venta"
+                            <input type="text" id="nota-venta" class="input inputs-compra" name="nota-venta"
                                 placeholder="Agregar nota">
                         </div>
                     </div>
