@@ -15,7 +15,7 @@
     height: 100%;
     padding: 20px;
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: start;
     overflow-x: auto;
     overflow-y: auto;

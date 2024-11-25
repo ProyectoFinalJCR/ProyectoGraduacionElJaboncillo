@@ -164,7 +164,8 @@ document.addEventListener("DOMContentLoaded", function () {
   //Buscar usuarios
   let usuariosData = [];
   // Cargar datos una sola vez cuando la página carga
-  fetch(`/generar_json_usuarios`)
+  // fetch(`/generar_json_usuarios`)
+  fetch(`/usuarios_json`)
     .then(response => response.json())
     .then(data => {
       usuariosData = data;
@@ -221,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   }
-  // Agregar event listener para delegación de eventos
+  // Agregar event listener para delegación de eventos btn editar usuario
   document.getElementById('tabla_usuarios').addEventListener('click', function (event) {
     if (event.target.closest('.btn-edit-usuario')) {
       const button = event.target.closest('.btn-edit-usuario');
@@ -271,30 +272,33 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Alertas
-  // alerta btn eliminar 
-  const forms_users = document.querySelectorAll('.form-eliminar')
+  // Delegar eventos para el botón de eliminar
+document.getElementById('tabla_usuarios').addEventListener('click', function (event) {
+  if (event.target.closest('.btn-delete')) {
+    event.preventDefault(); // Evita que se envíe el formulario automáticamente
+    const form = event.target.closest('.form-eliminar'); // Encuentra el formulario
+    const userId = form.querySelector('.id_eliminar').value;
 
-  forms_users.forEach(form => {
-    form.addEventListener('submit', function (event) {
-      event.preventDefault(); // Detener el envío del formulario inicialmente
-
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡No podrás revertir esta acción!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminarlo',
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          event.target.submit();
-        }
-      })
+    // Mostrar alerta de confirmación con SweetAlert
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¡No podrás revertir esta acción!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Enviar formulario para eliminar
+        form.submit();
+      }
     });
+  }
   });
+
+  // Alertas
 
   //ALERTA EDITAR
   const form_editar_user = document.querySelector('.form_edit_user');

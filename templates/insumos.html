@@ -96,7 +96,7 @@ Insumos | El Jaboncillo
                                 <i class="material-icons">edit</i>
                             </button>
                             <form action="/eliminarInsumo" method="post" class="form-eliminar">
-                                <input type="hidden" class="id_eliminar" name="id_insumo" value="{{insumos[0]}}">
+                                <input type="hidden" class="id_eliminar" name="id_editar_insumo" value="{{insumos[0]}}">
                                 <button class="btn-delete" id="btn-eliminar" type="submit">
                                     <i class="material-icons">delete</i>
                                 </button>
@@ -186,19 +186,12 @@ Insumos | El Jaboncillo
                                 </div>
                             </div>
                             <div class="input-subcat">
-                                <div class="agregar-subcat">
                                     <label for="">Seleccione una subcategoria</label>
                                     <select class="input input-insumos" id="subcat" name="idsubcat" required>
                                         {% for subcat in Subcat %}
                                         <option value="{{subcat[0]}}">{{subcat[2]}}</option>
                                         {% endfor %}
                                     </select>
-                                </div>
-                                <div class="btn-agregar-subcate">
-                                    <a href="#" class=" btn-modal-insumos" id="btn-modal-subcate"><button type="button">
-                                            <i class="material-icons">library_add</i></button></a>
-                                    <!-- <button type="button" class="btn-modal-insumos" id="btn-modal-subcate"> <i class="material-icons">library_add</i></button> -->
-                                </div>
                             </div>
                             <div class="input-colores">
                                 <label for="">Colores</label>
@@ -228,34 +221,6 @@ Insumos | El Jaboncillo
         </div>
     </div>
 </section>
-
-<!-- Modal agregar subcategoria -->
-<!-- <div id="myModalSub" class="modal">
-    <div class="modal-content form-subcat">
-        <span class="close">&times;</span>
-        <h2>Agregar subcategoria</h2>
-        <form method="post" class="form_edit" id="formSubcategoria">
-            <div class="input-subcategories">
-                <input type="hidden" id="id_editar" name="id_editar">
-                <label for="">Seleccione una categoria</label>
-                <select class="input" id="idCat" name="idCat">
-                    {% for rows in categorias %}
-                    <option name="idCat" value="{{rows[0]}}">{{rows[1]}}</option>
-                    {% endfor %}
-                </select>
-                <label for="">Nombre subcategoria</label>
-                <input type="text" id="nombreSub" class="input" name="nombreSub">
-                <label for="">Descripción</label>
-                <textarea id="descripcion" class="input" name="descripcion"> </textarea>
-            </div>
-            <div class="btn-modal">
-                <button type="button" class="btn close_modal" id="close_modal">Cancelar</button>
-                <button class="btn" id="btn-edit-categories">Agregar</button>
-            </div>
-        </form>
-    </div>
-</div> -->
-
 
 <!-- Modal editar insumo -->
 <div id="myModal" class="modal-insumos">

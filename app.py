@@ -133,11 +133,13 @@ def categorias():
             db.execute(agregarCategoria, {"categoria": categoria, "descripcion": descripcionCategoria})
             
             db.commit()
+            db.close()
         flash(('La categoria ha sido agregada con éxito.', 'success', '¡Éxito!'))
         return redirect(url_for('categorias'))
         
 @app.route('/editarCategoria', methods=["POST"])
 def editarCategoria():
+    print("Entro a editar categoria")
     categoria = request.form.get('nombre_editar')
     descripcion = request.form.get('descripcion_editar')
     idCategoria = request.form.get('id_editar')
@@ -165,6 +167,7 @@ def editarCategoria():
             editarCategoria = text("UPDATE categorias SET categoria=:categoria, descripcion=:descripcion WHERE id =:id")
             db.execute(editarCategoria, {"id":idCategoria, "categoria":categoria, "descripcion":descripcion})
             db.commit()
+            db.close()
         else:
             flash("Ha ocurrido un error", 'error', '¡Error!')
             return redirect(url_for('categorias'))
@@ -172,9 +175,11 @@ def editarCategoria():
     flash(('La categoría ha sido editada con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('categorias'))
 
-@app.route('/eliminarCategoria', methods=["GET", "POST"])
+@app.route('/eliminarCategoria', methods=["POST"])
 def eliminarCategoria():
     idCategoria = request.form.get('id_eliminar')
+    print(idCategoria)
+
     query = text("SELECT COUNT(*) FROM subcategorias WHERE categoria_id = :categoria_id")
     resultado = db.execute(query, {'categoria_id': idCategoria}).scalar()
 
@@ -185,6 +190,7 @@ def eliminarCategoria():
     query = text("UPDATE categorias SET estado=:estado WHERE id = :id")
     db.execute(query, {"estado": 'false', "id": idCategoria})
     db.commit()
+    db.close()
     flash(('La categoria ha sido eliminada con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('categorias'))
 
@@ -192,6 +198,7 @@ def eliminarCategoria():
 @app.route('/usuarios', methods =["GET","POST"])
 def usuarios():
     if request.method == "GET":
+        print("Usuarios GET")
         obtenerUsuarios = text("SELECT * FROM usuarios as u INNER JOIN roles as r ON r.id = u.rol_id WHERE u.rol_id = 1 OR u.rol_id = 2 ORDER by u.id asc")
         usuario = db.execute(obtenerUsuarios).fetchall()
 
@@ -236,18 +243,22 @@ def usuarios():
 
 @app.route('/eliminarUsuarios', methods=["GET", "POST"])
 def eliminarUsuarios():
+    print("Eliminar usuarios")
     idUsuario = request.form.get('id_usuario')
     print(idUsuario)
 
     query = text("DELETE FROM usuarios WHERE id = :id")
     db.execute(query, {"id": idUsuario})
     db.commit()
+    db.close()
     flash(('El usuario ha sido eliminado con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('usuarios'))
 
 @app.route('/editarUsuario', methods=["POST"])
 def editarUsuario():
     if request.method == "POST":
+        print("Entro a editar usuario")
+
         idUsuario_editar = request.form.get("id_editar_usuario")
         nombre_completo_editar = request.form.get('nombreUsuario_editar')
         correo_editar = request.form.get("correo_editar")
@@ -280,6 +291,7 @@ def editarUsuario():
                 editarUsuario = text("UPDATE usuarios SET nombre_completo=:nombre_completo, correo=:correo, rol_id=:rol_id WHERE id =:id")
                 db.execute(editarUsuario, {"id":idUsuario_editar, "nombre_completo":nombre_completo_editar, "correo":correo_editar, "rol_id": rol_id_editar})
                 db.commit()
+                db.close()
             else:
                 flash("Ha ocurrido un error", 'error', '¡Error!')
                 return redirect(url_for('usuarios'))
@@ -326,6 +338,7 @@ def eliminarSubcategoria():
     query = text("DELETE FROM subcategorias WHERE id = :id")
     db.execute(query, {"id": idSubcategoria})
     db.commit()
+    db.close()
     flash(('La subcategoría ha sido eliminada con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('subCategorias'))
 
@@ -363,6 +376,7 @@ def editarSubcategoria():
             editarSubcategoria = text("UPDATE subcategorias SET categoria_id=:categoria_id, subcategoria=:subcategoria, descripcion=:descripcion WHERE id =:id")
             db.execute(editarSubcategoria, {"id":idSubcategoria, "categoria_id":idcategoria, "subcategoria":subcategoria, "descripcion": descripcion})
             db.commit()
+            db.close()
         else:
             flash("Ha ocurrido un error", 'error', '¡Error!')
             return redirect(url_for('subCategorias'))
@@ -418,6 +432,7 @@ def insumos():
                               INNER JOIN colores c ON c.id = ci.color_id 
                               INNER JOIN aplicaciones_insumos api ON api.insumo_id = i.id
                               INNER JOIN aplicaciones ap ON ap.id = api.aplicacion_id 
+                              WHERE i.estado = 'true'
                                GROUP BY 
                               i.id, 
                               i.nombre, 
@@ -521,8 +536,8 @@ def insumos():
             return redirect(url_for('insumos'))
         else:
 
-            insertarInsumo = text("INSERT INTO insumos (nombre, tipo_insumo, descripcion, composicion_principal_id, frecuencia_aplicacion, compatibilidad, precauciones, fecha_vencimiento, precio_venta, imagen_url) VALUES (:insumo, :tipoInsumo, :descripcionInsumo, :composicionInsumo, :frecuenciaInsumo,:compatibilidadInsumo, :precaucionesInsumo, :fecha_vencimiento, :precio_venta, :imagen_url)")
-            db.execute(insertarInsumo, {"insumo": insumo, "tipoInsumo": tipoInsumo, "descripcionInsumo": descripcionInsumo, "composicionInsumo": composicionInsumo, "frecuenciaInsumo": frecuenciaInsumo, "compatibilidadInsumo": compatibilidadInsumo, "precaucionesInsumo": precaucionesInsumo, "fecha_vencimiento": fecha_vencimiento, "precio_venta": precioVentaInsumo, "imagen_url": imgInsumo})
+            insertarInsumo = text("INSERT INTO insumos (nombre, tipo_insumo, descripcion, composicion_principal_id, frecuencia_aplicacion, compatibilidad, precauciones, fecha_vencimiento, precio_venta, imagen_url, estado) VALUES (:insumo, :tipoInsumo, :descripcionInsumo, :composicionInsumo, :frecuenciaInsumo,:compatibilidadInsumo, :precaucionesInsumo, :fecha_vencimiento, :precio_venta, :imagen_url, :estado)")
+            db.execute(insertarInsumo, {"insumo": insumo, "tipoInsumo": tipoInsumo, "descripcionInsumo": descripcionInsumo, "composicionInsumo": composicionInsumo, "frecuenciaInsumo": frecuenciaInsumo, "compatibilidadInsumo": compatibilidadInsumo, "precaucionesInsumo": precaucionesInsumo, "fecha_vencimiento": fecha_vencimiento, "precio_venta": precioVentaInsumo, "imagen_url": imgInsumo, "estado": 'true'})
 
             selectInsumoId = text("SELECT id FROM insumos WHERE nombre=:insumo")
             insumoId = db.execute(selectInsumoId, {'insumo': insumo}).fetchone()
@@ -543,6 +558,7 @@ def insumos():
             db.execute(insertarInsumoIdAplicacion, {"insumoId": insumoId[0], "aplicacionId": tipoInsumo})
 
             db.commit()
+            db.close()
         flash(('El insumo ha sido agregado con éxito.', 'success', '¡Éxito!'))
         return redirect(url_for('insumos'))
 
@@ -552,12 +568,10 @@ def insumos():
 def eliminarInsumos():
     idInsumo = request.form.get('id_insumo')
 
-    queryEliminarInsumo = text("update insumos set estado = 'Inactivo' where id = :id")
+    queryEliminarInsumo = text("UPDATE insumos SET estado = 'false' WHERE id = :idInsumo")
     db.execute(queryEliminarInsumo, {"idInsumo": idInsumo})
-    
-    # query = text("DELETE FROM insumos WHERE id = :id")
-    # db.execute(query, {"id": idInsumo})
     db.commit()
+    db.close()
     flash(('El insumo se ha sido eliminado con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('insumos'))
 
@@ -572,6 +586,7 @@ def agregarImgInsumo(data):
     query = text("UPDATE insumos SET imagen_url = :imagen WHERE id =:id")
     db.execute(query,{"imagen": imagen, "id": insumo})
     db.commit()
+    db.close()
      # Emitir un evento al cliente para actualizar la imagen en la interfaz
     emit('addImgInsumo', {'idIns': insumo, 'url': imagen}, broadcast=True)
 
@@ -733,6 +748,7 @@ def editarinsumo():
                        insertarColores = text("INSERT INTO colores_insumos (color_id, insumo_id) VALUES (:colores, :insumo_id)")
                        db.execute(insertarColores, {"colores": colores, "insumo_id": insumo_ID})
                        db.commit()
+                       db.close()
                
                if sorted(colores_seleccionados) == sorted(coloresInsumo_existentes):
                    print("No hay cambios en los colores")   
@@ -752,9 +768,7 @@ def editarinsumo():
                         print(f"Eliminando colores con ID: {colores}")
             
                db.commit()
-     
-                
-
+               db.close()
            else:
                flash("Ha ocurrido un error", 'error', '¡Error!')
                return redirect(url_for('insumos'))
@@ -777,7 +791,7 @@ def agregarSubcategoriaInsumos():
            insertarSub = text("INSERT INTO subcategorias (categoria_id, subcategoria, descripcion) VALUES (:categoria_id, :subcategoria, :descripcion)")
     db.execute(insertarSub, {"categoria_id": idCat, "subcategoria": nombreSub, "descripcion": descripcion})
     db.commit()
-    
+    db.close()
     return jsonify({"success": True, "message": "La subcategoría ha sido agregada con éxito."})
     # return flash(('La subcategoría ha sido agregada con éxito.', 'success', '¡Éxito!'))
        
@@ -790,7 +804,7 @@ def plantas():
         obtenerColores = text("SELECT * FROM colores")
         colores = db.execute(obtenerColores).fetchall()
 
-        obtenerSubcategorias = text("SELECT * FROM subcategorias INNER JOIN categorias ON subcategorias.categoria_id = categorias.id WHERE categorias.categoria = 'Plantas Ornamentales'")
+        obtenerSubcategorias = text("SELECT * FROM subcategorias INNER JOIN categorias ON subcategorias.categoria_id = categorias.id WHERE categorias.categoria LIKE '%Plantas%'")
         subcategorias = db.execute(obtenerSubcategorias).fetchall()
 
         obtenerRangos = text("SELECT * FROM rangos")
@@ -953,6 +967,7 @@ GROUP BY
                 db.execute(insertarRangos, {'rango_id': rangos_id, 'planta_id': plantaId})
 
             db.commit()
+            db.close()
         flash(('La planta se ha agregado correctamente', 'success', '¡Exito!'))
         return redirect(url_for('plantas'))
 
@@ -972,6 +987,7 @@ def eliminarPlanta():
     eliminarPlanta = text("DELETE FROM plantas WHERE id = :id")
     db.execute(eliminarPlanta, {"id": idPlanta})
     db.commit()
+    db.close()
     flash(('La planta se ha sido eliminado con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('plantas'))   
 
@@ -1001,23 +1017,25 @@ def proveedores():
             flash(('El proveedor ya existe', 'error', '¡Error!'))
             return redirect(url_for('proveedores'))
         else:
-            insertarProveedor = text("INSERT INTO proveedores (nombre_proveedor, correo_electronico, telefono, direccion) VALUES (:nombre_proveedor, :correo_proveedor, :telefono, :direccion)")
-            db.execute(insertarProveedor, {"nombre_proveedor": nombreProveedor, "correo_proveedor": correoProveedor, "telefono": telefonoProveedor, "direccion": direccionProveedor})
+            insertarProveedor = text("INSERT INTO proveedores (nombre_proveedor, correo_electronico, telefono, direccion, estado) VALUES (:nombre_proveedor, :correo_proveedor, :telefono, :direccion, :estado)")
+            db.execute(insertarProveedor, {"nombre_proveedor": nombreProveedor, "correo_proveedor": correoProveedor, "telefono": telefonoProveedor, "direccion": direccionProveedor, "estado": 'true'})
         
             db.commit()
+            db.close()
         flash(('El proveedor se ha agregado correctamente', 'success', '¡Exito!'))
         return redirect(url_for('proveedores'))
     else:
-        obtenerProveedores = text("SELECT * FROM proveedores")
+        obtenerProveedores = text("SELECT * FROM proveedores WHERE estado = 'true' ORDER BY id ASC")
         proveedores = db.execute(obtenerProveedores).fetchall()
         return render_template('proveedores.html', Proveedores = proveedores)
 
 @app.route('/bajaProveedor', methods=["GET", "POST"])
 def bajaProveedor():
     idProveedor = request.form.get('id_baja')
-    eliminarProveedor = text("DELETE FROM proveedores WHERE id = :id")
+    eliminarProveedor = text("UPDATE proveedores SET estado = 'false' WHERE id = :id")
     db.execute(eliminarProveedor, {"id": idProveedor})
     db.commit()
+    db.close()
     flash(('El proveedor se ha eliminado con éxito.', 'success', '¡Éxito'))
     return redirect(url_for('proveedores'))
 
@@ -1058,6 +1076,7 @@ def editarProveedores():
             editarProveedor = text("UPDATE proveedores SET nombre_proveedor=:nombre_proveedor, correo_electronico=:correo_electronico, telefono=:telefono, direccion=:direccion WHERE id =:id")
             db.execute(editarProveedor, {"id":idProveedor, "nombre_proveedor":nombre_editar, "correo_electronico":correo_editar, "telefono":telefono_editar, "direccion": direccion_editar})
             db.commit()
+            db.close()
         else:
             flash("Ha ocurrido un error", 'error', '¡Error!')
             return redirect(url_for('proveedores'))
@@ -1075,6 +1094,7 @@ def agregarImgPlanta(data):
     query = text("UPDATE plantas SET imagen_url = :imagen WHERE id =:id")
     db.execute(query,{"imagen": imagen, "id": planta})
     db.commit()
+    db.close()
    
 
 @app.route('/editarPlantas', methods=["POST"])
@@ -1142,6 +1162,7 @@ def editarplantas():
                editarPlanta = text("UPDATE plantas SET nombre=:nombre, descripcion=:descripcion, entorno_ideal_id=:entorno, requerimiento_agua_id=:agua, tipo_suelo_id=:suelo, temporada_plantacion_id=:temporada, precio_venta=:precio WHERE id =:id")
                db.execute(editarPlanta, {"id":planta_ID, "nombre":plantas_editar, "descripcion":descripcioPlanta_editar, "entorno": identorno_editar, "agua": idagua_editar, "suelo": idSuelo_editar, "temporada": idTemporada_editar, "precio": precio_editar})
                db.commit()
+               db.close()
 
                subcategorias_seleccionadass = subcatplanta_editar
                print(subcategorias_seleccionadass)
@@ -1159,6 +1180,7 @@ def editarplantas():
                        insertarSubcategoria = text("INSERT INTO plantas_subcategoria (subcategoria_id, planta_id) VALUES (:subcategoria_id, :planta_id)")
                        db.execute(insertarSubcategoria, {"subcategoria_id": subcat, "planta_id": planta_ID})
                        db.commit()
+                       db.close()
                
                if sorted(subcategorias_seleccionadas) == sorted(subcategorias_existentes):
                    print("No hay cambios en las subcategorías")
@@ -1196,6 +1218,7 @@ def editarplantas():
                        insertarColores = text("INSERT INTO colores_plantas (color_id, planta_id) VALUES (:colores, :planta_id)")
                        db.execute(insertarColores, {"colores": colores, "planta_id": planta_ID})
                        db.commit()
+                       db.close()
                
                if sorted(colores_seleccionados) == sorted(colores_Plantas_existentes):
                    print("No hay cambios en los colores")   
@@ -1250,6 +1273,7 @@ def editarplantas():
                         print(f"Eliminando rango con ID: {rango}")
                         
                db.commit()
+               db.close()
            else:
                flash("Ha ocurrido un error", 'error', '¡Error!')
                return redirect(url_for('plantas'))
@@ -1388,6 +1412,7 @@ def ventas():
                 )
 
         db.commit()
+        db.close()
         flash(('La Venta se ha realizado correctamente', 'success', '¡Exito!'))
         return redirect(url_for('ventas'))
 
@@ -1463,6 +1488,7 @@ def get_products():
 
     # print(productos)
     return jsonify(productos)
+
 @app.route('/compras', methods=['GET', 'POST'])
 def compras():
     if request.method == 'GET':
@@ -1612,22 +1638,26 @@ def catalogo():
     return render_template('catalogo.html')
 
 #---------------- rutas para buscar info en cada search
-@app.route('/generar_json_usuarios', methods=['GET'])
-def generar_json_usuarios():
-    print("entro a generar json usuarios")
-    usuariosquery = text("""
-        SELECT usuarios.id, usuarios.nombre_completo, usuarios.correo, roles.rol, roles.id
-        FROM usuarios
-        INNER JOIN roles ON usuarios.rol_id = roles.id order by usuarios.id asc
+@app.route('/usuarios_json', methods=["GET"])
+def usuarios_json():
+    print("Usuarios JSON")
+    # Obtener usuarios con rol 1 o 2
+    obtenerUsuarios = text("""
+        SELECT u.id, u.nombre_completo, u.correo, r.rol, u.rol_id
+        FROM usuarios u
+        INNER JOIN roles r ON r.id = u.rol_id
+        WHERE u.rol_id = 1 OR u.rol_id = 2
+        ORDER BY u.id ASC
     """)
-    usuarios = db.execute(usuariosquery).fetchall()
+    usuarios = db.execute(obtenerUsuarios).fetchall()
 
+    # Convertir los resultados a un formato que se pueda convertir a JSON
     usuarios_json = [
-        {'id': usuario[0], 'nombre_completo': usuario[1], 'correo': usuario[2], 'rol': usuario[3] , 'rol_id': usuario[4]}
+        {'id': usuario[0], 'nombre_completo': usuario[1], 'correo': usuario[2], 'rol': usuario[3], 'rol_id': usuario[4]}
         for usuario in usuarios
     ]
-    print(usuarios_json)
-    return jsonify(usuarios_json)
+
+    return jsonify(usuarios_json)  # Enviar los usuarios como respuesta JSON
 
 @app.route('/generar_json_categorias', methods=["GET"])
 def generar_json_categorias():
@@ -1650,7 +1680,7 @@ def generar_json_subcategorias():
 @app.route('/generar_json_proveedores', methods=["GET"])
 def generar_json_proveedores():
     print("entro a generar json proveedores")
-    proveedoresquery = text("SELECT * FROM proveedores ORDER BY id ASC")
+    proveedoresquery = text("SELECT * FROM proveedores WHERE estado = 'true' ORDER BY id ASC")
     proveedores = db.execute(proveedoresquery).fetchall()
 
     proveedores_json = [{"id": proveedor[0], "nombre_proveedor": proveedor[1], "correo_electronico": proveedor[2], "telefono": proveedor[3], "direccion": proveedor[4]} for proveedor in proveedores]
@@ -1785,6 +1815,7 @@ def generar_json_insumos():
                               INNER JOIN colores c ON c.id = ci.color_id 
                               INNER JOIN aplicaciones_insumos api ON api.insumo_id = i.id
                               INNER JOIN aplicaciones ap ON ap.id = api.aplicacion_id 
+                              WHERE i.estado = 'true'
                                GROUP BY 
                               i.id, 
                               i.nombre, 
@@ -1860,6 +1891,10 @@ def produccion():
     
     return redirect(url_for('plantas'))
     
+
+@app.route('/configuracion', methods=['GET', 'POST'])
+def configuracion():
+    return render_template("configuracion.html")
     
 
 if __name__ == '__main__':

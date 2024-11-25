@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function(){
     nombre.addEventListener('input', validar);
     correo.addEventListener('input', validarEmail);
     telefono.addEventListener('input', validar);
-    direccion.addEventListener('input', validar);
+    direccion.addEventListener("input", validar);
 
     function validar(e){
         if(e.target.value.trim() === ''){
@@ -74,18 +74,18 @@ document.addEventListener('DOMContentLoaded', function(){
         inputs.forEach(input =>{
             if(input.value.trim() === ''){
                 fields = false;
+                console.log(fields)
             }
         });
 
         //Habilita o deshabilita el boton segun el estado de los campos
         if(fields){
-            btnSend.disabled = false;
-            btnSend.classList.remove('opacity');
-        }
-        else{
-            btnSend.disabled = true;
-            btnSend.classList.add('opacity');
-        }
+          btnSend.disabled = false;
+          btnSend.classList.remove('opacity');
+      } else {
+          btnSend.disabled = true;
+          btnSend.classList.add('opacity');
+      }
     });
 
     // validar inputs de proveedores ------------------
@@ -188,8 +188,8 @@ function mostrarProveedores(data) {
           <button class="btn-edit btn-edit-proveedores" data-id="${proveedor.id}">
             <i class="material-icons">edit</i>
           </button>
-          <form action="/eliminarProveedor" method="post" class="form-eliminar">
-            <input type="hidden" class="id_eliminar" name="id_proveedor" value="${proveedor.id}">
+          <form action="/bajaProveedor" method="post" class="form-eliminar">
+            <input type="hidden" class="id_eliminar" name="id_baja" value="${proveedor.id}">
             <button class="btn-delete" type="submit">
               <i class="material-icons">delete</i>
             </button>
@@ -247,32 +247,34 @@ document.getElementById('tabla_proveedores').addEventListener('click', function 
   }
   });
 
-// ALERTAS
-// alerta btn eliminar 
-const forms_Proveedores = document.querySelectorAll('.form-eliminar')
+  // Delegacion de eventos para el boton eliminar
+document.getElementById('tabla_proveedores').addEventListener('click', function (event) {
+  if (event.target.closest('.btn-delete')) {
+    event.preventDefault(); // Evita el envío automático del formulario
 
-forms_Proveedores.forEach(form => {
-  form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Detener el envío del formulario inicialmente
-  
+    const form = event.target.closest('.form-eliminar'); // Selecciona el formulario asociado
+    const proveedorId = form.querySelector('.id_eliminar').value; // Obtiene el ID del proveedor
+
+    // Mostrar SweetAlert de confirmación
     Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡No podrás revertir esta acción!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminarlo',
-        cancelButtonText: 'Cancelar'
+      title: '¿Estás seguro?',
+      text: `Se eliminará el proveedor. ¡No podrás revertir esta acción!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
-        if (result.isConfirmed) {
-            event.target.submit(); 
-          }
-      })
-  });
-
+      if (result.isConfirmed) { 
+        // Si se confirma, envía el formulario
+        form.submit();
+      }
+    });
+  }
 });
 
+// ALERTAS
 //ALERTA EDITAR
 const form_editar = document.querySelector('.form_edit');
 

@@ -164,9 +164,9 @@ document.addEventListener('DOMContentLoaded', function () {
           <button class="btn-edit btn-edit-categorias" data-id="${categoria.id}">
             <i class="material-icons">edit</i>
           </button>
-          <form action="/eliminarCategoria" method="post" class="form-eliminar">
-            <input type="hidden" class="id_eliminar" name="id_categoria" value="${categoria.id}">
-            <button class="btn-delete" type="submit">
+          <form action="/eliminarCategoria" method="post" class="form-eliminar-cat">
+            <input type="hidden" class="id_eliminar" name="id_eliminar" value="${categoria.id}">
+            <button class="btn-delete btn-delete-cat" type="submit">
               <i class="material-icons">delete</i>
             </button>
           </form>
@@ -213,31 +213,60 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
+   // Delegacion de eventos para el boton eliminar
+   // Delegación de eventos para el botón eliminar categoría
+document.getElementById('tabla_categorias').addEventListener('click', function (event) {
+  if (event.target.closest('.btn-delete-cat')) {
+    event.preventDefault(); // Evita el envío automático del formulario
+
+    const form = event.target.closest('.form-eliminar-cat'); // Selecciona el formulario asociado
+    const categoriaId = form.querySelector('.id_eliminar').value; // Obtiene el ID de la categoría
+
+    // Mostrar SweetAlert de confirmación
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `Se eliminará la categoría. ¡No podrás revertir esta acción!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si se confirma, envía el formulario
+        form.submit();
+      }
+    });
+  }
+});
+
+
   // ALERTAS
   // alerta btn eliminar 
-  const forms_Cat = document.querySelectorAll('.form-eliminar')
+  // const forms_Cat = document.querySelectorAll('.form-eliminar')
 
-  forms_Cat.forEach(form => {
-    form.addEventListener('submit', function (event) {
-      event.preventDefault(); // Detener el envío del formulario inicialmente
+  // forms_Cat.forEach(form => {
+  //   form.addEventListener('submit', function (event) {
+  //     event.preventDefault(); // Detener el envío del formulario inicialmente
 
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡No podrás revertir esta acción!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminarlo',
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          event.target.submit();
-        }
-      })
-    });
+  //     Swal.fire({
+  //       title: '¿Estás seguro?',
+  //       text: "¡No podrás revertir esta acción!",
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: 'Sí, eliminarlo',
+  //       cancelButtonText: 'Cancelar'
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         event.target.submit();
+  //       }
+  //     })
+  //   });
 
-  });
+  // });
 
   //ALERTA EDITAR
   const form_editar = document.querySelector('.form_edit');

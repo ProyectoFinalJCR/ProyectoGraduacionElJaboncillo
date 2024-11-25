@@ -70,23 +70,26 @@ Subcategorias | El Jaboncillo
             </div>
             <form action="/subCategorias" id="form-subcat" method="post" class="form-subcat">
                 <section class="input-subcategoria">
-                    <div class="input-contenido">
-                        <label for="">Subcategoria</label>
-                        <input type="text" id="nombreSub" class="input input-subcategories input-insumos" name="nombreSub"
+                    <div class="input-sub-categoria">
+
+                        <div class="input-contenido">
+                            <label for="">Subcategoria</label>
+                            <input type="text" id="nombreSub" class="input input-subcategories input-insumos" name="nombreSub"
                             placeholder="Nombre subcategoria">
-                    </div>
-                    <div class="input-contenido">
-                        <label for="">Categoria</label>
+                        </div>
+                        <div class="input-contenido">
+                            <label for="">Categoria</label>
                         <select class="input input-insumos input-subcategories" id="cat" name="idCat">
                             {% for rows in categorias %}
                             <option name="idCat" value="{{rows[0]}}">{{rows[1]}}</option>
                             {% endfor %}
                         </select>
                     </div>
+                    </div>
                     <div class="input-contenido">
                         <label for="">Descripción</label>
-                        <input type="text" id="descripcion" class="input input-subcategories input-insumos" name="descripcion"
-                            placeholder="Descripcion">
+                        <textarea id="descripcion" class="input input-subcategories  input-insumos" name="descripcion"
+                            placeholder="Descripcion"></textarea>
                     </div>
                 </section>
                 <section class="btn-agregar-subcategorias">
@@ -103,14 +106,19 @@ Subcategorias | El Jaboncillo
 </div>
 
 <!-- Modal editar subcategoria -->
-<div id="myModal" class="modal">
-    <div class="modal-content form-subcat">
+<div id="myModal" class="modal-subcat">
+    <div class="modal-content-subcat form-subcat">
         <div class=subcat-title>
             <h2>Editar subcategoria</h2>
             <span class="close">&times;</span>
         </div>
         <form action="/editarSubcategoria" method="post" class="form_subt">
             <div class="input-subcategories">
+                <div class="input-sub-categoria">
+                <div class="input-contenido">
+                    <label for="">Nombre subcategoria</label>
+                    <input type="text" id="nombreSub_editar" class="input input-insumos " name="nombreSub_editar">
+                </div>
                 <div class="input-contenido">
                     <input type="hidden" id="id_editar" name="id_editar">
                     <label for="">Categoria</label>
@@ -120,17 +128,14 @@ Subcategorias | El Jaboncillo
                         {% endfor %}
                     </select>
                 </div>
-                <div class="input-contenido">
-                    <label for="">Nombre subcategoria</label>
-                    <input type="text" id="nombreSub_editar" class="input input-insumos " name="nombreSub_editar">
-                </div>
+            </div>
                 <div class="input-contenido">
                     <label for="">Descripción</label>
-                    <input type="text" id="descripcion_editar" class="input input-insumos" name="descripcion_editar">
+                    <textarea type="text" id="descripcion_editar" class="input input-insumos" name="descripcion_editar"> </textarea>
                     
                 </div>
             </div>
-            <div class="btn-modal">
+            <div class="btn-modal-subcat">
                 <img src="/static/img/logoElJaboncillo.png" class="img-modal" alt="logo">
                 <div class="btn-agregar">
                     <button type="button" class="btn btn-sub-eliminar close-modal">Cancelar</button>

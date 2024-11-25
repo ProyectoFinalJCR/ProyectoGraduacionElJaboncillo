@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 icon.textContent = 'keyboard_arrow_down';
             } else {
                 opciones.classList.add('options');
-                icon.textContent = 'keyboard_arrow_left';
+                icon.textContent = 'keyboard_arrow_right';
             }
         });
     });

@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/catalogo.css">
+    <link rel="stylesheet" href="/static/css/configuracion.css">
     <link rel="stylesheet" href="/static/css/layout.css">
     <link rel="stylesheet" href="/static/css/categorias.css">
     <link rel="stylesheet" href="/static/css/sub_categorias.css">
@@ -36,11 +38,17 @@
                 <p>ADMINISTRADOR</p>
             </div>
             <div class="items">
-                <div>
+                <div class="items-back">
+                    <button class="btn-items-inicio">
+                        <i class="material-icons">home</i>
+                        <a href="inicioAdmin"><p class="btn_texto">Inicio</p></a>
+                    </button>
+                </div>
+                <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">inventory</i>
-                        <p class="btn_texto">Gestion stock</p>
-                        <i class="material-icons key">keyboard_arrow_left</i>
+                        <p class="btn_texto">Gestión inventario</p>
+                        <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
                         <ul class="list-options">
@@ -50,11 +58,11 @@
                         </ul>
                     </div>
                 </div>
-                <div>
+                <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">payments</i>
-                        <p class="btn_texto">Gestion facturación</p>
-                        <i class="material-icons key">keyboard_arrow_left</i>
+                        <p class="btn_texto">Gestion ventas</p>
+                        <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
                         <ul class="list-options">
@@ -64,11 +72,11 @@
                         </ul>
                     </div>
                 </div>
-                <div>
+                <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">local_mall</i>
-                        <p class="btn_texto">Gestion compras</p>
-                        <i class="material-icons key">keyboard_arrow_left</i>
+                        <p class="btn_texto">Gestión compras</p>
+                        <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
                         <ul class="list-options">
@@ -78,11 +86,11 @@
                         </ul>
                     </div>
                 </div>
-                <div>
+                <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">group_add</i>
-                        <p class="btn_texto">Gestion usuarios</p>
-                        <i class="material-icons key">keyboard_arrow_left</i>
+                        <p class="btn_texto">Gestión usuarios</p>
+                        <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
                         <ul class="list-options">
@@ -90,11 +98,11 @@
                         </ul>
                     </div>
                 </div>
-                <div>
+                <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">category</i>
-                        <p class="btn_texto">Gestion categorias</p>
-                        <i class="material-icons key">keyboard_arrow_left</i>
+                        <p class="btn_texto">Gestión categorias</p>
+                        <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
                         <ul class="list-options">
@@ -107,21 +115,22 @@
             <div class="configuracion">
                 <button class="btn-items-config">
                     <i class="material-icons">settings</i>
-                    <p>Configuración del sistema</p>
+                    <a class="item" href="/configuracion"><p>Configuración del sistema</p></a>
                 </button>
             </div>
     </aside>
     <section id="wrapper" class="seccion-wrapper">
         <nav class="navbar">
-            <img src="/static/img/logoElJaboncillo.png" alt="logo">
             <div class="navbar-content">
+            <i class="material-icons  menu-toggle">menu</i>
+           <a href="inicioAdmin"> <img src="/static/img/logoElJaboncillo.png" alt="logo"></a>
+            </div>
                 <div class="fecha">
                     <p id="fecha"></p>
                     <p>/</p>
                     <p id="hora"></p>
                 </div>
-                <i class="material-icons  menu-toggle">menu</i>
-            </div>
+                <!-- <i class="material-icons  menu-toggle">menu</i> -->
         </nav>
         <main class="main">
             {% block main %}

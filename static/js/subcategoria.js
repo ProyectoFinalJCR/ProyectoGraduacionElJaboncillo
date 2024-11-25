@@ -180,7 +180,7 @@ document.getElementById("search").addEventListener('input', function() {
               <i class="material-icons">edit</i>
             </button>
             <form action="/eliminarSubcategoria" method="post" class="form-eliminar">
-              <input type="hidden" class="id_eliminar" name="id_subcategoria" value="${subcategoria.id}">
+              <input type="hidden" class="id_eliminar" name="id_eliminar" value="${subcategoria.id}">
               <button class="btn-delete" type="submit">
                 <i class="material-icons">delete</i>
               </button>
@@ -230,6 +230,33 @@ document.getElementById("search").addEventListener('input', function() {
     
       }
  });
+
+ // Delegacion de eventos para el boton eliminar
+ document.getElementById('tabla_subcategorias').addEventListener('click', function (event) {
+        if (event.target.closest('.btn-delete')) {
+            event.preventDefault(); // Evita el envío automático del formulario
+    
+            const form = event.target.closest('.form-eliminar'); // Selecciona el formulario asociado
+            const subcategoriaId = form.querySelector('.id_eliminar').value; // Obtiene el ID de la subcategoría
+    
+            // Mostrar SweetAlert de confirmación
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: `Se eliminará la subcategoría. ¡No podrás revertir esta acción!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si se confirma, envía el formulario
+                    form.submit();
+                }
+            });
+        }
+    }); 
 
 
   //ALERTA EDITAR

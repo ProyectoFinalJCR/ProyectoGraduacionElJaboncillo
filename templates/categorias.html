@@ -46,9 +46,9 @@ Categorias | El Jaboncillo
                         <button class="btn-edit btn-edit-categorias">
                             <i class="material-icons">edit</i>
                         </button>
-                        <form action="/eliminarCategoria" method="post" class="form-eliminar">
+                        <form action="/eliminarCategoria" method="post" class="form-eliminar-cat">
                             <input type="hidden" id="id_eliminar" name="id_eliminar" value="{{rows.id}}">
-                            <button class="btn-delete" type="submit">
+                            <button class="btn-delete btn-delete-cat" type="submit">
                                 <i class="material-icons">delete</i>
                             </button>
                         </form>
@@ -62,7 +62,7 @@ Categorias | El Jaboncillo
     <div class="container-inputsCat">
         <div class="agregar-cat">
             <div class="inputCat-title">
-                <h3>Nuevo Categoria</h3>
+                <h3>Nueva Categoria</h3>
                 <span class="close" id="close_agregar_cat">&times;</span>
             </div>
             <form action="/categorias" id="form-cat" method="post" class="form-cat">
@@ -90,8 +90,8 @@ Categorias | El Jaboncillo
 </div>
 
 <!-- Modal editar categoria -->
-<div id="myModal" class="modal">
-    <div class="modal-content form-categories">
+<div id="myModal" class="modal-cat">
+    <div class="modal-content-cat form-categories">
         <div class="categoria-title">
             <h2>Editar categoria</h2>
             <span class="close">&times;</span>
@@ -105,11 +105,11 @@ Categorias | El Jaboncillo
                 </div>
                 <div class="input-contenido">
                     <label for="">Descripción</label>
-                    <input type="text" id="descripcion_editar" class="input input-cateEditar  input-insumos" name="descripcion_editar"
-                    value="{{categorias.descripcion}}">
+                    <textarea type="text" id="descripcion_editar" class="input input-cateEditar  input-insumos" name="descripcion_editar"
+                    value="{{categorias.descripcion}}"> </textarea>
                 </div>
             </div>
-            <div class="btn-modal">
+            <div class="btn-modal-cat">
                 <img src="/static/img/logoElJaboncillo.png" alt="logo" class="img-modal">
                 <div class="btn-agregar">
                     <button type="button" class="btn btn-sub-eliminar close-modal">Cancelar</button>

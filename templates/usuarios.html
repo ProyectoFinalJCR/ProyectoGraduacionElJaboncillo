@@ -42,7 +42,7 @@ Usuarios | El Jaboncillo
                     <td>{{usuario[0]}}</td>
                     <td>{{usuario[1]}}</td>
                     <td>{{usuario[2]}}</td>
-                    <td>{{usuario[3]}}</td>
+                    <td>{{usuario[6]}}</td>
                     <td style="display: none;">{{usuario[4]}}</td>
 
                     <td class="btn-acciones">
@@ -72,35 +72,41 @@ Usuarios | El Jaboncillo
             </div>
             <form class="formUser" action="/usuarios" id="formUser" method="post">
                 <section class="input-users">
-                    <div class="input-contenido">
-                        <label for="">Nombre Completo</label>
-                        <input type="text" id="nombre" class="input input-user input-insumos" name="nombre"
-                            placeholder="Nombre completo">
+                    <div class="grupo1">
+                        <div class="input-contenido">
+                            <label for="">Nombre Completo</label>
+                            <input type="text" id="nombre" class="input input-user input-insumos" name="nombre"
+                                placeholder="Nombre completo">
+                        </div>
+                        <div class="input-contenido">
+                            <label for="">Seleccione Rol</label>
+                            <select class="input input-user input-insumos" id="rol" name="idrol">
+                                {% for rol in Roles %}
+                                <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label for="">Correo</label>
-                        <input type="text" id="correo" class="input input-user input-insumos" name="correo" placeholder="Correo">
+                    <div class="grupo2">
+                        <div class="input-contenido">
+                            <label for="">Correo</label>
+                            <input type="text" id="correo" class="input input-user input-insumos" name="correo"
+                                placeholder="Correo">
+                        </div>
+                        <div class="input-contenido">
+                            <label for="">Contraseña</label>
+                            <input type="password" id="contraseña" class="input input-user input-insumos"
+                                name="contraseña" placeholder="Contraseña">
+                        </div>
                     </div>
-                    <div>
-                        <label for="">Contraseña</label>
-                        <input type="password" id="contraseña" class="input input-user input-insumos" name="contraseña"
-                            placeholder="Contraseña">
-                    </div>
-                    <div>
-                        <label for="">Seleccione Rol</label>
 
-                        <select class="input input-user input-insumos" id="rol" name="idrol">
-                            {% for rol in Roles %}
-                            <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
                 </section>
                 <section class="btn-agregar-user">
                     <img class="img-btn-add" src="/static/img/logoElJaboncillo.png" alt="logo">
                     <div class="btn-agregar">
                         <button type="button" class=" btn-cancel-user" id="btn-cancel-user ">Cancelar</button>
-                        <button type="submit" class="btn btn-agregar-users opacity" id="btn-agregar-user" disabled>Agregar</button>
+                        <button type="submit" class="btn btn-agregar-users"
+                            id="btn-agregar-user">Agregar</button>
                     </div>
                 </section>
             </form>
@@ -117,24 +123,34 @@ Usuarios | El Jaboncillo
         </div>
         <form action="/editarUsuario" method="post" class="form_edit_user">
             <div class="input-usuario">
-                <div class="input-contenido">
-                    <input type="hidden" id="id_editar_usuario" name="id_editar_usuario" value="{{usuario.id}}">
-                    <label for="">Nombre completo</label>
-                    <input type="text" id="nombreUsuario_editar" class="input input-user input-insumos"
-                        name="nombreUsuario_editar" value="">
+                <div class="grupo1">
+                    <div class="input-contenido">
+                        <input type="hidden" id="id_editar_usuario" name="id_editar_usuario" value="{{usuario.id}}">
+                        <label for="">Nombre completo</label>
+                        <input type="text" id="nombreUsuario_editar" class="input input-user input-insumos"
+                            name="nombreUsuario_editar" value="">
+                            
+                    </div>
+                    <div class="input-contenido">
+                        <label for="">Rol</label>
+                        <select type="text" id="rol_editar" name="rol_editar" class="input input-user input-insumos">
+                            {% for rol in Roles %}
+                            <option name="idrol" value="{{rol[0]}}" selected>{{rol[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-                <div class="input-contenido">
-                    <label for="">Correo</label>
-                    <input type="text" id="correo_editar" class="input input-user input-insumos" name="correo_editar"
-                        value="">
-                </div>
-                <div class="input-contenido">
-                    <label for="">Rol</label>
-                    <select type="text" id="rol_editar" name="rol_editar" class="input input-user input-insumos">
-                        {% for rol in Roles %}
-                        <option name="idrol" value="{{rol[0]}}" selected>{{rol[1]}}</option>
-                        {% endfor %}
-                    </select>
+                <div class="grupo2">
+                    <div class="input-contenido">
+                        <label for="">Correo</label>
+                        <input type="text" id="correo_editar" class="input input-user input-insumos"
+                            name="correo_editar" value="">
+                    </div>
+                    <div class="input-contenido">
+                        <label for="">Contraseña</label>
+                        <input type="password" id="contraseña_editar" class="input input-user input-insumos"
+                            name="contraseña_editar" value="">
+                    </div>
                 </div>
             </div>
             <div class="btn-modal">

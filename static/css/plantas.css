@@ -208,9 +208,6 @@
     height: auto;
 }
 .container-table-inputs .container-inputPlantas .form-plantas  .inputs-plantas{
-    /* display: flex;
-    flex-direction: column;
-    gap: 20px; */
     display: grid;
     grid-template-columns:repeat(3, 1fr); 
     gap: 20px;
@@ -325,7 +322,7 @@
     width: 100%;
     margin-top: 2px;
     border-radius: 10px;
-    background-color: #ECFFED;
+    background-color: #F3F2F8;
   }
   .modal-content-plantas .inputs-plantas .columna-1, .columna-2, .columna-3 {
     width: 100%;

@@ -89,7 +89,7 @@ Plantas | El Jaboncillo
                                 <i class="material-icons">compost</i>
                             </button>
                             <form action="/eliminarPlanta" method="post" class="form-eliminar">
-                                <input type="hidden" id="id_eliminar" name="id_eliminar" value="{{infoPlantas.id}}">
+                                <input type="hidden"  class="id_eliminar" name="id_eliminar" value="{{infoPlantas.id}}">
                                 <button class="btn-delete" type="submit">
                                     <i class="material-icons">delete</i>
                                 </button>
@@ -112,24 +112,24 @@ Plantas | El Jaboncillo
                         <div class="inputs-cont columna-1">
                             <div>
                                 <label for="">Nombre</label>
-                                <input type="text" id="nombrePlanta" class="input input-plantas" name="nombrePlanta"
+                                <input type="text" id="nombrePlanta" class="input input-insumos" name="nombrePlanta"
                                     placeholder="Nombre planta">
                             </div>
                             <div>
                                 <label>Descripcion</label>
-                                <input type="text" id="descripcion" class="input input-plantas" name="descripcion"
+                                <input type="text" id="descripcion" class="input input-insumos" name="descripcion"
                                     placeholder="Descripcion">
                             </div>
                             <div>
                                 <label>Precio unitario</label>
-                                <input type="number" id="precio" class="input input-plantas" name="precio"
-                                    placeholder="Descripcion">
+                                <input type="number" id="precio" class="input input-insumos" name="precio"
+                                    placeholder="Ingrese el precio">
                             </div>
                         </div>
                         <div class="inputs-cont columna-2">
                             <div class="inputs-select">
                                 <label>Colores</label>
-                                <select class="input input-plantas" id="color" name="idColor" required>
+                                <select class="input input-insumos" id="color" name="idColor" required>
                                     {% for colores in Colores %}
                                     <option value="{{ colores[0] }}">{{ colores[1] }}</option>
                                     {% endfor %}
@@ -137,7 +137,7 @@ Plantas | El Jaboncillo
                             </div>
                             <div class="inputs-select">
                                 <label>Subcategorias</label>
-                                <select class="input input-plantas" id="sub" name="idSub" required>
+                                <select class="input input-insumos" id="sub" name="idSub" required>
                                     {% for subcategoria in Subcategorias %}
                                     <option value="{{ subcategoria[0] }}">{{ subcategoria[2] }}</option>
                                     {% endfor %}
@@ -145,7 +145,7 @@ Plantas | El Jaboncillo
                             </div>
                             <div class="inputs-select">
                                 <label>Rangos de tamaño</label>
-                                <select class="input input-plantas" id="rango" name="idRango" required>
+                                <select class="input input-insumos" id="rango" name="idRango" required>
                                     {% for rango in Rangos %}
                                     <option value="{{ rango[0] }}">{{ rango[1] }}</option>
                                     {% endfor %}
@@ -155,7 +155,7 @@ Plantas | El Jaboncillo
                         <div class="inputs-cont columna-3">
                             <div>
                                 <label>Entorno ideal</label>
-                                <select class="input input-plantas" id="entorno" name="idEntorno" required>
+                                <select class="input input-insumos" id="entorno" name="idEntorno" required>
                                     {% for entorno in Entornos %}
                                     <option value="{{ entorno[0] }}">{{ entorno[1] }}</option>
                                     {% endfor %}
@@ -163,7 +163,7 @@ Plantas | El Jaboncillo
                             </div>
                             <div>
                                 <label>Requerimiento de agua</label>
-                                <select class="input input-plantas" id="agua" name="idAgua" required>
+                                <select class="input input-insumos" id="agua" name="idAgua" required>
                                     {% for agua in Agua %}
                                     <option value="{{ agua[0] }}">{{ agua[1] }}</option>
                                     {% endfor %}
@@ -171,7 +171,7 @@ Plantas | El Jaboncillo
                             </div>
                             <div>
                                 <label>Tipo de suelo</label>
-                                <select class="input input-plantas" id="suelo" name="idSuelo" required>
+                                <select class="input input-insumos" id="suelo" name="idSuelo" required>
                                     {% for suelo in Suelos %}
                                     <option value="{{ suelo[0] }}">{{ suelo[1] }}</option>
                                     {% endfor %}
@@ -179,7 +179,7 @@ Plantas | El Jaboncillo
                             </div>
                             <div>
                                 <label>Temporada de plantacion</label>
-                                <select class="input input-plantas" id="temporada" name="idTemporada">
+                                <select class="input input-insumos" id="temporada" name="idTemporada">
                                     {% for temporada in Temporada %}
                                     <option value="{{ temporada[0] }}">{{ temporada[1] }}</option required>
                                     {% endfor %}

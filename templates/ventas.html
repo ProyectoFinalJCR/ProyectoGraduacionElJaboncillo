@@ -40,9 +40,9 @@ Ventas | El Jaboncillo
                     <td>{{infoVentas.total}}</td>
                     <td>{{infoVentas.nota}}</td>
                     <td>{{infoVentas.estado}}</td>
-                    <td class="btn-acciones">
-                        <form action="/anularVenta" method="post" class="form-baja">
-                            <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
+                <td class="btn-acciones">
+                    <form action="/anularVenta" method="post" class="form-baja">
+                        <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
                             <button class="btn-delete" type="submit">
                                 <i class="material-icons">delete</i>
                             </button>

@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}
+Configuración del sistema | El Jaboncillo
+{% endblock %}
+
+{% block main %}
+<div class="allscreen">
+    <div class="img-info-cont">
+        <div class="img-info">
+            <img src="/static/img/logoElJaboncillo.png" alt="logo">
+            <div class="editar">
+                
+            </div>
+        </div>
+        <div class="info">
+            <div class="titulo-info">
+                <h2>Información del sistema</h2>
+                <button>editar información</button>
+            </div>
+            <div class="inputs-info">
+                <div class="columna1">
+                    <div class="inputs">
+                        <label>Nombre del sistema</label>
+                        <input type="text" class="nombre-sistema" name="nombre-sistema" placeholder="Nombre del sistema">
+                    </div>
+                    <div class="inputs">
+                        <label>Dirección del sistema</label>
+                        <textarea name="direccion-sistema" class="direccion-sistema" id="direccion-sistema" cols="30" rows="10" placeholder="Dirección del sistema"></textarea>
+                    </div>
+                    <div class="inputs">
+                        <label>Email del sistema</label>
+                        <input type="text" class="email-sistema" name="email-sistema" placeholder="Email del sistema">
+                    </div>
+                </div>
+                <div class="columna2">
+
+                    <div class="inputs">
+                        <label>Teléfono del sistema</label>
+                        <input type="text" class="telefono-sistema" name="telefono-sistema" placeholder="Teléfono del sistema">
+                    </div>
+                    <div class="inputs">
+                        <label>Numero RUC:</label>
+                        <input type="text" class="numero-ruc" name="numero-ruc" placeholder="Numero RUC">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="links-cont">
+
+    </div>
+</div>
+{%endblock%}

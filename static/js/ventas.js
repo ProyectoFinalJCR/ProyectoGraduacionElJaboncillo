@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function(){
                             $('#producto').append(new Option(producto.nombre, producto.id));
                        }); 
                     }
-
                 }
             });
         });
