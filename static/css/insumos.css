@@ -147,12 +147,11 @@ justify-content: space-between;
 }
 .container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 .input-subcat{
   width: 100%;
-  display: grid;
-  grid-template-columns: 5fr 1fr;
-  align-items:center;
-  gap: 15px;
-  padding-top: 10px;
-  margin-bottom: 10px;
+  display: flex;
+  height: auto;
+  flex-direction: column;
+  gap: 10px;
+  
 }
 
 .container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 .agregar-subcat{
@@ -191,7 +190,7 @@ gap: 10px;
   width: 100%;
   margin-top:2px;
   border-radius: 10px;
-  background-color: #ECFFED;
+  background-color: #F3F2F8;
 
 }
 .container-table-inputs .container-inputinsumos .btn-agregar{
@@ -221,7 +220,7 @@ gap: 10px;
 }
 
 .select2-container--default .select2-selection--multiple {
-  background-color: #ECFFED !important;
+  background-color: #F3F2F8 !important;
   width: 100% !important;
   border: 1px solid #aaa;
   border-radius: 4px;
@@ -294,7 +293,7 @@ gap: 10px;
     width: 100%;
     margin-top: 2px;
     border-radius: 10px;
-    background-color: #ECFFED;
+    background-color: #F3F2F8;
 }
 
   .modal-content-insumos .inputs-insumos .columna-1, .columna-2{

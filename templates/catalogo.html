@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,12 +8,149 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="shortcut icon" href="/static/img/logoElJaboncilloflor.png">
     <link rel="stylesheet" href="/static/css/catalogo.css">
-
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="shortcut icon" href="/static/img/logoElJaboncilloflor.png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <title>Catálogo | El Jaboncillo</title>
 </head>
+
 <body>
-    <h1>Aqui se creará el catalogo en linea</h1>
+    <header class="header">
+        <nav class="navbar">
+            <div class="links">
+                <a href="/">Inicio</a>
+                <a href="#">El vivero</a>
+                <a href="#">Servicios</a>
+                <a href="#">Catálogo</a>
+                <a href="#">Contacto</a>
+                <a href="#">Localización</a>
+            </div>
+        </nav>
+        <div class="container-img">
+            <img src="/static/img/logoElJaboncillo.png" alt="logo">
+        </div>
+        <div class="container-busqueda">
+            <div class="seccion-categorias">
+                <div class="lista-categorias">
+                    <select class="input-categorias" name="categorias" id="categorias">
+                        <option value="">Plantas</option>
+                        <option value="1">Ornamentales</option>
+                        <option value="2">decorativas</option>
+                        <option value="3">Frutales</option>
+                        <option value="4">Citricos</option>
+                    </select>
+                    <select class="input-categorias" name="categorias" id="categorias">
+                        <option value="">Insumos</option>
+                        <option value="1">Tierra</option>
+                        <option value="2">Fertilizantes</option>
+
+                    </select>
+                    <select class="input-categorias" name="categorias" id="categorias">
+                        <option value="">Servicios</option>
+                        <option value="1">Limpieza</option>
+                        <option value="2">Transporte</option>
+                    </select>
+                </div>
+            </div>
+            <div class="seccion-buscador">
+                <div class="barra-busqueda">
+                    <i class="material-icons">search</i>
+                    <input class="input-search" name="search" id="search" placeholder="Buscar">
+                </div>
+            </div>
+            <div class="btn-lista-cont">
+                <div class="btn-lista">
+                    <a href="#">Lista de deseo </a>
+                    <i class="material-icons">list_alt</i>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="img-info">
+        <div class="opacidad"></div>
+        <div class="texto-img">
+            <h2>BIENVENIDOS A LA SECCIÓN DE CATÁLOGO</h2>
+        </div>
+    </section>
+    <section class="resultado-plantas">
+        <div class="cards-plantas">
+            <div class="card-plantas">
+                <div class="img-card">
+                    <img class="img-planta" src="/static/img/gerberas.jpg" alt="Jade Crassula">
+                </div>
+                <div class="card-info">
+                    <div class="nombre-planta">
+                        <p>Gerbera, gerbera jamesonii</p>
+                    </div>
+                    <div class="btn-catalogo">
+                        <button><a href="#">Ir al catálogo</a></button>
+                    </div>
+                    <div class="minilogoEJ">
+                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
+                    </div>
+                </div>
+            </div>
+            <div class="card-plantas">
+                <div class="img-card img-plantaCorona">
+                    <img class="img-planta" src="/static/img/coronadecristo.jpg" alt="Jade Crassula">
+                </div>
+                <div class="card-info">
+                    <div class="nombre-planta">
+                        <p>Corona de cristo, euphorbia milii</p>
+                    </div>
+                    <div class="btn-catalogo">
+                        <button><a href="#">Ir al catálogo</a></button>
+                    </div>
+                    <div class="minilogoEJ">
+                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
+                    </div>
+                </div>
+            </div>
+            <div class="card-plantas">
+                <div class="img-card">
+                    <img class="img-planta" src="/static/img/gazanias.jpg" alt="gazanias">
+                </div>
+                <div class="card-info">
+                    <div class="nombre-planta">
+                        <p>Gazania, gazania rigens</p>
+                    </div>
+                    <div class="btn-catalogo">
+                        <button><a href="#">Ir al catálogo</a></button>
+                    </div>
+                    <div class="minilogoEJ">
+                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
+                    </div>
+                </div>
+            </div>
+            <div class="card-plantas">
+                <div class="img-card">
+                    <img class="img-planta" src="/static/img/crisantemo.jpg" alt="Jade Crassula">
+                </div>
+                <div class="card-info">
+                    <div class="nombre-planta">
+                        <p>Crisantemo, chrysanthemum morifolium</p>
+                    </div>
+                    <div class="btn-catalogo">
+                        <button><a href="#">Ir al catálogo</a></button>
+                    </div>
+                    <div class="minilogoEJ">
+                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+       
+    </section>
+    <script src="/static/js/catalogo.js"></script>
 </body>
+
 </html>

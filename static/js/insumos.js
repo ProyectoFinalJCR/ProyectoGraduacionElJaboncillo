@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   //Evento para mostrar formulario
   document.querySelector('#btn-add-insumos').addEventListener('click', function () {
 
@@ -204,10 +204,10 @@ document.addEventListener("DOMContentLoaded", function() {
       inputPrecioVentaInsumo_editar.value = precioVentaInsumo;
       inputPrecioVentaInsumo_editar.textContent = precioVentaInsumo;
 
-      
+
       // Mostrar el modal
       modal.style.display = "block";
-      
+
       // Asigna los valores y actualiza cada Select2
       $('#subcat_editar').val(subcategoriaInsumo).trigger('change');
       $('#coloresInsumo_editar').val(coloresInsumo).trigger('change');
@@ -217,6 +217,33 @@ document.addEventListener("DOMContentLoaded", function() {
       });
       document.getElementById("close-edit").addEventListener("click", function () {
         modal.style.display = "none";
+      });
+    }
+  });
+
+  // Delegar eventos para el boton de eliminar
+  document.getElementById('tabla_insumos').addEventListener('click', function (event) {
+    if (event.target.closest('.btn-delete')) {
+      event.preventDefault(); 
+      const button = event.target.closest('.btn-delete');
+      const insumoId = this.querySelector('.id_eliminar').value;
+      console.log("ID de insumo a eliminar:", insumoId);
+
+      // Mostrar SweetAlert de confirmación
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: `Se eliminará el insumo. ¡No podrás revertir esta acción!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Enviar formulario para eliminar
+          button.closest('form').submit();
+        }
       });
     }
   });
@@ -254,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   });
 
-   //SOCKETS Cloudinary
+  //SOCKETS Cloudinary
   /* MODAL AGREGAR*/
 
   const socket = io();
@@ -336,71 +363,6 @@ document.addEventListener("DOMContentLoaded", function() {
     modaleditar.style.display = "none";
   });
 
-  // document.getElementById("btn-modal-subcate").addEventListener("click", function (event) {
-
-  //   console.log("este se activa");
-  //   const modalAgregarSubcategoria = document.querySelector("#myModalSub");
-  //   modalAgregarSubcategoria.style.display = "block";
-
-  //   document.getElementById("close_modal").addEventListener("click", function () {
-  //     const modalAgregarSubcategoria = document.querySelector("#myModalSub");
-
-  //     modalAgregarSubcategoria.style.display = "none";
-  //   });
-  //   document.querySelector(".close").addEventListener("click", function () {
-  //     const modalAgregarSubcategoria = document.querySelector("#myModalSub");
-
-  //     modalAgregarSubcategoria.style.display = "none";
-  //   });
-
-  // });
-
-  // document.getElementById("btn-edit-sub").addEventListener("click", function (event) {
-  //   event.preventDefault();
-
-  //   // Obtén los datos del formulario
-  //   const formData = new FormData(document.getElementById("formSubcategoria"));
-
-  //   // Realiza la solicitud AJAX
-  //   fetch('/agregarSubcategoriaInsumos', {
-  //     method: 'POST',
-  //     body: formData
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       if (data.success) {
-  //         Swal.fire({
-  //           icon: 'success',
-  //           title: 'Subcategoría agregada',
-  //           text: 'La subcategoría se agregó exitosamente.'
-  //         });
-  //         cerrarModal(); // Función para cerrar el modal
-  //         document.getElementById("formSubcategoria").reset(); // Limpia el formulario
-  //       } else {
-  //         Swal.fire({
-  //           icon: 'error',
-  //           title: 'Error',
-  //           text: data.message || 'No se pudo agregar la subcategoría.'
-  //         });
-  //       }
-  //     })
-  //     .catch(error => {
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Error de servidor',
-  //         text: 'Hubo un problema al procesar la solicitud.'
-  //       });
-  //       console.error("Error en el envío:", error);
-  //     });
-  // });
-
-  // Función para cerrar el modal
-  function cerrarModal() {
-    document.getElementById("myModalSub").style.display = "none";
-  }
-
-
-  //---------
 
   document.getElementById("form-insumos").addEventListener("submit", function (event) {
     const fecha = document.getElementById("fecha_vencimiento").value;
@@ -419,7 +381,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
- 
+
 
 });
 
@@ -469,38 +431,53 @@ document.addEventListener("DOMContentLoaded", function() {
 /* MDOAL EDITAR*/
 document.addEventListener("DOMContentLoaded", function () {
 
-  document.querySelectorAll(".form_edit_insumo").forEach(function (form) {
-    form.addEventListener("submit", async function (event) {
+  const formInsumoEditar = document.querySelectorAll(".form_edit_insumo");
+
+  formInsumoEditar.forEach(form => {
+    form.addEventListener('submit', function (event) {
       event.preventDefault();
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, editar',
+        cancelButtonText: 'Cancelar'
+      }).then(async (result) => { // Declarar async aquí
+        if (result.isConfirmed) {
+          socket = io();
+          const imageUploader = document.getElementById('img_uploader_insu_editar');
+          const idInsumoEditar = document.getElementById('id_editar_insumo').value;
+          console.log("ID de insumo a editar:", idInsumoEditar);
 
-      socket = io();
-      const imageUploader = document.getElementById('img_uploader_insu_editar');
-      const idInsumoEditar = document.getElementById('id_editar_insumo').value;
-      console.log("ID de insumo a editar:", idInsumoEditar);
+          const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
+          const CLOUDINARY_UPLOAD_PRESET = "rn94xkdi";
 
-      const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
-      const CLOUDINARY_UPLOAD_PRESET = "rn94xkdi";
-
-      if (imageUploader.files.length > 0) {
-        const file = imageUploader.files[0];
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+          if (imageUploader.files.length > 0) {
+            const file = imageUploader.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
 
-        const res = await axios.post(CLOUDINARY_URL, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+            const res = await axios.post(CLOUDINARY_URL, formData, {
+              headers: { 'Content-Type': 'multipart/form-data' }
+            });
 
-        const url = res.data.url;
-        console.log("URL de la imagen subida:", url);
+            const url = res.data.url;
+            console.log("URL de la imagen subida:", url);
 
-        // Emitir la URL y el ID del insumo a través del socket
-        socket.emit("addImgInsumo", { 'url': url, 'idIns': idInsumoEditar });
-        // Aquí puedes proceder con el envío del formulario al servidor, si es necesario.
+            // Emitir la URL y el ID del insumo a través del socket
+            socket.emit("addImgInsumo", { 'url': url, 'idIns': idInsumoEditar });
+            // Aquí puedes proceder con el envío del formulario al servidor, si es necesario.
 
-        form.submit();
-      }
+            form.submit();
+          }
+        }
+      });
     });
-  });
+  })
 });
+

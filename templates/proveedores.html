@@ -71,35 +71,38 @@ Proveedores | El Jaboncillo
             </div>
             <form action="/proveedores" id="form-proveedores" method="post" class="form-proveedores">
                 <section class="input-proveedores">
-                    <div class="input-contenido">
-                        <label >Nombre del Proveedor</label>
-                        <input type="text" id="nombreprov" class="input input-proveedor input-insumos" name="nombre"
-                            placeholder="Nombre del Proveedor">
+                    <div class="grupo1">
+                        <div class="input-contenido">
+                            <label>Nombre del Proveedor</label>
+                            <input type="text" id="nombreprov" class="input input-proveedor input-insumos" name="nombre"
+                                placeholder="Nombre del Proveedor">
+                        </div>
+
+                        <div class="input-contenido">
+                            <label>Telefono</label>
+                            <input type="number" id="numeroTelefono" class="input input-proveedor input-insumos"
+                                name="numeroTelefono" placeholder="Telefono">
+                        </div>
                     </div>
-                    <div class="input-contenido">
-                        <label >Correo Electronico</label>
-                        <input type="text" id="correoProveedor" class="input input-proveedor input-insumos" name="correoProveedor"
-                            placeholder="Correo Electronico">
-                    </div>
-                    <div class="input-contenido">
-                        <label >Telefono</label>   
-                        <input type="number" id="numeroTelefono" class="input input-proveedor input-insumos" name="numeroTelefono"
-                            placeholder="Telefono">
-                    </div>
-                    <div class="input-contenido">
-                        <label >Direccion</label>
-                        <input type="text" id="direccionprov" class="input input-proveedor input-insumos" name="direccion"
-                            placeholder="Direccion">
+                    <div class="grupo2">
+                        <div class="input-contenido">
+                            <label>Correo Electronico</label>
+                            <input type="text" id="correoProveedor" class="input input-proveedor input-insumos"
+                                name="correoProveedor" placeholder="Correo Electronico">
+                        </div>
+                        <div class="input-contenido">
+                            <label>Direccion</label>
+                            <textarea id="direccionprov" class="input input-proveedor input-insumos" name="direccion" placeholder="Direccion"></textarea>
+                        </div>
                     </div>
                 </section>
                 <section class="btn-agregar-proveedor">
                     <img class="img-btn-add" src="/static/img/logoElJaboncillo.png" alt="logo">
                     <div class="btn-agregar">
                         <button type="button" class="btn btn-cancel" id="btn_cancel_proveedor">Cancelar</button>
-                        <button type="submit" class="btn btn-proveedor-agregar opacity" id="btn-add-proveedores" disabled>Agregar</button>
+                        <button type="submit" class="opacity btn btn-proveedor-agregar "
+                            id="btn-add-proveedores" disabled>Agregar</button>
                     </div>
-                    <!-- <button type="button" class="btn" id="btn-cancel">Cancelar</button>
-                    <button type="submit" class="btn" id="btn-add-proveedores">Agregar</button> -->
                 </section>
             </form>
         </div>
@@ -107,7 +110,7 @@ Proveedores | El Jaboncillo
 </div>
 
 <!-- Modal editar categoria -->
-<div id="myModal" class="modal">
+<div id="myModal" class="modal-prov">
     <div class="modal-content form-proveedoress">
         <div class="proveedor-title">
             <h2>Editar proveedor</h2>
@@ -115,27 +118,32 @@ Proveedores | El Jaboncillo
         </div>
         <form action="/editarProveedores" method="post" class="form-proveedores form_edit">
             <div class="input-proveedores">
-                <div class="input-contenido">
-                    <input type="hidden" id="id_editar" name="id_editar" value="{{Proveedores.id}}">
-                    <label for="">Nombre del Proveedor</label>
-                    <input type="text" id="nombre_editar" class="input input-proveedor input-insumos" name="nombre_editar"
-                    value="{{Proveedores.nombre_proveedor}}">
+                <div class="grupo1">
+                    <div class="input-contenido">
+                        <input type="hidden" id="id_editar" name="id_editar" value="{{Proveedores.id}}">
+                        <label for="">Nombre del Proveedor</label>
+                        <input type="text" id="nombre_editar" class="input input-proveedor input-insumos"
+                            name="nombre_editar" value="{{Proveedores.nombre_proveedor}}">
+                    </div>
+                    <div class="input-contenido">
+                        <label for="">Telefono</label>
+                        <input type="number" id="telefono_editar" class="input input-proveedor input-insumos"
+                            name="telefono_editar" value="{{Proveedores.direccion}}">
+                    </div>
                 </div>
-                <div class="input-contenido">
-                    <label for="">Correo Electronico</label>
-                    <input type="text" id="correo_editar" class="input input-proveedor input-insumos" name="correo_editar"
-                    value="{{Proveedores.correo_electronico}}">
+                <div class="grupo2">
+                    <div class="input-contenido">
+                        <label for="">Correo Electronico</label>
+                        <input type="text" id="correo_editar" class="input input-proveedor input-insumos"
+                            name="correo_editar" value="{{Proveedores.correo_electronico}}">
+                    </div>
+                    <div class="input-contenido">
+                        <label for="">Direccion</label>
+                        <textarea type="text" id="direccion_editar" class="input input-proveedor input-insumos"
+                            name="direccion_editar" value="{{Proveedores.direccion}}"> </textarea>
+                    </div>
                 </div>
-                <div class="input-contenido">
-                    <label for="">Telefono</label>
-                    <input type="text" id="telefono_editar" class="input input-proveedor input-insumos" name="telefono_editar"
-                    value="{{Proveedores.direccion}}">
-                </div>
-                <div class="input-contenido">
-                    <label for="">Direccion</label>
-                    <input type="text" id="direccion_editar" class="input input-proveedor input-insumos" name="direccion_editar"
-                    value="{{Proveedores.direccion}}">
-                </div>
+
             </div>
             <div class="btn-modal">
                 <img src="/static/img/logoElJaboncillo.png" alt="logo" class="img-modal">

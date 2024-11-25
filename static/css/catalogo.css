@@ -1,0 +1,307 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Noto Sans", sans-serif;
+}
+
+.header {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+.navbar {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    background-color: #009249;
+}
+.navbar .links {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;  
+}
+.navbar .links a:hover {
+    transform: scale(1.1); /* Efecto de agrandamiento */
+}
+.navbar .links a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    transition: color 0.3s ease, transform 0.3s ease; /* Transición suave */
+}
+
+.container-img {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-busqueda {
+    width: 100%;
+    height: 20%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    border: 1px solid #EAE9E9;
+
+}
+.container-busqueda .seccion-categorias{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.container-busqueda .seccion-categorias .lista-categorias{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+    width: 50%;
+    height: 30px;
+    padding-left: 50px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.container-busqueda .seccion-categorias .lista-categorias select{
+    width: 100%;
+    height: 55px;
+    border-radius: 10px;
+    background-color: #fff;
+    border: none;
+    padding: 10px;
+}   
+.container-busqueda .seccion-buscador{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+.barra-busqueda{
+    width: 100%;
+    height: 45px;
+    padding-left: 20px;
+    background-color: #F3F4F9;
+    box-shadow: 0px 5px 8px 0px #ececec;
+    outline: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.barra-busqueda i{
+    font-size: 30px;
+    background-color: #F3F4F9;
+}
+.barra-busqueda .input-search{
+    width: 100%;
+    height: 45px;
+    padding-left: 20px;
+    background-color: #F3F4F9;
+    box-shadow: 0px 5px 8px 0px #ececec;
+    outline: none;
+    border: none;
+    font-size: 14   px;
+}
+.container-busqueda .btn-lista-cont{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    text-align: center;
+    gap: 10px;
+}
+.container-busqueda .btn-lista-cont .btn-lista{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width:220px;
+    height: 80%;
+    border-radius: 16px;
+    background-color: #5dc073;
+}
+.container-busqueda .btn-lista-cont a{
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+}
+.container-busqueda .btn-lista-cont i{
+    font-size: 30px;
+    color: #fff ;
+}
+/* IMG INFO */
+.img-info{
+    width: 100%;
+    height: 65vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10px;
+    background-image: url("/static/img/catalogo/san_diegos.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative; /* Necesario para posicionar hijos con `absolute` */
+    overflow: hidden; /* Asegura que no haya contenido desbordante */
+    transform: scale(1); /* Inicia en escala normal */
+    transition: background-size 0.1s ease-out; /* Suaviza el cambio */
+    opacity: 0; /* Oculto al inicio */
+    transform: translateY(30px); /* Posición inicial hacia abajo */
+    transition: opacity 1.5s ease, transform 1.5s ease; /* Transición suave */
+}
+.img-info .opacidad{
+    top: 0;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.3;
+    z-index: 1;
+}
+.texto-img{
+    position: absolute;
+    width: 50%;
+    top: 95px;
+    right: 136px;
+    z-index: 2;
+    color: #fff;
+    font-size: 33rem;
+    font-weight: bold;
+    text-align: left;
+    height: 250px;
+    opacity: 0; /* Oculto al inicio */
+    transform: translateY(30px); /* Posición inicial hacia abajo */
+    transition: opacity 1.5s ease, transform 1.5s ease; /* Transición suave */
+}
+.texto-img h2{
+    font-size: 60px;
+    color: #fff;
+    letter-spacing: 10px;
+    font-weight: 900;
+}
+
+/*card-plantas*/
+.resultado-plantas{
+    width: 100%;
+    height: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: row;
+}
+
+.cards-plantas{
+    width: 100%;
+    height: 65%;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 120px;
+    margin-top: 20px;
+    padding: 50px;
+}
+
+.cards-plantas .card-plantas{
+    width: 300px;
+    height: 440px;
+    background-color: #fff;
+    border-radius: 24px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    box-sizing: border-box;
+ }
+ .cards-plantas .card-plantas .img-card{
+    width: 100%;
+    height: 70%;
+    border-radius: 24px 24px 0px 0px;
+    background-color: #009447;
+    
+  }
+
+  .cards-plantas .card-plantas .img-card img{
+    width: 100%;
+    height: 100%;
+    border-radius: 24px 24px 0px 0px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    }
+  .cards-plantas .card-plantas .card-info{
+    width: 100%;
+    height: 30%;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+   }
+  .cards-plantas .card-plantas .card-info{
+    width: 100%;
+    height: 30%;
+    padding: 15px;
+   }
+   /*nombre planta*/
+  .cards-plantas .card-plantas .card-info .nombre-planta{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+   }
+   /*boton catalogo*/
+   .cards-plantas .card-plantas .card-info .btn-catalogo{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 10px;
+   }
+  .cards-plantas .card-plantas .card-info .btn-catalogo button{
+    width: 45%;
+    height: 27px;
+    border-radius: 15px;
+    border: none;
+    background-color: #BEFFB6;
+    color: #000;
+   }
+  .cards-plantas .card-plantas .card-info .btn-catalogo button:hover{
+    background-color: #aae9a2;
+    font-weight: 600;
+   }
+  .cards-plantas .card-plantas .card-info .btn-catalogo button a{
+    text-decoration: none;
+    letter-spacing: 1px;
+   }
+   /*minilogo*/
+  .cards-plantas .card-plantas .card-info .minilogoEJ{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+   }
+  .cards-plantas .card-plantas .card-info .minilogoEJ img{
+    width: 40%;
+   }

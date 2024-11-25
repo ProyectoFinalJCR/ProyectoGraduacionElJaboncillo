@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <i class="material-icons">compost</i>
           </button>
           <form action="/eliminarPlanta" method="post" class="form-eliminar">
-              <input type="hidden" id="id_eliminar" name="id_eliminar" value="${planta.id}">
+              <input type="hidden"  class="id_eliminar" name="id_eliminar" value="${planta.id}">
               <button class="btn-delete" type="submit">
                   <i class="material-icons">delete</i>
               </button>
@@ -220,19 +220,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const inputNombreproduccion = document.getElementById("nombrePlantaproduccion")
       const inputDescripcion = document.getElementById("descripcionPlanta")
       const inputPrecio = document.getElementById("precioPlanta")
-            
-            // Obtener el elemento <p>
+
+      // Obtener el elemento <p>
       const fechaElemento = document.querySelector('.fecha-cont .fecha p');
 
       // Obtener la fecha actual
       const fechaActual = new Date();
       const fechaFormateada = fechaActual.toLocaleDateString('es-ES', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
       });
 
-      
+
       const row = event.target.closest("tr");
       // console.log("esta entrando en este js");
       console.log("esta en plantas.js")
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const PlantaDescripcion = row.cells[3].innerText;
       const PlantaSubcategoria = row.cells[12].innerText.split(', ');
       const PlantaPrecio = row.cells[11].innerText;
-      
+
       console.log("este es el id", PlantaIdproduccion);
       // Rellenar los campos del modal con los datos obtenidos
       inputIdproduccion.value = PlantaIdproduccion;
@@ -258,29 +258,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
       inputDescripcion.value = PlantaDescripcion;
       inputDescripcion.textContent = PlantaDescripcion;
-      
+
       inputPrecio.value = PlantaPrecio;
       inputPrecio.textContent = PlantaPrecio;
 
       // Establecer la fecha en el <p>
       fechaElemento.textContent = fechaFormateada;
-            
-            
 
-      
+
+
+
 
       // Asigna los valores y actualiza cada Select2
       // $('#idColor_editar').val(PlantaColor).trigger('change');
       $('#idSubcategoria_editar').val(PlantaSubcategoria).trigger('change');
       // $('#idRango_editar').val(PlantaRango).trigger('change');
 
-        // ABRIR MODAL Y MOSTRAR LA IMAGEN
-        const modalProduccion = document.getElementById("ModalProduccion");
-        const modalImg = modalProduccion.querySelector(".imgProduccion");
+      // ABRIR MODAL Y MOSTRAR LA IMAGEN
+      const modalProduccion = document.getElementById("ModalProduccion");
+      const modalImg = modalProduccion.querySelector(".imgProduccion");
 
-        if (imgSrc) {
-            modalImg.src = imgSrc; // Actualizar la imagen del modal
-        }
+      if (imgSrc) {
+        modalImg.src = imgSrc; // Actualizar la imagen del modal
+      }
 
 
 
@@ -296,6 +296,33 @@ document.addEventListener("DOMContentLoaded", function () {
         modalproduccion.style.display = "none";
       });
 
+    }
+  });
+
+  // Delegacion de eventos para el boton eliminar
+  // Delegar eventos para el botón de eliminar
+  document.getElementById('tabla_plantas').addEventListener('click', function (event) {
+    if (event.target.closest('.btn-delete')) {
+      event.preventDefault(); // Evita que se envíe el formulario automáticamente
+      const form = event.target.closest('.form-eliminar'); // Encuentra el formulario
+      const userId = form.querySelector('.id_eliminar').value;
+
+      // Mostrar alerta de confirmación con SweetAlert
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: `¡No podrás revertir esta acción!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Enviar formulario para eliminar
+          form.submit();
+        }
+      });
     }
   });
 
@@ -350,50 +377,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //SOCKETS Cloudinary
   /* MDOAL AGREGAR*/
-    const socket = io();
-    socket.on('connect', () => {
-      console.log('Cliente conectado a SocketIO');
-    });
+  const socket = io();
+  socket.on('connect', () => {
+    console.log('Cliente conectado a SocketIO');
+  });
 
-    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
-    const CLOUDINARY_UPLOAD_PRESET = "rn94xkdi";
+  const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "rn94xkdi";
 
-    // Usar delegación de eventos para inputs dinámicos
-    document.addEventListener("change", async function (event) {
-      // Verificar si el evento proviene de un input de archivo con la clase específica
-      if (event.target && event.target.classList.contains("file-input")) {
-        const fileInput = event.target;
-        const file = fileInput.files[0];
-        if (file) {
-          // Obtener el ID relacionado con el input actual
-          const id_planta = fileInput.closest("form").querySelector(".id_planta_agregar").value;
+  // Usar delegación de eventos para inputs dinámicos
+  document.addEventListener("change", async function (event) {
+    // Verificar si el evento proviene de un input de archivo con la clase específica
+    if (event.target && event.target.classList.contains("file-input")) {
+      const fileInput = event.target;
+      const file = fileInput.files[0];
+      if (file) {
+        // Obtener el ID relacionado con el input actual
+        const id_planta = fileInput.closest("form").querySelector(".id_planta_agregar").value;
 
-          const reader = new FileReader();
+        const reader = new FileReader();
 
-          reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
 
-          // Crear el FormData para la subida a Cloudinary
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+        // Crear el FormData para la subida a Cloudinary
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
 
-          const res = await axios.post(CLOUDINARY_URL, formData, {
-            headers: { "Content-Type": "multipart/form-data" }
-          });
+        const res = await axios.post(CLOUDINARY_URL, formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
 
-          const url = res.data.url;
-          console.log("URL de la imagen subida:", url);
+        const url = res.data.url;
+        console.log("URL de la imagen subida:", url);
 
 
-          socket.emit("addImgPlanta", { 'url': url, 'idPlan': id_planta });
-          console.log("Enviado a la planta en agregarplanta: ", id_planta);
-        }
-
-        // Enviar el formulario (opcional si es necesario)
-        const formagregarimg = fileInput.closest(".form_agregarimgplanta");
-        formagregarimg.submit();
+        socket.emit("addImgPlanta", { 'url': url, 'idPlan': id_planta });
+        console.log("Enviado a la planta en agregarplanta: ", id_planta);
       }
-    });
+
+      // Enviar el formulario (opcional si es necesario)
+      const formagregarimg = fileInput.closest(".form_agregarimgplanta");
+      formagregarimg.submit();
+    }
+  });
 
 });
 
@@ -414,50 +441,43 @@ document.addEventListener("DOMContentLoaded", function () {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, editar',
         cancelButtonText: 'Cancelar'
-      }).then((result) => {
+      }).then(async (result) => { // Declarar async aquí
         if (result.isConfirmed) {
-          event.target.submit();
+          socket = io();
+          const imageEditarUploader = document.getElementById('img_uploader_plantas_editar');
+          const idPlantaEditar = document.getElementById('id_editar_planta').value;
+          console.log("ID de planta a editar:", idPlantaEditar);
+
+          const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
+          const CLOUDINARY_UPLOAD_PRESET = "rn94xkdi";
+
+          if (imageEditarUploader.files.length > 0) {
+            const file = imageEditarUploader.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+            const res = await axios.post(CLOUDINARY_URL, formData, {
+              headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            const url = res.data.url;
+            console.log("URL de la imagen subida:", url);
+
+            // Emitir la URL y el ID del insumo a través del socket
+            socket.emit("addImgPlanta", { 'url': url, 'idPlan': idPlantaEditar });
+
+            // Enviar el formulario al servidor
+            form.submit();
+          } else {
+            // Si no hay imagen, enviar directamente el formulario
+            form.submit();
+          }
         }
       });
     });
   });
-
-  document.querySelectorAll(".form_editar_plantas").forEach(function (form) {
-    form.addEventListener("submit", async function (event) {
-      event.preventDefault();
-
-      socket = io();
-      const imageEditarUploader = document.getElementById('img_uploader_plantas_editar');
-      const idPlantaEditar = document.getElementById('id_editar_planta').value;
-      console.log("ID de planta a editar:", idPlantaEditar);
-
-      const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/do1rxjufw/image/upload";
-      const CLOUDINARY_UPLOAD_PRESET = "rn94xkdi";
-
-      if (imageEditarUploader.files.length > 0) {
-        const file = imageEditarUploader.files[0];
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
-
-        const res = await axios.post(CLOUDINARY_URL, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-
-        const url = res.data.url;
-        console.log("URL de la imagen subida:", url);
-
-        // Emitir la URL y el ID del insumo a través del socket
-        socket.emit("addImgPlanta", { 'url': url, 'idPlan': idPlantaEditar });
-
-        // Aquí puedes proceder con el envío del formulario al servidor, si es necesario.
-        form.submit();
-      }
-    });
-  });
 });
-
 
 
 

@@ -40,9 +40,9 @@ Ventas | El Jaboncillo
                     <td>{{infoVentas.total}}</td>
                     <td>{{infoVentas.nota}}</td>
                     <td>{{infoVentas.estado}}</td>
-                    <td class="btn-acciones">
-                        <form action="/anularVenta" method="post" class="form-baja">
-                            <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
+                <td class="btn-acciones">
+                    <form action="/anularVenta" method="post" class="form-baja">
+                        <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
                             <button class="btn-delete" type="submit">
                                 <i class="material-icons">delete</i>
                             </button>
@@ -143,16 +143,6 @@ Ventas | El Jaboncillo
                             <!-- Campo oculto que contendrá el ID de la divisa -->
                             <input type="hidden" id="divisa-id" name="divisa-id" value="">
                         </div>
-                        
-                        <!-- <div>
-                            <label>Divisas</label>
-                            <select class="input input-plantas" id="divisa-select" name="divisa-select">
-                                {% for infoDivisas in InfoDivisas %}
-                                <option name="divisa-select" value="{{infoDivisas[3]}}">{{infoDivisas[1]}}</option>
-                                {% endfor %}
-                                <option value="" selected>Selecciona una divisa</option>
-                            </select>
-                        </div> -->
                         <div>
                             <label>Subtotal</label>
                             <input type="number" id="subtotal" class="input input-plantas" name="subtotal"

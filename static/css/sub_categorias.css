@@ -89,6 +89,20 @@
       border: 3px solid #F3F2F8;
   }
 }
+ .container-table-inputs .container-inputSubcat .form-subcat .input-subcategoria .input-sub-categoria{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+}
+ .container-table-inputs .container-inputSubcat .form-subcat .input-subcategoria .input-sub-categoria, #descripcion{
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 100px;
+    min-height: 100px;
+    max-height: 100px;
+}
 
 .container-table-inputs .container-inputSubcat .form-subcat  .input-contenido{
     display: flex;
@@ -146,18 +160,32 @@
 
 /* MODAL */
  /* Contenido del Modal */
- .modal-content {
-    background-color: white;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
+ .modal-subcat {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
     width: 100%;
-    max-width: 700px;
-    height: 580px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
   }
-  .modal-content .subcat-title{
+ .modal-subcat .modal-content-subcat {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-35%, -50%); /* Centra el modal */
+  background-color: #fff;
+  padding: 0px 50px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 700px;
+  height: 460px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .modal-subcat .modal-content-subcat .subcat-title{
     width: 100%;
     height: 65px;
     display: flex;
@@ -168,20 +196,20 @@
     margin-bottom: 25px;
 
   }
-  .modal-content .form_subt{
+ .modal-subcat .modal-content-subcat .form_subt{
     width: 100%;
     height: auto;
   }
 
-  .modal-content  .form_subt .input-subcategories{
-    height: 255px;
+ .modal-subcat .modal-content-subcat  .form_subt .input-subcategories{
+    height: 285px;
     max-height: 300px;
     display: flex;
     flex-direction: column;
     gap: 15px;
     overflow-y: auto;
     scrollbar-width: 1px; /* Firefox */
-    -ms-overflow-style: 1px;  /* IE 10+ */
+    -ms-overflow-style: 1px;  /* IE 10+*/ 
     &::-webkit-scrollbar-track {
         background-color: #d7ffda;
     }
@@ -195,31 +223,49 @@
         border: 3px solid #F3F2F8;
     }
   } 
-  .modal-content .form_subt .input-subcategories .input-contenido{
+  .modal-subcat .modal-content-subcat .form_subt .input-subcategories .input-sub-categoria{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+  }
+  
+.modal-subcat .modal-content-subcat .form_subt .input-subcategories .input-sub-categoria, #descripcion_editar{
+    width: 100%;
+    height: 100px;
+    min-height: 100px;
+    max-height: 100px;
+    min-width: 100%;
+    max-width: 100%;
+  } 
+ .modal-subcat .modal-content-subcat.form_subt .input-subcategories .input-contenido{
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 5px;
   align-items: start;
   }
-  .modal-content .btn-modal{
+
+ .modal-subcat .modal-content-subcat .btn-modal-subcat{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 35px;
+    margin-top: 10px;
     gap: 15px;
+    border-top: 1px solid #000;
+    padding-top: 18px;
   }
-  .modal-content .btn-modal .btn-agregar{
+.modal-subcat .modal-content-subcat .btn-modal-subcat .btn-agregar{
     display: flex;
     flex-direction: row;
     gap: 15px;
   }
-  .modal-content .btn-modal .img-modal{
+  .modal-subcat .modal-content-subcat .btn-modal-subcat .img-modal{
     width: 200px;
     height: 40px;    
   }
 
-  .modal-content .btn-modal .btn-agregar .btn-sub-eliminar{
+.modal-subcat .modal-content-subcat .btn-modal-subcat .btn-agregar .btn-sub-eliminar{
     width: 100px;
     height: 35px;
     background-color: #CF696B;
@@ -228,11 +274,11 @@
     border-radius: 5px;
   cursor:pointer;    
   }
-  .modal-content .btn-modal .btn-agregar .btn-sub-eliminar:hover{
+ .modal-subcat .modal-content-subcat .btn-modal-subcat .btn-agregar .btn-sub-eliminar:hover{
     background-color: #CF696B;
     color: #fff;
   }
-  .modal-content .btn-modal .btn-agregar .btn-sun-agregar{
+  .modal-subcat .modal-content-subcat .btn-modal-subcat .btn-agregar .btn-sun-agregar{
     border: none;
     color: white;
     background-color: #2db87e;
@@ -242,9 +288,9 @@
     cursor: pointer;    
     border-radius: 5px;
   }
-  .modal-content .btn-modal .btn-agregar .btn-sun-agregar:hover{
+.modal-subcat .modal-content-subcat .btn-modal-subcat .btn-agregar .btn-sun-agregar:hover{
     background-color: #229e6a;
     color: #fff;
   }
 
-
+ 
