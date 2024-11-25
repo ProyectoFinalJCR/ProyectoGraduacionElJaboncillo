@@ -1320,7 +1320,6 @@ def ventas():
                 'precio': float(precio)
             })
             index += 1
-
         if not cliente:
             flash(('Ingrese el nombre del cliente', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
@@ -1490,6 +1489,145 @@ def get_products():
 
     # print(productos)
     return jsonify(productos)
+@app.route('/compras', methods=['GET', 'POST'])
+def compras():
+    if request.method == 'GET':
+        ObtenerSubcat = text("SELECT * FROM subcategorias")
+        subcategorias = db.execute(ObtenerSubcat).fetchall()
+        ObtenerProveedores = text('SELECT * FROM proveedores')
+        proveedores = db.execute(ObtenerProveedores).fetchall()
+        ObtenerDivisas = text('SELECT * FROM divisas')
+        divisas = db.execute(ObtenerDivisas).fetchall()
+        ObtenerCompras = text("""SELECT compras.id, proveedores.nombre_proveedor, compras.fecha_compra, compras.total  
+                                    FROM compras
+                                    LEFT JOIN
+                                        proveedores ON compras.proveedor_id = proveedores.id""")
+        compras = db.execute(ObtenerCompras).fetchall()
+        return render_template('compras.html', Subcategorias = subcategorias, Proveedores = proveedores, Divisas = divisas, Compras = compras)
+    else:
+        proveedorId = request.form.get('proveedor-select')
+        fecha = request.form.get('fecha')
+        divisaId = request.form.get('divisa-id')
+        subtotal = request.form.get('subtotal')
+        total = request.form.get('total')
+
+        productos = []
+        index = 0
+        while True:
+            id = request.form.get(f'productos[{index}][id]')
+            tipo = request.form.get(f'productos[{index}][tipo]')
+            producto = request.form.get(f'productos[{index}][nombre]')
+            cantidad = request.form.get(f'productos[{index}][cantidad]')
+            precio = request.form.get(f'productos[{index}][precio]')
+
+            if not producto:  # Termina cuando no encuentra más productos
+                break
+            productos.append({
+                'id': int(id),
+                'tipo': tipo,
+                'producto': producto,
+                'cantidad': int(cantidad),
+                'precio': float(precio)
+            })
+            index += 1
+        
+        if not proveedorId:
+            flash(('Ingrese el proveedor', 'error', '¡Error!'))
+            return redirect(url_for('compras'))
+        if not divisaId:
+            flash(('Ingrese la divisa', 'error', '¡Error!'))
+            return redirect(url_for('compras'))
+        if not productos:
+            flash(('Ingrese productos', 'error', '¡Error!'))
+            return redirect(url_for('compras'))
+        if not fecha:
+            flash(('Ingrese fecha', 'error', '¡Error!'))
+            return redirect(url_for('compras'))
+        if not subtotal:
+            flash(('Ingrese subtotal', 'error', '¡Error!'))
+            return redirect(url_for('compras'))
+        if not total:
+            flash(('Ingrese total', 'error', '¡Error!'))
+            return redirect(url_for('compras'))
+       
+        # Insertar datos en la base de datos
+
+        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, divisa_id) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :divisa_id)")
+        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha, "total": total, "usuario_id": '1', "divisa_id": divisaId})
+
+        for producto in productos:
+            if producto['tipo'] == 'planta':
+                planta_id = producto['id']
+                insumo_id = None
+            elif producto['tipo'] == 'insumo':
+                planta_id = None
+                insumo_id = producto['id']
+
+            insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": '1', "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": ''})
+
+        compraId = db.execute(text("SELECT * FROM compras ORDER BY id DESC LIMIT 1")).fetchone()[0]
+        kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
+
+        for producto in productos:
+            if producto['tipo'] == 'planta':
+                planta_id = producto['id']
+                insumo_id = None
+            elif producto['tipo'] == 'insumo':
+                planta_id = None
+                insumo_id = producto['id']
+
+            insertarProductos = text("INSERT INTO detalle_compra (compra_id, planta_id, insumo_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:compra_id, :planta_id, :insumo_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
+            db.execute(insertarProductos, {"compra_id": compraId, "planta_id": planta_id, "insumo_id": insumo_id, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal":subtotal})
+
+        for producto in productos:
+            stock_query = text("""
+                    SELECT id, cantidad
+                    FROM stock 
+                    WHERE 
+                        (planta_id = :planta_id OR :planta_id IS NULL)
+                        AND 
+                        (insumo_id = :insumo_id OR :insumo_id IS NULL)
+            """)
+            stockInfo = db.execute(
+                stock_query, 
+                {
+                    "planta_id": producto['id'] if producto['tipo'] == 'planta' else None,
+                    "insumo_id": producto['id'] if producto['tipo'] == 'insumo' else None
+                }
+            ).mappings().fetchone()
+        
+            stock_cantidad = int(stockInfo['cantidad'])
+            nuevaCantidad = stock_cantidad + int(producto['cantidad'])
+
+            if producto['tipo'] == 'planta':
+                obtenerPrecioBd = text("SELECT precio_venta FROM plantas where id=:id")
+                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
+                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
+            else:
+                obtenerPrecioBd = text("SELECT precio_venta FROM insumos where id=:id")
+                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
+                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
+
+            if stockInfo['id']:
+                actualizar_stock = text("""
+                    UPDATE stock 
+                    SET cantidad=:cantidad, kardex_id=:kardex_id, precio_total_inversion=:precio_total_inversion 
+                    WHERE id=:id
+                """)
+                db.execute(
+                    actualizar_stock, 
+                    {
+                        "cantidad": nuevaCantidad, 
+                        "kardex_id": kardexId, 
+                        "precio_total_inversion": nuevoPrecioInversion, 
+                        "id": stockInfo['id']
+                    }
+                )
+
+        db.commit()
+        flash(('La compra se ha realizado correctamente', 'success', '¡Exito!'))
+        return redirect(url_for('compras'))
 
 @app.route('/catalogo')
 def catalogo():

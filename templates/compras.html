@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}
-Ventas | El Jaboncillo
+Compras | El Jaboncillo
 {% endblock %}
 
 {% block main %}
@@ -8,107 +8,96 @@ Ventas | El Jaboncillo
     <div class="search">
         <div class="seccion-buscar">
             <i class="material-icons">search</i>
-            <input class="input-search" name="search" id="search" placeholder="Buscar ventas">
-            
+            <input class="input-search" name="search" id="search" placeholder="Buscar compras">
         </div>
         <div>
-            <button class="btn-add-venta btn">Nueva venta</button>
+            <button class="btn-add-compra btn">Nueva compra</button>
         </div>
     </div>
 </section>
 <div class="container-table-inputs">
-    <div class="table-venta">
+    <div class="table-Compra">
         <table class="table">
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Cliente</th>
-                    <th>Vendedor</th>
+                    <th>Proveedor</th>
                     <th>Fecha</th>
-                    <th>Nota</th>
                     <th>Total</th>
-                    <th>Acciones</th>
                 </tr>
             </thead> 
             
             <tbody>
-                {% for infoVentas in InfoVentas %}
+                {% for compras in Compras %}
                 <tr>
-                    <td>{{infoVentas.id}}</td>
-                    <td>{{infoVentas.nombre}}</td>
-                    <td>{{infoVentas.fecha}}</td>
-                    <td>{{infoVentas.total}}</td>
-                    <td>{{infoVentas.nota}}</td>
-                    <td>{{infoVentas.estado}}</td>
-                <td class="btn-acciones">
-                    <form action="/anularVenta" method="post" class="form-baja">
-                        <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
-                            <button class="btn-delete" type="submit">
-                                <i class="material-icons">delete</i>
-                            </button>
-                        </form>
-                    </td>
+                    <td>{{compras.id}}</td>
+                    <td>{{compras.nombre_proveedor}}</td>
+                    <td>{{compras.fecha_compra}}</td>
+                    <td>{{compras.total}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <div class="container-inputVenta">
-        <div class="nueva-venta">
-            <div class="inputVenta-title">
-                <h3>NUEVA VENTA</h3>
+    <div class="container-inputCompra">
+        <div class="nueva-compra">
+            <div class="inputCompra-title">
+                <h3>NUEVA COMPRA</h3>
                 <span class="close">&times;</span>
             </div>
-            <form action="/ventas" id="form-venta" method="post" class="form-venta">
-                <section class="inputs-venta" id="lista-productos">
+            <form action="/compras" id="form-compra" method="post" class="form-compra">
+                <section class="inputs-compra" id="lista-productos">
                     <div class="inputs-cont row-1">
                         <div>
-                            <label for="">Cliente</label>
-                            <input type="text" id="nombreCliente" class="input input-plantas" name="nombreCliente"
-                                placeholder="Nombre Cliente">
+                            <label>Proveedor</label>
+                            <select class="input inputs-compra" id="proveedor-select" name="proveedor-select">
+                                <option value="">Selecciona un proveedor</option>
+                                {% for proveedores in Proveedores %}
+                                <option name="proveedor-select" value="{{proveedores[0]}}">{{proveedores[1]}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div>
                             <label>Subcategorias</label>
-                            <select class="input input-plantas" id="subcategoria-select" name="subcategoria-select">
-                                {% for infoSubcat in InfoSubcat %}
-                                <option name="subcategoria-select" value="{{infoSubcat[0]}}">{{infoSubcat[2]}}</option>
+                            <select class="input inputs-compra" id="subcategoria-select" name="subcategoria-select">
+                                {% for subcategorias in Subcategorias %}
+                                <option name="subcategoria-select" value="{{subcategorias[0]}}">{{subcategorias[2]}}</option>
                                 {% endfor %}
-                                <option value="" selected>Selecciona una subcategoria</option>
                             </select>
                         </div>
                         <div>
                             <label>Fecha</label>
-                            <input type="date" id="fecha" class="input input-plantas" name="fecha"
+                            <input type="date" id="fecha" class="input inputs-compra" name="fecha"
                                 placeholder="fecha">
                         </div>
                     </div>
                     <div class="inputs-cont row-2">
                         <div>
                             <label>Producto</label>
-                            <select class="input input-plantas" id="producto" name="producto">
-                                <option value="" selected>Selecciona un producto</option>
+                            <select class="input inputs-compra" id="producto" name="producto">
+                                <option value="">Selecciona un producto</option>
                             </select>
                         </div>
                         <div>
                             <label>Cantidad</label>
-                            <input type="text" id="cantidad" class="input input-plantas" name="cantidad"
+                            <input type="number" id="cantidad" class="input inputs-compra" name="cantidad"
                                 placeholder="Cantidad">
                         </div>
                         <div>
                             <label>Precio</label>
-                            <input type="number" id="precio" class="input input-plantas" name="precio"
+                            <input type="number" id="precio" class="input inputs-compra" name="precio"
                                 placeholder="Precio">
                         </div>
-                        <div>
+                        <div class="inputs-hidden">
                             <input type="hidden" name="idProd" id="idProd">
                         </div>
-                        <div>
+                        <div class="inputs-hidden">
                             <input type="hidden" name="cantidadDispo" id="cantidadDispo">
                         </div>
-                        <div>
+                        <div class="inputs-hidden">
                             <input type="hidden" name="tipoProducto" id="tipoProducto">
                         </div>
-                        <button type="button" class="btn agregar_producto" id="agregar_producto">Agregar</button>
+                        <button type="button" class="btn agregar_producto-compra" id="agregar_producto-compra">Agregar</button>
                     </div>
                 </section>
                 <section>
@@ -129,14 +118,14 @@ Ventas | El Jaboncillo
                         </table>
                     </div>
                 </section>
-                <section class="inputs-venta">
+                <section class="inputs-compra">
                     <div class="inputs-cont row-4">
                         <div>
                             <label>Divisas</label>
-                            <select class="input input-plantas" id="divisa-select" name="divisa-select">
-                                {% for infoDivisas in InfoDivisas %}
-                                <option value="{{infoDivisas[3]}}" data-id="{{infoDivisas[0]}}">
-                                    {{infoDivisas[1]}}
+                            <select class="input inputs-compra" id="divisa-select" name="divisa-select">
+                                {% for divisas in Divisas %}
+                                <option value="{{divisas[3]}}" data-id="{{divisas[0]}}">
+                                    {{divisas[1]}}
                                 </option>
                                 {% endfor %}
                             </select>
@@ -144,17 +133,17 @@ Ventas | El Jaboncillo
                         </div>
                         <div>
                             <label>Subtotal</label>
-                            <input type="number" id="subtotal" class="input input-plantas" name="subtotal"
+                            <input type="number" id="subtotal" readonly class="input inputs-compra" name="subtotal"
                                 placeholder="Subtotal">
                         </div>
                         <div>
                             <label>Total</label>
-                            <input type="number" id="total" class="input input-plantas" name="total"
+                            <input type="number" id="total" readonly class="input inputs-compra" name="total"
                                 placeholder="Precio">
                         </div>
                         <div>
                             <label>Nota</label>
-                            <input type="text" id="nota-venta" class="input input-plantas" name="nota-venta"
+                            <input type="text" id="nota-venta" class="input inputs-compra" name="nota-venta"
                                 placeholder="Agregar nota">
                         </div>
                     </div>
