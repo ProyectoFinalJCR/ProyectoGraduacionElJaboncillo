@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <i class="material-icons">edit</i>
             </button>
             <form action="/eliminarInsumo" method="post" class="form-eliminar">
-                <input type="hidden" class="id_eliminar" name="id_insumo" value="${insumo.id}">
+                <input type="hidden" class="id_eliminar" name="id_eliminar" value="${insumo.id}">
                 <button class="btn-delete" type="submit">
                     <i class="material-icons">delete</i>
                 </button>
@@ -206,12 +206,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
       // Mostrar el modal
-      modal.style.display = "block";
-
+      
       // Asigna los valores y actualiza cada Select2
       $('#subcat_editar').val(subcategoriaInsumo).trigger('change');
       $('#coloresInsumo_editar').val(coloresInsumo).trigger('change');
-
+      
+      modal.style.display = "block";
+      
       document.getElementById("btn-cancel-edit").addEventListener("click", function () {
         modal.style.display = "none";
       });
@@ -474,7 +475,10 @@ document.addEventListener("DOMContentLoaded", function () {
             // Aquí puedes proceder con el envío del formulario al servidor, si es necesario.
 
             form.submit();
-          }
+          } else {
+          // Si no hay imagen, enviar directamente el formulario
+          form.submit();
+        }
         }
       });
     });

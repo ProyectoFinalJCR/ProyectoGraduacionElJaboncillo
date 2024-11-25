@@ -682,7 +682,6 @@ def editarinsumo():
                db.execute(editaraplicacion, {"aplicacion_id": tipoInsumo_editar, "insumo_id": insumo_ID})   
 
                db.commit()
-               db.close()
               
 
                 # Insertar nuevas subcategorías seleccionadas que no existan para este insumo
@@ -1489,6 +1488,7 @@ def get_products():
 
     # print(productos)
     return jsonify(productos)
+
 @app.route('/compras', methods=['GET', 'POST'])
 def compras():
     if request.method == 'GET':
