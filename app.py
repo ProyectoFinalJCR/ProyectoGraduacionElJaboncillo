@@ -115,9 +115,9 @@ def registrarse():
 @app.route('/categorias', methods=["GET", "POST"])
 def categorias():
     if request.method == "GET":
-        obtenerCategorias = text("SELECT * FROM categorias order by id asc")
+        obtenerCategorias = text("SELECT * FROM categorias WHERE estado = true order by id asc")
         rows = db.execute(obtenerCategorias).fetchall()
-
+        print(rows)
         return render_template('categorias.html', categorias=rows)
     
     else:
@@ -182,8 +182,8 @@ def eliminarCategoria():
         flash(('No se puede eliminar la categoría porque tiene subcategorías asociadas.', 'error'))
         return redirect(url_for('categorias'))
 
-    query = text("DELETE FROM categorias WHERE id = :id")
-    db.execute(query, {"id": idCategoria})
+    query = text("UPDATE categorias SET estado=:estado WHERE id = :id")
+    db.execute(query, {"estado": 'false', "id": idCategoria})
     db.commit()
     flash(('La categoria ha sido eliminada con éxito.', 'success', '¡Éxito!'))
     return redirect(url_for('categorias'))
@@ -1602,6 +1602,10 @@ def compras():
         db.commit()
         flash(('La compra se ha realizado correctamente', 'success', '¡Exito!'))
         return redirect(url_for('compras'))
+    
+# @app.route('/cambiarContraseña', methods='POST')
+# def cambiarContraseña():
+#     return render_template('usuarios.html')
 
 @app.route('/catalogo')
 def catalogo():

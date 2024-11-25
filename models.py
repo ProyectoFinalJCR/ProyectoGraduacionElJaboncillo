@@ -280,7 +280,7 @@ class Detalle_produccion(db.Model):
     produccion_id = db.Column(db.Integer, db.ForeignKey('produccion.id'), nullable = False)
     planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = True)
     kardex_id = db.Column(db.Integer, db.ForeignKey('movimientos_kardex.id'), nullable = False)
-    cantidad = db.Column(db.integer, nullable=False)
+    cantidad = db.Column(db.Integer, nullable=False)
 
 class Listas_deseo(db.Model):
     __tablename__ = 'listas_deseo'
