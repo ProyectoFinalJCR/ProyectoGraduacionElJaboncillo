@@ -40,23 +40,18 @@
             <div class="seccion-categorias">
                 <div class="lista-categorias">
                     <select class="input-categorias" name="categorias" id="categorias">
-                        <option value="">Plantas</option>
-                        <option value="1">Ornamentales</option>
-                        <option value="2">decorativas</option>
-                        <option value="3">Frutales</option>
-                        <option value="4">Citricos</option>
+                        {% for categoria in categorias %}
+                        <option id="categorias" name="categorias" value="{{categoria[0]}}">{{categoria[1]}}</option>
+                        {% endfor %}
+                        <option value="" selected>Selecciona una categoria</option>
                     </select>
-                    <select class="input-categorias" name="categorias" id="categorias">
-                        <option value="">Insumos</option>
-                        <option value="1">Tierra</option>
-                        <option value="2">Fertilizantes</option>
-
-                    </select>
-                    <select class="input-categorias" name="categorias" id="categorias">
-                        <option value="">Servicios</option>
-                        <option value="1">Limpieza</option>
-                        <option value="2">Transporte</option>
-                    </select>
+                </div>
+                <div class="lista-subcategorias" id="none">
+                    <div class="select-subcategorias">
+                        <select name="subcategorias" id="subcategorias">
+                            <option selected>Selecciona una subcategoría</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="seccion-buscador">
@@ -73,14 +68,16 @@
             </div>
         </div>
     </header>
-    <section class="img-info">
+    <!-- <section class="img-info">
         <div class="opacidad"></div>
         <div class="texto-img">
             <h2>BIENVENIDOS A LA SECCIÓN DE CATÁLOGO</h2>
         </div>
-    </section>
+    </section> -->
+
     <section class="resultado-plantas">
         <div class="cards-plantas">
+            <!-- <-- aqui se crean las card plantas -->
             <div class="card-plantas">
                 <div class="img-card">
                     <img class="img-planta" src="/static/img/gerberas.jpg" alt="Jade Crassula">
@@ -96,7 +93,7 @@
                         <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
                     </div>
                 </div>
-            </div>
+            </div> 
             <div class="card-plantas">
                 <div class="img-card img-plantaCorona">
                     <img class="img-planta" src="/static/img/coronadecristo.jpg" alt="Jade Crassula">
@@ -148,8 +145,9 @@
         </div>
     </section>
     <section>
-       
+
     </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/static/js/catalogo.js"></script>
 </body>
 

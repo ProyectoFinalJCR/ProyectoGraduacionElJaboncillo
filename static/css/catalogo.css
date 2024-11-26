@@ -10,6 +10,7 @@
     height: 300px;
     display: flex;
     flex-direction: column;
+    gap: 0px;
 }
 .navbar {
     width: 100%;
@@ -18,7 +19,7 @@
     justify-content: center;
     align-items: center;
     padding: 0 20px;
-    background-color: #009249;
+    background-color: #06a84f;
 }
 .navbar .links {
     width: 100%;
@@ -55,25 +56,44 @@
     grid-template-columns: 2fr 1fr 1fr;
     grid-template-rows: 1fr;
     border: 1px solid #EAE9E9;
-
+    padding: 10px;
 }
 .container-busqueda .seccion-categorias{
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
+    flex-direction: row;
+    overflow-x: auto;
 }
 .container-busqueda .seccion-categorias .lista-categorias{
     display: flex;
     justify-content: space-around;
     align-items: center;
+    flex-direction: row;
     gap: 20px;
-    width: 50%;
     height: 30px;
     padding-left: 50px;
     overflow-x: auto;
     scrollbar-width: none;
 }
+.container-busqueda .seccion-categorias .lista-subcategorias{
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+.container-busqueda .seccion-categorias .select-subcategorias{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+#none{
+    display: none;
+}
+
 .container-busqueda .seccion-categorias .lista-categorias select{
     width: 100%;
     height: 55px;
@@ -134,7 +154,7 @@
     width:220px;
     height: 80%;
     border-radius: 16px;
-    background-color: #5dc073;
+    background-color: #3eaa56;
 }
 .container-busqueda .btn-lista-cont a{
     text-decoration: none;
@@ -154,8 +174,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 10px;
-    background-image: url("/static/img/catalogo/san_diegos.jpg");
+    background-image: url("/static/img/coronadecristo.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -209,7 +228,6 @@
    align-items: center;
    flex-direction: row;
 }
-
 .cards-plantas{
     width: 100%;
     height: 65%;
