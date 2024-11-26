@@ -1629,8 +1629,19 @@ def compras():
         flash(('La compra se ha realizado correctamente', 'success', '¡Exito!'))
         return redirect(url_for('compras'))
 
-@app.route('/catalogo')
+@app.route('/catalogo', methods=["GET"])
 def catalogo():
+    if request.method == "GET":
+        id_categoria = request.args.get("categoriaSeleccionada")
+
+        obtenerCategorias = text("SELECT c.id, c.categoria FROM categorias as c ORDER BY c.id ASC")
+        categorias = db.execute(obtenerCategorias).fetchall()
+
+        obtenerSubcategorias = text("SELECT s.id, s.subcategoria FROM subcategorias as s INNER JOIN categorias as c ON s.categoria_id = c.id WHERE c.id = :id ORDER BY c.id ASC")
+        subcategorias = db.execute(obtenerSubcategorias, {"id": id_categoria}).fetchall()
+
+        return render_template("catalogo.html",categorias=categorias, subcategorias=subcategorias)
+    
     return render_template('catalogo.html')
 
 #---------------- rutas para buscar info en cada search
