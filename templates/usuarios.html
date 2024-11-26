@@ -156,6 +156,7 @@ Usuarios | El Jaboncillo
             <div class="btn-modal">
                 <img src="/static/img/logoElJaboncillo.png" alt="logo" class="img-modal">
                 <div class="btn-agregar">
+                    <button type="button" class="btn btn-cambiar-contraseña" id="abrirModal">Cambiar contraseña</button>
                     <button type="button" class="btn close-modal btn-cancel-user">Cancelar</button>
                     <button type="submit" class="btn btn-agregar-user" id="btn-edit-usuarios">Editar</button>
                 </div>
@@ -163,7 +164,34 @@ Usuarios | El Jaboncillo
         </form>
     </div>
 </div>
-
+  
+  <!-- Modal -->
+  <div id="modalCambiarContraseña" class="modal-editar-usuario">
+    <div class="modal-content">
+        <div class="usuario-title">
+            <h2>Cambiar contraseña</h2>
+            <span class="cerrar cerrarModal" id="cerrarModal">&times;</span>
+        </div>
+        <form action="/cambiarContraseña" method="post">
+            <div class="input-usuario">
+                <input type="hidden" id="id_usuario_contraseña" name="id_usuario_contraseña" value="{{usuario.id}}">
+                <div class="input-contenido">
+                  <label>Nueva contraseña segura:</label>
+                  <input type="text" id="nuevaContraseña" name="nuevaContraseña" class="input input-user input-insumos">
+                </div>
+            </div>
+                <div class="btn-modal">
+                    <img src="/static/img/logoElJaboncillo.png" alt="logo" class="img-modal">
+                    <div class="btn-agregar">
+                        <button type="button" id="generarContraseña" class="btn btn-success">Generar contraseña segura</button>
+                        <button type="button" class="btn close-modal btn-cancel-user">Cancelar</button>
+                        <button type="submit" class="btn btn-agregar-user" id="btn-edit-usuarios">Cambiar</button>
+                    </div>
+                </div>  
+        </form>
+    </div>
+  </div>
+  
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
 {% if messages %}

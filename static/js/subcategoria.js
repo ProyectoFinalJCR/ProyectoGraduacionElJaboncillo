@@ -237,7 +237,8 @@ document.getElementById("search").addEventListener('input', function() {
             event.preventDefault(); // Evita el envío automático del formulario
     
             const form = event.target.closest('.form-eliminar'); // Selecciona el formulario asociado
-            const subcategoriaId = form.querySelector('.id_eliminar').value; // Obtiene el ID de la subcategoría
+            console.log(form.querySelector('#id_eliminar').value)
+            const subcategoriaId = form.querySelector('#id_eliminar').value; // Obtiene el ID de la subcategoría
     
             // Mostrar SweetAlert de confirmación
             Swal.fire({

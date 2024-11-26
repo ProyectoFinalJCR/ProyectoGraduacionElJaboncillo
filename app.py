@@ -115,9 +115,9 @@ def registrarse():
 @app.route('/categorias', methods=["GET", "POST"])
 def categorias():
     if request.method == "GET":
-        obtenerCategorias = text("SELECT * FROM categorias order by id asc")
+        obtenerCategorias = text("SELECT * FROM categorias WHERE estado = true order by id asc")
         rows = db.execute(obtenerCategorias).fetchall()
-
+        print(rows)
         return render_template('categorias.html', categorias=rows)
     
     else:
@@ -187,8 +187,8 @@ def eliminarCategoria():
         flash(('No se puede eliminar la categoría porque tiene subcategorías asociadas.', 'error'))
         return redirect(url_for('categorias'))
 
-    query = text("DELETE FROM categorias WHERE id = :id")
-    db.execute(query, {"id": idCategoria})
+    query = text("UPDATE categorias SET estado=:estado WHERE id = :id")
+    db.execute(query, {"estado": 'false', "id": idCategoria})
     db.commit()
     db.close()
     flash(('La categoria ha sido eliminada con éxito.', 'success', '¡Éxito!'))
@@ -335,8 +335,8 @@ def subCategorias():
 def eliminarSubcategoria():
     idSubcategoria = request.form.get('id_eliminar')
 
-    query = text("DELETE FROM subcategorias WHERE id = :id")
-    db.execute(query, {"id": idSubcategoria})
+    query = text("UPDATE subcategorias SET estado=:estado WHERE id = :id")
+    db.execute(query, {"estado": 'false', "id": idSubcategoria})
     db.commit()
     db.close()
     flash(('La subcategoría ha sido eliminada con éxito.', 'success', '¡Éxito!'))
@@ -975,17 +975,8 @@ GROUP BY
 def eliminarPlanta():
     idPlanta = request.form.get('id_eliminar')
 
-    eliminarPlantaSub = text("DELETE FROM plantas_subcategoria WHERE planta_id = :planta_id")
-    db.execute(eliminarPlantaSub, {"planta_id": idPlanta})
-
-    eliminarPlantaColor = text("DELETE FROM colores_plantas WHERE planta_id = :planta_id")
-    db.execute(eliminarPlantaColor, {"planta_id": idPlanta})
-
-    eliminarPlantaRango = text("DELETE FROM rangos_medidas WHERE planta_id = :planta_id")
-    db.execute(eliminarPlantaRango, {"planta_id": idPlanta})
-    
-    eliminarPlanta = text("DELETE FROM plantas WHERE id = :id")
-    db.execute(eliminarPlanta, {"id": idPlanta})
+    queryEliminarPlanta = text("UPDATE plantas SET estado = 'false' WHERE id = :idPlanta")
+    db.execute(queryEliminarPlanta, {"idPlanta": idPlanta})
     db.commit()
     db.close()
     flash(('La planta se ha sido eliminado con éxito.', 'success', '¡Éxito!'))
@@ -1628,6 +1619,23 @@ def compras():
         db.commit()
         flash(('La compra se ha realizado correctamente', 'success', '¡Exito!'))
         return redirect(url_for('compras'))
+    
+@app.route('/cambiarContraseña', methods=['POST'])
+def cambiarContraseña():
+    idUsuario = request.form.get('id_usuario_contraseña')
+    nuevaContraseña = request.form.get('nuevaContraseña')
+    hashed_contraseña = generate_password_hash(nuevaContraseña)
+    if not idUsuario:
+        flash(('Error al cambiar contraseña', 'danger', 'Error'))
+        return redirect(url_for('cambiarContraseña'))
+
+    obtenerUsuario = text("SELECT * FROM usuarios WHERE id=:id")
+    if db.execute(obtenerUsuario, {'id': idUsuario}).rowcount > 0:
+        actualizarContraseña = text('UPDATE usuarios SET clave=:clave where id=:id')
+        db.execute(actualizarContraseña, {'clave': hashed_contraseña, 'id': idUsuario})
+        db.commit()
+        flash(('La contraseña se ha actualizado correctamente', 'success', '¡Exito!'))
+    return redirect(url_for('usuarios'))
 
 @app.route('/catalogo', methods=["GET"])
 def catalogo():
@@ -1653,7 +1661,7 @@ def usuarios_json():
         SELECT u.id, u.nombre_completo, u.correo, r.rol, u.rol_id
         FROM usuarios u
         INNER JOIN roles r ON r.id = u.rol_id
-        WHERE u.rol_id = 1 OR u.rol_id = 2
+        WHERE u.rol_id = 1 OR u.rol_id = 2 AND estado = 'true'
         ORDER BY u.id ASC
     """)
     usuarios = db.execute(obtenerUsuarios).fetchall()
@@ -1669,7 +1677,7 @@ def usuarios_json():
 @app.route('/generar_json_categorias', methods=["GET"])
 def generar_json_categorias():
     print("entro a generar json categorias")
-    categoriasquery = text("SELECT c.id, c.categoria, c.descripcion FROM categorias as c ORDER BY c.id ASC")
+    categoriasquery = text("SELECT c.id, c.categoria, c.descripcion FROM categorias as c WHERE estado = 'true' ORDER BY c.id ASC")
     categorias = db.execute(categoriasquery).fetchall()
 
     categorias_json = [{"id": categoria[0], "categoria": categoria[1], "descripcion": categoria[2]} for categoria in categorias]
@@ -1678,7 +1686,7 @@ def generar_json_categorias():
 @app.route('/generar_json_subcategorias', methods=["GET"])
 def generar_json_subcategorias():
     print("entro a generar json subcategorias")
-    subcategoriasquery = text("SELECT s.id, s.subcategoria, c.categoria, s.descripcion, c.id FROM subcategorias as s INNER JOIN categorias as c ON s.categoria_id = c.id ORDER BY s.id ASC")
+    subcategoriasquery = text("SELECT s.id, s.subcategoria, c.categoria, s.descripcion, c.id FROM subcategorias as s INNER JOIN categorias as c ON s.categoria_id = c.id WHERE s.estado = 'true' ORDER BY s.id ASC")
     subcategorias = db.execute(subcategoriasquery).fetchall()
 
     subcategorias_json = [{"id": subcategoria[0], "subcategoria": subcategoria[1], "categoria": subcategoria[2], "descripcion": subcategoria[3], "id_categoria": subcategoria[4]} for subcategoria in subcategorias]
@@ -1747,6 +1755,8 @@ JOIN
     tipos_suelos ON plantas.tipo_suelo_id = tipos_suelos.id
 JOIN 
     temporadas_plantacion ON plantas.temporada_plantacion_id = temporadas_plantacion.id
+                        
+WHERE plantas.estado = 'true'
 
 GROUP BY 
     plantas.id, 

@@ -16,6 +16,30 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+// Obtener elementos del DOM
+const abrirModal = document.getElementById('abrirModal');
+const cerrarModal = document.getElementById('cerrarModal');
+const modal = document.getElementById('modalCambiarContraseña');
+
+// Abrir el modal
+abrirModal.addEventListener('click', (event) => {
+  modal.style.display = 'block';
+  
+  // Usar event.target para obtener el botón que disparó el evento
+  const userId = document.querySelector('#id_editar_usuario').value
+  
+  console.log(userId); // Verificar el ID en la consola
+  
+  // Asignar el valor al input oculto
+  document.querySelector('#id_usuario_contraseña').value = userId;
+});
+
+// Cerrar el modal al hacer clic en la "x"
+cerrarModal.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+
   // Validacion de los campos
   const nombre_completo = document.querySelector('#nombre');
   const correo = document.querySelector('#correo');
@@ -320,5 +344,23 @@ document.getElementById('tabla_usuarios').addEventListener('click', function (ev
       }
     });
   });
+  
 
+  function generarContraseña() {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$!%*?&';
+    let contraseña = '';
+
+    for (let i = 0; i < 8; i++) {
+        const random = Math.floor(Math.random() * caracteres.length);
+        contraseña += caracteres[random];
+    }
+    return contraseña;
+  }
+
+  document.querySelector('#generarContraseña').addEventListener('click', function(event){
+    const nuevaContraseña = document.querySelector('#nuevaContraseña')
+    const contraseñaAleatoria = generarContraseña();
+    nuevaContraseña.value = contraseñaAleatoria
+    event.preventDefault(); 
+  })
 });   
