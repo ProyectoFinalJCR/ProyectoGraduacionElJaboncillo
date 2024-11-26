@@ -1429,9 +1429,11 @@ def get_products():
             plantas.id AS planta_id,
             plantas.nombre AS nombre_planta,
             plantas.precio_venta AS precio_planta,
+            plantas.imagen_url AS imagen_planta,
             subcategorias.subcategoria AS subcategoria,
             insumos.id AS insumo_id,
             insumos.nombre AS nombre_insumo,
+            insumos.imagen_url AS imagen_insumo,
             insumos.precio_venta AS precio_insumo
         FROM
             stock
@@ -1460,7 +1462,10 @@ def get_products():
             insumos.id,
             insumos.nombre,
             insumos.precio_venta,
-            stock.cantidad;
+            stock.cantidad,
+            plantas.imagen_url,
+            insumos.imagen_url
+            ;
     """)
     
     infoProd = db.execute(ObtenerProd, {'subcategoria': subcategoria}).fetchall()
@@ -1472,7 +1477,8 @@ def get_products():
         'nombre': prod.nombre_planta if prod.nombre_planta else prod.nombre_insumo,
         'precio': prod.precio_planta if prod.precio_planta is not None else prod.precio_insumo,
         'cantidad': prod.cantidad_disponible,
-        'tipo': 'planta' if prod.planta_id is not None else 'insumo'
+        'tipo': 'planta' if prod.planta_id is not None else 'insumo',
+        'imagen': prod.imagen_planta if prod.imagen_planta is not None else prod.imagen_insumo,
     }
     for prod in infoProd
 ]
@@ -1637,9 +1643,33 @@ def cambiarContraseña():
         flash(('La contraseña se ha actualizado correctamente', 'success', '¡Exito!'))
     return redirect(url_for('usuarios'))
 
-@app.route('/catalogo')
+@app.route('/catalogo', methods=["GET"])
 def catalogo():
+    if request.method == "GET":
+        id_categoria = request.args.get("categoriaSeleccionada")
+
+        obtenerCategorias = text("SELECT c.id, c.categoria FROM categorias as c ORDER BY c.id ASC")
+        categorias = db.execute(obtenerCategorias).fetchall()
+
+        return render_template("catalogo.html",categorias=categorias)
+    
     return render_template('catalogo.html')
+
+@app.route("/obtener_subcategorias", methods=["POST"])
+def obtener_subcategorias():
+    id_categoria = request.json.get('categoria','')
+    print(id_categoria)
+
+    obtenerSubcategorias = text("SELECT s.id, s.subcategoria FROM subcategorias as s INNER JOIN categorias as c ON s.categoria_id = c.id WHERE c.id = :id ORDER BY c.id ASC")
+
+    subcategoriasObtenidas = db.execute(obtenerSubcategorias, {"id": id_categoria}).fetchall()
+
+    subcategorias = [
+        {'id': subcategoria[0], 'subcategoria': subcategoria[1]}
+        for subcategoria in subcategoriasObtenidas
+    ]
+
+    return jsonify(subcategorias)
 
 #---------------- rutas para buscar info en cada search
 @app.route('/usuarios_json', methods=["GET"])
