@@ -1643,7 +1643,43 @@ def cambiarContraseña():
         flash(('La contraseña se ha actualizado correctamente', 'success', '¡Exito!'))
     return redirect(url_for('usuarios'))
 
-@app.route('/catalogo', methods=["GET"])
+@app.route('/listaDeseos', methods=["GET", "POST"])
+def listaDeseos():
+    if request.method == "GET":
+        return render_template("listaDeseos")
+    else:
+        productoId = request.form.get('productoId')
+        tipo = request.form.get('tipo')
+        usuarioId = 1
+        fecha_actual = datetime.now()
+        fecha_formateada = fecha_actual.strftime('%Y-%m-%d')
+
+        if not productoId:
+            flash(('No se recibio del Id del producto', 'error', '¡Error!'))
+
+
+        if tipo == 'planta':
+            planta_id = productoId
+            insumo_id = None
+        elif tipo == 'insumo':
+            planta_id = None
+            insumo_id = productoId
+
+        obtenerListaDeseo = text('SELECT * FROM listas_deseo WHERE usuario_id=:usuario_id AND planta_id=:planta_id OR insumo_id=:insumo_id')
+        if db.execute(obtenerListaDeseo, {'usuario_id': usuarioId, 'planta_id': planta_id, 'insumo_id':insumo_id}).rowcount > 0:
+            flash(('El producto ya ha sido agregado a la lista!', 'error', '¡Error!'))
+            return redirect(url_for('catalogo'))
+        else:
+            insertarLista = text("""INSERT INTO listas_deseo (
+	                        usuario_id, planta_id, insumo_id, fecha)
+	                        VALUES (:usuario_id, :planta_id, :insumo_id, :fecha);""")
+            db.execute(insertarLista, {'usuario_id': usuarioId, 'planta_id': planta_id, 'insumo_id': insumo_id, 'fecha': fecha_formateada})
+            db.commit()
+            flash(('Producto agregado a la lista de deseos!', 'success', '¡Exito!'))
+        return redirect(url_for('catalogo'))
+
+
+@app.route('/catalogo', methods=["GET", "POST"])
 def catalogo():
     if request.method == "GET":
         id_categoria = request.args.get("categoriaSeleccionada")
@@ -1652,7 +1688,6 @@ def catalogo():
         categorias = db.execute(obtenerCategorias).fetchall()
 
         return render_template("catalogo.html",categorias=categorias)
-    
     return render_template('catalogo.html')
 
 @app.route("/obtener_subcategorias", methods=["POST"])

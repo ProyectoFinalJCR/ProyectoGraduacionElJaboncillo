@@ -52,20 +52,24 @@ document.addEventListener("DOMContentLoaded", function () {
                         productos.forEach(function(producto) {
                             const cardHTML = `
                             <div class="card-plantas">
-                                <div class="img-card">
-                                    <img class="img-planta" src="${producto.imagen}" alt="${producto.nombre}">
-                                </div>
-                                <div class="card-info">
-                                    <div class="nombre-planta">
-                                        <p>${producto.nombre}</p>
+                                <form action="/listaDeseos" method="POST" class="agregar-producto">
+                                    <input text hidden name="tipo" value="${producto.tipo}">
+                                    <input text hidden name="productoId" value="${producto.idProd}">
+                                    <div class="img-card">
+                                        <img class="img-planta" src="${producto.imagen}" alt="${producto.nombre}">
                                     </div>
-                                    <div class="btn-catalogo">
-                                        <button><a href="#">Agregar lista</a></button>
+                                    <div class="card-info">
+                                        <div class="nombre-planta">
+                                            <p>${producto.nombre}</p>
+                                        </div>
+                                        <div class="btn-catalogo">
+                                            <button type="submit">Agregar lista</button>
+                                        </div>
+                                        <div class="minilogoEJ">
+                                            <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jaboncillo">
+                                        </div>
                                     </div>
-                                    <div class="minilogoEJ">
-                                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jaboncillo">
-                                    </div>
-                                </div>
+                                </form>
                             </div>`;
                             $('.cards-plantas').append(cardHTML); // Agrega la tarjeta al contenedor
                         });
@@ -75,4 +79,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     });
+    $(document).on('submit', '.agregar-producto', function (event) {
+        event.preventDefault();
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¡No podrás revertir esta acción!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, editar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            event.target.submit();
+          }
+        });
+      });
 });
