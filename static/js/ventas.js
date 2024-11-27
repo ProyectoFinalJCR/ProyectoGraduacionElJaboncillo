@@ -1,14 +1,12 @@
 document.addEventListener("DOMContentLoaded", function(){
     //Evento para mostrar formulario
-    document.querySelector('.btn-add-venta').addEventListener('click', function(){
-     
-        const container_table_inputs = document.querySelector(".container-inputVenta");  
+    const btneditar = document.querySelector('.btn-add-venta').addEventListener('click', function(){
+        console.log(btneditar)
+      const container_table_inputs = document.querySelector(".container-inputVenta");  
         container_table_inputs.style.display = "block";
         document.getElementById("btn-cancel").addEventListener("click", function(){
             container_table_inputs.style.display="none";
         });
-
-        
     });
 
     $(document).ready(function() {

@@ -15,39 +15,129 @@ Configuración del sistema | El Jaboncillo
         <div class="info">
             <div class="titulo-info">
                 <h2>Información del sistema</h2>
-                <button>editar información</button>
+                <button id="btn-editar-info" class="btn-editar-info">Editar Información</button>
             </div>
             <div class="inputs-info">
                 <div class="columna1">
                     <div class="inputs">
                         <label>Nombre del sistema</label>
-                        <input type="text" class="nombre-sistema" name="nombre-sistema" placeholder="Nombre del sistema">
-                    </div>
+                        <input readonly type="text" class="nombre-sistema" value="{{ Configuracion.nombre_empresa }}">
+                    </div>                    
                     <div class="inputs">
                         <label>Dirección del sistema</label>
-                        <textarea name="direccion-sistema" class="direccion-sistema" id="direccion-sistema" cols="30" rows="10" placeholder="Dirección del sistema"></textarea>
+                        <textarea readonly class="direccion-sistema" id="direccion-sistema" cols="30" rows="10">{{ Configuracion.direccion }}</textarea>
                     </div>
                     <div class="inputs">
                         <label>Email del sistema</label>
-                        <input type="text" class="email-sistema" name="email-sistema" placeholder="Email del sistema">
+                        <input readonly type="text" class="email-sistema" value="{{ Configuracion.email }}">
                     </div>
                 </div>
                 <div class="columna2">
 
                     <div class="inputs">
                         <label>Teléfono del sistema</label>
-                        <input type="text" class="telefono-sistema" name="telefono-sistema" placeholder="Teléfono del sistema">
+                        <input readonly type="text" class="telefono-sistema"  value="{{ Configuracion.telefono }}">
                     </div>
                     <div class="inputs">
                         <label>Numero RUC:</label>
-                        <input type="text" class="numero-ruc" name="numero-ruc" placeholder="Numero RUC">
+                        <input readonly type="text" class="numero-ruc"  value="{{ Configuracion.numero_RUC }}">
+                    </div>
+                </div>
+                <div class="columna3">
+                    <div class="inputs">
+                        <label>Link de Facebook</label>
+                        <input readonly type="text" class="facebook"  value="{{ Configuracion.link_facebook }}">
+                    </div>
+                    <div class="inputs">
+                        <label>Link de Instagram</label>
+                        <input readonly type="text" class="instagram"  value="{{ Configuracion.link_instagram }}">
+                    </div>
+                    <div class="inputs">
+                        <label>Link de tiktok</label>
+                        <input readonly type="text" class="tiktok"  value="{{ Configuracion.link_tiktok }}">
+                    </div>
+                    <div class="inputs">
+                        <label>Link de whatsApp</label>
+                        <input readonly type="text" class="whatsApp"  value="{{ Configuracion.link_whatsapp }}">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="links-cont">
+</div>
 
+<div class="container-editarInfo">
+    <div class="editar-info">
+        <div class="titulo-info">
+            <h2>Información del sistema</h2>
+        </div>
+        <form action="/configuracion" method="post" id="form-editar-configuracion">
+            <div class="inputs-info">
+                <div class="columna1">
+                    <div class="inputs">
+                        <label>Nombre del sistema</label>
+                        <input type="text" class="nombre-sistema" name="nombre-sistema" value="{{ Configuracion.nombre_empresa }}">
+                    </div>                    
+                    <div class="inputs">
+                        <label>Dirección del sistema</label>
+                        <textarea name="direccion-sistema" class="direccion-sistema" id="direccion-sistema" cols="30" rows="10">{{ Configuracion.direccion }}</textarea>
+                    </div>
+                    <div class="inputs">
+                        <label>Email del sistema</label>
+                        <input type="text" class="email-sistema" name="email-sistema" value="{{ Configuracion.email }}">
+                    </div>
+                </div>
+            </div>
+            <div class="columna2">
+                <div class="inputs">
+                    <label>Teléfono del sistema</label>
+                    <input type="number" class="telefono-sistema" name="telefono-sistema" value="{{ Configuracion.telefono }}">
+                </div>
+                <div class="inputs">
+                    <label>Numero RUC:</label>
+                    <input type="number" class="numero-ruc" name="numero-ruc" value="{{ Configuracion.numero_RUC }}">
+                </div>
+            </div>
+            <div class="columna3">
+                <div class="inputs">
+                    <label>Link de Facebook</label>
+                    <input type="text" class="facebook" name="facebook" value="{{ Configuracion.link_facebook }}">
+                </div>
+                <div class="inputs">
+                    <label>Link de Instagram</label>
+                    <input type="text" class="instagram" name="instagram" value="{{ Configuracion.link_instagram }}">
+                </div>
+                <div class="inputs">
+                    <label>Link de tiktok</label>
+                    <input type="text" class="tiktok" name="tiktok" value="{{ Configuracion.link_tiktok }}">
+                </div>
+                <div class="inputs">
+                    <label>Link de whatsApp</label>
+                    <input type="text" class="whatsApp" name="whatsApp" value="{{ Configuracion.link_whatsapp }}">
+                </div>
+            </div>
+            <section class="btn-agregar">
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                <div>
+                    <div id="productos-dinamicos"></div>
+                    <button type="button" class="btn btn-cancel" id="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn" id="btn-add-venta">Agregar</button>
+                </div>
+            </section>
+        </form>
     </div>
 </div>
-{%endblock%}
+<!-- Mostrar mensaje de éxito -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <script>
+    Swal.fire({
+      title:'{{ messages[0][2] }}',
+      text: '{{ messages[0][0] }}',
+      icon: '{{ messages[0][1] }}',
+      confirmButtonText: 'OK'
+    });
+  </script>
+{% endif %}
+{% endwith %}
+{% endblock %}

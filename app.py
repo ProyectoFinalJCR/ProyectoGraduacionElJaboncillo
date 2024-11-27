@@ -1908,21 +1908,41 @@ def produccion():
         tipoMovimiento = request.form.get("tipomovi")
         precio = request.form.get("precioPlanta")
         nota = request.form.get("nota")
-        catidad = request.form.get("cantidad")
+        cantidad = request.form.get("cantidad")
         fechaactual = datetime.now().date()
 
-        print(idPlanta, tipoMovimiento, precio, nota, catidad, fechaactual)
-
-        if not nota or not catidad:
+        if not nota or not cantidad:
             flash('Verifique los campos, estan vacios', "error")
             return redirect(url_for("plantas")) 
+        
+        ObtenerPlantaStock = text('SELECT * FROM stock WHERE id=:id')
+        infoStock = db.execute(ObtenerPlantaStock,{"id":idPlanta}).mappings().fetchone()
 
+        nuevaCantidad = int(infoStock['cantidad']) + int(cantidad)
+        nuevaInversion = nuevaCantidad * float(precio)
+        
         insertarPlantaquery = text("INSERT INTO movimientos_kardex (planta_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
-        db.execute(insertarPlantaquery, {"planta_id": idPlanta, "cantidad": catidad, "tipo_movimiento_id": tipoMovimiento, "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
+        db.execute(insertarPlantaquery, {"planta_id": idPlanta, "cantidad": cantidad, "tipo_movimiento_id": tipoMovimiento, "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
+        
+        kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
 
+        actualizar_stock = text("""
+                    UPDATE stock 
+                    SET cantidad=:cantidad, kardex_id=:kardex_id, precio_total_inversion=:precio_total_inversion 
+                    WHERE id=:id
+                """)
+        db.execute(
+            actualizar_stock, 
+            {
+                "cantidad": nuevaCantidad, 
+                "kardex_id": kardexId, 
+                "precio_total_inversion": nuevaInversion, 
+                "id": infoStock['id']
+            }
+        )
         db.commit()
 
-        flash(('La planta se ha agregado correctamente', 'success'))
+        flash(('Se ha actualizado el stock correctamente', 'success'))
         return redirect(url_for("plantas"))
     
     return redirect(url_for('plantas'))
@@ -1930,7 +1950,54 @@ def produccion():
 
 @app.route('/configuracion', methods=['GET', 'POST'])
 def configuracion():
-    return render_template("configuracion.html")
+    if request.method == 'GET':
+        ObtenerConfiguracion = text('SELECT * FROM configuracion_sistema')
+        configuracion = db.execute(ObtenerConfiguracion).fetchone()
+        return render_template('configuracion.html', Configuracion = configuracion)
+    else:
+        nombreSistema = request.form.get('nombre-sistema')
+        direccionSistema = request.form.get('direccion-sistema')
+        emailSistema = request.form.get('email-sistema')
+        telefonoSistema = request.form.get('telefono-sistema')
+        numeroRuc = request.form.get('numero-ruc')
+        facebookLink = request.form.get('facebook')
+        instagramLink = request.form.get('instagram')
+        tiktokLink = request.form.get('tiktok')
+        whatsapp = request.form.get('whatsApp')
+
+        if not nombreSistema:
+            flash(('Ingrese el nombre del sistema', "error"))
+            return redirect(url_for("configuracion"))
+        if not direccionSistema:
+            flash(('Ingrese la direccion del sistema', "error"))
+            return redirect(url_for("configuracion"))
+        if not emailSistema:
+            flash(('Ingrese el correo del sistema', "error"))
+            return redirect(url_for("configuracion"))
+        if not telefonoSistema:
+            flash(('Ingrese el telefono del sistema', "error"))
+            return redirect(url_for("configuracion"))
+        if not numeroRuc:
+            flash(('Ingrese el numero ruc del sistema', "error"))
+            return redirect(url_for("configuracion"))
+        if not facebookLink:
+            flash(('Ingrese el link de facebook del sistema', "error"))
+            return redirect(url_for("configuracion"))
+        if not instagramLink:
+            flash(('Ingrese el link de instagram del sistema', "error"))
+            return redirect(url_for("configuracion"))
+        if not tiktokLink:
+            flash(('Ingrese el link de tiktok del sistema', "error"))
+            return redirect(url_for("configuracion"))
+        if not whatsapp:
+            flash(('Ingrese el link de whatsapp del sistema', "error"))
+            return redirect(url_for("configuracion"))
+        
+        actualizarInfo = text('UPDATE configuracion_sistema SET nombre_empresa=:nombre_empresa, direccion=:direccion, telefono=:telefono, email=:email, "numero_RUC"=:numero_RUC, link_facebook=:link_facebook, link_instagram=:link_instagram, link_tiktok=:link_tiktok, link_whatsapp=:link_whatsapp')
+        db.execute(actualizarInfo, {"nombre_empresa":nombreSistema, "direccion":direccionSistema, "telefono":telefonoSistema, "email":emailSistema, "numero_RUC": numeroRuc, "link_facebook": facebookLink, "link_instagram":instagramLink, "link_tiktok": tiktokLink, "link_whatsapp":whatsapp})
+        db.commit()
+        flash(('Configuracion actualizada con exito', "success"))
+        return redirect(url_for("configuracion"))
     
 
 if __name__ == '__main__':
