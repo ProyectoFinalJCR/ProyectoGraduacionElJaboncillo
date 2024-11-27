@@ -43,7 +43,7 @@ Compras | El Jaboncillo
         <div class="nueva-compra">
             <div class="inputCompra-title">
                 <h3>NUEVA COMPRA</h3>
-                <span class="close">&times;</span>
+                <span class="close close-modal-compra">&times;</span>
             </div>
             <form action="/compras" id="form-compra" method="post" class="form-compra">
                 <section class="inputs-compra" id="lista-productos">
@@ -67,8 +67,8 @@ Compras | El Jaboncillo
                         </div>
                         <div>
                             <label>Fecha</label>
-                            <input type="date" id="fecha" class="input inputs-compra" name="fecha"
-                                placeholder="fecha">
+                            <input type="text" id="fecha_compra" class="input input-plantas" name="fecha"
+                                placeholder="fecha" readonly>
                         </div>
                     </div>
                     <div class="inputs-cont row-2">
@@ -80,13 +80,13 @@ Compras | El Jaboncillo
                         </div>
                         <div>
                             <label>Cantidad</label>
-                            <input type="number" id="cantidad" class="input inputs-compra" name="cantidad"
-                                placeholder="Cantidad">
+                            <input type="number" id="cantidad-compra" class="input inputs-compra validar-input" name="cantidad"
+                                placeholder="Cantidad" min="0">
                         </div>
                         <div>
                             <label>Precio</label>
-                            <input type="number" id="precio" class="input inputs-compra" name="precio"
-                                placeholder="Precio">
+                            <input type="number" id="precio" class="input inputs-compra validar-input" name="precio"
+                                placeholder="Precio" min="0">
                         </div>
                         <div class="inputs-hidden">
                             <input type="hidden" name="idProd" id="idProd">

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/inventario.css">
     <link rel="stylesheet" href="/static/css/catalogo.css">
     <link rel="stylesheet" href="/static/css/configuracion.css">
     <link rel="stylesheet" href="/static/css/layout.css">
@@ -33,9 +34,10 @@
 <body>
     <section class="all-screen">
         <aside class="sidebar">
+            {% if  session["user_rol"] == "ADMINISTRADOR" %}
             <div class="sidebar-titulo-user">
-                <h2>Janixa Centeno</h2>
-                <p>ADMINISTRADOR</p>
+                <h2>{{session["user_name"]}}</h2>
+                <p>{{session["user_rol"]}}</p>
             </div>
             <div class="items">
                 <div class="items-back">
@@ -118,6 +120,48 @@
                     <a class="item" href="/configuracion"><p>Configuración del sistema</p></a>
                 </button>
             </div>
+            {%else%}
+            <div class="sidebar-titulo-user">
+                <h2>{{session["user_name"]}}</h2>
+                <p>{{session["user_rol"]}}</p>
+            </div>
+            <div class="items">
+                <div class="items-back">
+                    <button class="btn-items-inicio">
+                        <i class="material-icons">home</i>
+                        <a href="inicioAdmin"><p class="btn_texto">Inicio</p></a>
+                    </button>
+                </div>
+                <div class="items-back">
+                    <button class="btn-items">
+                        <i class="material-icons">payments</i>
+                    <p class="btn_texto">Gestion ventas</p>
+                    <i class="material-icons key">keyboard_arrow_right</i>
+                </button>
+                <div class="options">
+                    <ul class="list-options">
+                        <li><a href="/ventas">Venta</a></li>
+                        <li><a href="#">Devoluciones</a></li>
+                        <li><a href="#">Reportes</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="items-back">
+                <button class="btn-items">
+                    <i class="material-icons">local_mall</i>
+                    <p class="btn_texto">Gestión compras</p>
+                    <i class="material-icons key">keyboard_arrow_right</i>
+                </button>
+                <div class="options">
+                    <ul class="list-options">
+                        <li><a href="/proveedores">Proveedores</a></li>
+                        <li><a href="/compras">Compras</a></li>
+                        <li><a href="#">Reportes</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+            {% endif %}
     </aside>
     <section id="wrapper" class="seccion-wrapper">
         <nav class="navbar">
@@ -131,6 +175,9 @@
                     <p id="hora"></p>
                 </div>
                 <!-- <i class="material-icons  menu-toggle">menu</i> -->
+                 <div>
+                     <a href="/logout"><button class="btn-logout">Cerrar sesión</button></a>
+                 </div>
         </nav>
         <main class="main">
             {% block main %}
@@ -151,6 +198,7 @@
 <script src="/static/js/ventas.js"></script>
 <script src="/static/js/compras.js"></script>
 <script src="/static/js/socket.io.min.js"></script>
+<script src="/static/js/inventario.js"></script>
 <!-- Carga jQuery primero -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 

@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Filtrar resultados cuando hay texto en el input
     const resultados = valorBuscar === "" ? plantasData :
-      plantasData.filter(planta =>
+        plantasData.filter(planta =>
         planta.nombre.toLowerCase().includes(valorBuscar) ||
         (planta.subcategoria || "").toLowerCase().includes(valorBuscar) ||
         (planta.color || "").toLowerCase().includes(valorBuscar) ||

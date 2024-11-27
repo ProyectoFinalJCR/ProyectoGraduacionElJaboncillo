@@ -25,13 +25,21 @@
         <div class="seccion-items">
             <a class="item-navb" href="#inicio-link">Inicio</a>
             <a class="item-navb" href="#servicios">Servicios</a>
-            <a class="item-navb" href="#">Productos</a>
+            <a class="item-navb" href="/catalogo">Catálogo</a>
             <a class="item-navb" href="#">Nosotros</a>
         </div>
+      
+        {% if session.get("user_id") is none %}
         <div class="seccion-btns">
-            <a class="item-navb" href="/registrarse">Registrarse</a>
+            <a class="item-navb" href="/register">Registrarse</a>
             <button class="btn-inicars"><a class="item-navb" href="/login">Iniciar sesión</a></button>
         </div>
+        {% else %}
+        <div class="seccion-btns">
+            <p>bienvenido, {{ session["user_name"] }}</p>
+            <button class="btn-inicars"><a class="item-navb" href="/logout">Cerrar sesión</a></button>
+        </div>
+        {% endif %}
     </nav>
     <section class="seccion-fondoylogo">
         <div class="opacidad">
@@ -309,7 +317,7 @@
             <p class="footer-creditos">© UNAN - Managua CUR Carazo, Vivero El Jaboncillo 2024</p>
         </div>
     </footer>
-   
+
 </body>
 
 </html>

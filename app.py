@@ -24,6 +24,51 @@ socketio = SocketIO(app)
 engine = create_engine(os.getenv("DATABASE_URL"), pool_pre_ping=True)
 db = scoped_session(sessionmaker(bind=engine))
 
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+# Función para obtener las rutas permitidas para un perfil desde la base de datos
+def obtener_rutas_permitidas(usuario):
+        # Consulta para obtener el perfil y las rutas permitidas para ese perfil
+        consulta = text('''SELECT r."ruta" FROM usuarios as u INNER JOIN roles as ro ON u.rol_id = ro.id
+        INNER JOIN rutas_roles as rr ON rr.rol_id = ro.id
+        INNER JOIN rutas as r ON rr.ruta_id = r.id
+        WHERE u.id = :usuario ''')
+        rutas = db.execute(consulta, {'usuario': usuario}).fetchall()
+        # Convertir el resultado a diccionario para poder acceder con claves
+        rutas_permitidas = [row[0] for row in rutas]  # Accediendo por nombre de columna
+        return rutas_permitidas
+
+# Decorador para verificar si el usuario tiene acceso a la ruta
+def ruta_permitida(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        usuario = session.get("user_id")
+        if usuario is None:
+            return redirect("/")
+
+        # Obtener las rutas permitidas para el usuario
+        rutas_permitidas = obtener_rutas_permitidas(usuario)
+        ruta_actual = request.path  # Obtener la ruta que está intentando acceder
+
+        if ruta_actual not in rutas_permitidas:
+            return "Acceso denegado", 403
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/')
 def index():
@@ -65,7 +110,7 @@ def login():
                 print(session["rol_id"])
                 #verifica el rol del usuario para redirigirlo a su vista correspondiente
                 if session["user_rol"] == 'CLIENTE':
-                    return jsonify({"success": True, "redirect":"/catalogo"}), 200
+                    return jsonify({"success": True, "redirect":"/"}), 200
                 else:
                     return jsonify({"success": True, "redirect": "/inicioAdmin"}), 200
 
@@ -113,6 +158,8 @@ def registrarse():
             return redirect("/catalogo")
 
 @app.route('/categorias', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def categorias():
     if request.method == "GET":
         obtenerCategorias = text("SELECT * FROM categorias WHERE estado = true order by id asc")
@@ -138,6 +185,8 @@ def categorias():
         return redirect(url_for('categorias'))
         
 @app.route('/editarCategoria', methods=["POST"])
+@login_required
+@ruta_permitida
 def editarCategoria():
     print("Entro a editar categoria")
     categoria = request.form.get('nombre_editar')
@@ -176,6 +225,8 @@ def editarCategoria():
     return redirect(url_for('categorias'))
 
 @app.route('/eliminarCategoria', methods=["POST"])
+@login_required
+@ruta_permitida
 def eliminarCategoria():
     idCategoria = request.form.get('id_eliminar')
     print(idCategoria)
@@ -196,6 +247,8 @@ def eliminarCategoria():
 
 
 @app.route('/usuarios', methods =["GET","POST"])
+# @login_required
+# @ruta_permitida
 def usuarios():
     if request.method == "GET":
         print("Usuarios GET")
@@ -242,6 +295,8 @@ def usuarios():
             return redirect("/usuarios")     
 
 @app.route('/eliminarUsuarios', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def eliminarUsuarios():
     print("Eliminar usuarios")
     idUsuario = request.form.get('id_usuario')
@@ -255,6 +310,8 @@ def eliminarUsuarios():
     return redirect(url_for('usuarios'))
 
 @app.route('/editarUsuario', methods=["POST"])
+@login_required
+@ruta_permitida
 def editarUsuario():
     if request.method == "POST":
         print("Entro a editar usuario")
@@ -302,10 +359,14 @@ def editarUsuario():
 
     
 @app.route("/inicioAdmin", methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def inicio():
     return render_template("inicio_admin.html")
 
 @app.route("/subCategorias", methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def subCategorias():
     if request.method == "GET":
         obtenerCategorias = text("SELECT * FROM categorias order by id asc")
@@ -332,6 +393,8 @@ def subCategorias():
         return redirect(url_for('subCategorias'))
     
 @app.route('/eliminarSubcategoria', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def eliminarSubcategoria():
     idSubcategoria = request.form.get('id_eliminar')
 
@@ -343,6 +406,8 @@ def eliminarSubcategoria():
     return redirect(url_for('subCategorias'))
 
 @app.route('/editarSubcategoria', methods=["POST"])
+@login_required
+@ruta_permitida
 def editarSubcategoria():
     subcategoria = request.form.get('nombreSub_editar')
     idcategoria = request.form.get('idCat_editar')
@@ -385,6 +450,8 @@ def editarSubcategoria():
     return redirect(url_for('subCategorias'))
 
 @app.route('/insumos', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def insumos():
     if request.method == "GET":
         obtenerComposicion = text("SELECT * FROM composiciones_principales order by id asc")
@@ -565,6 +632,8 @@ def insumos():
 
 
 @app.route('/eliminarInsumo', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def eliminarInsumos():
     idInsumo = request.form.get('id_insumo')
 
@@ -591,6 +660,8 @@ def agregarImgInsumo(data):
     emit('addImgInsumo', {'idIns': insumo, 'url': imagen}, broadcast=True)
 
 @app.route('/editarinsumo', methods=["POST"])
+@login_required
+@ruta_permitida
 def editarinsumo():
     if request.method == "POST":
        insumo_ID = request.form.get('id_editar_insumo')
@@ -778,6 +849,8 @@ def editarinsumo():
        return redirect(url_for('insumos'))
 
 @app.route('/agregarSubcategoriaInsumos', methods=["POST"])
+@login_required
+@ruta_permitida
 def agregarSubcategoriaInsumos():
     nombreSub = request.form.get('nombreSub')
     descripcion = request.form.get('descripcion')
@@ -797,6 +870,8 @@ def agregarSubcategoriaInsumos():
        
 
 @app.route('/plantas', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def plantas():
     if request.method == "GET":
         id_planta = request.args.get("id_editar_planta")
@@ -821,14 +896,6 @@ def plantas():
 
         obtenerTemporada = text("SELECT * FROM temporadas_plantacion")
         temporada = db.execute(obtenerTemporada).fetchall()
-
-        tiposmovimientosquery = text("""SELECT id, tipo_movimiento from tipo_movimientos WHERE tipo_movimiento = 'Producción' OR tipo_movimiento = 'Cantidad inicial'""")
-        tiposmovimientos = db.execute(tiposmovimientosquery).fetchall()
-
-        imagenquery = text("SELECT * FROM plantas WHERE id = :id_planta")
-        Imagen = db.execute(imagenquery, {"id_planta": id_planta}).fetchall()
-
-
 
         obtenerInfo = text("""SELECT 
     plantas.id AS id, 
@@ -899,7 +966,7 @@ GROUP BY
         
         infoPlantas = db.execute(obtenerInfo).fetchall()
 
-        return render_template('plantas.html', InfoPlanta = infoPlantas, Colores = colores, Subcategorias = subcategorias, Rangos = rangos, Entornos = entornos, Agua = agua, Suelos = suelos, Temporada = temporada, movimientos = tiposmovimientos, imagen = Imagen)
+        return render_template('plantas.html', InfoPlanta = infoPlantas, Colores = colores, Subcategorias = subcategorias, Rangos = rangos, Entornos = entornos, Agua = agua, Suelos = suelos, Temporada = temporada)
     else:
         nombrePlanta = request.form.get('nombrePlanta')
         descripcion = request.form.get('descripcion')
@@ -972,6 +1039,8 @@ GROUP BY
         return redirect(url_for('plantas'))
 
 @app.route('/eliminarPlanta', methods=["POST"])
+@login_required
+@ruta_permitida
 def eliminarPlanta():
     idPlanta = request.form.get('id_eliminar')
 
@@ -983,6 +1052,8 @@ def eliminarPlanta():
     return redirect(url_for('plantas'))   
 
 @app.route('/proveedores', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def proveedores():
     if request.method == "POST":
         nombreProveedor = request.form.get('nombre')
@@ -1021,6 +1092,8 @@ def proveedores():
         return render_template('proveedores.html', Proveedores = proveedores)
 
 @app.route('/bajaProveedor', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def bajaProveedor():
     idProveedor = request.form.get('id_baja')
     eliminarProveedor = text("UPDATE proveedores SET estado = 'false' WHERE id = :id")
@@ -1031,6 +1104,8 @@ def bajaProveedor():
     return redirect(url_for('proveedores'))
 
 @app.route('/editarProveedores', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def editarProveedores():
     idProveedor = request.form.get('id_editar')
     nombre_editar = request.form.get('nombre_editar')
@@ -1089,6 +1164,8 @@ def agregarImgPlanta(data):
    
 
 @app.route('/editarPlantas', methods=["POST"])
+@login_required
+@ruta_permitida
 def editarplantas():
     if request.method == "POST":
        
@@ -1274,6 +1351,8 @@ def editarplantas():
        return redirect(url_for('plantas'))
     
 @app.route('/ventas', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def ventas():
     if request.method == 'GET':
         ObtenerSubcat = text("SELECT * FROM subcategorias")
@@ -1408,6 +1487,8 @@ def ventas():
         return redirect(url_for('ventas'))
 
 @app.route('/anularVenta', methods=['POST'])
+@login_required
+@ruta_permitida
 def anularVenta():
     idVenta = request.form.get('id_anular')
 
@@ -1487,6 +1568,8 @@ def get_products():
     return jsonify(productos)
 
 @app.route('/compras', methods=['GET', 'POST'])
+@login_required
+@ruta_permitida
 def compras():
     if request.method == 'GET':
         ObtenerSubcat = text("SELECT * FROM subcategorias")
@@ -1627,6 +1710,7 @@ def compras():
         return redirect(url_for('compras'))
     
 @app.route('/cambiarContraseña', methods=['POST'])
+@login_required
 def cambiarContraseña():
     idUsuario = request.form.get('id_usuario_contraseña')
     nuevaContraseña = request.form.get('nuevaContraseña')
@@ -1644,6 +1728,8 @@ def cambiarContraseña():
     return redirect(url_for('usuarios'))
 
 @app.route('/catalogo', methods=["GET"])
+@login_required
+@ruta_permitida
 def catalogo():
     if request.method == "GET":
         id_categoria = request.args.get("categoriaSeleccionada")
@@ -1901,6 +1987,8 @@ def generar_json_insumos():
     return jsonify(insumos_json)
 
 @app.route('/produccion', methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def produccion():
     if request.method == 'POST':
         
@@ -1929,9 +2017,44 @@ def produccion():
     
 
 @app.route('/configuracion', methods=['GET', 'POST'])
+@login_required
+@ruta_permitida
 def configuracion():
     return render_template("configuracion.html")
+
+@app.route("/inventario", methods=["GET"])
+def inventario():
+    if request.method == "GET":
+        producto_id = request.args.get("planta-idProduccion")
+
+        mostrarInventario = text("""SELECT 
+    COALESCE(p.id, i.id) AS producto_id, 
+    COALESCE(p.nombre, i.nombre) AS nombre_producto, 
+    COALESCE(p.imagen_url, i.imagen_url) AS imagen_producto,
+    COALESCE(p.descripcion, i.descripcion) AS descripcion_producto,
+    COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
+    inv.precio_total_inversion,
+    inv.cantidad
+        FROM stock as inv
+        LEFT JOIN plantas as p ON p.id = inv.planta_id
+        LEFT JOIN insumos as i ON i.id = inv.insumo_id
+        INNER JOIN movimientos_kardex as mk ON mk.id = inv.kardex_id""")
+        infoInventario = db.execute(mostrarInventario).fetchall()
+        
+        tiposmovimientosquery = text("""SELECT id, tipo_movimiento from tipo_movimientos WHERE tipo_movimiento = 'Producción'""")
+        tiposmovimientos = db.execute(tiposmovimientosquery).fetchall()
+
+        imagenquery = text("SELECT * FROM plantas WHERE id = :id_planta")
+        Imagen = db.execute(imagenquery, {"id_planta": producto_id}).fetchall()
+
+        return render_template("inventario.html", infoInventario=infoInventario,movimientos=tiposmovimientos)
     
+
+@app.route('/logout')
+def logout():
+    # Limpiar todos los datos de sesión
+    session.clear()
+    return redirect('/') 
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)

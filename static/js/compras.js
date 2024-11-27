@@ -1,13 +1,58 @@
 document.addEventListener('DOMContentLoaded', function(){
     //Evento para mostrar modal
     document.querySelector('.btn-add-compra').addEventListener('click', function(){
+
+        const inputFecha = document.getElementById("fecha_compra");
+    const hoy = new Date();
+
+    // Obtén día, mes y año
+    const dia = hoy.getDate();
+    const mes = hoy.toLocaleString('default', { month: 'long' }); // Nombre completo del mes
+    const anio = hoy.getFullYear();
+
+    // Formatea la fecha
+    const fechaFormateada = `${dia} de ${mes} del ${anio}`;
+    inputFecha.value = fechaFormateada; // Mostrar como placeholder
      
         const container_table_inputs = document.querySelector(".container-inputCompra");  
         container_table_inputs.style.display = "block";
         document.getElementById("btn-cancel").addEventListener("click", function(){
+        const container_table_inputs = document.querySelector(".container-inputCompra");  
+
             container_table_inputs.style.display="none";
         });
 
+        document.getElementsByClassName("close-modal-compra")[0].addEventListener("click", function(){
+        const container_table_inputs = document.querySelector(".container-inputCompra");  
+
+            container_table_inputs.style.display="none";
+        });
+
+        // const inputCantidad = document.getElementById("cantidad-compra");
+
+        // inputCantidad.addEventListener("input", function () {
+        //     if (this.value < 0) {
+        //         this.value = 0; // Restablece a 0 si es negativo
+        //     }
+        //     // Verificar si el valor es un número válido
+        //     if (!/^\d*\.?\d*$/.test(this.value)) {
+        //         this.value = this.value.slice(0, -1); // Elimina el último carácter inválido
+        //     }
+        // });
+
+        const Validarinputs = document.querySelectorAll('.validar-input');
+
+        Validarinputs.forEach(input => {
+            input.addEventListener('input', function () {
+                if (this.value < 0) {
+                    this.value = 0; // Restablece a 0 si es negativo
+                }
+                // Verificar si el valor es un número válido
+                if (!/^\d*\.?\d*$/.test(this.value)) {
+                    this.value = this.value.slice(0, -1); // Elimina el último carácter inválido
+                }
+            });
+        });
         
     });
     $(document).ready(function() {

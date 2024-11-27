@@ -1,0 +1,149 @@
+  /*modal produccion*/
+  .modal-produccion{
+    display: none; 
+     position: fixed; 
+     z-index: 1; 
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.5);
+     justify-content: center;
+  }
+  .modal-produccion .modal-content-produccion{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-36%, -50%); /* Centra el modal */
+    background-color: #fff;
+    padding: 0px 50px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    height: 650px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .modal-produccion .modal-content-produccion .inputplantas-title{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border-bottom: 1px solid #000;
+    margin-bottom: 25px;
+  }
+  .modal-produccion .modal-content-produccion .form-produccion {
+    width: 100%;
+    height: 520px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 1fr 1fr;
+  }
+  .modal-produccion .modal-content-produccion .form-produccion .img-info-cont{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 20px;
+  }
+  .modal-produccion .modal-content-produccion .form-produccion .img-info-cont .img-cont{
+    width: 100%;
+    height: 100%;
+    padding: 25px;
+}
+  .modal-produccion .modal-content-produccion .form-produccion .img-info-cont .img-cont .imgProduccion {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px ;
+}
+  .modal-produccion .modal-content-produccion .form-produccion .info-planta-cont{
+    width: 100%;
+    height: 100%;
+    border-radius: 16px ;
+    display: flex;
+    flex-direction: column;
+}
+  .modal-produccion .modal-content-produccion .form-produccion .info-planta-cont .fecha-cont{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    flex-direction: column;
+    padding-right: 20px;
+}
+  .modal-produccion .modal-content-produccion .form-produccion .info-planta-cont .textos-cont{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    padding: 0px 20px;
+}
+.textos-cont .textos{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.textos-cont .textos .nombreplanta{
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  font-size: 25px;
+  letter-spacing: 15px;
+  color: #2c9b6d;
+  font-size: bold;
+  
+}
+.sinborde{
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+  .modal-produccion .modal-content-produccion .form-produccion .cantidad-cont{ 
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+}
+.modal-produccion .modal-content-produccion .form-produccion .cantidad-cont .textarea{
+  width: 100%;           /* Ancho completo del contenedor */
+  max-width: 260px;      /* Ancho máximo de 500px */
+  height: 80px;         /* Altura inicial de 150px */
+  max-height: 80px;
+  min-height: 80px;
+  min-width:260px; 
+  padding: 10px;
+}
+.modal-produccion .modal-content-produccion .form-produccion .btn-agregar{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 50px;
+  gap: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #000;
+  margin-bottom: 10px;
+}
+.modal-produccion .modal-content-produccion .form-produccion .btn-agregar .logo-btn-add{
+  width: 220px;
+  height: 40px;
+}
+.modal-produccion .modal-content-produccion .form-produccion .btn-agregar .btn{
+  width: 150px;
+  border-radius: 15px;
+  background-color: #2db87e;
+}
+.modal-produccion .modal-content-produccion .form-produccion .btn-agregar .btn-cancel{  
+  width: 120px;
+  background-color: #CF696B;
+}
