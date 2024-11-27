@@ -57,7 +57,7 @@ Ventas | El Jaboncillo
         <div class="nueva-venta">
             <div class="inputVenta-title">
                 <h3>NUEVA VENTA</h3>
-                <span class="close">&times;</span>
+                <span class="close close-modal-venta">&times;</span>
             </div>
             <form action="/ventas" id="form-venta" method="post" class="form-venta">
                 <section class="inputs-venta" id="lista-productos">
@@ -78,8 +78,8 @@ Ventas | El Jaboncillo
                         </div>
                         <div>
                             <label>Fecha</label>
-                            <input type="date" id="fecha" class="input input-plantas" name="fecha"
-                                placeholder="fecha">
+                            <input type="text" id="fecha_venta" class="input input-plantas" name="fecha"
+                                placeholder="fecha" readonly>
                         </div>
                     </div>
                     <div class="inputs-cont row-2">
@@ -91,12 +91,12 @@ Ventas | El Jaboncillo
                         </div>
                         <div>
                             <label>Cantidad</label>
-                            <input type="text" id="cantidad" class="input input-plantas" name="cantidad"
-                                placeholder="Cantidad">
+                            <input type="number" id="cantidad" class="input input-plantas validar-input" name="cantidad"
+                                placeholder="Cantidad" step="0.01" inputmode="decimal" min="0">
                         </div>
                         <div>
                             <label>Precio</label>
-                            <input type="number" id="precio" class="input input-plantas" name="precio"
+                            <input type="number" id="precio" class="input input-plantas validar-input" name="precio"
                                 placeholder="Precio">
                         </div>
                         <div>

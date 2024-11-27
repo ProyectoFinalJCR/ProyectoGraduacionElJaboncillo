@@ -6,8 +6,8 @@ Plantas | El Jaboncillo
 {% block main %}
 <section class="all-screen-plantas">
     <section class="bienvenida">
-        <h2>Buenos dias, </h2>
-        <p>Bienvenida Janixa Centeno</p>
+        <h2 id="saludo"></h2>
+        <p>Bienvenid@, {{session["user_name"]}}</p>
     </section>
     <section class="busqueda">
         <div class="search">
@@ -85,9 +85,7 @@ Plantas | El Jaboncillo
                             <button class="btn-edit btn-edit-plantas">
                                 <i class="material-icons">edit</i>
                             </button>
-                            <button class="btn-produccion btn-produccion-plantas" data-id="${planta.id}">
-                                <i class="material-icons">compost</i>
-                            </button>
+                           
                             <form action="/eliminarPlanta" method="post" class="form-eliminar">
                                 <input type="hidden"  class="id_eliminar" name="id_eliminar" value="{{infoPlantas.id}}">
                                 <button class="btn-delete" type="submit">

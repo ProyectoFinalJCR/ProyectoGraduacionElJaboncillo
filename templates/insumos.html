@@ -10,8 +10,8 @@ Insumos | El Jaboncillo
 {% block main %}
 <section class="all-screen-insumos">
     <section class="bienvenida">
-        <h2>Buenos dias, </h2>
-        <p>Bienvenida Janixa Centeno</p>
+        <h2 id="saludo"></h2>
+        <p>Bienvenid@, {{session["user_name"]}}</p>
     </section>
     <section class="busqueda">
         <div class="search">

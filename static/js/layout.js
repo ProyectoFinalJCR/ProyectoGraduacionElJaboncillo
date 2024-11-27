@@ -61,6 +61,17 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 })
 
+// Saludo de la página
+const saludo = document.getElementById("saludo");
+const hora = new Date().getHours();
+
+if (hora >= 6 && hora < 12) {
+    saludo.textContent = "Buenos días";
+} else if (hora >= 12 && hora < 18) {
+    saludo.textContent = "Buenas tardes";
+} else {
+    saludo.textContent = "Buenas noches";
+}
 // Modal
 // Cerrar el modal cuando se hace clic en la "X"
 
