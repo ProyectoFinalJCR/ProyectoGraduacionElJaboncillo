@@ -115,13 +115,13 @@ Plantas | El Jaboncillo
                             </div>
                             <div>
                                 <label>Descripcion</label>
-                                <input type="text" id="descripcion" class="input input-insumos" name="descripcion"
-                                    placeholder="Descripcion">
+                                <textarea type="text" id="descripcion" class="input input-insumos" name="descripcion"
+                                    placeholder="Descripcion"></textarea>
                             </div>
                             <div>
                                 <label>Precio unitario</label>
                                 <input type="number" id="precio" class="input input-insumos" name="precio"
-                                    placeholder="Ingrese el precio">
+                                    placeholder="Ingrese el precio" min="0">
                             </div>
                         </div>
                         <div class="inputs-cont columna-2">
@@ -222,7 +222,7 @@ Plantas | El Jaboncillo
                     <div>
                         <label for="">Precio unitario</label>
                         <input type="number" id="precio_editar" class="input input-plantas" name="precio_editar"
-                            value="" placeholder="Ingrese el precio unitario">
+                            value="" placeholder="Ingrese el precio unitario" min="0">
                     </div>
                     <div>
                         <label for="">Imagen</label>

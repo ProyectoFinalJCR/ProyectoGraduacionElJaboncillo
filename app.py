@@ -311,7 +311,6 @@ def eliminarUsuarios():
 
 @app.route('/editarUsuario', methods=["POST"])
 @login_required
-@ruta_permitida
 def editarUsuario():
     if request.method == "POST":
         print("Entro a editar usuario")
@@ -1105,7 +1104,6 @@ def bajaProveedor():
 
 @app.route('/editarProveedores', methods=["GET", "POST"])
 @login_required
-@ruta_permitida
 def editarProveedores():
     idProveedor = request.form.get('id_editar')
     nombre_editar = request.form.get('nombre_editar')
@@ -2144,9 +2142,41 @@ def generar_json_insumos():
 
     return jsonify(insumos_json)
 
+@app.route('/generar_inventario_info', methods=["GET"])
+def inventario_info():
+    query = text("""
+              
+              SELECT 
+    COALESCE(p.id, i.id) AS producto_id, 
+    COALESCE(p.nombre, i.nombre) AS nombre_producto,
+    COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
+    COALESCE(p.imagen_url, i.imagen_url) AS imagen_url,
+    inv.cantidad
+        FROM stock as inv
+        LEFT JOIN plantas as p ON p.id = inv.planta_id
+        LEFT JOIN insumos as i ON i.id = inv.insumo_id
+        INNER JOIN movimientos_kardex as mk ON mk.id = inv.kardex_id
+              """)
+    
+    productos = db.execute(query).fetchall()
+
+    # Convertir los resultados en un diccionario para jsonify
+    resultado = [
+        {
+            "producto_id": prod.producto_id,
+            "nombre_producto": prod.nombre_producto,
+            "precio_venta": prod.precio_venta,
+            "imagen_url": prod.imagen_url,
+            "cantidad": prod.cantidad,
+        }
+        for prod in productos
+    ]
+
+    return jsonify(resultado)
+   
+
 @app.route('/produccion', methods=["GET", "POST"])
 @login_required
-@ruta_permitida
 def produccion():
     if request.method == 'POST':
         
@@ -2158,13 +2188,16 @@ def produccion():
         fechaactual = datetime.now().date()
 
         if not nota or not cantidad:
-            flash('Verifique los campos, estan vacios', "error")
-            return redirect(url_for("plantas")) 
+            flash(('Verifique los campos, estan vacios', "error"))
+            return redirect(url_for("inventario")) 
         
-        ObtenerPlantaStock = text('SELECT * FROM stock WHERE id=:id')
+        
+        ObtenerPlantaStock = text('SELECT * FROM stock WHERE planta_id=:id')
         infoStock = db.execute(ObtenerPlantaStock,{"id":idPlanta}).mappings().fetchone()
 
+
         nuevaCantidad = int(infoStock['cantidad']) + int(cantidad)
+        print(infoStock['id'])
         nuevaInversion = nuevaCantidad * float(precio)
         
         insertarPlantaquery = text("INSERT INTO movimientos_kardex (planta_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
@@ -2189,9 +2222,9 @@ def produccion():
         db.commit()
 
         flash(('Se ha actualizado el stock correctamente', 'success'))
-        return redirect(url_for("plantas"))
+        return redirect(url_for("inventario"))
     
-    return redirect(url_for('plantas'))
+    return redirect(url_for('inventario'))
     
 
 @app.route('/configuracion', methods=['GET', 'POST'])
@@ -2247,18 +2280,16 @@ def configuracion():
         flash(('Configuracion actualizada con exito', "success"))
         return redirect(url_for("configuracion"))
 
-@app.route("/inventario", methods=["GET"])
+@app.route("/inventario", methods=["GET", "POST"])
 def inventario():
     if request.method == "GET":
-        producto_id = request.args.get("planta-idProduccion")
+        producto_id = request.args.get("producto_id")
 
         mostrarInventario = text("""SELECT 
     COALESCE(p.id, i.id) AS producto_id, 
-    COALESCE(p.nombre, i.nombre) AS nombre_producto, 
-    COALESCE(p.imagen_url, i.imagen_url) AS imagen_producto,
-    COALESCE(p.descripcion, i.descripcion) AS descripcion_producto,
+    COALESCE(p.nombre, i.nombre) AS nombre_producto,
     COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
-    inv.precio_total_inversion,
+    COALESCE(p.imagen_url, i.imagen_url) AS imagen_url,
     inv.cantidad
         FROM stock as inv
         LEFT JOIN plantas as p ON p.id = inv.planta_id
@@ -2269,11 +2300,10 @@ def inventario():
         tiposmovimientosquery = text("""SELECT id, tipo_movimiento from tipo_movimientos WHERE tipo_movimiento = 'Producción'""")
         tiposmovimientos = db.execute(tiposmovimientosquery).fetchall()
 
-        imagenquery = text("SELECT * FROM plantas WHERE id = :id_planta")
-        Imagen = db.execute(imagenquery, {"id_planta": producto_id}).fetchall()
+        # imagenquery = text("SELECT * FROM plantas WHERE id = :id_planta")
+        # Imagen = db.execute(imagenquery, {"id_planta": producto_id}).fetchall()
 
         return render_template("inventario.html", infoInventario=infoInventario,movimientos=tiposmovimientos)
-    
 
 @app.route('/logout')
 def logout():

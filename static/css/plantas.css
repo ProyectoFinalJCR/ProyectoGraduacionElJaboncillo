@@ -225,6 +225,17 @@
     flex-direction: column;
     gap: 60px;
 }
+.container-table-inputs .container-inputPlantas .form-plantas .inputs-plantas .columna-1 #descripcion{
+    width: 350px;
+    height: 40px;
+    max-width: 350px;
+    min-width: 350px;
+    max-height: 150px;
+    min-height: 150px;
+    padding: 10px;
+    font-size: 15px;
+    font-size: bold;
+}
 
 .input-colores, .input-subcat, .input-rango
 {
@@ -331,6 +342,18 @@
     justify-content: space-between;
     gap: 60px;
   }
+  .modal-content-plantas .inputs-plantas .columna-1 #descripcion_editar{
+    width: 350px;
+    height: 100px;
+    max-width: 350px;
+    min-width: 350px;
+    max-height: 100px;
+    min-height: 100px;
+    padding: 10px;
+    font-size: 15px;
+    font-size: bold;
+}
+
   .modal-content-plantas .form_editar_plantas .btn-agregar {
     width: 100%;
     display: flex;

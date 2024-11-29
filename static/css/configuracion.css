@@ -7,9 +7,9 @@
     border-radius: 16px;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 2fr .5fr;
+    grid-template-rows: 1fr .5fr;
 }
-.img-info-cont .img-info{
+.img-info-cont-config .img-info-config{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,51 +17,60 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+    border: 1px solid #3BB64A;
+    padding: 20px;
 }
-.img-info-cont{
+.img-info-cont-config .img-info-config .img{
+    width: 90%;
+    height: 80%;
+    background-color: #06aa00;
+}
+.img-info-cont-config{
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-template-rows: 1fr;
     border-radius: 16px;
     padding: 20px;
 }
-.img-info-cont .info .titulo-info{
+.img-info-cont-config .info .titulo-info{
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 16px;
     padding: 20px;
     border:1px solid #3BB64A;
+    height: 15%;
 }
-.img-info-cont .info .inputs-info{
+.img-info-cont-config .info .inputs-info{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 20px;
     padding: 15px;
     width: 100%;
-    height: 100%;
-}
-.img-info-cont .info .inputs-info .columna1{
+    height: 85%;
+    border: 1px solid #3BB64A;
+} 
+.img-info-cont-config .info .inputs-info .columna1{
     width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: .5fr 1fr .5fr ;
 }
-.img-info-cont .info .inputs-info .columna2{
+.img-info-cont-config .info .inputs-info .columna2{
     width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 0.5fr 0.5fr ;
 }
-.img-info-cont .info .inputs-info .inputs{
+.img-info-cont-config .info .inputs-info .inputs{
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
-.img-info-cont .info .inputs-info .inputs .nombre-sistema, .email-sistema, .telefono-sistema, .numero-ruc, .facebook, .instagram, .whatsApp, .tiktok{
+.img-info-cont-config .info .inputs-info .inputs .nombre-sistema, .email-sistema, .telefono-sistema, .numero-ruc, .facebook, .instagram, .whatsApp, .tiktok{
     width: 100%;
     height: 50px; /* Altura ajustable */
     padding: 10px;
@@ -105,4 +114,15 @@ input[type="text"]:focus {
    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
    overflow-y: auto;
    scrollbar-width: none;
+}
+.allscreen .inputs-info-links{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 20px;
+    padding: 15px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #3BB64A;
+    border-radius: 16px;
 }

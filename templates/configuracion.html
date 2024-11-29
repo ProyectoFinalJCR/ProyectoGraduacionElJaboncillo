@@ -5,11 +5,10 @@ Configuración del sistema | El Jaboncillo
 
 {% block main %}
 <div class="allscreen">
-    <div class="img-info-cont">
-        <div class="img-info">
-            <img src="/static/img/logoElJaboncillo.png" alt="logo">
-            <div class="editar">
-                
+    <div class="img-info-cont-config">
+        <div class="img-info-config">
+            <div class="img">
+
             </div>
         </div>
         <div class="info">
@@ -18,53 +17,17 @@ Configuración del sistema | El Jaboncillo
                 <button id="btn-editar-info" class="btn-editar-info">Editar Información</button>
             </div>
             <div class="inputs-info">
-                <div class="columna1">
-                    <div class="inputs">
-                        <label>Nombre del sistema</label>
-                        <input readonly type="text" class="nombre-sistema" value="{{ Configuracion.nombre_empresa }}">
-                    </div>                    
-                    <div class="inputs">
-                        <label>Dirección del sistema</label>
-                        <textarea readonly class="direccion-sistema" id="direccion-sistema" cols="30" rows="10">{{ Configuracion.direccion }}</textarea>
-                    </div>
-                    <div class="inputs">
-                        <label>Email del sistema</label>
-                        <input readonly type="text" class="email-sistema" value="{{ Configuracion.email }}">
-                    </div>
-                </div>
-                <div class="columna2">
-
-                    <div class="inputs">
-                        <label>Teléfono del sistema</label>
-                        <input readonly type="text" class="telefono-sistema"  value="{{ Configuracion.telefono }}">
-                    </div>
-                    <div class="inputs">
-                        <label>Numero RUC:</label>
-                        <input readonly type="text" class="numero-ruc"  value="{{ Configuracion.numero_RUC }}">
-                    </div>
-                </div>
-                <div class="columna3">
-                    <div class="inputs">
-                        <label>Link de Facebook</label>
-                        <input readonly type="text" class="facebook"  value="{{ Configuracion.link_facebook }}">
-                    </div>
-                    <div class="inputs">
-                        <label>Link de Instagram</label>
-                        <input readonly type="text" class="instagram"  value="{{ Configuracion.link_instagram }}">
-                    </div>
-                    <div class="inputs">
-                        <label>Link de tiktok</label>
-                        <input readonly type="text" class="tiktok"  value="{{ Configuracion.link_tiktok }}">
-                    </div>
-                    <div class="inputs">
-                        <label>Link de whatsApp</label>
-                        <input readonly type="text" class="whatsApp"  value="{{ Configuracion.link_whatsapp }}">
-                    </div>
-                </div>
+                
             </div>
+
         </div>
     </div>
+    <div class="inputs-info-links">
+
+    </div>
+    
 </div>
+
 
 <div class="container-editarInfo">
     <div class="editar-info">
@@ -76,11 +39,13 @@ Configuración del sistema | El Jaboncillo
                 <div class="columna1">
                     <div class="inputs">
                         <label>Nombre del sistema</label>
-                        <input type="text" class="nombre-sistema" name="nombre-sistema" value="{{ Configuracion.nombre_empresa }}">
-                    </div>                    
+                        <input type="text" class="nombre-sistema" name="nombre-sistema"
+                            value="{{ Configuracion.nombre_empresa }}">
+                    </div>
                     <div class="inputs">
                         <label>Dirección del sistema</label>
-                        <textarea name="direccion-sistema" class="direccion-sistema" id="direccion-sistema" cols="30" rows="10">{{ Configuracion.direccion }}</textarea>
+                        <textarea name="direccion-sistema" class="direccion-sistema" id="direccion-sistema" cols="30"
+                            rows="10">{{ Configuracion.direccion }}</textarea>
                     </div>
                     <div class="inputs">
                         <label>Email del sistema</label>
@@ -91,7 +56,8 @@ Configuración del sistema | El Jaboncillo
             <div class="columna2">
                 <div class="inputs">
                     <label>Teléfono del sistema</label>
-                    <input type="number" class="telefono-sistema" name="telefono-sistema" value="{{ Configuracion.telefono }}">
+                    <input type="number" class="telefono-sistema" name="telefono-sistema"
+                        value="{{ Configuracion.telefono }}">
                 </div>
                 <div class="inputs">
                     <label>Numero RUC:</label>
@@ -127,17 +93,18 @@ Configuración del sistema | El Jaboncillo
         </form>
     </div>
 </div>
+
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-  <script>
+<script>
     Swal.fire({
-      title:'{{ messages[0][2] }}',
-      text: '{{ messages[0][0] }}',
-      icon: '{{ messages[0][1] }}',
-      confirmButtonText: 'OK'
+        title: '{{ messages[0][2] }}',
+        text: '{{ messages[0][0] }}',
+        icon: '{{ messages[0][1] }}',
+        confirmButtonText: 'OK'
     });
-  </script>
+</script>
 {% endif %}
 {% endwith %}
 {% endblock %}

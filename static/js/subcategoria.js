@@ -227,6 +227,10 @@ document.getElementById("search").addEventListener('input', function() {
 
         // Mostrar el modal
         modal.style.display = "block";
+
+        document.getElementById("close-edit").addEventListener("click", () => {
+          modal.style.display = "none";
+        })
     
       }
  });

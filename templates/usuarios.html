@@ -5,7 +5,7 @@ Usuarios | El Jaboncillo
 
 {% block main %}
 <section class="bienvenida">
-    <h2  id="saludo"></h2>
+    <h2 id="saludo"></h2>
     <p>Bienvenid@, {{session["user_name"]}}</p>
 </section>
 <section class="busqueda">
@@ -95,8 +95,12 @@ Usuarios | El Jaboncillo
                         </div>
                         <div class="input-contenido">
                             <label for="">Contraseña</label>
-                            <input type="password" id="contraseña" class="input input-user input-insumos"
-                                name="contraseña" placeholder="Contraseña">
+                            <div class="input-forma">
+                                <input type="password" id="contraseña" class="input input-user input-insumos"
+                                    name="contraseña" placeholder="Contraseña">
+                                <i class="material-icons eye" id="eye">visibility</i>
+                                <i class="material-icons noneye" id="noneye">visibility_off</i>
+                            </div>
                         </div>
                     </div>
 
@@ -105,8 +109,7 @@ Usuarios | El Jaboncillo
                     <img class="img-btn-add" src="/static/img/logoElJaboncillo.png" alt="logo">
                     <div class="btn-agregar">
                         <button type="button" class=" btn-cancel-user" id="btn-cancel-user ">Cancelar</button>
-                        <button type="submit" class="btn btn-agregar-users"
-                            id="btn-agregar-user">Agregar</button>
+                        <button type="submit" class="btn btn-agregar-users" id="btn-agregar-user">Agregar</button>
                     </div>
                 </section>
             </form>
@@ -129,7 +132,7 @@ Usuarios | El Jaboncillo
                         <label for="">Nombre completo</label>
                         <input type="text" id="nombreUsuario_editar" class="input input-user input-insumos"
                             name="nombreUsuario_editar" value="">
-                            
+
                     </div>
                     <div class="input-contenido">
                         <label for="">Rol</label>
@@ -146,11 +149,6 @@ Usuarios | El Jaboncillo
                         <input type="text" id="correo_editar" class="input input-user input-insumos"
                             name="correo_editar" value="">
                     </div>
-                    <div class="input-contenido">
-                        <label for="">Contraseña</label>
-                        <input type="password" id="contraseña_editar" class="input input-user input-insumos"
-                            name="contraseña_editar" value="">
-                    </div>
                 </div>
             </div>
             <div class="btn-modal">
@@ -164,34 +162,41 @@ Usuarios | El Jaboncillo
         </form>
     </div>
 </div>
-  
-  <!-- Modal -->
-  <div id="modalCambiarContraseña" class="modal-editar-usuario">
-    <div class="modal-content">
+
+<!-- Modal -->
+<div id="modalCambiarContraseña" class="modal-editar-contraseña">
+    <div class="modal-content-contraseña">
         <div class="usuario-title">
             <h2>Cambiar contraseña</h2>
             <span class="cerrar cerrarModal" id="cerrarModal">&times;</span>
         </div>
-        <form action="/cambiarContraseña" method="post">
-            <div class="input-usuario">
+        <form action="/cambiarContraseña" method="post" class="form_cambiar_contraseña">
+            <div class="input-contraseña">
                 <input type="hidden" id="id_usuario_contraseña" name="id_usuario_contraseña" value="{{usuario.id}}">
-                <div class="input-contenido">
-                  <label>Nueva contraseña segura:</label>
-                  <input type="text" id="nuevaContraseña" name="nuevaContraseña" class="input input-user input-insumos">
+                <div class="input-contenido-contraseña">
+                    <label>Nueva contraseña segura:</label>
+                    <div class="input-forma">
+                        <input type="password" id="nuevaContraseña" name="nuevaContraseña"
+                            class="input input-user input-insumos">
+                        <i class="material-icons eye" id="eye">visibility</i>
+                        <i class="material-icons noneye" id="noneye">visibility_off</i>
+                    </div>
                 </div>
             </div>
-                <div class="btn-modal">
-                    <img src="/static/img/logoElJaboncillo.png" alt="logo" class="img-modal">
-                    <div class="btn-agregar">
-                        <button type="button" id="generarContraseña" class="btn btn-success">Generar contraseña segura</button>
-                        <button type="button" class="btn close-modal btn-cancel-user">Cancelar</button>
-                        <button type="submit" class="btn btn-agregar-user" id="btn-edit-usuarios">Cambiar</button>
-                    </div>
-                </div>  
+            <div class="btn-modal-contraseña">
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="img-modal">
+                <div class="btn-agregar">
+                    <button type="button" id="generarContraseña" class="btn btn-generar">Generar contraseña
+                        segura</button>
+                    <button type="button" class="btn close-modal btn-cancel-user"
+                        id="cerrarModalCambiarContraseña">Cancelar</button>
+                    <button type="submit" class="btn btn-agregar-user" id="btn-edit-usuarios">Cambiar</button>
+                </div>
+            </div>
         </form>
     </div>
-  </div>
-  
+</div>
+
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
 {% if messages %}
