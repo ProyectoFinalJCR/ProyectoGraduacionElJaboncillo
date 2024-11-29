@@ -15,7 +15,7 @@ Inventario | El Jaboncillo
             <input class="input-search" name="search" id="buscar_inventario" placeholder="Buscar inventario">
         </div>
         <div>
-            <button class="btn-add-inventario btn">Agregar inventario</button>
+           
         </div>
     </div>
 </section>
@@ -27,21 +27,26 @@ Inventario | El Jaboncillo
                     <th>Producto</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
-                    <th>Precio total inversión</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="tabla_inventario">
                 <tr>
                     {% for infoInventario in infoInventario %}
+                    <td style="display: none;">{{infoInventario.producto_id}}</td>
                     <td>{{infoInventario.nombre_producto}}</td>
                     <td>{{infoInventario.precio_venta}}</td>
                     <td>{{infoInventario.cantidad}}</td>
-                    <td>{{infoInventario.precio_total_inversion}}</td>
+                    
+                    <td style="display: none;"><img src="{{infoInventario.imagen_url}}" alt="producto" class="mini-imgInsumo"></td>
+                    <td style="display: none;">{{infoInventario.produccion_id}}</td>
+                    
                     <td class="btn-acciones">
-                        <input type="hidden" name="producto_id" id="id_prod" value="{{infoInventario.producto_id}}">
-                        <button class="btn-produccion " data-id="${planta.id}">
+                        <button class="btn-produccion" data-id="{{infoInventario.producto_id}}">
                             <i class="material-icons">compost</i>
+                        </button>
+                        <button class="btn-darbaja" data-id="{infoInventario.producto_id}">
+                            <i class="material-icons">delete</i>
                         </button>
                     </td>
                 </tr>
@@ -50,6 +55,7 @@ Inventario | El Jaboncillo
         </table>
     </div>
 </div>
+
 <!-- modal produccion -->
 <div id="ModalProduccion" class="modal-produccion">
     <div class="modal-content-produccion">
@@ -58,10 +64,9 @@ Inventario | El Jaboncillo
             <span class="close" id="close-pro">&times;</span>
         </div>
         <form action="/produccion" class="form-produccion" method="post">
-            {% for info in infoInventario%}
             <div class="img-info-cont">
                 <div class="img-cont">
-                    <img alt="planta" class="imgProduccion" src=" {{info.imagen_producto}}">                     
+                    <img alt="planta" class="imgProduccion" id="imgProduccion" src="">                     
                 </div>
                 
                 <div class="info-planta-cont">
@@ -73,17 +78,13 @@ Inventario | El Jaboncillo
                     </div>
                     <div class="textos-cont">
                         <div class="textos">
-                            <input type="hidden" name="id_planta_produccion" id="planta-idProduccion" value="">
-                            <label for="">Nombre: {{info.nombre_producto}} </label>
-                            <input type="text" id="nombrePlantaproduccion" name="nombrePlanta" class="sinborde nombreplanta" readonly value="{{info.nombre_producto}}">
-                        </div>
-                        <div class="textos">
-                            <label for="">Descripción: </label>
-                            <input type="text" name="descripcionPlanta" id="descripcionPlanta" class="sinborde" readonly value="{{info.descripcion_producto}}">
+                            <input type="text" name="id_planta_produccion" id="idProduccion" value="">
+                            <label for="">Nombre:</label>
+                            <input type="text" id="nombreProductoproduccion" name="nombrePlanta" class="sinborde nombreplanta" readonly value="">
                         </div>
                         <div class="textos">
                             <label for="">Precio unitario: </label>
-                            <input type="text" class="sinborde" readonly name="precioPlanta" id="precioPlanta" value="{{info.precio_venta}}">
+                            <input type="text" class="sinborde" readonly name="precioPlanta" id="precioProducto" value="">
                         </div>
                     </div>
 
@@ -116,8 +117,77 @@ Inventario | El Jaboncillo
                     <button type="submit" class="btn" id="btn-edit-plantas">Agregar</button>
                 </div>
             </div>
-            {%endfor%}
         </form>
     </div>
 </div>
+
+<!-- modal dar de baja -->
+<div id="ModalBaja" class="modal-baja">
+    <div class="modal-content-baja">
+        <div class="inputplantas-title">
+            <h2>Dar de baja a productos</h2>
+            <span class="close" id="close-baja">&times;</span>
+        </div>
+        <form action="/produccion" class="form-produccion" method="post">
+            <div class="img-info-cont">
+                <div class="img-cont">
+                    <img alt="planta" class="imgBaja" id="imgBaja" src="">                     
+                </div>
+                
+                <div class="info-planta-cont">
+                    <div class="fecha-cont">
+                        <div class="fecha_baja">
+                            <label for="">Fecha: </label>
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="textos-cont">
+                        <div class="textos">
+                            <input type="hidden" name="id_producto_baja" id="id_producto_baja" value="">
+                            <label for="">Nombre:</label>
+                            <input type="text" id="nombreProductoBaja" name="nombrePlanta" class="sinborde nombreplanta" readonly value="">
+                        </div>
+                        <div class="textos">
+                            <label for="">Precio unitario: </label>
+                            <input type="text" class="sinborde" readonly name="precioPlanta" id="precioProductoBaja" value="">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="cantidad-cont">
+                <div>
+                    <label for="">Nota</label>
+                    <textarea name="nota" class="textarea input-plantas" id="nota"></textarea>
+                </div>
+               
+                <div>
+                    <label for="">Cantidad</label>
+                    <input type="number" class="input input-plantas" name="cantidad" id="cantidad">
+                </div>
+            </div>
+            <div class="btn-agregar">
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                <div>
+                    <button type="button" class="btn btn-cancel" id="btn-cancel-baja">Cancelar</button>
+                    <button type="submit" class="btn" id="btn-edit-plantas">Agregar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Mostrar mensaje de éxito -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<script>
+    Swal.fire({
+        title: '{{ messages[0][2] }}',
+        text: '{{ messages[0][0] }}',
+        icon: '{{ messages[0][1] }}',
+        confirmButtonText: 'OK'
+    });
+</script>
+{% endif %}
+{% endwith %}
 {% endblock %}

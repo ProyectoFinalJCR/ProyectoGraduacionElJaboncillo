@@ -73,8 +73,8 @@ Categorias | El Jaboncillo
                     </div>
                     <div class="input-contenido">
                         <label for="">Descripción</label>
-                        <input type="text" id="descripcion" class="input input-cat input-insumos" name="descripcion"
-                            placeholder="Descripción">
+                        <textarea type="text" id="descripcion" class="input input-cat input-insumos" name="descripcion"
+                            placeholder="Descripción"></textarea>
                     </div>
                 </section>
                 <section class="btn-agregar-cate">
@@ -94,7 +94,7 @@ Categorias | El Jaboncillo
     <div class="modal-content-cat form-categories">
         <div class="categoria-title">
             <h2>Editar categoria</h2>
-            <span class="close">&times;</span>
+            <span class="close" id="close-edit">&times;</span>
         </div>
         <form action="/editarCategoria" method="post" class="form_edit" id="form_cat_edit">
             <div class="input-categories">

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
   document.querySelector('.btn-add').addEventListener('click', function () {
     const form_cat = document.querySelector(".container-inputsCat");
     form_cat.style.display = "block";
@@ -209,7 +209,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
           // Mostrar el modal
           modal.style.display = "block";
-       
+
+          document.getElementById("close-edit").addEventListener("click", () => {
+            modal.style.display = "none";
+          })
     }
   });
 

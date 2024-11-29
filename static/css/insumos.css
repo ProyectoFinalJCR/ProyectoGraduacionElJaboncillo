@@ -143,6 +143,7 @@ justify-content: space-between;
   max-width: 330px;      /* Ancho máximo de 500px */
   height: 100px;         /* Altura inicial de 150px */
   max-height: 100px;
+  min-height: 100px;
   min-width:330px 
 }
 .container-inputinsumos .agregar-insumos .inputs-insumos .columna-3 .input-subcat{

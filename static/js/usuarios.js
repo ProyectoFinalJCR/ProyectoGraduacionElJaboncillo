@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Obtener elementos del DOM
 const abrirModal = document.getElementById('abrirModal');
 const cerrarModal = document.getElementById('cerrarModal');
+const cerrarModalCambiarContraseña = document.getElementById('cerrarModalCambiarContraseña');
 const modal = document.getElementById('modalCambiarContraseña');
 
 // Abrir el modal
@@ -37,6 +38,9 @@ abrirModal.addEventListener('click', (event) => {
 // Cerrar el modal al hacer clic en la "x"
 cerrarModal.addEventListener('click', () => {
   modal.style.display = 'none';
+});
+cerrarModalCambiarContraseña.addEventListener("click", () => {
+  modal.style.display = "none";
 });
 
 
@@ -364,3 +368,53 @@ document.getElementById('tabla_usuarios').addEventListener('click', function (ev
     event.preventDefault(); 
   })
 });   
+
+
+//Visibilidad de la password
+        // Obtener los elementos
+        const passwordInputagregar = document.getElementById('contraseña');
+        const PasswordEyeOnagregar = document.getElementById('eye');
+        const PasswordEyeOnOffagregar = document.getElementById('noneye');
+    
+        // Función para alternar la visibilidad de la contraseña
+        PasswordEyeOnagregar.addEventListener('click', function() {
+            // Cambiar el tipo de input entre 'password' y 'text'
+            if (passwordInputagregar.type === 'password') {
+              passwordInputagregar.type = 'text';
+                PasswordEyeOnagregar.style.display = 'none';  // Ocultar icono de ojo abierto
+                PasswordEyeOnOffagregar.style.display = 'inline';  // Mostrar icono de ojo cerrado
+            }
+        });
+    
+        PasswordEyeOnOffagregar.addEventListener('click', function() {
+            // Cambiar el tipo de input entre 'text' y 'password'
+            if (passwordInputagregar.type === 'text') {
+              passwordInputagregar.type = 'password';
+                PasswordEyeOnOffagregar.style.display = 'none';  // Ocultar icono de ojo cerrado
+                PasswordEyeOnagregar.style.display = 'inline';  // Mostrar icono de ojo abierto
+            }
+        });
+//Visibilidad de la password
+        // Obtener los elementos
+        const passwordInput = document.getElementById('nuevaContraseña');
+        const PasswordEyeOn = document.getElementById('eye');
+        const PasswordEyeOnOff = document.getElementById('noneye');
+    
+        // Función para alternar la visibilidad de la contraseña
+        PasswordEyeOn.addEventListener('click', function() {
+            // Cambiar el tipo de input entre 'password' y 'text'
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                PasswordEyeOn.style.display = 'none';  // Ocultar icono de ojo abierto
+                PasswordEyeOnOff.style.display = 'inline';  // Mostrar icono de ojo cerrado
+            }
+        });
+    
+        PasswordEyeOnOff.addEventListener('click', function() {
+            // Cambiar el tipo de input entre 'text' y 'password'
+            if (passwordInput.type === 'text') {
+                passwordInput.type = 'password';
+                PasswordEyeOnOff.style.display = 'none';  // Ocultar icono de ojo cerrado
+                PasswordEyeOn.style.display = 'inline';  // Mostrar icono de ojo abierto
+            }
+        });

@@ -136,7 +136,27 @@ document.addEventListener('DOMContentLoaded', function(){
             alerta.remove();
         }
     };
- 
+    
+    //Validar telefono
+    const numeroTelefono = document.querySelector('#numeroTelefono');
+
+    document.getElementById("numeroTelefono").addEventListener("input", function () {
+      const telefono = this.value;
+      const regex = /^[23578]\d{7}$/; // Valida números que empiezan con 2, 3, 5, 7, 8 y tienen 8 dígitos
+      if (!regex.test(telefono)) {
+          this.setCustomValidity("Ingrese un número válido de 8 dígitos y tiene que empezar con 2, 3, 5, 7 u 8.");
+          this.reportValidity();
+      }
+      else if (telefono < 0) {
+        this.value = ""; // Borra el valor si es negativo
+        this.setCustomValidity("El número no puede ser negativo.");
+        this.reportValidity();
+      }
+      else {
+          this.setCustomValidity(""); // Elimina el mensaje de error si es válido
+      }
+  }); 
+
     //Buscar proveedores -----------------------------------
     let proveedoresData = [];
     // Cargar datos una sola vez cuando la página carga
