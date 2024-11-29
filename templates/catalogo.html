@@ -145,7 +145,18 @@
         </div>
     </section>
     <section>
-
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <script>
+            Swal.fire({
+              title:'{{ messages[0][2] }}',
+              text: '{{ messages[0][0] }}',
+              icon: '{{ messages[0][1] }}',
+              confirmButtonText: 'OK'
+            });
+          </script>
+        {% endif %}
+        {% endwith %}
     </section>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/static/js/catalogo.js"></script>
