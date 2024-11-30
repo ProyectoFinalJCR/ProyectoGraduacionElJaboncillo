@@ -104,9 +104,9 @@ def login():
                 session["user_id"] = selected_user[0]
                 session["user_name"] = selected_user[1]
                 session["rol_id"] = selected_user[4]
-                session["user_rol"] = selected_user[6]
+                session["user_rol"] = selected_user[7]
 
-                print(session["user_rol"])
+                print("tiene que ser el rol",session["user_rol"])
                 print(session["rol_id"])
                 #verifica el rol del usuario para redirigirlo a su vista correspondiente
                 if session["user_rol"] == 'CLIENTE':
@@ -186,7 +186,6 @@ def categorias():
         
 @app.route('/editarCategoria', methods=["POST"])
 @login_required
-@ruta_permitida
 def editarCategoria():
     print("Entro a editar categoria")
     categoria = request.form.get('nombre_editar')
@@ -226,7 +225,6 @@ def editarCategoria():
 
 @app.route('/eliminarCategoria', methods=["POST"])
 @login_required
-@ruta_permitida
 def eliminarCategoria():
     idCategoria = request.form.get('id_eliminar')
     print(idCategoria)
@@ -247,8 +245,7 @@ def eliminarCategoria():
 
 
 @app.route('/usuarios', methods =["GET","POST"])
-# @login_required
-# @ruta_permitida
+@login_required
 def usuarios():
     if request.method == "GET":
         print("Usuarios GET")
@@ -296,7 +293,6 @@ def usuarios():
 
 @app.route('/eliminarUsuarios', methods=["GET", "POST"])
 @login_required
-@ruta_permitida
 def eliminarUsuarios():
     print("Eliminar usuarios")
     idUsuario = request.form.get('id_usuario')
@@ -393,7 +389,6 @@ def subCategorias():
     
 @app.route('/eliminarSubcategoria', methods=["GET", "POST"])
 @login_required
-@ruta_permitida
 def eliminarSubcategoria():
     idSubcategoria = request.form.get('id_eliminar')
 
@@ -406,7 +401,6 @@ def eliminarSubcategoria():
 
 @app.route('/editarSubcategoria', methods=["POST"])
 @login_required
-@ruta_permitida
 def editarSubcategoria():
     subcategoria = request.form.get('nombreSub_editar')
     idcategoria = request.form.get('idCat_editar')
@@ -881,9 +875,6 @@ def plantas():
         obtenerSubcategorias = text("SELECT * FROM subcategorias INNER JOIN categorias ON subcategorias.categoria_id = categorias.id WHERE categorias.categoria LIKE '%Plantas%'")
         subcategorias = db.execute(obtenerSubcategorias).fetchall()
 
-        obtenerRangos = text("SELECT * FROM rangos")
-        rangos = db.execute(obtenerRangos).fetchall()
-
         obtenerEntornos = text("SELECT * FROM entornos_ideales")
         entornos = db.execute(obtenerEntornos).fetchall()
 
@@ -904,13 +895,7 @@ def plantas():
     
     STRING_AGG(DISTINCT subcategorias.subcategoria, ', ') AS subcategoria,
     STRING_AGG(DISTINCT subcategorias.id::text, ', ') AS id_subcategoria,
-    
-    STRING_AGG(DISTINCT colores.color, ', ') AS color,
-    STRING_AGG(DISTINCT colores.id::text, ', ') AS id_color,
-    
-    STRING_AGG(DISTINCT rangos.rango, ', ') AS rango,
-    STRING_AGG(DISTINCT rangos.id::text, ', ') AS id_rango,
-    
+                           
     entornos_ideales.entorno AS entorno,
     entornos_ideales.id AS id_entorno,
     
@@ -931,14 +916,6 @@ JOIN
     plantas_subcategoria ON plantas.id = plantas_subcategoria.planta_id
 JOIN 
     subcategorias ON plantas_subcategoria.subcategoria_id = subcategorias.id
-JOIN 
-    colores_plantas ON plantas.id = colores_plantas.planta_id
-JOIN 
-    colores ON colores_plantas.color_id = colores.id
-JOIN 
-    rangos_medidas ON plantas.id = rangos_medidas.planta_id
-JOIN 
-    rangos ON rangos_medidas.rango_id = rangos.id
 JOIN 
     entornos_ideales ON plantas.entorno_ideal_id = entornos_ideales.id
 JOIN 
@@ -965,20 +942,17 @@ GROUP BY
         
         infoPlantas = db.execute(obtenerInfo).fetchall()
 
-        return render_template('plantas.html', InfoPlanta = infoPlantas, Colores = colores, Subcategorias = subcategorias, Rangos = rangos, Entornos = entornos, Agua = agua, Suelos = suelos, Temporada = temporada)
+        return render_template('plantas.html', InfoPlanta = infoPlantas, Subcategorias = subcategorias, Entornos = entornos, Agua = agua, Suelos = suelos, Temporada = temporada)
     else:
         nombrePlanta = request.form.get('nombrePlanta')
         descripcion = request.form.get('descripcion')
         precio = request.form.get('precio')
-        color = request.form.getlist('idColor')
         subcategoria = request.form.getlist('idSub')
-        rango = request.form.getlist('idRango')
         entorno = request.form.get('idEntorno')
         agua = request.form.get('idAgua')
         suelo = request.form.get('idSuelo')
         temporada = request.form.get('idTemporada')
 
-        print(color)
         if not nombrePlanta:
             flash(('Ingrese el nombre', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
@@ -988,14 +962,8 @@ GROUP BY
         if not precio:
             flash(('Ingrese el precio', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
-        if not color:
-            flash(('Seleccione el color', 'error', '¡Error!'))
-            return redirect(url_for('plantas'))
         if not subcategoria:
             flash(('Seleccione la subcategoria', 'error', '¡Error!'))
-            return redirect(url_for('plantas'))
-        if not rango:
-            flash(('Seleccione el rango', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
         if not entorno:
             flash(('Seleccione el entorno ideal', 'error', '¡Error!'))
@@ -1023,15 +991,6 @@ GROUP BY
             for sub_id in subcategoria:
                 insertarPlantasSub = text("INSERT INTO plantas_subcategoria (subcategoria_id, planta_id) VALUES (:subcategoria_id, :planta_id)")
                 db.execute(insertarPlantasSub, {'subcategoria_id': int(sub_id), 'planta_id': plantaId})
-
-            for colores_id in color:
-                insertarColores = text("INSERT INTO colores_plantas (color_id, planta_id) VALUES (:color_id, :planta_id)")
-                db.execute(insertarColores, {'color_id': int(colores_id), 'planta_id': plantaId})
-
-            for rangos_id in rango:
-                insertarRangos = text("INSERT INTO rangos_medidas (rango_id, planta_id) VALUES (:rango_id, :planta_id)")
-                db.execute(insertarRangos, {'rango_id': rangos_id, 'planta_id': plantaId})
-
             db.commit()
             db.close()
         flash(('La planta se ha agregado correctamente', 'success', '¡Exito!'))
@@ -1159,7 +1118,17 @@ def agregarImgPlanta(data):
     db.execute(query,{"imagen": imagen, "id": planta})
     db.commit()
     db.close()
-   
+
+
+@socketio.on("addLogoEmpresa")
+def agregarLogoEmpresa(data):
+    print(data)
+    imagen = data['url']
+    print(f"{imagen} imagen de la empresa")
+    query = text("UPDATE configuracion_sistema SET logo_empresa_url = :imagen")
+    db.execute(query,{"imagen": imagen})
+    db.commit()
+    db.close()
 
 @app.route('/editarPlantas', methods=["POST"])
 @login_required
@@ -2111,6 +2080,8 @@ def configuracion():
     if request.method == 'GET':
         ObtenerConfiguracion = text('SELECT * FROM configuracion_sistema')
         configuracion = db.execute(ObtenerConfiguracion).fetchone()
+
+
         return render_template('configuracion.html', Configuracion = configuracion)
     else:
         nombreSistema = request.form.get('nombre-sistema')
@@ -2151,8 +2122,8 @@ def configuracion():
             flash(('Ingrese el link de whatsapp del sistema', "error"))
             return redirect(url_for("configuracion"))
         
-        actualizarInfo = text('UPDATE configuracion_sistema SET nombre_empresa=:nombre_empresa, direccion=:direccion, telefono=:telefono, email=:email, "numero_RUC"=:numero_RUC, link_facebook=:link_facebook, link_instagram=:link_instagram, link_tiktok=:link_tiktok, link_whatsapp=:link_whatsapp')
-        db.execute(actualizarInfo, {"nombre_empresa":nombreSistema, "direccion":direccionSistema, "telefono":telefonoSistema, "email":emailSistema, "numero_RUC": numeroRuc, "link_facebook": facebookLink, "link_instagram":instagramLink, "link_tiktok": tiktokLink, "link_whatsapp":whatsapp})
+        actualizarInfo = text('UPDATE configuracion_sistema SET nombre_empresa=:nombre_empresa, direccion=:direccion, telefono=:telefono, email=:email, "numero_ruc"=:numero_ruc, link_facebook=:link_facebook, link_instagram=:link_instagram, link_tiktok=:link_tiktok, link_whatsapp=:link_whatsapp')
+        db.execute(actualizarInfo, {"nombre_empresa":nombreSistema, "direccion":direccionSistema, "telefono":telefonoSistema, "email":emailSistema, "numero_ruc": numeroRuc, "link_facebook": facebookLink, "link_instagram":instagramLink, "link_tiktok": tiktokLink, "link_whatsapp":whatsapp})
         db.commit()
         flash(('Configuracion actualizada con exito', "success"))
         return redirect(url_for("configuracion"))

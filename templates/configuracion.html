@@ -7,9 +7,7 @@ Configuración del sistema | El Jaboncillo
 <div class="allscreen">
     <div class="img-info-cont-config">
         <div class="img-info-config">
-            <div class="img">
-
-            </div>
+            <img src="{{ Configuracion.logo_empresa_url }}" class="img" alt="logo">
         </div>
         <div class="info">
             <div class="titulo-info">
@@ -17,15 +15,79 @@ Configuración del sistema | El Jaboncillo
                 <button id="btn-editar-info" class="btn-editar-info">Editar Información</button>
             </div>
             <div class="inputs-info">
-                
+                <div class="columna1">
+                    <div class="inputs">
+                        <label>Nombre del sistema</label>
+                        <input type="text" class="nombre-sistema" name="nombre-sistema"
+                            value="{{ Configuracion.nombre_empresa }}" readonly>
+                    </div>
+                    <div class="inputs">
+                        <label>Dirección del sistema</label>
+                        <textarea name="direccion-sistema" class="direccion-sistema" id="direccion-sistema" cols="30"
+                            rows="10" readonly>{{ Configuracion.direccion }}</textarea>
+                    </div>
+                    <div class="inputs">
+                        <label>Email del sistema</label>
+                        <input type="text" class="email-sistema" name="email-sistema" value="{{ Configuracion.email }}"
+                            readonly>
+                    </div>
+                </div>
+                <div class="columna2">
+                    <div class="inputs">
+                        <label>Teléfono del sistema</label>
+                        <input type="number" class="telefono-sistema" name="telefono-sistema"
+                            value="{{ Configuracion.telefono }}" readonly>
+                    </div>
+                    <div class="inputs">
+                        <label>Numero RUC:</label>
+                        <input type="number" class="numero-ruc" name="numero-ruc" value="{{ Configuracion.numero_ruc }}"
+                            readonly>
+                    </div>
+                    <div class="inputs">
+                        <label>Valor de la divisa en:</label>
+                        {% for divisa in Divisas %}
+                        <div class="input-divisas">
+                            <label>{{ divisa.divisa }}</label>
+                            <input type="hidden" class="divisas" name="divisas" value="{{ divisa.id }}">
+                            <input type="text" class="divisas" name="divisas" value="{{ divisa.equivalente_cordobas }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
     <div class="inputs-info-links">
-
+        <div class="inputs">
+            <label for="">Facebook</label>
+            <div class="input-link">
+                <img src="/static/img/facebook.png" class="icon" alt="facebook">
+                <input type="text" class="facebook" name="facebook" value="{{ Configuracion.link_facebook }}" readonly>
+            </div>
+        </div>
+        <div class="inputs">
+            <label for="">Instagram</label>
+            <div class="input-link">
+                <img src="/static/img/social.png" class="icon" alt="instagram">
+                <input type="text" class="instagram" name="instagram" value="{{ Configuracion.link_instagram }}"
+                    readonly>
+            </div>
+        </div>
+        <div class="inputs">
+            <label for="">Tiktok</label>
+            <div class="input-link">
+                <img src="/static/img/tik-tok.png" class="icon" alt="tiktok">
+                <input type="text" class="tiktok" name="tiktok" value="{{ Configuracion.link_tiktok }}" readonly>
+            </div>
+        </div>
+        <div class="inputs">
+            <label for="">WhatsApp</label>
+            <div class="input-link">
+                <img src="/static/img/whatsapp.png" class="icon" alt="whatsapp">
+                <input type="text" class="whatsApp" name="whatsApp" value="{{ Configuracion.link_whatsapp }}" readonly>
+            </div>
+        </div>
     </div>
-    
 </div>
 
 
@@ -33,13 +95,22 @@ Configuración del sistema | El Jaboncillo
     <div class="editar-info">
         <div class="titulo-info">
             <h2>Información del sistema</h2>
+            <span class="close close-info">&times;</span>
         </div>
         <form action="/configuracion" method="post" id="form-editar-configuracion">
             <div class="inputs-info">
                 <div class="columna1">
                     <div class="inputs">
+                        <label for="">Editar logo</label>
+                        <!-- <label for="">Archivo</label>
+                        <input type="file" name="archivo" id="archivo" accept=".jpg, .png, .jpeg"> -->
+                        <label for="fileInput" class="custom-file-label">
+                            click para seleccionar archivo</label>
+                        <input type="file" id="fileInput" style="display: none;" accept=".jpg, .png, .jpeg">
+                    </div>
+                    <div class="inputs">
                         <label>Nombre del sistema</label>
-                        <input type="text" class="nombre-sistema" name="nombre-sistema"
+                        <input type="text" class="nombre-sistema email-sistema" name="nombre-sistema"
                             value="{{ Configuracion.nombre_empresa }}">
                     </div>
                     <div class="inputs">
@@ -47,47 +118,66 @@ Configuración del sistema | El Jaboncillo
                         <textarea name="direccion-sistema" class="direccion-sistema" id="direccion-sistema" cols="30"
                             rows="10">{{ Configuracion.direccion }}</textarea>
                     </div>
+                </div>
+                <div class="columna2">
                     <div class="inputs">
                         <label>Email del sistema</label>
                         <input type="text" class="email-sistema" name="email-sistema" value="{{ Configuracion.email }}">
                     </div>
-                </div>
-            </div>
-            <div class="columna2">
-                <div class="inputs">
-                    <label>Teléfono del sistema</label>
-                    <input type="number" class="telefono-sistema" name="telefono-sistema"
-                        value="{{ Configuracion.telefono }}">
-                </div>
-                <div class="inputs">
-                    <label>Numero RUC:</label>
-                    <input type="number" class="numero-ruc" name="numero-ruc" value="{{ Configuracion.numero_RUC }}">
+                    <div class="inputs">
+                        <label>Teléfono del sistema</label>
+                        <input type="number" class="telefono-sistema" name="telefono-sistema"
+                            value="{{ Configuracion.telefono }}">
+                    </div>
+                    <div class="inputs">
+                        <label>Numero RUC:</label>
+                        <input type="number" class="numero-ruc" name="numero-ruc"
+                            value="{{ Configuracion.numero_ruc }}">
+                    </div>
                 </div>
             </div>
             <div class="columna3">
                 <div class="inputs">
-                    <label>Link de Facebook</label>
-                    <input type="text" class="facebook" name="facebook" value="{{ Configuracion.link_facebook }}">
+                    <label for="">Facebook</label>
+                    <div class="input-link">
+                        <img src="/static/img/facebook.png" class="icon" alt="facebook">
+                        <input type="text" class="facebook" name="facebook" value="{{ Configuracion.link_facebook }}"
+                            readonly>
+                    </div>
                 </div>
                 <div class="inputs">
-                    <label>Link de Instagram</label>
-                    <input type="text" class="instagram" name="instagram" value="{{ Configuracion.link_instagram }}">
+                    <label for="">Instagram</label>
+                    <div class="input-link">
+                        <img src="/static/img/social.png" class="icon" alt="instagram">
+                        <input type="text" class="instagram" name="instagram" value="{{ Configuracion.link_instagram }}"
+                            readonly>
+                    </div>
                 </div>
                 <div class="inputs">
-                    <label>Link de tiktok</label>
-                    <input type="text" class="tiktok" name="tiktok" value="{{ Configuracion.link_tiktok }}">
+                    <label for="">Tiktok</label>
+                    <div class="input-link">
+                        <img src="/static/img/tik-tok.png" class="icon" alt="tiktok">
+                        <input type="text" class="tiktok" name="tiktok" value="{{ Configuracion.link_tiktok }}"
+                            readonly>
+                    </div>
                 </div>
                 <div class="inputs">
-                    <label>Link de whatsApp</label>
-                    <input type="text" class="whatsApp" name="whatsApp" value="{{ Configuracion.link_whatsapp }}">
+                    <label for="">WhatsApp</label>
+                    <div class="input-link">
+                        <img src="/static/img/whatsapp.png" class="icon" alt="whatsapp">
+                        <input type="text" class="whatsApp" name="whatsApp" value="{{ Configuracion.link_whatsapp }}"
+                            readonly>
+                    </div>
                 </div>
             </div>
+
             <section class="btn-agregar">
                 <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
                 <div>
-                    <div id="productos-dinamicos"></div>
-                    <button type="button" class="btn btn-cancel" id="btn-cancel">Cancelar</button>
-                    <button type="submit" class="btn" id="btn-add-venta">Agregar</button>
+                    <div class="btn-agregar-info">
+                        <button type="button" class="btn btn-cancel" id="btn-cancel">Cancelar</button>
+                        <button type="submit" class="btn btn-add" id="btn-add-venta">Agregar</button>
+                    </div>
                 </div>
             </section>
         </form>

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/static/css/sub_categorias.css">
     <link rel="stylesheet" href="/static/css/usuarios.css">
     <link rel="stylesheet" href="/static/css/plantas.css">
-    <link rel="stylesheet" href="/static/css/proveedores.css"> 
+    <link rel="stylesheet" href="/static/css/proveedores.css">
     <link rel="stylesheet" href="/static/css/insumos.css">
     <link rel="stylesheet" href="/static/css/ventas.css">
     <link rel="stylesheet" href="/static/css/proveedores.css">
@@ -31,10 +31,11 @@
 
     <title>{%block title%} {%endblock%}</title>
 </head>
+
 <body>
     <section class="all-screen">
         <aside class="sidebar">
-            {% if  session["user_rol"] == "ADMINISTRADOR" %}
+            {% if session["rol_id"] == 1 %}
             <div class="sidebar-titulo-user">
                 <h2>{{session["user_name"]}}</h2>
                 <p>{{session["user_rol"]}}</p>
@@ -43,7 +44,9 @@
                 <div class="items-back">
                     <button class="btn-items-inicio">
                         <i class="material-icons">home</i>
-                        <a href="inicioAdmin"><p class="btn_texto">Inicio</p></a>
+                        <a href="inicioAdmin">
+                            <p class="btn_texto">Inicio</p>
+                        </a>
                     </button>
                 </div>
                 <div class="items-back">
@@ -117,7 +120,9 @@
             <div class="configuracion">
                 <button class="btn-items-config">
                     <i class="material-icons">settings</i>
-                    <a class="item" href="/configuracion"><p>Configuración del sistema</p></a>
+                    <a class="item" href="/configuracion">
+                        <p>Configuración del sistema</p>
+                    </a>
                 </button>
             </div>
             {%else%}
@@ -129,91 +134,95 @@
                 <div class="items-back">
                     <button class="btn-items-inicio">
                         <i class="material-icons">home</i>
-                        <a href="inicioAdmin"><p class="btn_texto">Inicio</p></a>
+                        <a href="inicioAdmin">
+                            <p class="btn_texto">Inicio</p>
+                        </a>
                     </button>
                 </div>
                 <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">payments</i>
-                    <p class="btn_texto">Gestion ventas</p>
-                    <i class="material-icons key">keyboard_arrow_right</i>
-                </button>
-                <div class="options">
-                    <ul class="list-options">
-                        <li><a href="/ventas">Venta</a></li>
-                        <li><a href="#">Devoluciones</a></li>
-                        <li><a href="#">Reportes</a></li>
-                    </ul>
+                        <p class="btn_texto">Gestion ventas</p>
+                        <i class="material-icons key">keyboard_arrow_right</i>
+                    </button>
+                    <div class="options">
+                        <ul class="list-options">
+                            <li><a href="/ventas">Venta</a></li>
+                            <li><a href="#">Devoluciones</a></li>
+                            <li><a href="#">Reportes</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="items-back">
+                    <button class="btn-items">
+                        <i class="material-icons">local_mall</i>
+                        <p class="btn_texto">Gestión compras</p>
+                        <i class="material-icons key">keyboard_arrow_right</i>
+                    </button>
+                    <div class="options">
+                        <ul class="list-options">
+                            <li><a href="/compras">Compras</a></li>
+                            <li><a href="/proveedores">Proveedores</a></li>
+                            <li><a href="#">Reportes</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="items-back">
-                <button class="btn-items">
-                    <i class="material-icons">local_mall</i>
-                    <p class="btn_texto">Gestión compras</p>
-                    <i class="material-icons key">keyboard_arrow_right</i>
-                </button>
-                <div class="options">
-                    <ul class="list-options">
-                        <li><a href="/compras">Compras</a></li>
-                        <li><a href="/proveedores">Proveedores</a></li>
-                        <li><a href="#">Reportes</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
             {% endif %}
-    </aside>
-    <section id="wrapper" class="seccion-wrapper">
-        <nav class="navbar">
-            <div class="navbar-content">
-            <i class="material-icons  menu-toggle">menu</i>
-           <a href="inicioAdmin"> <img src="/static/img/logoElJaboncillo.png" alt="logo"></a>
-            </div>
-                <div class="fecha">
-                    <p id="fecha"></p>
-                    <p>/</p>
-                    <p id="hora"></p>
+        </aside>
+        <section id="wrapper" class="seccion-wrapper">
+            <nav class="navbar">
+                <div class="navbar-content">
+                    <i class="material-icons  menu-toggle">menu</i>
+                    <a href="inicioAdmin"> <img src="/static/img/logoElJaboncillo.png" alt="logo"></a>
                 </div>
-                <!-- <i class="material-icons  menu-toggle">menu</i> -->
-                 <div>
-                     <a href="/logout"><button class="btn-logout">Cerrar sesión</button></a>
-                 </div>
-        </nav>
-        <main class="main">
-            {% block main %}
+                <div class="fecha-btnlogout">
+                    <div class="fecha">
+                        <p id="fecha"></p>
+                        <p>/</p>
+                        <p id="hora"></p>
+                    </div>
+                    <div >
+                        <a href="/logout"><button class="btn-logout">Cerrar sesión</button></a>
+                    </div>
+                </div>
+            </nav>
+            <main class="main">
+                {% block main %}
 
-            {% endblock %}
-        </main>
+                {% endblock %}
+            </main>
+        </section>
     </section>
-</section>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/static/js/layout.js"></script>
-<script src="/static/js/categorias.js"></script>
-<script src="/static/js/usuarios.js"></script>
-<script src="/static/js/subcategoria.js"></script>
-<script src="/static/js/insumos.js"></script>
-<script src="/static/js/proveedores.js"></script>
-<script src="/static/js/plantas.js"></script>
-<script src="/static/js/ventas.js"></script>
-<script src="/static/js/compras.js"></script>
-<script src="/static/js/configuracion.js"></script>
-<script src="/static/js/socket.io.min.js"></script>
-<script src="/static/js/inventario.js"></script>
-<!-- Carga jQuery primero -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/layout.js"></script>
+    <script src="/static/js/categorias.js"></script>
+    <script src="/static/js/usuarios.js"></script>
+    <script src="/static/js/subcategoria.js"></script>
+    <script src="/static/js/insumos.js"></script>
+    <script src="/static/js/proveedores.js"></script>
+    <script src="/static/js/plantas.js"></script>
+    <script src="/static/js/ventas.js"></script>
+    <script src="/static/js/compras.js"></script>
+    <script src="/static/js/configuracion.js"></script>
+    <script src="/static/js/socket.io.min.js"></script>
+    <script src="/static/js/inventario.js"></script>
+    <!-- Carga jQuery primero -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<!-- Luego carga Select2 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <!-- Luego carga Select2 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-<!-- Carga Axios para Cloudinary -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!-- Cargar Socket.io desde un CDN -->
-<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <!-- Carga Axios para Cloudinary -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Cargar Socket.io desde un CDN -->
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 
-<script src="path/to/insumos.js"></script>
-<script src="path/to/plantas.js"></script>
-          
+    <script src="path/to/insumos.js"></script>
+    <script src="path/to/plantas.js"></script>
+    <script src="path/to/configuracion.js"></script>
+
 </body>
 
 </html>

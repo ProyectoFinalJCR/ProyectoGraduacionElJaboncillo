@@ -1,3 +1,20 @@
+  .container-table-inputs .table-inventario{
+    width: 100%;
+  }
+  .container-table-inputs .table-inventario .table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+    
+  }
+  
+  .container-table-inputs .table-inventario .table .btn-acciones .btn-produccion{
+background-color: #4bdb82;
+  }
+  .container-table-inputs .table-inventario .table .btn-acciones .btn-darbaja{
+background-color: #CF696B;
+  }
+  
   /*modal produccion*/
   .modal-produccion{
     display: none; 

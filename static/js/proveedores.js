@@ -66,27 +66,27 @@ document.addEventListener('DOMContentLoaded', function(){
     };
 
     //Opacidad y habilitacion del boton agregar
-    document.getElementById('form-proveedores').addEventListener('input', function(){
-        const inputs = document.querySelectorAll('.input-proveedor');
-        const btnSend = document.querySelector('#btn-add-proveedores');
-        let fields = true;
+    // document.getElementById('form-proveedores').addEventListener('input', function(){
+    //     const inputs = document.querySelectorAll('.input-proveedor');
+    //     const btnSend = document.querySelector('#btn-add-proveedores');
+    //     let fields = true;
 
-        inputs.forEach(input =>{
-            if(input.value.trim() === ''){
-                fields = false;
-                console.log(fields)
-            }
-        });
+    //     inputs.forEach(input =>{
+    //         if(input.value.trim() === ''){
+    //             fields = false;
+    //             console.log(fields)
+    //         }
+    //     });
 
-        //Habilita o deshabilita el boton segun el estado de los campos
-        if(fields){
-          btnSend.disabled = false;
-          btnSend.classList.remove('opacity');
-      } else {
-          btnSend.disabled = true;
-          btnSend.classList.add('opacity');
-      }
-    });
+    //     //Habilita o deshabilita el boton segun el estado de los campos
+    //     if(fields){
+    //       btnSend.disabled = false;
+    //       btnSend.classList.remove('opacity');
+    //   } else {
+    //       btnSend.disabled = true;
+    //       btnSend.classList.add('opacity');
+    //   }
+    // });
 
     // validar inputs de proveedores ------------------
     const nombre_proveedor = document.querySelector('#nombre_editar');

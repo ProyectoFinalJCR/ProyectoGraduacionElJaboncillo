@@ -400,7 +400,7 @@
     align-items: center;
     gap: 10px;
   }
-  .modal-editar-contraseña .modal-content-contraseña .form_cambiar_contraseña .input-contraseña .input-forma .noneye{
+  .modal-editar-contraseña .modal-content-contraseña .form_cambiar_contraseña .input-contraseña .input-forma #unshow-password{
     display: none;
   }
   .modal-editar-contraseña .modal-content-contraseña .form_cambiar_contraseña .input-contraseña .input-contenido-contraseña{

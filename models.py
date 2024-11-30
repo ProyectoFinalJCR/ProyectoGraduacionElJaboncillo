@@ -2,7 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 
 db = SQLAlchemy()
-
 class Aplicaciones (db.Model):
     __tablename__ = 'aplicaciones'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
@@ -22,15 +21,15 @@ class Unidades_Medidas (db.Model):
     abreviatura = db.Column(db.String, nullable=False)
 
     
-class Rangos(db.Model):
-    __tablename__= 'rangos'
+class Medidas(db.Model):
+    __tablename__= 'medidas'
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    rango = db.Column(db.String, nullable=False)
+    medida = db.Column(db.String, nullable=False)
 
 
-class Requerimientos_Agua (db.Model):
+class Requerimientos_Agua(db.Model):
     __tablename__ = 'requerimientos_agua'
-    id = db.Column (db.Integer, primary_key=True, autoincrement =True)
+    id = db.Column (db.Integer, primary_key=True, autoincrement=True)
     requerimiento_agua =db.Column (db.String, nullable=False)
     descripcion =db.Column (db.String, nullable=True)
 
@@ -70,14 +69,8 @@ class Plantas(db.Model):
     temporada_plantacion_id = db.Column(db.Integer, db.ForeignKey('temporadas_plantacion.id'), nullable = False)
     imagen_url = db.Column(db.String, nullable=True)
     precio_venta = db.Column(db.Float, nullable=False)
-
-
-class Colores_plantas (db.Model):
-    __tablename__ = 'colores_plantas'
-    id =db.Column (db.Integer, primary_key=True, autoincrement =True)
-    color_id =db.Column (db.Integer, db.ForeignKey('colores.id'), nullable = False) 
-    planta_id =db.Column (db.Integer, db.ForeignKey('plantas.id'), nullable = False)     
-
+    estado = db.Column(db.Boolean, nullable=False, default=True)
+  
 class Insumos(db.Model):
     __tablename__ = 'insumos'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -91,6 +84,8 @@ class Insumos(db.Model):
     imagen_url = db.Column(db.String, nullable=True)
     fecha_vencimiento = db.Column(db.Date, nullable=True)
     precio_venta = db.Column(db.Float, nullable=False)
+    estado = db.Column(db.Boolean, nullable=False, default=True)
+
 
 class Insumos_Unidades(db.Model):
     __tablename__ = 'insumos_unidades'
@@ -104,17 +99,13 @@ class Aplicaciones_Insumos (db.Model):
     aplicacion_id = db.Column(db.Integer, db.ForeignKey('aplicaciones.id'), nullable = False)  
     insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = False) 
 
-class Colores_Insumos (db.Model):
-    __tablename__ = 'colores_insumos'
-    id =db.Column (db.Integer, primary_key=True, autoincrement =True)
-    color_id =db.Column (db.Integer, db.ForeignKey('colores.id'), nullable = False) 
-    insumo_id =db.Column (db.Integer, db.ForeignKey('insumos.id'), nullable = False) 
-
 class Categorias(db.Model):
     __tablename__ = 'categorias'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     categoria= db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
+    estado = db.Column(db.Boolean, nullable=False, default=True)
+
 
 class Subcategorias(db.Model):
     __tablename__ = 'subcategorias'
@@ -122,17 +113,12 @@ class Subcategorias(db.Model):
     categoria_id = db.Column(db.Integer, db.ForeignKey('categorias.id'), nullable = False)
     subcategoria = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
+    estado = db.Column(db.Boolean, nullable=False, default=True)
 
 class Plantas_Subcategoria(db.Model):
     __tablename__ = 'plantas_subcategoria'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     subcategoria_id = db.Column(db.Integer, db.ForeignKey('subcategorias.id'), nullable = False)
-    planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = False)
-
-class Rangos_Medidas(db.Model):
-    __tablename__= 'rangos_medidas'
-    id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    rango_id = db.Column(db.Integer, db.ForeignKey('rangos.id'), nullable = False)
     planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = False)
 
 class Insumos_Subcategoria(db.Model):
@@ -145,17 +131,16 @@ class Tipo_Movimientos(db.Model):
     __tablename__ = 'tipo_movimientos'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     tipo_movimiento = db.Column(db.String, nullable=False)
-    descripcion = db.Column(db.String, nullable=False)
+    descripcion = db.Column(db.String, nullable=True)
 
 class Stock(db.Model):
     __tablename__ = 'stock'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = True)
-    insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = True)
+    planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = False)
+    insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = False)
     cantidad = db.Column(db.Float, nullable=False)
     kardex_id = db.Column(db.Integer, db.ForeignKey('movimientos_kardex.id'), nullable = False)
-    precio_total_inversion = db.Column(db.Float, nullable=False)
-    estado = db.Column(db.String, default=True)
+    estado = db.Column(db.String, default = False)
 
 class Roles(db.Model):
     __tablename__ = 'roles'
@@ -173,32 +158,36 @@ class Rutas_roles(db.Model):
     rol_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable = False)
     ruta_id = db.Column(db.Integer, db.ForeignKey('rutas.id'), nullable = False)
 
-
 class Usuarios(db.Model):
     __tablename__ = 'usuarios'
     id = db.Column (db.Integer, primary_key=True , autoincrement=True)
-    nombre_completo = db.Column (db.String, nullable=False)
-    correo = db.Column (db.String, unique=True, nullable=False)
-    clave = db.Column (db.String, nullable=True)
-    rol_id = db.Column (db.Integer, db.ForeignKey('roles.id'), nullable = False)
+    nombre_completo = db.Column(db.String, nullable=False)
+    correo = db.Column(db.String, unique=True, nullable=False)
+    clave = db.Column(db.String, nullable=False)
+    rol_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable = False)
+    estado = db.Column(db.Boolean, nullable=False, default=True)
 
-class Divisas(db.Model):
-    __tablename__ = 'divisas'
-    id = db.Column (db.Integer, primary_key=True , autoincrement=True)
-    divisa = db.Column (db.String, nullable=False)
-    abreviatura = db.Column (db.String, nullable=False)
-    equivalente_cordobas = db.Column (db.Float, nullable=False)
+class Cliente_Categoria(db.Model):
+    __tablename__ = 'cliente_categoria'
+    id = db.Column (db.Integer, primary_key=True, autoincrement = True)
+    categoria = db.Column(db.String, nullable=False)
+
+class tipos_pagos(db.Model):
+    __tablename__ = 'tipos_pagos'
+    id = db.Column (db.Integer, primary_key=True, autoincrement = True)
+    tipo_pago = db.Column (db.String, nullable = False)
 
 class Ventas (db.Model):
     __tablename__ = 'ventas'
     id =db.Column (db.Integer, primary_key=True, autoincrement =True)
     nombre_cliente =db.Column(db.String, nullable=False)
-    usuario_id= db.Column (db.Integer, db.ForeignKey('usuarios.id'), nullable = True)
+    usuario_id= db.Column (db.Integer, db.ForeignKey('usuarios.id'), nullable = False)
+    id_cliente_categoria = db.Column (db.Integer, db.ForeignKey('cliente_categoria.id'), nullable = False)
+    id_tipo_pago = db.Column (db.Integer, db.ForeignKey('tipos_pagos.id'), nullable = False)
     fecha_venta = db.Column (db.Date, nullable=False)
-    divisa_id = db.Column (db.Integer, db.ForeignKey('divisas.id'), nullable = True)
     nota = db.Column (db.String, nullable=True)
     total = db.Column (db.Float, nullable=False)
-    estado = db.Column (db.String, nullable=False)
+    estado = db.Column (db.Boolean, nullable=False)
 
 class Movimientos_kardex (db.Model):
     __tablename__ = 'movimientos_kardex'
@@ -214,8 +203,8 @@ class Movimientos_kardex (db.Model):
 class Detalle_ventas (db.Model):
     __tablename__ = 'detalle_ventas'
     id = db.Column(db.Integer, primary_key=True, autoincrement =True)
-    planta_id = db.Column (db.Integer, db.ForeignKey ('plantas.id'), nullable = False) 
-    insumo_id = db.Column (db.Integer, db.ForeignKey ('insumos.id'), nullable = False)
+    planta_id = db.Column (db.Integer, db.ForeignKey ('plantas.id'), nullable = True) 
+    insumo_id = db.Column (db.Integer, db.ForeignKey ('insumos.id'), nullable = True)
     venta_id = db.Column(db.Integer, db.ForeignKey ('ventas.id'), nullable = False)
     kardex_id = db.Column (db.Integer, db.ForeignKey ('movimientos_kardex.id'), nullable = False)
     cantidad = db.Column (db.Float, nullable=False)
@@ -227,8 +216,8 @@ class Devoluciones (db.Model):
     id =db.Column (db.Integer, primary_key=True, autoincrement =True)
     venta_id = db.Column (db.Integer, db.ForeignKey('ventas.id'), nullable = True)
     cantidad_producto = db.Column (db.Float, nullable=False)
-    motivo = db.Column (db.String, nullable=False)
     fecha_devolucion = db.Column (db.Date, nullable=False)
+    motivo = db.Column (db.String, nullable=True)
     total = db.Column (db.Float, nullable=False)
 
 class Detalle_devoluciones (db.Model):
@@ -249,6 +238,7 @@ class Proveedores(db.Model):
     correo_electronico = db.Column(db.String, unique=True, nullable=False)  
     telefono = db.Column(db.Integer, nullable=False)
     direccion = db.Column(db.String, nullable=False)
+    estado = db.Column(db.Boolean, nullable=False, default=True)
 
 class Compras(db.Model):
     __tablename__ = 'compras'
@@ -260,34 +250,20 @@ class Compras(db.Model):
 class Detalles_Compra(db.Model):
     __tablename__ = 'detalle_compra'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    compra_id = db.Column(db.Integer, db.ForeignKey('compras.id'), nullable = True)
+    compra_id = db.Column(db.Integer, db.ForeignKey('compras.id'), nullable = False)
     planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = True)
-    insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = False)
+    insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = True)
     kardex_id = db.Column(db.Integer,db.ForeignKey("movimientos_kardex.id"), nullable = False)
     cantidad = db.Column(db.Float, nullable=False)
     precio_unitario = db.Column(db.Float, nullable=False)
     subtotal = db.Column(db.Float, nullable=False) 
     
-class Produccion(db.Model):
-    __tablename__ = 'produccion'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nota = db.Column(db.String, nullable=False)
-    fecha = db.Column(db.Date, nullable=False)
-
-class Detalle_produccion(db.Model):
-    __tablename__ = 'detalle_produccion'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    produccion_id = db.Column(db.Integer, db.ForeignKey('produccion.id'), nullable = False)
-    planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = True)
-    kardex_id = db.Column(db.Integer, db.ForeignKey('movimientos_kardex.id'), nullable = False)
-    cantidad = db.Column(db.Integer, nullable=False)
-
 class Listas_deseo(db.Model):
     __tablename__ = 'listas_deseo'
     lista_deseo_id = db.Column (db.Integer, primary_key=True, autoincrement=True)
     usuario_id = db.Column (db.Integer, db.ForeignKey ('usuarios.id'), nullable = False)
-    planta_id = db.Column (db.Integer, db.ForeignKey ('plantas.id'), nullable = False)
-    insumo_id = db.Column (db.Integer, db.ForeignKey ('insumos.id'), nullable = False)
+    planta_id = db.Column (db.Integer, db.ForeignKey ('plantas.id'), nullable = True)
+    insumo_id = db.Column (db.Integer, db.ForeignKey ('insumos.id'), nullable = True)
     fecha = db.Column (db.Date, nullable=False)
 
 class configuracion_sistema(db.Model):
@@ -298,9 +274,8 @@ class configuracion_sistema(db.Model):
     telefono = db.Column (db.String, nullable=False)
     email = db.Column (db.String, nullable=False)
     logo_empresa_url = db.Column (db.String, nullable=False)
-    numero_RUC = db.Column (db.String, nullable=False)
+    numero_ruc = db.Column (db.String, nullable=False)
     link_facebook = db.Column (db.String, nullable=False)
     link_instagram = db.Column (db.String, nullable=False)
     link_tiktok = db.Column (db.String, nullable=False)
     link_whatsapp = db.Column (db.String, nullable=False)
-

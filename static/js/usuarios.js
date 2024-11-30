@@ -99,36 +99,37 @@ cerrarModalCambiarContraseña.addEventListener("click", () => {
       alerta.remove();
     }
 
-    //opacidad y habilitacion del boton agregar
-    document.getElementById('formUser').addEventListener('input', function () {
-      const inputs = document.querySelectorAll('.input-user');
-      const btnSend = document.querySelector('#btn-agregar-user');
-      let fields = true;
-      console.log(fields)
+  //   //opacidad y habilitacion del boton agregar
+  //   document.getElementById('formUser').addEventListener('input', function () {
+  //     const inputs = document.querySelectorAll('.input-user');
+  //     const btnSend = document.querySelector('#btn-agregar-user');
+  //     let fields = true;
+  //     console.log(fields)
 
-      inputs.forEach(input => {
-        if (input.value.trim() === '') {
-          fields = false;
-          console.log(fields)
-        }
-      });
+  //     inputs.forEach(input => {
+  //       if (input.value.trim() === '') {
+  //         fields = false;
+  //         console.log(fields)
+  //       }
+  //     });
 
-      // Habilita o deshabilita el botón según el estado de los inputs
-      if (fields) {
-        btnSend.disabled = false;
-        btnSend.classList.remove('opacity');
-      } else {
-        btnSend.disabled = true;
-        btnSend.classList.add('opacity');
-      }
-    });
-  }
+  //     // Habilita o deshabilita el botón según el estado de los inputs
+  //     if (fields) {
+  //       btnSend.disabled = false;
+  //       btnSend.classList.remove('opacity');
+  //     } else {
+  //       btnSend.disabled = true;
+  //       btnSend.classList.add('opacity');
+  //     }
+  //   });
+  // }
   function limpiarAlerta(referencia) {
     const alerta = referencia.querySelector('.error');
     if (alerta) {
       alerta.remove();
     }
   }
+ }
   
   //validad campos de usuarios editar
   const nombre_completo_editar = document.querySelector('#nombreUsuario_editar');
@@ -367,38 +368,13 @@ document.getElementById('tabla_usuarios').addEventListener('click', function (ev
     nuevaContraseña.value = contraseñaAleatoria
     event.preventDefault(); 
   })
-});   
 
 
-//Visibilidad de la password
-        // Obtener los elementos
-        const passwordInputagregar = document.getElementById('contraseña');
-        const PasswordEyeOnagregar = document.getElementById('eye');
-        const PasswordEyeOnOffagregar = document.getElementById('noneye');
-    
-        // Función para alternar la visibilidad de la contraseña
-        PasswordEyeOnagregar.addEventListener('click', function() {
-            // Cambiar el tipo de input entre 'password' y 'text'
-            if (passwordInputagregar.type === 'password') {
-              passwordInputagregar.type = 'text';
-                PasswordEyeOnagregar.style.display = 'none';  // Ocultar icono de ojo abierto
-                PasswordEyeOnOffagregar.style.display = 'inline';  // Mostrar icono de ojo cerrado
-            }
-        });
-    
-        PasswordEyeOnOffagregar.addEventListener('click', function() {
-            // Cambiar el tipo de input entre 'text' y 'password'
-            if (passwordInputagregar.type === 'text') {
-              passwordInputagregar.type = 'password';
-                PasswordEyeOnOffagregar.style.display = 'none';  // Ocultar icono de ojo cerrado
-                PasswordEyeOnagregar.style.display = 'inline';  // Mostrar icono de ojo abierto
-            }
-        });
-//Visibilidad de la password
+  //Visibilidad de la password
         // Obtener los elementos
         const passwordInput = document.getElementById('nuevaContraseña');
-        const PasswordEyeOn = document.getElementById('eye');
-        const PasswordEyeOnOff = document.getElementById('noneye');
+        const PasswordEyeOn = document.getElementById('show-password');
+        const PasswordEyeOnOff = document.getElementById('unshow-password');
     
         // Función para alternar la visibilidad de la contraseña
         PasswordEyeOn.addEventListener('click', function() {
@@ -418,3 +394,32 @@ document.getElementById('tabla_usuarios').addEventListener('click', function (ev
                 PasswordEyeOn.style.display = 'inline';  // Mostrar icono de ojo abierto
             }
         });
+        
+          //Visibilidad de la password
+                // Obtener los elementos
+                const passwordInputagregar = document.getElementById('contraseña');
+                const PasswordEyeOnagregar = document.getElementById('eye');
+                const PasswordEyeOnOffagregar = document.getElementById('noneye');
+            
+                // Función para alternar la visibilidad de la contraseña
+                PasswordEyeOnagregar.addEventListener('click', function() {
+                    // Cambiar el tipo de input entre 'password' y 'text'
+                    if (passwordInputagregar.type === 'password') {
+                      passwordInputagregar.type = 'text';
+                        PasswordEyeOnagregar.style.display = 'none';  // Ocultar icono de ojo abierto
+                        PasswordEyeOnOffagregar.style.display = 'inline';  // Mostrar icono de ojo cerrado
+                    }
+                });
+            
+                PasswordEyeOnOffagregar.addEventListener('click', function() {
+                    // Cambiar el tipo de input entre 'text' y 'password'
+                    if (passwordInputagregar.type === 'text') {
+                      passwordInputagregar.type = 'password';
+                        PasswordEyeOnOffagregar.style.display = 'none';  // Ocultar icono de ojo cerrado
+                        PasswordEyeOnagregar.style.display = 'inline';  // Mostrar icono de ojo abierto
+                    }
+                });
+});   
+
+
+

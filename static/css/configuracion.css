@@ -17,13 +17,11 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
-    border: 1px solid #3BB64A;
     padding: 20px;
 }
 .img-info-cont-config .img-info-config .img{
-    width: 90%;
-    height: 80%;
-    background-color: #06aa00;
+    width: 350px;
+    height: 60px;
 }
 .img-info-cont-config{
     display: grid;
@@ -32,31 +30,49 @@
     border-radius: 16px;
     padding: 20px;
 }
+.img-info-cont-config .info .titulo-info .btn-editar-info{
+    width: 150px;
+    height: 45px;
+    background-color: #3BB64A;
+    border: none;
+    color: #fff;
+    border-radius: 16px;  
+    cursor: pointer;      
+}
+.img-info-cont-config .info .titulo-info .btn-editar-info:hover{
+    background-color: #3eb84d;
+}
 .img-info-cont-config .info .titulo-info{
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 16px;
     padding: 20px;
-    border:1px solid #3BB64A;
     height: 15%;
 }
 .img-info-cont-config .info .inputs-info{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 20px;
     padding: 15px;
     width: 100%;
     height: 85%;
-    border: 1px solid #3BB64A;
 } 
 .img-info-cont-config .info .inputs-info .columna1{
     width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: .5fr 1fr .5fr ;
+    grid-template-rows: .5fr .5fr;
+    gap: 20px;
+}
+.img-info-cont-config .info .inputs-info .columna1 .inputs textarea{ 
+   height: 90px;
+   width: 100%;
+   resize: none;
+   padding: 10px;
+
 }
 .img-info-cont-config .info .inputs-info .columna2{
     width: 100%;
@@ -70,7 +86,7 @@
     flex-direction: column;
     gap: 5px;
 }
-.img-info-cont-config .info .inputs-info .inputs .nombre-sistema, .email-sistema, .telefono-sistema, .numero-ruc, .facebook, .instagram, .whatsApp, .tiktok{
+.img-info-cont-config .info .inputs-info .inputs .nombre-sistema, .direccion-sistema , .email-sistema, .telefono-sistema, .numero-ruc, .divisas, .facebook, .instagram, .whatsApp, .tiktok{
     width: 100%;
     height: 50px; /* Altura ajustable */
     padding: 10px;
@@ -81,12 +97,6 @@
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     line-height: 1.5; /* Altura inicial */ 
-}
-
-input[type="text"]:focus {
-    border-color: #06aa00;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none;
 }
 
 .container-editarInfo{
@@ -117,12 +127,219 @@ input[type="text"]:focus {
 }
 .allscreen .inputs-info-links{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 20px;
     padding: 15px;
     width: 100%;
     height: 100%;
-    border: 1px solid #3BB64A;
+    padding-top: 80px;
     border-radius: 16px;
+}
+.allscreen .inputs-info-links .inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.allscreen .inputs-info-links .inputs label{
+    padding-left: 60px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.allscreen .inputs-info-links .inputs .input-link{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 16px;
+    padding: 20px;
+    height: 15%;
+    gap: 10px;
+}
+.allscreen .inputs-info-links .inputs .input-link .icon{
+    width: 30px;
+    height: 30px;
+}
+
+/* Modal de edición de información del sistema */
+.container-editarInfo{
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+}
+
+.container-editarInfo .editar-info{
+    position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-40%, -48%); /* Centra el modal */
+   background-color: #fff;
+   padding: 0px 50px;
+   border-radius: 8px;
+   width: 100%;
+   max-width: 1100px;
+   height: 684px;
+   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+   overflow-y: auto;
+   scrollbar-width: none;
+}
+.container-editarInfo .editar-info .titulo-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 15px;
+    height: 12%;
+    border-bottom: 1px solid #000;
+}
+.container-editarInfo .editar-info .titulo-info h2{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.container-editarInfo .editar-info .form-editar-configuracion{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    padding: 15px;
+    width: 100%;
+    height: 85%;
+}
+.container-editarInfo .editar-info .inputs-info{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 20px;
+    width: 100%;
+    height: 312px;
+}
+.container-editarInfo .editar-info .columna1{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: .5fr .5fr;
+    gap: 20px;
+}
+.container-editarInfo .editar-info .columna1 .inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}   
+.container-editarInfo .editar-info .columna1 .inputs textarea{
+    background-color: #e7e9f1;
+}
+.container-editarInfo .editar-info .columna1 .inputs textarea{
+    height: 90px;
+    width: 100%;
+    resize: none;
+    padding: 10px;
+}
+
+.container-editarInfo .editar-info .columna2{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.5fr 0.5fr ;
+}
+.container-editarInfo .editar-info .columna2 .inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}   
+.container-editarInfo input{
+    background-color: #e7e9f1;
+}
+
+.container-editarInfo .editar-info  input[type="file"]{
+    background-color: #e7e9f1;
+    height: 35px;
+    width: 100%;
+}
+.custom-file-label {
+    background-color: #e7e9f1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    display: inline-block;
+}
+.custom-file-label:hover {
+    background-color: #d0d3e2;
+}
+
+.container-editarInfo .editar-info .columna3{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: .5fr .5fr .5fr .5fr;
+    grid-template-rows: 1fr;
+    gap: 15px;
+    padding: 20px;
+}
+.container-editarInfo .editar-info .columna3 .inputs{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+
+}
+.container-editarInfo .editar-info .columna3 .inputs .input-link{
+    display: flex;
+    align-items: center;
+    border-radius: 16px;
+    padding: 20px;
+    height: 15%;
+    gap: 10px;
+}
+.container-editarInfo .editar-info .columna3 .inputs label{
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 60px;
+}
+.container-editarInfo .editar-info .columna3 .inputs .input-link .icon{
+    width: 30px;
+    height: 30px;
+}
+
+.container-editarInfo .editar-info .btn-agregar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    height: 15%;
+    gap: 10px;
+    border-top: 1px solid #000;
+}
+.container-editarInfo .editar-info .btn-agregar img{
+    width: 280px;
+    height: 60px;
+}
+.container-editarInfo .editar-info .btn-agregar .btn-agregar-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.container-editarInfo .editar-info .btn-agregar .btn-cancel{
+    background-color: #e61e17;
+    width: 180px;
+    color: #fff;
+    font-weight: bold;
+}
+.container-editarInfo .editar-info .btn-agregar .btn-add{
+    background-color: #3BB64A;
+    color: #fff;    
+    border: none;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    font-weight: bold;
 }
