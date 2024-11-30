@@ -10,8 +10,13 @@ Insumos | El Jaboncillo
 {% block main %}
 <section class="all-screen-insumos">
     <section class="bienvenida">
-        <h2 id="saludo"></h2>
-        <p>Bienvenid@, {{session["user_name"]}}</p>
+        <div>
+            <h2 id="saludo"></h2>
+            <p>Bienvenid@, {{session["user_name"]}}</p>
+        </div>
+        <div>
+            <h3>Modulo de Insumos</h3>
+        </div>
     </section>
     <section class="busqueda">
         <div class="search">
@@ -44,7 +49,6 @@ Insumos | El Jaboncillo
                         <th style="display: none;">Precauciones</th>
                         <th>Subcategoria</th>
                         <th>Unidad de Medida</th>
-                        <th style="display: none;">Colores</th>
                         <th>Fecha de Vencimiento</th>
                         <th>Precio de Venta</th>
                         <th>Acciones</th>
@@ -54,10 +58,10 @@ Insumos | El Jaboncillo
                     <tr>
                         {% for insumo in insumos %}
                         <td id="insumo-{{ insumo[0] }}">
-                            {% if insumo[18] %}
+                            {% if insumo[16] %}
                             <!-- Si hay imagen cargada -->
                             <div class="img-container">
-                                <img class="mini-imgInsumo" src="{{ insumo[18] }}" alt="Insumo">
+                                <img class="mini-imgInsumo" src="{{ insumo[16] }}" alt="Insumo">
                             </div>
                             {% else %}
                                 <div class="image-upload">
@@ -87,10 +91,8 @@ Insumos | El Jaboncillo
                         <td style="display: none;">{{insumo[11]}}</td>
                         <td style="display: none;">{{insumo[12]}}</td>
                         <td style="display: none;">{{insumo[13]}}</td>
-                        <td style="display: none;">{{insumo[14]}}</td>
-                        <td style="display: none;">{{insumo[15]}}</td>
-                        <td>{{insumo[16]}}</td>
-                        <td>{{insumo[17]}}</td>
+                        <td>{{insumo[14]}}</td>
+                        <td>{{insumo[15]}}</td>
                         <td class="btn-acciones">
                             <button class="btn-edit btn-edit-insumos" data-id="{{insumos[0]}}">
                                 <i class="material-icons">edit</i>
@@ -188,20 +190,11 @@ Insumos | El Jaboncillo
                                         {% endfor %}
                                     </select>
                             </div>
-                            <div class="input-colores">
-                                <label for="">Colores</label>
-                                <select class="input input-insumos" id="colores" name="idcolor" required>
-                                    {% for color in Colores %}
-                                    <option value="{{color[0]}}">{{color[1]}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                             <div>
                                 <label for="">Precauciones</label>
                                 <input type="text" id="precauciones" class="input input-insumos" name="precauciones"
                                     placeholder="Ingrese durabilidad aproximada para este insumo">
                             </div>
-                           
                         </div>
                     </section>
                     <section class="btn-agregar">
@@ -309,15 +302,6 @@ Insumos | El Jaboncillo
                             <option value="{{ subcat[0] }}" {% if subcat[0] in Subcat %} selected {% endif %}>
                                 {{ subcat[2] }}
                                 {% endfor %}
-                        </select>
-                    </div>
-                    <div class="input-colores">
-                        <label for="">Colores</label>
-                        <select type="text" id="coloresInsumo_editar" name="coloresInsumo_editar" class="input"
-                            required>
-                            {% for colores in Colores %}
-                            <option name="idColor" value="{{colores[0]}}">{{colores[1]}}</option>
-                            {% endfor %}
                         </select>
                     </div>
                     <div>

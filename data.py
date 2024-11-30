@@ -29,27 +29,14 @@ def colores():
         db.session.add (data)
         db.session.commit()
 
-def rangos():
-    rangos = [
-        ("1cm-5cm"),
-        ("6cm-10cm"),
-        ("10cm-15cm"),
-        ("15cm-20cm"),
-        ("20cm-30cm"),
-        ("30cm-40cm"),
-        ("40cm-50cm"),
-        ("50cm-60cm"),
-        ("60cm-70cm"),
-        ("70cm-80cm"),
-        ("80cm-90cm"),
-        ("9Ocm-100cm"),
-        ("1M-5M"),
-        ("6M-10M"),
-        ("11M-15M"),
-        ("16M-20M")
+def medidas():
+    medidas = [
+        ("Grande"),
+        ("Mediana"),
+        ("Pequeña"),
         ]
-    for rango in rangos:
-        data = Rangos(rango=rango)
+    for medida in medidas:
+        data = Medidas(medida=medida)
         db.session.add(data)
         db.session.commit()
 
@@ -174,7 +161,49 @@ def composiciones_principales():
         db.session.add(data)
         db.session.commit()
 
+def rutas():
+    rutas = [
+        "/inicioAdmin",
+        "/plantas",
+        "/insumos",
+        "/inventario",
+        "/ventas",
+        "/compras",
+        "/proveedores",
+        "/usuarios",
+        "/categorias",
+        "/subCategorias",
+        "/configuracion",
+        "/devoluciones"
+    ]
+    for ruta in rutas:
+        nueva_ruta = Rutas(ruta=ruta)
+        db.session.add(nueva_ruta)
+        db.session.commit()
 
+def agregar_rutas_roles():
+    rutas_roles = [
+        (1, 1),
+        (1, 2),
+        (1, 3),
+        (1, 4),
+        (1, 5),
+        (1, 6),
+        (1, 7),
+        (1, 8),
+        (1, 9),
+        (1, 10),
+        (1, 11),
+        (1, 12),
+        (2, 5),
+        (2, 6)
+    ]
+    for rol_id, ruta_id in rutas_roles:
+        nueva_relacion = Rutas_roles(rol_id=rol_id, ruta_id=ruta_id)
+        db.session.add(nueva_relacion)
+        db.session.commit()
+
+        
 #with app.app_context():
     #entornos_ideales()        
     #tipos_suelos()
@@ -183,6 +212,6 @@ def composiciones_principales():
     #aplicaciones()
     #temporadas_plantacion()
     #composiciones_principales()
-    #rangos()
+    #medidas()
     #unidades_medidas()
-    
+    #colores()    

@@ -4,6 +4,15 @@ Compras | El Jaboncillo
 {% endblock %}
 
 {% block main %}
+<section class="bienvenida">
+    <div>
+        <h2 id="saludo"></h2>
+        <p>Bienvenid@, {{session["user_name"]}}</p>
+    </div>
+    <div>
+        <h3>Modulo de compras</h3>
+    </div>
+</section>
 <section class="busqueda">
     <div class="search">
         <div class="seccion-buscar">
@@ -79,6 +88,28 @@ Compras | El Jaboncillo
                             </select>
                         </div>
                         <div>
+                            <label>Colores</label>
+                            <select class="input inputs-compra" id="divisa-select" name="divisa-select">
+                                {% for color in colores %}
+                                <option value="{{color[0]}}" data-id="{{color[0]}}">
+                                    {{color[1]}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" id="divisa-id" name="divisa-id" value="">
+                        </div>
+                        <div>
+                            <label>Medidas</label>
+                            <select class="input inputs-compra" id="divisa-select" name="divisa-select">
+                                {% for medida in medidas %}
+                                <option value="{{medida[0]}}" data-id="{{medida[0]}}">
+                                    {{medida[1]}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" id="divisa-id" name="divisa-id" value="">
+                        </div>
+                        <div>
                             <label>Cantidad</label>
                             <input type="number" id="cantidad-compra" class="input inputs-compra validar-input" name="cantidad"
                                 placeholder="Cantidad" min="0">
@@ -121,11 +152,11 @@ Compras | El Jaboncillo
                 <section class="inputs-compra">
                     <div class="inputs-cont row-4">
                         <div>
-                            <label>Divisas</label>
+                            <label>Tipos de pago</label>
                             <select class="input inputs-compra" id="divisa-select" name="divisa-select">
-                                {% for divisas in Divisas %}
-                                <option value="{{divisas[3]}}" data-id="{{divisas[0]}}">
-                                    {{divisas[1]}}
+                                {% for tipospagos in tipospago %}
+                                <option value="{{tipospagos[0]}}" data-id="{{tipospagos[0]}}">
+                                    {{tipospagos[1]}}
                                 </option>
                                 {% endfor %}
                             </select>

@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Formatea la fecha
     const fechaFormateada = `${dia} de ${mes} del ${anio}`;
-    inputFecha.value = fechaFormateada; // Mostrar como placeholder
+    inputFecha.value = fechaFormateada;
      
         const container_table_inputs = document.querySelector(".container-inputCompra");  
         container_table_inputs.style.display = "block";

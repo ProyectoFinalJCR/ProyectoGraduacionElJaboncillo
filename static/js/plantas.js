@@ -84,16 +84,12 @@ document.addEventListener("DOMContentLoaded", function () {
        <td>${planta.nombre}</td>
        <td style="display: none;">${planta.descripcion}</td>
        <td>${planta.subcategoria}</td>
-       <td>${planta.color}</td>
-       <td>${planta.rango}</td>
        <td style="display: none;">${planta.entorno}</td>
        <td style="display: none;">${planta.agua}</td>
        <td style="display: none;">${planta.suelo}</td>
        <td style="display: none;">${planta.temporada}</td>
        <td>${planta.precio_venta}</td>
        <td style="display: none;">${planta.id_subcategoria}</td>
-       <td style="display: none;">${planta.id_color}</td>
-       <td style="display: none;">${planta.id_rango}</td>
        <td style="display: none;">${planta.id_entorno}</td>
        <td style="display: none;">${planta.id_agua}</td>
        <td style="display: none;">${planta.id_suelo}</td>
@@ -149,14 +145,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const PlantaId = row.cells[1].innerText;
       const PlantaNombre = row.cells[2].innerText;
       const PlantaDescripcion = row.cells[3].innerText;
-      const PlantaColor = row.cells[13].innerText.split(', ');
-      const PlantaSubcategoria = row.cells[12].innerText.split(', ');
-      const PlantaRango = row.cells[14].innerText.split(', ');
-      const PlantaEntorno = row.cells[15].innerText;
-      const PlantaAgua = row.cells[16].innerText;
-      const PlantaSuelo = row.cells[17].innerText;
-      const PlantaTemporada = row.cells[18].innerText;
-      const PlantaPrecio = row.cells[11].innerText;
+      const PlantaSubcategoria = row.cells[10].innerText.split(', ');
+      const PlantaEntorno = row.cells[11].innerText;
+      const PlantaAgua = row.cells[12].innerText;
+      const PlantaSuelo = row.cells[13].innerText;
+      const PlantaTemporada = row.cells[14].innerText;
+      const PlantaPrecio = row.cells[9].innerText;
 
       // Rellenar los campos del modal con los datos obtenidos
       inputId.value = PlantaId;
@@ -167,11 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
       inputDescripcion.value = PlantaDescripcion;
       inputDescripcion.textContent = PlantaDescripcion;
 
-      inputColor.value = PlantaColor;
-
       inputSubcategoria.value = PlantaSubcategoria;
-
-      inputRango.value = PlantaRango;
 
       inputEntorno.value = PlantaEntorno;
 
@@ -185,9 +175,8 @@ document.addEventListener("DOMContentLoaded", function () {
       inputPrecio.textContent = PlantaPrecio;
 
       // Asigna los valores y actualiza cada Select2
-      $('#idColor_editar').val(PlantaColor).trigger('change');
       $('#idSubcategoria_editar').val(PlantaSubcategoria).trigger('change');
-      $('#idRango_editar').val(PlantaRango).trigger('change');
+     
 
 
 
@@ -329,13 +318,6 @@ document.addEventListener("DOMContentLoaded", function () {
   //Select2 para seleccionar opciones
   $(document).ready(function () {
     // Inicializar Select2 en modo múltiple
-    $('#color').select2({
-      placeholder: "Seleccione una o más opciones",
-      allowClear: true,
-      multiple: true,
-      dropdownParent: $('.agregar-plantas') // Ajusta el selector al ID de tu modal
-
-    });
     $('#sub').select2({
       placeholder: "Seleccione una o más opciones",
       allowClear: true,
@@ -343,34 +325,20 @@ document.addEventListener("DOMContentLoaded", function () {
       dropdownParent: $('.agregar-plantas') // Ajusta el selector al ID de tu modal
 
     });
-    $('#rango').select2({
-      placeholder: "Seleccione una o más opciones",
-      allowClear: true,
-      multiple: true,
-      dropdownParent: $('.agregar-plantas') // Ajusta el selector al ID de tu modal
-    });
+  
   });
 
   //Select2 para seleccionar opciones editar plantas
   $(document).ready(function () {
     // Inicializar Select2 en modo múltiple
-    $('#idColor_editar').select2({
-      placeholder: "Seleccione una o más opciones",
-      allowClear: true,
-      multiple: true,
-
-    });
+   
     $('#idSubcategoria_editar').select2({
       placeholder: "Seleccione una o más opciones",
       allowClear: true,
       multiple: true,
 
     });
-    $('#idRango_editar').select2({
-      placeholder: "Seleccione una o más opciones",
-      allowClear: true,
-      multiple: true,
-    });
+  
   });
 
 

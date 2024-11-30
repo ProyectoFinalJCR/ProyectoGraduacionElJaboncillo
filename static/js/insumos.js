@@ -102,8 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
          <td style="display:none;">${insumo.id_subcategoria}</td>
          <td>${insumo.unidad_medida}</td>
          <td style="display: none;">${insumo.id_unidad_medida}</td>
-         <td style="display: none;">${insumo.color}</td>
-         <td style="display: none;">${insumo.id_color}</td>
          <td>${insumo.fecha_vencimiento}</td>
          <td>${insumo.precio_venta}</td>
          <td class="btn-acciones">
@@ -165,9 +163,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const precaucionesInsumo = row.cells[10].innerText;
       const subcategoriaInsumo = row.cells[12].innerText.split(', ');
       const UnidadMedida = row.cells[14].innerText;
-      const coloresInsumo = row.cells[16].innerText.split(', ');
-      const fechaVencimientoInsumo = row.cells[17].innerText;
-      const precioVentaInsumo = row.cells[18].innerText;
+      const fechaVencimientoInsumo = row.cells[15].innerText;
+      const precioVentaInsumo = row.cells[16].innerText;
 
       // Rellenar los campos del modal con los datos obtenidos
       inputId_insumo.value = insumoID;
@@ -196,8 +193,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       inputUnidadMedida_editar.value = UnidadMedida;
 
-      inputColoresInsumo_editar.value = coloresInsumo;
-
       inputFechaVencimientoInsumo_editar.value = fechaVencimientoInsumo;
       inputFechaVencimientoInsumo_editar.textContent = fechaVencimientoInsumo;
 
@@ -209,7 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
       
       // Asigna los valores y actualiza cada Select2
       $('#subcat_editar').val(subcategoriaInsumo).trigger('change');
-      $('#coloresInsumo_editar').val(coloresInsumo).trigger('change');
       
       modal.style.display = "block";
       
@@ -252,12 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //Select2 para seleccionar opciones
   $(document).ready(function () {
     // Inicializar Select2 en modo múltiple
-    $('#colores').select2({
-      placeholder: "Seleccione una o más opciones",
-      allowClear: true,
-      multiple: true,
-      dropdownParent: $('.agregar-insumos') // Ajusta el selector al ID de tu modal
-    });
+   
     $('#subcat').select2({
       placeholder: "Seleccione una o más opciones",
       allowClear: true,
@@ -274,12 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
       allowClear: true,
       multiple: true,
     });
-    $('#coloresInsumo_editar').select2({
-      placeholder: "Seleccione una o más opciones",
-      allowClear: true,
-      multiple: true,
-    });
-
+   
   });
 
   //SOCKETS Cloudinary
