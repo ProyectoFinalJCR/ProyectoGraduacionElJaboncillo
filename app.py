@@ -1729,10 +1729,133 @@ def listaDeseos():
             flash(('Producto agregado a la lista de deseos!', 'success', '¡Exito!'))
         return redirect(url_for('catalogo'))
 
+@app.route('/devoluciones', methods=["GET", "POST"])
+def devoluciones():
+    if request.method == "GET":
+        ObtenerMovimientos = text('SELECT * FROM tipo_movimientos WHERE id = 4 OR id = 5')
+        movimientos = db.execute(ObtenerMovimientos).fetchall()
+        return render_template("devoluciones.html", Movimientos=movimientos)
+    else:
+        datos_formulario = request.form.to_dict(flat=False)
+        # print("Datos del formulario:", datos_formulario)
+
+             # Inicializa una lista para guardar los productos
+        productos = []
+
+        # Procesa los datos dinámicos enviados
+        for key, values in datos_formulario.items():
+            if key.startswith('productos'):
+                # Extrae índices y campos
+                index = key.split('[')[1].split(']')[0]  # Obtiene el índice del producto
+                field = key.split('[')[2].split(']')[0]  # Obtiene el nombre del campo
+
+                # Asegúrate de que el índice exista en la lista
+                while len(productos) <= int(index):
+                    productos.append({})
+
+                productos[int(index)][field] = values[0]  # Asocia el campo al producto
+
+        idVenta = request.form.get('idVenta')
+        idMovimiento = request.form.get('movimiento-select')
+        cantidad = request.form.get('cantidadDev')
+        fecha = request.form.get('fecha_devolucion')
+        total = request.form.get('totalDev')
+        nota = request.form.get('nota-devolucion')
+
+        # print(idVenta, idMovimiento, fecha, total, nota, productos)
+        if not idVenta:
+            flash(('No se ha seleccionado una venta para devolver!', 'error', '¡Error!'))
+            return redirect(url_for('devoluciones'))
+        if not idMovimiento:
+            flash(('No se ha seleccionado un movimiento para devolver!', 'error', '¡Error!'))
+            return redirect(url_for('devoluciones'))
+        if not fecha:
+            flash(('No se ha seleccionado una fecha para la devolución!', 'error', '¡Error!'))
+            return redirect(url_for('devoluciones'))
+        if not total:
+            flash(('No se ha ingresado el total de la devolución!', 'error', '¡Error!'))
+            return redirect(url_for('devoluciones'))
+        if not nota:
+            flash(('No se ha ingresado una nota para la devolución!', 'error', '¡Error!'))
+            return redirect(url_for('devoluciones'))
+        
+        insertarDevolucion = text("INSERT INTO devoluciones (venta_id, cantidad_producto, motivo, fecha_devolucion, total) VALUES (:venta_id, :cantidad_producto, :motivo, :fecha_devolucion, :total)")
+        db.execute(insertarDevolucion, {"venta_id": idVenta, "cantidad_producto": cantidad, "motivo": nota, "fecha_devolucion": fecha, "total": total})
+
+        for producto in productos:
+            if producto['tipo'] == 'planta':
+                planta_id = producto['idProduc']
+                insumo_id = None
+            elif producto['tipo'] == 'insumo':
+                planta_id = None
+                insumo_id = producto['idProduc']
+
+            insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": idMovimiento, "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": nota})
+
+        devolucionId = db.execute(text("SELECT * FROM devoluciones ORDER BY id DESC LIMIT 1")).fetchone()[0]
+        kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
+
+        for producto in productos:
+            if producto['tipo'] == 'planta':
+                planta_id = producto['idProduc']
+                insumo_id = None
+            elif producto['tipo'] == 'insumo':
+                planta_id = None
+                insumo_id = producto['idProduc']
+
+            insertarDetalle = text("INSERT INTO detalle_devoluciones (devolucion_id, planta_id, insumo_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:devolucion_id, :planta_id, :insumo_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
+            db.execute(insertarDetalle, {"devolucion_id": devolucionId, "planta_id": planta_id, "insumo_id": insumo_id, "kardex_id": kardexId, "cantidad": cantidad, "precio_unitario": producto['precio'], "subtotal":producto['subtotal']})
+        
+        db.commit()
+        flash(('La devolucion se ha realizado correctamente', 'success', '¡Exito!'))
+        return redirect(url_for('devoluciones'))
+        # return render_template('devoluciones.html')
+    
+@app.route('/obtener_ventas', methods=["POST"])
+def obtener_ventas():
+    ventaId = request.json.get('idVenta', '')
+    # print(subcategoria)
+
+    ObtenerVenta = text("""
+                SELECT 	detalle_ventas.id AS idDetalleVenta,
+		            detalle_ventas.planta_id AS plantaId,
+		            plantas.nombre AS nombrePlanta,
+		            detalle_ventas.insumo_id AS insumoID,
+		            insumos.nombre AS nombreInsumo,
+		            detalle_ventas.venta_id AS ventaId, 
+		            detalle_ventas.kardex_id AS kardexId, 
+		            detalle_ventas.cantidad AS cantidad,
+                    detalle_ventas.precio_unitario AS precio
+	            FROM public.detalle_ventas
+	            LEFT JOIN
+                        plantas ON detalle_ventas.planta_id = plantas.id
+                    LEFT JOIN
+                        insumos ON detalle_ventas.insumo_id = insumos.id
+	            WHERE venta_id =:venta_id
+    """)
+    
+    infoVenta = db.execute(ObtenerVenta, {'venta_id': ventaId}).mappings().all()
+    # print(infoVenta)
+    # print (infoProd)
+    detalleVenta = [
+    {
+        'id': info.iddetalleventa,
+        'idProd': info.plantaid if info.plantaid is not None else info.insumoid, 
+        'nombre': info.nombreplanta if info.nombreplanta else info.nombreinsumo,
+        'precio': info.precio,
+        'cantidad': info.cantidad,
+        'tipo': 'planta' if info.plantaid is not None else 'insumo',
+    }
+    for info in infoVenta
+]
+
+    # print(productos)
+    return jsonify(detalleVenta)
 
 @app.route('/catalogo', methods=["GET", "POST"])
-@login_required
-@ruta_permitida
+# @login_required
+# @ruta_permitida
 def catalogo():
     if request.method == "GET":
         id_categoria = request.args.get("categoriaSeleccionada")

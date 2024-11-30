@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+{% block title %}
+Devoluciones | El Jaboncillo
+{% endblock %}
+
+{% block main %}
+<section class="busqueda">
+    <div class="search">
+        <div class="seccion-buscar">
+            <i class="material-icons">search</i>
+            <input class="input-search" name="search" id="search" placeholder="Buscar devoluciones">
+            
+        </div>
+        <div>
+            <button class="btn-add-devolucion btn">Nueva devoluciones</button>
+        </div>
+    </div>
+</section>
+<div class="container-table-inputs">
+    <div class="table-venta">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Cliente</th>
+                    <th>Vendedor</th>
+                    <th>Fecha</th>
+                    <th>Nota</th>
+                </tr>
+            </thead> 
+            
+            <tbody>
+                <!-- {% for infoVentas in InfoVentas %}
+                <tr>
+                    <td>{{infoVentas.id}}</td>
+                    <td>{{infoVentas.nombre}}</td>
+                    <td>{{infoVentas.fecha}}</td>
+                    <td>{{infoVentas.nota}}</td>
+                </tr>
+                {% endfor %} -->
+            </tbody>
+        </table>
+    </div>
+    <div class="container-inputDevolucion">
+        <div class="nueva-devolucion">
+            <div class="inputDevolucion-title">
+                <h3>DEVOLUCION</h3>
+                <span class="close close-modal-venta">&times;</span>
+            </div>
+            <form action="/devoluciones" id="form-devoluciones" method="post" class="form-devoluciones">
+                <section class="inputs-venta" id="lista-productos">
+                    <div class="inputs-cont row-1">
+                        <div>
+                            <label>Ingrese numero de venta</label>
+                            <input type="number" value="" name="idVenta" placeholder="Ingrese el numero de la venta">
+                            <button id="idVenta" type="button">Buscar</button>
+                        </div>
+                        <div>
+                            <label>Motivo</label>
+                            <select class="input inputs-venta" id="movimiento-select" name="movimiento-select">
+                                <option value="">Selecciona el tipo de devolucion</option>
+                                {% for movimientos in Movimientos %}
+                                <option name="movimiento-select" value="{{movimientos[0]}}">{{movimientos[1]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label>Fecha</label>
+                            <input type="date" id="fecha_devolucion" class="input input-plantas" name="fecha_devolucion"
+                                placeholder="Fecha">
+                        </div>
+                        <div id="productosDañados">
+
+                        </div>
+                    </div>
+                    <div class="inputs-cont row-2">
+                        <div id="infoPrueba">
+                            
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    
+                    <div class="productos">
+                        <table id="lista-productos-seleccionados">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unit</th>
+                                    <th>Subtotal</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section class="inputs-venta">
+                    <div class="inputs-cont row-4">
+                        <div>
+                            <label>Subtotal</label>
+                            <input type="number" readonly id="subtotalDev" class="input input-plantas" name="subtotalDev"
+                                placeholder="Subtotal">
+                        </div>
+                        <div>
+                            <label>Total</label>
+                            <input type="number" readonly id="totalDev" class="input input-plantas" name="totalDev"
+                                placeholder="Precio">
+                        </div>
+                        <div>
+                            <label>Nota</label>
+                            <input type="text" id="nota-devolucion" class="input input-plantas" name="nota-devolucion"
+                                placeholder="Agregar nota">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="btn-agregar">
+                    <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                    <div>
+                        <div id="productos-dinamicos"></div>
+                        <button type="button" class="btn btn-cancel" id="btn-cancel">Cancelar</button>
+                        <button type="submit" class="btn" id="btn-add-venta">Agregar</button>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Mostrar mensaje de éxito -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <script>
+    Swal.fire({
+      title:'{{ messages[0][2] }}',
+      text: '{{ messages[0][0] }}',
+      icon: '{{ messages[0][1] }}',
+      confirmButtonText: 'OK'
+    });
+  </script>
+{% endif %}
+{% endwith %}
+{% endblock %}
