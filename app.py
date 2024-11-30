@@ -155,7 +155,7 @@ def registrarse():
             session['user_id'] = usuario_seleccionado[0]
             session['rol_id'] = usuario_seleccionado[4]
 
-            return redirect("/catalogo")
+            return redirect("/login")
 
 @app.route('/categorias', methods=["GET", "POST"])
 @login_required
@@ -456,9 +456,6 @@ def insumos():
         unidadesMedida = text("SELECT * FROM unidades_medidas order by id asc")
         unidadMedida = db.execute(unidadesMedida).fetchall()
 
-        colores = text("SELECT * FROM colores order by id asc")
-        color = db.execute(colores).fetchall()
-        
         obtenerSubcat = text("SELECT * FROM subcategorias INNER JOIN categorias ON subcategorias.categoria_id = categorias.id WHERE categorias.categoria = 'Insumos'")
         subcat = db.execute(obtenerSubcat).fetchall()
 
@@ -474,11 +471,9 @@ def insumos():
                                i.compatibilidad,
                                i.precauciones,
                                STRING_AGG(DISTINCT sub.subcategoria, ', ') AS subcategoria,
-                               STRING_AGG(DISTINCT sub.id::text, ', ') AS sub_id,  -- Concatenar subcategorias id
+                               STRING_AGG(DISTINCT sub.id::text, ', ') AS sub_id,
                                unidad.unidad_medida,
                                unidad.id,
-                               STRING_AGG(DISTINCT c.color, ', ') as color,
-                                STRING_AGG(DISTINCT c.id::text, ', ') AS color_id,                               
                                i.fecha_vencimiento,
                                i.precio_venta,
                                i.imagen_url 
@@ -488,8 +483,6 @@ def insumos():
                               INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id
                               INNER JOIN insumos_unidades iu ON i.id = iu.insumo_id
                               INNER JOIN unidades_medidas unidad ON unidad.id = iu.unidad_medida_id
-                              INNER JOIN colores_insumos ci ON ci.insumo_id = i.id 
-                              INNER JOIN colores c ON c.id = ci.color_id 
                               INNER JOIN aplicaciones_insumos api ON api.insumo_id = i.id
                               INNER JOIN aplicaciones ap ON ap.id = api.aplicacion_id 
                               WHERE i.estado = 'true'
@@ -522,7 +515,7 @@ def insumos():
         
 
 
-        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, UnidadesMedida = unidadMedida, Colores = color, insumos=Insumos, categorias=rows, subcategorias=rows2)
+        return render_template('insumos.html', Composicionp=composicionP, TiposInsumo = tiposInsumo, Subcat = subcat, UnidadesMedida = unidadMedida, insumos=Insumos, categorias=rows, subcategorias=rows2)
 
     else:
         insumo = request.form.get('nombre_insumo')
@@ -569,11 +562,7 @@ def insumos():
         if not precaucionesInsumo:
             flash(('Ingrese las precauciones', 'error', '¡Error!'))
             return redirect(url_for('insumos'))
-        
-        if not fechaVencimientoInsumo:
-            flash(("No se ha seleccionado la fecha de vencimiento", 'error', '¡Error!'))
-            return redirect(url_for('insumos'))
-        
+                
         if fecha_vencimiento < fecha_actual:
             flash(("No puedes ingresar un producto con la fecha de vencimiento caducada", 'error', '¡Error!'))
             return redirect(url_for("insumos"))
@@ -584,10 +573,6 @@ def insumos():
         
         if not unidadMedidaInsumo:
             flash(("No se ha seleccionado una unidad de medida", 'error', '¡Error!'))
-            return redirect(url_for('insumos'))
-        
-        if not coloresInsumo:
-            flash(("No se ha seleccionado un color", 'error', '¡Error!'))
             return redirect(url_for('insumos'))
         
         obtenerInsumo = text("SELECT * FROM insumos WHERE nombre=:insumo")
@@ -605,10 +590,6 @@ def insumos():
             for subcat in subcatInsumo:
                 insertSubcatInsumo = text("INSERT INTO insumos_subcategoria (subcategoria_id, insumo_id) VALUES (:subcatInsumo, :insumoId)")
                 db.execute(insertSubcatInsumo, {"subcatInsumo": int(subcat), "insumoId": insumoId[0]})
-
-            for colores in coloresInsumo:
-                insertarInsumoIdColor = text("INSERT INTO colores_insumos (insumo_id, color_id) VALUES (:insumoId, :coloresId)")
-                db.execute(insertarInsumoIdColor, {"insumoId": insumoId[0], "coloresId": int(colores)})
 
             insertarInsumoIdUnidad = text("INSERT INTO insumos_unidades (insumo_id, unidad_medida_id) VALUES (:insumoId, :unidadMedidaId)")
             db.execute(insertarInsumoIdUnidad, {"insumoId": insumoId[0], "unidadMedidaId": unidadMedidaInsumo})
@@ -654,7 +635,6 @@ def agregarImgInsumo(data):
 
 @app.route('/editarinsumo', methods=["POST"])
 @login_required
-@ruta_permitida
 def editarinsumo():
     if request.method == "POST":
        insumo_ID = request.form.get('id_editar_insumo')
@@ -721,10 +701,6 @@ def editarinsumo():
            flash(('Seleccione una unidad de medida', 'error', '¡Error!'))
            return redirect(url_for('insumos'))
        
-       if not coloresInsumo_editar:
-           flash(('Seleccione un color', 'error', '¡Error!'))
-           return redirect(url_for('insumos'))
-
        # VALIDANDO SI HAY UN insumo CON ESE NOMBRE
        obtenerInsumo = text("SELECT * FROM insumos WHERE nombre=:insumo AND id!=:id")
        if db.execute(obtenerInsumo,{'insumo': insumo_editar, "id":insumo_ID}).rowcount > 0:
@@ -794,42 +770,7 @@ def editarinsumo():
                             WHERE insumo_id = :insumo_id AND subcategoria_id = :subcategoria_id
                         """)
                         db.execute(eliminarInsumoSub, {"insumo_id": insumo_ID, "subcategoria_id": subcategoria_id})
-                        print(f"Eliminando subcategoría con ID: {subcategoria_id}")
-
-                # manejar los colores
-               colores_seleccionadoss = coloresInsumo_editar
-               print("colores seleccionados", colores_seleccionadoss)
-               obtenerColoresInsumo = text("SELECT color_id FROM colores_insumos WHERE insumo_id=:insumo_id")
-               coloresInsumo_existentess = [row[0] for row in db.execute(obtenerColoresInsumo, {'insumo_id': insumo_ID}).fetchall()]
-               print("colores existentes", coloresInsumo_existentess)
-
-               colores_seleccionados = sorted([int(colores) for colores in colores_seleccionadoss])
-               coloresInsumo_existentes = sorted([int(colores) for colores in coloresInsumo_existentess])
-               
-               for colores in colores_seleccionados:
-                   obtenerColores = text("SELECT * FROM colores_insumos WHERE color_id=:colores AND insumo_id=:insumo_id")
-                   if db.execute(obtenerColores, {"colores": colores, "insumo_id": insumo_ID}).rowcount == 0:
-                       insertarColores = text("INSERT INTO colores_insumos (color_id, insumo_id) VALUES (:colores, :insumo_id)")
-                       db.execute(insertarColores, {"colores": colores, "insumo_id": insumo_ID})
-                       db.commit()
-                       db.close()
-               
-               if sorted(colores_seleccionados) == sorted(coloresInsumo_existentes):
-                   print("No hay cambios en los colores")   
-               else:
-                    print((coloresInsumo_existentes))
-                    print((colores_seleccionados))
-                    print("Hay cambios en los colores")
-                    # Encontrar los números que están en coloresInsumo_existentess pero no en colores_seleccionados
-                    diferencias_colores = [colores for colores in coloresInsumo_existentes if colores not in colores_seleccionados]
-                    print("Colores a eliminar:", diferencias_colores)
-                    for colores in diferencias_colores:
-                        eliminarColores = text("""
-                            DELETE FROM colores_insumos 
-                            WHERE insumo_id = :insumo_id AND color_id = :colores
-                        """)
-                        db.execute(eliminarColores, {"insumo_id": insumo_ID, "colores": colores})
-                        print(f"Eliminando colores con ID: {colores}")
+                        print(f"Eliminando subcategoría con ID: {subcategoria_id}") 
             
                db.commit()
                db.close()
@@ -868,9 +809,6 @@ def agregarSubcategoriaInsumos():
 def plantas():
     if request.method == "GET":
         id_planta = request.args.get("id_editar_planta")
-
-        obtenerColores = text("SELECT * FROM colores")
-        colores = db.execute(obtenerColores).fetchall()
 
         obtenerSubcategorias = text("SELECT * FROM subcategorias INNER JOIN categorias ON subcategorias.categoria_id = categorias.id WHERE categorias.categoria LIKE '%Plantas%'")
         subcategorias = db.execute(obtenerSubcategorias).fetchall()
@@ -1161,15 +1099,11 @@ def editarplantas():
        if not precio_editar:
            flash(('Ingrese el precio de la planta', 'error', '¡Error!'))
            return redirect(url_for('plantas'))
-       if not coloresplanta_editar:
-           flash(('Seleccione al menos un color', 'error', '¡Error!'))
-           return redirect(url_for('plantas'))
+      
        if not subcatplanta_editar:
            flash(('Seleccione al menos una subcategoría', 'error', '¡Error!'))
            return redirect(url_for('plantas'))
-       if not idrango_editar:
-           flash(('Seleccione un rango válido', 'error', '¡Error!'))
-           return redirect(url_for('plantas'))
+      
        if not identorno_editar:
            flash(('Seleccione un entorno ideal', 'error', '¡Error!'))
            return redirect(url_for('plantas'))
@@ -1234,79 +1168,7 @@ def editarplantas():
                         """)
                         db.execute(eliminarPlantaSub, {"planta_id": planta_ID, "subcategoria_id": subcategoria_id})
                         print(f"Eliminando subcategoría con ID: {subcategoria_id}")
-               
-
-               
-                # manejar los colores
-               colores_seleccionadoss = coloresplanta_editar
-               print("colores seleccionados", colores_seleccionadoss)
-               obtenerColoresPlanta = text("SELECT color_id FROM colores_plantas WHERE planta_id=:planta_id")
-               coloresPlanta_existentess = [row[0] for row in db.execute(obtenerColoresPlanta, {'planta_id': planta_ID}).fetchall()]
-               print("colores existentes", coloresPlanta_existentess)
-
-               colores_seleccionados = sorted(int(colores) for colores in colores_seleccionadoss)
-               colores_Plantas_existentes = sorted(int(colores) for colores in coloresPlanta_existentess)
-               
-               for colores in colores_seleccionados:
-                   obtenerColores = text("SELECT * FROM colores_plantas WHERE color_id=:colores AND planta_id=:planta_id")
-                   if db.execute(obtenerColores, {"colores": colores, "planta_id": planta_ID}).rowcount == 0:
-                       insertarColores = text("INSERT INTO colores_plantas (color_id, planta_id) VALUES (:colores, :planta_id)")
-                       db.execute(insertarColores, {"colores": colores, "planta_id": planta_ID})
-                       db.commit()
-                       db.close()
-               
-               if sorted(colores_seleccionados) == sorted(colores_Plantas_existentes):
-                   print("No hay cambios en los colores")   
-               else:
-                    print((colores_Plantas_existentes))
-                    print((colores_seleccionados))
-                    print("Hay cambios en los colores")
-                    # Encontrar los números que están en colores_Plantas_existentes pero no en colores_seleccionados
-                    diferencia_colores = [colores for colores in colores_Plantas_existentes if colores not in colores_seleccionados]
-                    print("Colores a eliminar:", diferencia_colores)
-                    for color in diferencia_colores:
-                        eliminarColores = text("""
-                            DELETE FROM colores_plantas 
-                            WHERE planta_id = :planta_id AND color_id = :colores
-                        """)
-                        db.execute(eliminarColores, {"planta_id": planta_ID, "colores": color})
-                        print(f"Eliminando colores con ID: {color}")
-
-
-                # manejar los rangos
-               rangos_seleccionadoss = idrango_editar
-               print("rangos seleccionados", rangos_seleccionadoss)
-               obtenerRangosPlanta = text("SELECT rango_id FROM rangos_medidas WHERE planta_id=:planta_id")
-               rangosPlanta_existentess = [row[0] for row in db.execute(obtenerRangosPlanta, {'planta_id': planta_ID}).fetchall()]
-               print("rangos existentes", rangosPlanta_existentess)
-
-               rangos_seleccionados = sorted([int(rango) for rango in rangos_seleccionadoss])
-               rangos_Plantas_existentes = sorted([int(rango) for rango in rangosPlanta_existentess])
-               
-               for rangos in rangos_seleccionados:
-                   obtenerRangos = text("SELECT * FROM rangos_medidas WHERE rango_id=:rangos AND planta_id=:planta_id")
-                   if db.execute(obtenerRangos, {"rangos": rangos, "planta_id": planta_ID}).rowcount == 0:
-                    insertarRangos = text("INSERT INTO rangos_medidas (rango_id, planta_id) VALUES (:rangos, :planta_id)")
-                    db.execute(insertarRangos, {"rangos": rangos, "planta_id": planta_ID})
-                    
-               if sorted(rangos_seleccionados) == sorted(rangos_Plantas_existentes):
-                   print("No hay cambios en los rangos")
-
-               else:
-                    print((rangos_Plantas_existentes))
-                    print((rangos_seleccionados))
-                    print("Hay cambios en los rangos")
-                    # Encontrar los números que están en rangos_Plantas_existentes pero no en rangos_seleccionados
-                    diferencia_rangos = [rango for rango in rangos_Plantas_existentes if rango not in rangos_seleccionados]
-                    print("Rangos a eliminar:", diferencia_rangos)
-                    for rango in diferencia_rangos:
-                        eliminarRangos = text("""
-                            DELETE FROM rangos_medidas 
-                            WHERE planta_id = :planta_id AND rango_id = :rango
-                        """)
-                        db.execute(eliminarRangos, {"planta_id": planta_ID, "rango": rango})
-                        print(f"Eliminando rango con ID: {rango}")
-                        
+                       
                db.commit()
                db.close()
            else:
@@ -1323,16 +1185,22 @@ def editarplantas():
 def ventas():
     if request.method == 'GET':
         ObtenerSubcat = text("SELECT * FROM subcategorias")
-        ObtenerDivisas = text("SELECT * FROM divisas")
         ObtenerVentas = text("SELECT id, nombre_cliente AS nombre, fecha_venta AS fecha, total, nota, estado FROM ventas")
+        obtenerTiposPago = text("SELECT * FROM tipos_pagos")
+        obtenerTipoCliente = text("SELECT * FROM cliente_categoria")
+        obtenerColores = text("SELECT * FROM colores")
+        obtenerMedidas = text("SELECT * FROM medidas")
+
+        tipoCliente = db.execute(obtenerTipoCliente).fetchall()
+        colores = db.execute(obtenerColores).fetchall()
+        medidas = db.execute(obtenerMedidas).fetchall()
+        tiposPago = db.execute(obtenerTiposPago).fetchall()
         infoSubcat = db.execute(ObtenerSubcat).fetchall()
-        infoDivisas = db.execute(ObtenerDivisas).fetchall()
         infoVentas = db.execute(ObtenerVentas).fetchall()
-        return render_template('ventas.html', InfoSubcat = infoSubcat, InfoDivisas = infoDivisas, InfoVentas = infoVentas)
+        return render_template('ventas.html', InfoSubcat = infoSubcat, InfoVentas = infoVentas, tipospago = tiposPago, colores = colores, medidas = medidas, tipocliente = tipoCliente)
     else:
-        cliente = request.form.get('nombreCliente');
+        cliente = request.form.get('nombreCliente')
         fecha = request.form.get('fecha')
-        divisa = request.form.get('divisa-id')
         subtotal = request.form.get('subtotal')
         total = request.form.get('total')
         nota = request.form.get('nota-venta')
@@ -1364,9 +1232,7 @@ def ventas():
             return redirect(url_for('ventas'))
         if not productos:
             flash(('Ingrese al menos un producto', 'error', '¡Error!'))
-        if not divisa:
-            flash(('Ingrese la divisa', 'error', '¡Error!'))
-            return redirect(url_for('ventas'))
+        
         if not subtotal:
             flash(('Ingrese un subtotal', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
@@ -1374,8 +1240,8 @@ def ventas():
             flash(('Ingrese el total', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
         
-        insertarVenta = text("INSERT INTO ventas (nombre_cliente, usuario_id, fecha_venta, divisa_id, nota, total, estado) VALUES (:nombre_cliente, :usuario_id, :fecha_venta, :divisa_id, :nota,:total, :estado)")
-        db.execute(insertarVenta, {"nombre_cliente": cliente, "usuario_id": '1', "fecha_venta": fecha, "divisa_id": divisa, "nota": nota, "total": total, "estado": 'true'})
+        insertarVenta = text("INSERT INTO ventas (nombre_cliente, usuario_id, fecha_venta, nota, total, estado) VALUES (:nombre_cliente, :usuario_id, :fecha_venta, :divisa_id, :nota,:total, :estado)")
+        db.execute(insertarVenta, {"nombre_cliente": cliente, "usuario_id": session["user_id"], "fecha_venta": fecha, "nota": nota, "total": total, "estado": 'true'})
 
 
         for producto in productos:
@@ -1543,18 +1409,25 @@ def compras():
         subcategorias = db.execute(ObtenerSubcat).fetchall()
         ObtenerProveedores = text('SELECT * FROM proveedores')
         proveedores = db.execute(ObtenerProveedores).fetchall()
-        ObtenerDivisas = text('SELECT * FROM divisas')
-        divisas = db.execute(ObtenerDivisas).fetchall()
+
+        obtenerTiposPago = text("SELECT * FROM tipos_pagos")
+        obtenerTipoCliente = text("SELECT * FROM cliente_categoria")
+        obtenerColores = text("SELECT * FROM colores")
+        obtenerMedidas = text("SELECT * FROM medidas")
         ObtenerCompras = text("""SELECT compras.id, proveedores.nombre_proveedor, compras.fecha_compra, compras.total  
                                     FROM compras
                                     LEFT JOIN
                                         proveedores ON compras.proveedor_id = proveedores.id""")
+
+
+        colores = db.execute(obtenerColores).fetchall()
+        medidas = db.execute(obtenerMedidas).fetchall()
+        tiposPago = db.execute(obtenerTiposPago).fetchall()
         compras = db.execute(ObtenerCompras).fetchall()
-        return render_template('compras.html', Subcategorias = subcategorias, Proveedores = proveedores, Divisas = divisas, Compras = compras)
+        return render_template('compras.html', Subcategorias = subcategorias, Proveedores = proveedores, Compras = compras, colores = colores, medidas = medidas, tipospago = tiposPago)
     else:
         proveedorId = request.form.get('proveedor-select')
         fecha = request.form.get('fecha')
-        divisaId = request.form.get('divisa-id')
         subtotal = request.form.get('subtotal')
         total = request.form.get('total')
 
@@ -1581,9 +1454,7 @@ def compras():
         if not proveedorId:
             flash(('Ingrese el proveedor', 'error', '¡Error!'))
             return redirect(url_for('compras'))
-        if not divisaId:
-            flash(('Ingrese la divisa', 'error', '¡Error!'))
-            return redirect(url_for('compras'))
+        
         if not productos:
             flash(('Ingrese productos', 'error', '¡Error!'))
             return redirect(url_for('compras'))
@@ -1600,7 +1471,7 @@ def compras():
         # Insertar datos en la base de datos
 
         insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, divisa_id) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :divisa_id)")
-        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha, "total": total, "usuario_id": '1', "divisa_id": divisaId})
+        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha, "total": total, "usuario_id": session["user_id"]})
 
         for producto in productos:
             if producto['tipo'] == 'planta':
@@ -1701,7 +1572,7 @@ def listaDeseos():
     else:
         productoId = request.form.get('productoId')
         tipo = request.form.get('tipo')
-        usuarioId = 1
+        usuarioId = session["user_id"]
         fecha_actual = datetime.now()
         fecha_formateada = fecha_actual.strftime('%Y-%m-%d')
 
@@ -1943,12 +1814,6 @@ def generar_json_plantas():
     STRING_AGG(DISTINCT subcategorias.subcategoria, ', ') AS subcategoria,
     STRING_AGG(DISTINCT subcategorias.id::text, ', ') AS id_subcategoria,
     
-    STRING_AGG(DISTINCT colores.color, ', ') AS color,
-    STRING_AGG(DISTINCT colores.id::text, ', ') AS id_color,
-    
-    STRING_AGG(DISTINCT rangos.rango, ', ') AS rango,
-    STRING_AGG(DISTINCT rangos.id::text, ', ') AS id_rango,
-    
     entornos_ideales.entorno AS entorno,
     entornos_ideales.id AS id_entorno,
     
@@ -1969,14 +1834,6 @@ JOIN
     plantas_subcategoria ON plantas.id = plantas_subcategoria.planta_id
 JOIN 
     subcategorias ON plantas_subcategoria.subcategoria_id = subcategorias.id
-JOIN 
-    colores_plantas ON plantas.id = colores_plantas.planta_id
-JOIN 
-    colores ON colores_plantas.color_id = colores.id
-JOIN 
-    rangos_medidas ON plantas.id = rangos_medidas.planta_id
-JOIN 
-    rangos ON rangos_medidas.rango_id = rangos.id
 JOIN 
     entornos_ideales ON plantas.entorno_ideal_id = entornos_ideales.id
 JOIN 
@@ -2012,19 +1869,15 @@ GROUP BY
         'descripcion': planta[3],
         'subcategoria': planta[4],
         'id_subcategoria': planta[5],  # Agregar este campo para los IDs de subcategorías
-        'color': planta[6],  # Los colores concatenados
-        'id_color': planta[7],  # IDs de colores
-        'rango': planta[8],  # Los rangos concatenados
-        'id_rango': planta[9],  # IDs de rangos
-        'entorno': planta[10],
-        'id_entorno': planta[11],
-        'agua': planta[12],
-        'id_agua': planta[13],
-        'suelo': planta[14],
-        'id_suelo': planta[15],
-        'temporada': planta[16],
-        'id_temporada': planta[17],
-        'precio_venta': planta[18]
+        'entorno': planta[6],
+        'id_entorno': planta[7],
+        'agua': planta[8],
+        'id_agua': planta[9],
+        'suelo': planta[10],
+        'id_suelo': planta[11],
+        'temporada': planta[12],
+        'id_temporada': planta[13],
+        'precio_venta': planta[14]
     }
     for planta in plantas
     ]
@@ -2047,8 +1900,6 @@ def generar_json_insumos():
                                STRING_AGG(DISTINCT sub.id::text, ', ') AS sub_id,  -- Concatenar subcategorias id
                                unidad.unidad_medida,
                                unidad.id,
-                               STRING_AGG(DISTINCT c.color, ', ') as color,
-                                STRING_AGG(DISTINCT c.id::text, ', ') AS color_id,                               
                                i.fecha_vencimiento,
                                i.precio_venta,
                                i.imagen_url 
@@ -2058,8 +1909,6 @@ def generar_json_insumos():
                               INNER JOIN composiciones_principales cp ON i.composicion_principal_id = cp.id
                               INNER JOIN insumos_unidades iu ON i.id = iu.insumo_id
                               INNER JOIN unidades_medidas unidad ON unidad.id = iu.unidad_medida_id
-                              INNER JOIN colores_insumos ci ON ci.insumo_id = i.id 
-                              INNER JOIN colores c ON c.id = ci.color_id 
                               INNER JOIN aplicaciones_insumos api ON api.insumo_id = i.id
                               INNER JOIN aplicaciones ap ON ap.id = api.aplicacion_id 
                               WHERE i.estado = 'true'
@@ -2100,11 +1949,9 @@ def generar_json_insumos():
         'id_subcategoria': insumo[11],  # IDs de subcategorías concatenadas
         'unidad_medida': insumo[12],
         'id_unidad_medida': insumo[13],
-        'color': insumo[14],  # Colores concatenados
-        'id_color': insumo[15],  # IDs de colores concatenados
-        'fecha_vencimiento': insumo[16],  # Formatear fecha
-        'precio_venta': insumo[17],
-        'imagen_url': insumo[18],
+        'fecha_vencimiento': insumo[14], 
+        'precio_venta': insumo[15],
+        'imagen_url': insumo[16],
     }
     for insumo in insumos
     ]

@@ -4,6 +4,15 @@ Ventas | El Jaboncillo
 {% endblock %}
 
 {% block main %}
+<section class="bienvenida">
+    <div>
+        <h2 id="saludo"></h2>
+        <p>Bienvenid@, {{session["user_name"]}}</p>
+    </div>
+    <div>
+        <h3>Modulo de ventas</h3>
+    </div>
+</section>
 <section class="busqueda">
     <div class="search">
         <div class="seccion-buscar">
@@ -65,7 +74,15 @@ Ventas | El Jaboncillo
                         <div>
                             <label for="">Cliente</label>
                             <input type="text" id="nombreCliente" class="input input-plantas" name="nombreCliente"
-                                placeholder="Nombre Cliente">
+                                placeholder="Ej. Ismael Hernandez">
+                        </div>
+                        <div>
+                            <label>Tipo de cliente</label>
+                            <select class="input input-plantas" id="tipoCliente-select" name="tipoCliente-select">
+                                {% for tipoclientes in tipocliente %}
+                                <option name="subcategoria-select" value="{{tipoclientes[0]}}">{{tipoclientes[1]}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div>
                             <label>Subcategorias</label>
@@ -78,8 +95,8 @@ Ventas | El Jaboncillo
                         </div>
                         <div>
                             <label>Fecha</label>
-                            <input type="date" id="fecha_venta" class="input input-plantas" name="fecha"
-                                placeholder="fecha">
+                            <input type="text" id="fecha_venta" class="input input-plantas" name="fecha"
+                                placeholder="fecha" readonly>
                         </div>
                     </div>
                     <div class="inputs-cont row-2">
@@ -90,14 +107,32 @@ Ventas | El Jaboncillo
                             </select>
                         </div>
                         <div>
+                            <label>Colores</label>
+                            <select class="input input-plantas" id="caracteristicas-select" name="caracteristicas-select">
+                                {% for color in colores %}
+                                <option name="subcategoria-select" value="{{color[0]}}">{{color[1]}}</option>
+                                {% endfor %}
+                                <option value="" selected>Selecciona una caractistica</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Medidas</label>
+                            <select class="input input-plantas" id="caracteristicas-select" name="caracteristicas-select">
+                                {% for medida in medidas %}
+                                <option name="subcategoria-select" value="{{medida[0]}}">{{medida[1]}}</option>
+                                {% endfor %}
+                                <option value="" selected>Selecciona una caractistica</option>
+                            </select>
+                        </div>
+                        <div>
                             <label>Cantidad</label>
                             <input type="number" id="cantidad" class="input input-plantas validar-input" name="cantidad"
-                                placeholder="Cantidad" step="0.01" inputmode="decimal" min="0">
+                                placeholder="0" step="0.01" inputmode="decimal" min="0">
                         </div>
                         <div>
                             <label>Precio</label>
                             <input type="number" id="precio" class="input input-plantas validar-input" name="precio"
-                                placeholder="Precio">
+                                placeholder="0.00">
                         </div>
                         <div>
                             <input type="hidden" name="idProd" id="idProd">
@@ -132,11 +167,11 @@ Ventas | El Jaboncillo
                 <section class="inputs-venta">
                     <div class="inputs-cont row-4">
                         <div>
-                            <label>Divisas</label>
+                            <label>Tipos de pago</label>
                             <select class="input input-plantas" id="divisa-select" name="divisa-select">
-                                {% for infoDivisas in InfoDivisas %}
-                                <option value="{{infoDivisas[3]}}" data-id="{{infoDivisas[0]}}">
-                                    {{infoDivisas[1]}}
+                                {% for tipo_pago in tipospago %}
+                                <option value="{{tipo_pago[0]}}" data-id="{{tipo_pago[0]}}">
+                                    {{tipo_pago[1]}}
                                 </option>
                                 {% endfor %}
                             </select>
@@ -145,17 +180,17 @@ Ventas | El Jaboncillo
                         <div>
                             <label>Subtotal</label>
                             <input type="number" id="subtotal" class="input input-plantas" name="subtotal"
-                                placeholder="Subtotal" readonly>
+                                placeholder="0.00" readonly>
                         </div>
                         <div>
                             <label>Total</label>
                             <input type="number" id="total" class="input input-plantas" name="total"
-                                placeholder="Precio" readonly>
+                                placeholder="0.00" readonly>
                         </div>
                         <div>
                             <label>Nota</label>
                             <input type="text" id="nota-venta" class="input input-plantas" name="nota-venta"
-                                placeholder="Agregar nota">
+                                placeholder="Ej. ">
                         </div>
                     </div>
                 </section>

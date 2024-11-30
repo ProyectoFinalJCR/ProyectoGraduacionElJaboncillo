@@ -6,8 +6,13 @@ Plantas | El Jaboncillo
 {% block main %}
 <section class="all-screen-plantas">
     <section class="bienvenida">
-        <h2 id="saludo"></h2>
-        <p>Bienvenid@, {{session["user_name"]}}</p>
+        <div>
+            <h2 id="saludo"></h2>
+            <p>Bienvenid@, {{session["user_name"]}}</p>
+        </div>
+        <div>    
+            <h3>Modulo de Plantas</h3>
+        </div>
     </section>
     <section class="busqueda">
         <div class="search">
@@ -33,8 +38,6 @@ Plantas | El Jaboncillo
                         <th>Imágen</th>
                         <th>Planta</th>
                         <th>Subcategoria</th>
-                        <th>Color</th>
-                        <th>Tamaño</th>
                         <th>Precio</th>
                         <th>Acciones</th>
                     </tr>
@@ -67,16 +70,12 @@ Plantas | El Jaboncillo
                         <td>{{infoPlantas.nombre}}</td>
                         <td style="display: none;">{{infoPlantas.descripcion}}</td>
                         <td>{{infoPlantas.subcategoria}}</td>
-                        <td>{{infoPlantas.color}}</td>
-                        <td>{{infoPlantas.rango}}</td>
                         <td style="display: none;">{{infoPlantas.entorno}}</td>
                         <td style="display: none;">{{infoPlantas.agua}}</td>
                         <td style="display: none;">{{infoPlantas.suelo}}</td>
                         <td style="display: none;">{{infoPlantas.temporada}}</td>
                         <td>{{infoPlantas.precio_venta}}</td>
                         <td style="display: none;">{{infoPlantas.id_subcategoria}}</td>
-                        <td style="display: none;">{{infoPlantas.id_color}}</td>
-                        <td style="display: none;">{{infoPlantas.id_rango}}</td>
                         <td style="display: none;">{{infoPlantas.id_entorno}}</td>
                         <td style="display: none;">{{infoPlantas.id_agua}}</td>
                         <td style="display: none;">{{infoPlantas.id_suelo}}</td>
@@ -125,11 +124,11 @@ Plantas | El Jaboncillo
                             </div>
                         </div>
                         <div class="inputs-cont columna-2">
-                            <div class="inputs-select">
-                                <label>Colores</label>
-                                <select class="input input-insumos" id="color" name="idColor" required>
-                                    {% for colores in Colores %}
-                                    <option value="{{ colores[0] }}">{{ colores[1] }}</option>
+                            <div>
+                                <label>Entorno ideal</label>
+                                <select class="input input-insumos" id="entorno" name="idEntorno" required>
+                                    {% for entorno in Entornos %}
+                                    <option value="{{ entorno[0] }}">{{ entorno[1] }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -141,24 +140,6 @@ Plantas | El Jaboncillo
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="inputs-select">
-                                <label>Rangos de tamaño</label>
-                                <select class="input input-insumos" id="rango" name="idRango" required>
-                                    {% for rango in Rangos %}
-                                    <option value="{{ rango[0] }}">{{ rango[1] }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="inputs-cont columna-3">
-                            <div>
-                                <label>Entorno ideal</label>
-                                <select class="input input-insumos" id="entorno" name="idEntorno" required>
-                                    {% for entorno in Entornos %}
-                                    <option value="{{ entorno[0] }}">{{ entorno[1] }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                             <div>
                                 <label>Requerimiento de agua</label>
                                 <select class="input input-insumos" id="agua" name="idAgua" required>
@@ -167,6 +148,8 @@ Plantas | El Jaboncillo
                                     {% endfor %}
                                 </select>
                             </div>
+                        </div>
+                        <div class="inputs-cont columna-3"> 
                             <div>
                                 <label>Tipo de suelo</label>
                                 <select class="input input-insumos" id="suelo" name="idSuelo" required>
@@ -231,11 +214,11 @@ Plantas | El Jaboncillo
                     </div>
                 </div>
                 <div class="inputs-cont columna-2">
-                    <div class="input-colores">
-                        <label for="">Colores</label>
-                        <select class="input input-plantas" id="idColor_editar" name="idColor_editar" required>
-                            {% for colores in Colores %}
-                            <option name="idColor" value="{{colores[0]}}">{{colores[1]}}</option>
+                    <div>
+                        <label for="">Requerimiento de agua</label>
+                        <select class="input input-plantas" id="idAgua_editar" name="idAgua_editar" required>
+                            {% for agua in Agua %}
+                            <option value="{{ agua[0] }}">{{ agua[1] }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -248,16 +231,6 @@ Plantas | El Jaboncillo
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="input-rango">
-                        <label for="">Rangos de tamaño</label>
-                        <select class="input input-plantas" id="idRango_editar" name="idRango_editar" required>
-                            {% for rango in Rangos %}
-                            <option name="idRango" value="{{ rango[0] }}">{{ rango[1] }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="inputs-cont columna-3">
                     <div>
                         <label for="">Entorno ideal</label>
                         <select class="input input-plantas" id="idEntorno_editar" name="idEntorno_editar" required>
@@ -266,14 +239,8 @@ Plantas | El Jaboncillo
                             {% endfor %}
                         </select>
                     </div>
-                    <div>
-                        <label for="">Requerimiento de agua</label>
-                        <select class="input input-plantas" id="idAgua_editar" name="idAgua_editar" required>
-                            {% for agua in Agua %}
-                            <option value="{{ agua[0] }}">{{ agua[1] }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                </div>
+                <div class="inputs-cont columna-3">
                     <div>
                         <label for="">Tipo de suelo</label>
                         <select class="input input-plantas" id="idSuelo_editar" name="idSuelo_editar">

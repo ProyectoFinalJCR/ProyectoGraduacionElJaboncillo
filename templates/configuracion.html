@@ -44,14 +44,8 @@ Configuración del sistema | El Jaboncillo
                             readonly>
                     </div>
                     <div class="inputs">
-                        <label>Valor de la divisa en:</label>
-                        {% for divisa in Divisas %}
-                        <div class="input-divisas">
-                            <label>{{ divisa.divisa }}</label>
-                            <input type="hidden" class="divisas" name="divisas" value="{{ divisa.id }}">
-                            <input type="text" class="divisas" name="divisas" value="{{ divisa.equivalente_cordobas }}">
-                        </div>
-                        {% endfor %}
+                        <br>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -142,7 +136,7 @@ Configuración del sistema | El Jaboncillo
                     <div class="input-link">
                         <img src="/static/img/facebook.png" class="icon" alt="facebook">
                         <input type="text" class="facebook" name="facebook" value="{{ Configuracion.link_facebook }}"
-                            readonly>
+                            >
                     </div>
                 </div>
                 <div class="inputs">
@@ -150,7 +144,7 @@ Configuración del sistema | El Jaboncillo
                     <div class="input-link">
                         <img src="/static/img/social.png" class="icon" alt="instagram">
                         <input type="text" class="instagram" name="instagram" value="{{ Configuracion.link_instagram }}"
-                            readonly>
+                            >
                     </div>
                 </div>
                 <div class="inputs">
@@ -158,7 +152,7 @@ Configuración del sistema | El Jaboncillo
                     <div class="input-link">
                         <img src="/static/img/tik-tok.png" class="icon" alt="tiktok">
                         <input type="text" class="tiktok" name="tiktok" value="{{ Configuracion.link_tiktok }}"
-                            readonly>
+                            >
                     </div>
                 </div>
                 <div class="inputs">
@@ -166,7 +160,7 @@ Configuración del sistema | El Jaboncillo
                     <div class="input-link">
                         <img src="/static/img/whatsapp.png" class="icon" alt="whatsapp">
                         <input type="text" class="whatsApp" name="whatsApp" value="{{ Configuracion.link_whatsapp }}"
-                            readonly>
+                            >
                     </div>
                 </div>
             </div>

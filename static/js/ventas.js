@@ -1,6 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
     //Evento para mostrar formulario
     const btneditar = document.querySelector('.btn-add-venta').addEventListener('click', function(){
+
+        const inputFecha = document.getElementById("fecha_venta");
+        const hoy = new Date();
+    
+        // Obtén día, mes y año
+        const dia = hoy.getDate();
+        const mes = hoy.toLocaleString('default', { month: 'long' }); // Nombre completo del mes
+        const anio = hoy.getFullYear();
+    
+        // Formatea la fecha
+        const fechaFormateada = `${dia} de ${mes} del ${anio}`;
+        inputFecha.value = fechaFormateada;
+
         console.log(btneditar)
       const container_table_inputs = document.querySelector(".container-inputVenta");  
         container_table_inputs.style.display = "block";
