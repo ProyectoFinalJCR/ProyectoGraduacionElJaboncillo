@@ -29,30 +29,6 @@ def colores():
         db.session.add (data)
         db.session.commit()
 
-def rangos():
-    rangos = [
-        ("1cm-5cm"),
-        ("6cm-10cm"),
-        ("10cm-15cm"),
-        ("15cm-20cm"),
-        ("20cm-30cm"),
-        ("30cm-40cm"),
-        ("40cm-50cm"),
-        ("50cm-60cm"),
-        ("60cm-70cm"),
-        ("70cm-80cm"),
-        ("80cm-90cm"),
-        ("9Ocm-100cm"),
-        ("1M-5M"),
-        ("6M-10M"),
-        ("11M-15M"),
-        ("16M-20M")
-        ]
-    for rango in rangos:
-        data = Rangos(rango=rango)
-        db.session.add(data)
-        db.session.commit()
-
 def unidades_medidas():
     unidades_medidas = [
         ("Libra","LB"),
@@ -116,9 +92,12 @@ def tipo_movimientos():
     movimientos = [
         ("Compra", "Adquisición de plantas o insumos para el vivero."),
         ("Venta", "Comercialización de plantas a los clientes."),
-        ("Producción", "insumos a ser usados en producción."),
+        ("Salida a producción", "insumos a ser usados en producción."),
+        ("Entrada a producción", "Planta agregadas de producción."),
         ("Devolución", "Retorno de productos por parte del cliente que regresan al stock."),
         ("Devolucion por daños", "Los productos que sufren daños, NO retornan al stock."),
+        ("Cantidad inicial", "Los productos que se agregan por primera vez."),
+        ("Baja de productos", "Los productos que se dan de baja."),
         
     ]
     
@@ -175,14 +154,13 @@ def composiciones_principales():
         db.session.commit()
 
 
-#with app.app_context():
-    #entornos_ideales()        
-    #tipos_suelos()
-    #tipo_movimientos()
-    #requerimientos_agua()
-    #aplicaciones()
-    #temporadas_plantacion()
-    #composiciones_principales()
-    #rangos()
-    #unidades_medidas()
+# with app.app_context():
+    # entornos_ideales()        
+    # tipos_suelos()
+    # tipo_movimientos()
+    # requerimientos_agua()
+    # aplicaciones()
+    # temporadas_plantacion()
+    # composiciones_principales()
+    # unidades_medidas()
     
