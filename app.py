@@ -533,8 +533,6 @@ def insumos():
         fecha_actual = datetime.now().date()
         precioVentaInsumo = request.form.get("precio_venta")
         unidadMedidaInsumo = request.form.get('idUnidadMedida')
-        coloresInsumo = request.form.getlist('idcolor')
-
 
         if not insumo:
             flash(('Ingrese el nombre del insumo', 'error', '¡Error!'))
@@ -651,7 +649,6 @@ def editarinsumo():
        fecha_vencimiento = datetime.strptime(fechaVencimientoInsumo_editar, "%Y-%m-%d").date()
        fecha_actual = datetime.now().date()
        precio_ventaInsumo_editar = request.form.get('precioVentaInsumo_editar')
-       coloresInsumo_editar = request.form.getlist('coloresInsumo_editar')
        unidadMedida_editar = request.form.get('unidadMedida_editar')
 
        if not insumo_editar:
@@ -1078,9 +1075,7 @@ def editarplantas():
        planta_ID = request.form.get('id_editar_planta')
        plantas_editar = request.form.get('nombrePlanta_editar')
        descripcioPlanta_editar = request.form.get('descripcion_editar')
-       coloresplanta_editar = request.form.getlist('idColor_editar')
        subcatplanta_editar = request.form.getlist('idSubcategoria_editar')
-       idrango_editar = request.form.getlist('idRango_editar')
        identorno_editar = request.form.get('idEntorno_editar')
        idagua_editar = request.form.get('idAgua_editar')
        idSuelo_editar = request.form.get('idSuelo_editar')
@@ -1201,10 +1196,12 @@ def ventas():
         return render_template('ventas.html', InfoSubcat = infoSubcat, InfoVentas = infoVentas, tipospago = tiposPago, colores = colores, medidas = medidas, tipocliente = tipoCliente)
     else:
         cliente = request.form.get('nombreCliente')
-        fecha = request.form.get('fecha')
-        subtotal = request.form.get('subtotal')
+        cliente_categoria = request.form.get('tipoCliente-select')
+        fecha_actual = datetime.now()
+        fecha_formateada = fecha_actual.strftime('%Y-%m-%d')
         total = request.form.get('total')
         nota = request.form.get('nota-venta')
+        tipoPago = request.form.get('tipoPago-select')
 
         productos = []
         index = 0
@@ -1225,24 +1222,20 @@ def ventas():
                 'precio': float(precio)
             })
             index += 1
+
+            
         if not cliente:
             flash(('Ingrese el nombre del cliente', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
-        if not fecha:
-            flash(('Ingrese la fehca', 'error', '¡Error!'))
-            return redirect(url_for('ventas'))
         if not productos:
             flash(('Ingrese al menos un producto', 'error', '¡Error!'))
-        
-        if not subtotal:
-            flash(('Ingrese un subtotal', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
         if not total:
             flash(('Ingrese el total', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
         
-        insertarVenta = text("INSERT INTO ventas (nombre_cliente, usuario_id, fecha_venta, nota, total, estado) VALUES (:nombre_cliente, :usuario_id, :fecha_venta, :divisa_id, :nota,:total, :estado)")
-        db.execute(insertarVenta, {"nombre_cliente": cliente, "usuario_id": session["user_id"], "fecha_venta": fecha, "nota": nota, "total": total, "estado": 'true'})
+        insertarVenta = text("INSERT INTO ventas (nombre_cliente, usuario_id, id_cliente_categoria, id_tipo_pago, fecha_venta, nota, total, estado) VALUES (:nombre_cliente, :usuario_id, :id_cliente_categoria, :id_tipo_pago, :fecha_venta, :nota,:total, :estado)")
+        db.execute(insertarVenta, {"nombre_cliente": cliente, "usuario_id": session["user_id"], "id_cliente_categoria": cliente_categoria, "id_tipo_pago": tipoPago ,"fecha_venta": fecha_formateada, "nota": nota, "total": total, "estado": 'true'})
 
 
         for producto in productos:
@@ -1254,7 +1247,7 @@ def ventas():
                 insumo_id = producto['id']
 
             insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
-            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": '2', "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": nota})
+            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": '2', "precio_unitario": producto['precio'], "fecha_movimiento": fecha_formateada, "nota": nota})
 
         ventaId = db.execute(text("SELECT * FROM ventas ORDER BY id DESC LIMIT 1")).fetchone()[0]
         kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
@@ -1267,8 +1260,9 @@ def ventas():
                 planta_id = None
                 insumo_id = producto['id']
 
+            subtotal = (producto['cantidad'] * producto['precio'])
             insertarProductos = text("INSERT INTO detalle_ventas (planta_id, insumo_id, venta_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:planta_id, :insumo_id, :venta_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
-            db.execute(insertarProductos, {"planta_id": planta_id, "insumo_id": insumo_id, "venta_id": ventaId, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal":subtotal})
+            db.execute(insertarProductos, {"planta_id": planta_id, "insumo_id": insumo_id, "venta_id": ventaId, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal": subtotal})
 
         for producto in productos:
             stock_query = text("""
@@ -1290,19 +1284,10 @@ def ventas():
             stock_cantidad = int(stockInfo['cantidad'])
             nuevaCantidad = stock_cantidad - int(producto['cantidad'])
 
-            if producto['tipo'] == 'planta':
-                obtenerPrecioBd = text("SELECT precio_venta FROM plantas where id=:id")
-                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
-                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
-            else:
-                obtenerPrecioBd = text("SELECT precio_venta FROM insumos where id=:id")
-                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
-                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
-
             if stockInfo['id']:
                 actualizar_stock = text("""
                     UPDATE stock 
-                    SET cantidad=:cantidad, kardex_id=:kardex_id, precio_total_inversion=:precio_total_inversion 
+                    SET cantidad=:cantidad, kardex_id=:kardex_id    
                     WHERE id=:id
                 """)
                 db.execute(
@@ -1310,7 +1295,6 @@ def ventas():
                     {
                         "cantidad": nuevaCantidad, 
                         "kardex_id": kardexId, 
-                        "precio_total_inversion": nuevoPrecioInversion, 
                         "id": stockInfo['id']
                     }
                 )
@@ -1412,7 +1396,6 @@ def compras():
         proveedores = db.execute(ObtenerProveedores).fetchall()
 
         obtenerTiposPago = text("SELECT * FROM tipos_pagos")
-        obtenerTipoCliente = text("SELECT * FROM cliente_categoria")
         obtenerColores = text("SELECT * FROM colores")
         obtenerMedidas = text("SELECT * FROM medidas")
         ObtenerCompras = text("""SELECT compras.id, proveedores.nombre_proveedor, compras.fecha_compra, compras.total  
@@ -1428,9 +1411,11 @@ def compras():
         return render_template('compras.html', Subcategorias = subcategorias, Proveedores = proveedores, Compras = compras, colores = colores, medidas = medidas, tipospago = tiposPago)
     else:
         proveedorId = request.form.get('proveedor-select')
-        fecha = request.form.get('fecha')
-        subtotal = request.form.get('subtotal')
+        fecha_actual = datetime.now()
+        fecha_formateada = fecha_actual.strftime('%Y-%m-%d')
         total = request.form.get('total')
+        nota = request.form.get('nota-compra')
+        tipoPago = request.form.get('tipoPago-select')
 
         productos = []
         index = 0
@@ -1459,20 +1444,14 @@ def compras():
         if not productos:
             flash(('Ingrese productos', 'error', '¡Error!'))
             return redirect(url_for('compras'))
-        if not fecha:
-            flash(('Ingrese fecha', 'error', '¡Error!'))
-            return redirect(url_for('compras'))
-        if not subtotal:
-            flash(('Ingrese subtotal', 'error', '¡Error!'))
-            return redirect(url_for('compras'))
         if not total:
             flash(('Ingrese total', 'error', '¡Error!'))
             return redirect(url_for('compras'))
        
         # Insertar datos en la base de datos
 
-        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, divisa_id) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :divisa_id)")
-        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha, "total": total, "usuario_id": session["user_id"]})
+        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, nota, id_tipo_pago) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :nota, :id_tipo_pago)")
+        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha_formateada, "total": total, "usuario_id": session["user_id"], "nota": nota , "id_tipo_pago": tipoPago})
 
         for producto in productos:
             if producto['tipo'] == 'planta':
@@ -1483,7 +1462,7 @@ def compras():
                 insumo_id = producto['id']
 
             insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
-            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": '1', "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": ''})
+            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": '1', "precio_unitario": producto['precio'], "fecha_movimiento": fecha_formateada, "nota": nota})
 
         compraId = db.execute(text("SELECT * FROM compras ORDER BY id DESC LIMIT 1")).fetchone()[0]
         kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
@@ -1495,6 +1474,8 @@ def compras():
             elif producto['tipo'] == 'insumo':
                 planta_id = None
                 insumo_id = producto['id']
+
+            subtotal = (producto['precio'] * producto['cantidad'])
 
             insertarProductos = text("INSERT INTO detalle_compra (compra_id, planta_id, insumo_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:compra_id, :planta_id, :insumo_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
             db.execute(insertarProductos, {"compra_id": compraId, "planta_id": planta_id, "insumo_id": insumo_id, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal":subtotal})
@@ -1519,27 +1500,17 @@ def compras():
             stock_cantidad = int(stockInfo['cantidad'])
             nuevaCantidad = stock_cantidad + int(producto['cantidad'])
 
-            if producto['tipo'] == 'planta':
-                obtenerPrecioBd = text("SELECT precio_venta FROM plantas where id=:id")
-                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
-                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
-            else:
-                obtenerPrecioBd = text("SELECT precio_venta FROM insumos where id=:id")
-                precioBd = db.execute(obtenerPrecioBd, {"id": producto['id']}).fetchone()[0]
-                nuevoPrecioInversion = (float(nuevaCantidad) * float(precioBd))
-
             if stockInfo['id']:
                 actualizar_stock = text("""
                     UPDATE stock 
-                    SET cantidad=:cantidad, kardex_id=:kardex_id, precio_total_inversion=:precio_total_inversion 
+                    SET cantidad=:cantidad, kardex_id=:kardex_id
                     WHERE id=:id
                 """)
                 db.execute(
                     actualizar_stock, 
                     {
                         "cantidad": nuevaCantidad, 
-                        "kardex_id": kardexId, 
-                        "precio_total_inversion": nuevoPrecioInversion, 
+                        "kardex_id": kardexId,
                         "id": stockInfo['id']
                     }
                 )
@@ -1604,14 +1575,12 @@ def listaDeseos():
 @app.route('/devoluciones', methods=["GET", "POST"])
 def devoluciones():
     if request.method == "GET":
-        ObtenerMovimientos = text('SELECT * FROM tipo_movimientos WHERE id = 4 OR id = 5')
+        ObtenerMovimientos = text('SELECT * FROM tipo_movimientos WHERE id = 5 OR id = 6')
         movimientos = db.execute(ObtenerMovimientos).fetchall()
         return render_template("devoluciones.html", Movimientos=movimientos)
     else:
         datos_formulario = request.form.to_dict(flat=False)
-        # print("Datos del formulario:", datos_formulario)
-
-             # Inicializa una lista para guardar los productos
+        print(datos_formulario)
         productos = []
 
         # Procesa los datos dinámicos enviados
@@ -1628,8 +1597,7 @@ def devoluciones():
                 productos[int(index)][field] = values[0]  # Asocia el campo al producto
 
         idVenta = request.form.get('idVenta')
-        idMovimiento = request.form.get('movimiento-select')
-        cantidad = request.form.get('cantidadDev')
+        idMovimiento = int(request.form.get('movimiento-select'))
         fecha = request.form.get('fecha_devolucion')
         total = request.form.get('totalDev')
         nota = request.form.get('nota-devolucion')
@@ -1651,8 +1619,8 @@ def devoluciones():
             flash(('No se ha ingresado una nota para la devolución!', 'error', '¡Error!'))
             return redirect(url_for('devoluciones'))
         
-        insertarDevolucion = text("INSERT INTO devoluciones (venta_id, cantidad_producto, motivo, fecha_devolucion, total) VALUES (:venta_id, :cantidad_producto, :motivo, :fecha_devolucion, :total)")
-        db.execute(insertarDevolucion, {"venta_id": idVenta, "cantidad_producto": cantidad, "motivo": nota, "fecha_devolucion": fecha, "total": total})
+        insertarDevolucion = text("INSERT INTO devoluciones (venta_id, motivo, fecha_devolucion, total) VALUES (:venta_id, :motivo, :fecha_devolucion, :total)")
+        db.execute(insertarDevolucion, {"venta_id": idVenta, "motivo": nota, "fecha_devolucion": fecha, "total": total})
 
         for producto in productos:
             if producto['tipo'] == 'planta':
@@ -1663,7 +1631,7 @@ def devoluciones():
                 insumo_id = producto['idProduc']
 
             insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
-            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": idMovimiento, "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": nota})
+            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": 5, "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": nota})
 
         devolucionId = db.execute(text("SELECT * FROM devoluciones ORDER BY id DESC LIMIT 1")).fetchone()[0]
         kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
@@ -1677,12 +1645,93 @@ def devoluciones():
                 insumo_id = producto['idProduc']
 
             insertarDetalle = text("INSERT INTO detalle_devoluciones (devolucion_id, planta_id, insumo_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:devolucion_id, :planta_id, :insumo_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
-            db.execute(insertarDetalle, {"devolucion_id": devolucionId, "planta_id": planta_id, "insumo_id": insumo_id, "kardex_id": kardexId, "cantidad": cantidad, "precio_unitario": producto['precio'], "subtotal":producto['subtotal']})
+            db.execute(insertarDetalle, {"devolucion_id": devolucionId, "planta_id": planta_id, "insumo_id": insumo_id, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal":producto['subtotal']})
         
+        for producto in productos:
+            stock_query = text("""
+                    SELECT id, cantidad
+                    FROM stock 
+                    WHERE 
+                        (planta_id = :planta_id OR :planta_id IS NULL)
+                        AND 
+                        (insumo_id = :insumo_id OR :insumo_id IS NULL)
+            """)
+            stockInfo = db.execute(
+                stock_query, 
+                {
+                    "planta_id": producto['idProduc'] if producto['tipo'] == 'planta' else None,
+                    "insumo_id": producto['idProduc'] if producto['tipo'] == 'insumo' else None
+                }
+            ).mappings().fetchone()
+        
+            stock_cantidad = int(stockInfo['cantidad'])
+            nuevaCantidad = stock_cantidad + int(producto['cantidad'])
+
+            if stockInfo['id']:
+                actualizar_stock = text("""
+                    UPDATE stock 
+                    SET cantidad=:cantidad, kardex_id=:kardex_id    
+                    WHERE id=:id
+                """)
+                db.execute(
+                    actualizar_stock, 
+                    {
+                        "cantidad": nuevaCantidad, 
+                        "kardex_id": kardexId, 
+                        "id": stockInfo['id']
+                    }
+                )
+        for producto in productos:
+
+            dañados = int(producto.get('dañados', 0))
+
+            if producto['tipo'] == 'planta':
+                planta_id = producto['idProduc']
+                insumo_id = None
+            elif producto['tipo'] == 'insumo':
+                planta_id = None
+                insumo_id = producto['idProduc']
+
+            if (idMovimiento == 6 and dañados > 0):
+                insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+                db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['dañados'], "tipo_movimiento_id": idMovimiento, "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": nota})
+
+                kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
+                stock_query = text("""
+                        SELECT id, cantidad
+                        FROM stock 
+                        WHERE 
+                            (planta_id = :planta_id OR :planta_id IS NULL)
+                            AND 
+                            (insumo_id = :insumo_id OR :insumo_id IS NULL)
+                """)
+                stockInfo = db.execute(
+                    stock_query, 
+                    {
+                        "planta_id": producto['idProduc'] if producto['tipo'] == 'planta' else None,
+                        "insumo_id": producto['idProduc'] if producto['tipo'] == 'insumo' else None
+                    }
+                ).mappings().fetchone()
+                stock_cantidad = int(stockInfo['cantidad'])
+                nuevaCantidad = stock_cantidad - int(producto['dañados'])
+                if stockInfo['id']:
+                    actualizar_stock = text("""
+                        UPDATE stock 
+                        SET cantidad=:cantidad, kardex_id=:kardex_id    
+                        WHERE id=:id
+                    """)
+                    db.execute(
+                        actualizar_stock, 
+                        {
+                            "cantidad": nuevaCantidad, 
+                            "kardex_id": kardexId, 
+                            "id": stockInfo['id']
+                        }
+                    )
+
         db.commit()
         flash(('La devolucion se ha realizado correctamente', 'success', '¡Exito!'))
         return redirect(url_for('devoluciones'))
-        # return render_template('devoluciones.html')
     
 @app.route('/obtener_ventas', methods=["POST"])
 def obtener_ventas():
@@ -1968,7 +2017,11 @@ def inventario_info():
     COALESCE(p.nombre, i.nombre) AS nombre_producto,
     COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
     COALESCE(p.imagen_url, i.imagen_url) AS imagen_url,
-    inv.cantidad
+    inv.cantidad,
+    CASE
+        WHEN p.id IS NOT NULL THEN 'planta'
+        WHEN i.id IS NOT NULL THEN 'insumo'
+    END AS tipo_producto
         FROM stock as inv
         LEFT JOIN plantas as p ON p.id = inv.planta_id
         LEFT JOIN insumos as i ON i.id = inv.insumo_id
@@ -1985,6 +2038,7 @@ def inventario_info():
             "precio_venta": prod.precio_venta,
             "imagen_url": prod.imagen_url,
             "cantidad": prod.cantidad,
+            "tipo_producto": prod.tipo_producto,
         }
         for prod in productos
     ]
@@ -1999,8 +2053,7 @@ def produccion():
     if request.method == 'POST':
         
         idPlanta = request.form.get("id_planta_produccion")
-        print(idPlanta)
-        tipoMovimiento = request.form.get("tipomovi")
+        tipoMovimiento = 4
         precio = request.form.get("precioPlanta")
         nota = request.form.get("nota")
         cantidad = request.form.get("cantidad")
@@ -2017,7 +2070,6 @@ def produccion():
 
         nuevaCantidad = int(infoStock['cantidad']) + int(cantidad)
         print(infoStock['id'])
-        nuevaInversion = nuevaCantidad * float(precio)
         
         insertarPlantaquery = text("INSERT INTO movimientos_kardex (planta_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
         db.execute(insertarPlantaquery, {"planta_id": idPlanta, "cantidad": cantidad, "tipo_movimiento_id": tipoMovimiento, "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
@@ -2026,7 +2078,7 @@ def produccion():
 
         actualizar_stock = text("""
                     UPDATE stock 
-                    SET cantidad=:cantidad, kardex_id=:kardex_id, precio_total_inversion=:precio_total_inversion 
+                    SET cantidad=:cantidad, kardex_id=:kardex_id
                     WHERE id=:id
                 """)
         db.execute(
@@ -2034,7 +2086,61 @@ def produccion():
             {
                 "cantidad": nuevaCantidad, 
                 "kardex_id": kardexId, 
-                "precio_total_inversion": nuevaInversion, 
+                "id": infoStock['id']
+            }
+        )
+        db.commit()
+
+        flash(('Se ha actualizado el stock correctamente', 'success'))
+        return redirect(url_for("inventario"))
+    
+    return redirect(url_for('inventario'))
+
+@app.route('/bajaproductos', methods=["GET", "POST"])
+@login_required
+def bajaproductos():
+    if request.method == 'POST':
+        
+        idProducto = request.form.get("id_producto_baja")
+        tipoMovimiento = 8
+        precio = request.form.get("precioPlanta")
+        nota = request.form.get("nota")
+        cantidad = request.form.get("cantidad")
+        tipo = request.form.get('tipo_producto_baja')
+        fechaactual = datetime.now().date()
+
+        if not nota or not cantidad:
+            flash(('Verifique los campos, estan vacios', "error"))
+            return redirect(url_for("inventario")) 
+        
+        if (tipo == 'planta'):
+            id_planta = idProducto
+            id_insumo = None
+        else:
+            id_planta = None
+            id_insumo = idProducto
+
+        ObtenerPlantaStock = text('SELECT * FROM stock WHERE planta_id=:id OR insumo_id=:insumo_id')
+        infoStock = db.execute(ObtenerPlantaStock,{"id":id_planta, "insumo_id": id_insumo}).mappings().fetchone()
+
+
+        nuevaCantidad = int(infoStock['cantidad']) - int(cantidad)
+        
+        insertarPlantaquery = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+        db.execute(insertarPlantaquery, {"planta_id": id_planta, "insumo_id": id_insumo, "cantidad": cantidad, "tipo_movimiento_id": tipoMovimiento, "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
+        
+        kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
+
+        actualizar_stock = text("""
+                    UPDATE stock 
+                    SET cantidad=:cantidad, kardex_id=:kardex_id 
+                    WHERE id=:id
+                """)
+        db.execute(
+            actualizar_stock, 
+            {
+                "cantidad": nuevaCantidad, 
+                "kardex_id": kardexId, 
                 "id": infoStock['id']
             }
         )

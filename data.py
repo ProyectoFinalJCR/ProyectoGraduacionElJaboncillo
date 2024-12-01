@@ -103,9 +103,12 @@ def tipo_movimientos():
     movimientos = [
         ("Compra", "Adquisición de plantas o insumos para el vivero."),
         ("Venta", "Comercialización de plantas a los clientes."),
-        ("Producción", "insumos a ser usados en producción."),
+        ("Salida a producción", "insumos a ser usados en producción."),
+        ("Entrada a producción", "Planta agregadas de producción."),
         ("Devolución", "Retorno de productos por parte del cliente que regresan al stock."),
         ("Devolucion por daños", "Los productos que sufren daños, NO retornan al stock."),
+        ("Cantidad inicial", "Los productos que se agregan por primera vez."),
+        ("Baja de productos", "Los productos que se dan de baja."),
         
     ]
     
@@ -204,7 +207,7 @@ def agregar_rutas_roles():
         db.session.commit()
 
         
-#with app.app_context():
+with app.app_context():
     #entornos_ideales()        
     #tipos_suelos()
     #tipo_movimientos()
@@ -214,4 +217,4 @@ def agregar_rutas_roles():
     #composiciones_principales()
     #medidas()
     #unidades_medidas()
-    #colores()    
+    colores()    

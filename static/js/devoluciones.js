@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     <th>Subtotal</th>`;
             
             // Si el motivo es "Devolución por daños", agregar la columna adicional
-            if (motivo == 5) {
+            if (motivo == 6) {
                 encabezado += `<th>Productos Dañados</th>`;
             }
         
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function(){
             $('#lista-productos-seleccionados tbody').empty();
         
             // Verificar si el motivo es "Devolución por daños"
-            if (motivo == 5) {
+            if (motivo == 6) {
                 // Lógica para agregar productos a la tabla con columna de productos dañados
                 ventas.forEach(function (venta) {
                     // Crear una nueva fila para cada producto
