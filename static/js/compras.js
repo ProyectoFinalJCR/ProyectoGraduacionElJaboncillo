@@ -113,14 +113,14 @@ document.addEventListener('DOMContentLoaded', function(){
     const tipoInput = document.querySelector('#tipoProducto');
     const productoInput = document.querySelector('#producto');   
     const cantidadDispoInput = document.querySelector('#cantidadDispo');
-    const cantidadInput = document.querySelector('#cantidad');
+    const cantidadInput = document.querySelector('#cantidad-compra');
     const precioInput = document.querySelector('#precio');
     const subtotalInput = document.querySelector('#subtotal');
     const totalInput = document.querySelector('#total');
-    const divisaSelect = document.querySelector('#divisa-select');
-    const divisaIdInput = document.getElementById("divisa-id");
     const form = document.querySelector('#form-compra');
     const productosDinamicos = document.querySelector('#productos-dinamicos')
+    const color = document.querySelector('#color-select')
+    const medida = document.querySelector('#medida-select')
     let articulosLista = [];
 
 
@@ -133,13 +133,19 @@ document.addEventListener('DOMContentLoaded', function(){
     function agregarProd(e){
     e.preventDefault();
 
+    const colorSeleccionado = color.options[color.selectedIndex]?.text || '';
+    const medidaSeleccionada = medida.options[medida.selectedIndex]?.text || '';
+    // Concatenar nombre del producto con color y medida
+    const nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado} - ${medidaSeleccionada}`;
+
+
     // Leer información del producto desde los inputs
     const infoProducto = {
         id: parseFloat(idInput.value) || 0,
         tipo: tipoInput.value || '',
-        nombre: productoInput.options[productoInput.selectedIndex].text,
+        nombre: nombreCompletoProducto,
         precio: parseFloat(precioInput.value) || 0,
-        cantidad: parseInt(cantidadInput.value) || 1,
+        cantidad: parseInt(cantidadInput.value) || 1
     };
 
     if (!infoProducto.nombre || infoProducto.precio <= 0 || infoProducto.cantidad <= 0) {
@@ -202,21 +208,6 @@ document.addEventListener('DOMContentLoaded', function(){
                     </div>
                 </td>
             `;
-
-            divisaSelect.addEventListener('change', actualizarTotales);
-
-            function actualizarTotales() {
-                const selectedOption = this.options[this.selectedIndex];
-                const divisaId = selectedOption.getAttribute("data-id");
-                divisaIdInput.value = divisaId;
-
-                const tasaCambio = parseFloat(divisaSelect.value);
-                subtotal = `${articulosLista.reduce((acum, producto) => acum + (producto.cantidad * producto.precio), 0).toFixed(2)}`;
-                total = `${articulosLista.reduce((acum, producto) => acum + (producto.cantidad * producto.precio), 0).toFixed(2)}`;
-                
-                subtotalInput.value = (subtotal / tasaCambio).toFixed(2);
-                totalInput.value = (subtotal / tasaCambio).toFixed(2);
-            }
             
             subtotalInput.value = `${articulosLista.reduce((acum, producto) => acum + (producto.cantidad * producto.precio), 0).toFixed(2)}`;
             totalInput.value = `${articulosLista.reduce((acum, producto) => acum + (producto.cantidad * producto.precio), 0).toFixed(2)}`;

@@ -136,8 +136,8 @@ class Tipo_Movimientos(db.Model):
 class Stock(db.Model):
     __tablename__ = 'stock'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = False)
-    insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = False)
+    planta_id = db.Column(db.Integer, db.ForeignKey('plantas.id'), nullable = True)
+    insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = True)
     cantidad = db.Column(db.Float, nullable=False)
     kardex_id = db.Column(db.Integer, db.ForeignKey('movimientos_kardex.id'), nullable = False)
     estado = db.Column(db.String, default = False)

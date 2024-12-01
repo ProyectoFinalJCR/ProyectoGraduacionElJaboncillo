@@ -45,6 +45,7 @@ Inventario | El Jaboncillo
                     
                     <td style="display: none;"><img src="{{infoInventario.imagen_url}}" alt="producto" class="mini-imgInsumo"></td>
                     <td style="display: none;">{{infoInventario.produccion_id}}</td>
+                    <td style="display: none;">{{infoInventario.tipo_producto}}</td>
                     
                     <td class="btn-acciones">
                         <button class="btn-produccion" data-id="{{infoInventario.producto_id}}">
@@ -83,7 +84,9 @@ Inventario | El Jaboncillo
                     </div>
                     <div class="textos-cont">
                         <div class="textos">
-                            <input type="text" name="id_planta_produccion" id="idProduccion" value="">
+                            <input type="hidden" name="id_planta_produccion" id="idProduccion" value="">
+                            <input type="hidden" name="tipo_producto" id="tipo_producto" value="">
+
                             <label for="">Nombre:</label>
                             <input type="text" id="nombreProductoproduccion" name="nombrePlanta" class="sinborde nombreplanta" readonly value="">
                         </div>
@@ -99,16 +102,6 @@ Inventario | El Jaboncillo
                 <div>
                     <label for="">Nota</label>
                     <textarea name="nota" class="textarea input-plantas" id="nota"></textarea>
-                </div>
-                <div class="tipomovi">
-                    <label for="">Tipo de movimiento</label>
-                    <select class="input input-plantas" id="tipomovi" name="tipomovi">
-                        {% for tipomovi in movimientos %}
-                        <option value="{{ tipomovi[0] }}">{{ tipomovi[1] }}</option>
-                        {% else %}
-                        <option value="">No hay tipos de movimiento disponibles</option>
-                        {% endfor %}
-                    </select>
                 </div>
                 <div>
                     <label for="">Cantidad</label>
@@ -133,7 +126,7 @@ Inventario | El Jaboncillo
             <h2>Dar de baja a productos</h2>
             <span class="close" id="close-baja">&times;</span>
         </div>
-        <form action="/produccion" class="form-produccion" method="post">
+        <form action="/bajaproductos" class="form-produccion" method="post">
             <div class="img-info-cont">
                 <div class="img-cont">
                     <img alt="planta" class="imgBaja" id="imgBaja" src="">                     
@@ -149,6 +142,7 @@ Inventario | El Jaboncillo
                     <div class="textos-cont">
                         <div class="textos">
                             <input type="hidden" name="id_producto_baja" id="id_producto_baja" value="">
+                            <input type="hidden" name="tipo_producto_baja" id="tipo_producto_baja" value="">
                             <label for="">Nombre:</label>
                             <input type="text" id="nombreProductoBaja" name="nombrePlanta" class="sinborde nombreplanta" readonly value="">
                         </div>

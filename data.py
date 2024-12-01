@@ -207,7 +207,7 @@ def agregar_rutas_roles():
         db.session.commit()
 
         
-#with app.app_context():
+with app.app_context():
     #entornos_ideales()        
     #tipos_suelos()
     #tipo_movimientos()
@@ -217,4 +217,4 @@ def agregar_rutas_roles():
     #composiciones_principales()
     #medidas()
     #unidades_medidas()
-    #colores()    
+    colores()    

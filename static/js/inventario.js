@@ -66,6 +66,8 @@ document.addEventListener("DOMContentLoaded", function () {
         <td> ${inventario.cantidad}</td>
         <td style="display: none;"><img src="${inventario.imagen_url}" alt="producto" class="mini-imgInsumo"></td>
         <td style="display: none;">${inventario.produccion_id}</td>
+        <td style="display: none;">${inventario.tipo_producto}</td>
+                    
         <td class="btn-acciones">
             <button class="btn-produccion" data-id="${inventario.producto_id}">
                 <i class="material-icons">compost</i>
@@ -94,6 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
       //Obtener datos para mostrar en el modal de editar
       const modalproduccion = document.getElementById("ModalProduccion");
       const inputIdproduccion = document.getElementById("idProduccion");
+      const inputTipoProducto = document.getElementById("tipo_producto");
+      
       const inputNombreproduccion = document.getElementById("nombreProductoproduccion")
       const inputPrecio = document.getElementById("precioProducto")
 
@@ -123,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const precio_venta = row.cells[2].innerText;
       const cantidad = row.cells[3].innerText;
       const imagen = row.cells[4].innerText;
+      const tipoProducto = row.cells[6].innerText;
 
       console.log("este es el id", Idproduccion);
       // Rellenar los campos del modal con los datos obtenidos
@@ -133,6 +138,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       inputNombreproduccion.value = nombre_producto;
       inputNombreproduccion.textContent = nombre_producto;
+
+      inputTipoProducto.value = tipoProducto;
+      inputTipoProducto.textContent = tipoProducto;
 
       inputPrecio.value = precio_venta;
       inputPrecio.textContent = precio_venta;
@@ -182,7 +190,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const inputNombreproduccion = document.getElementById("nombreProductoBaja");
       const inputPrecio = document.getElementById("precioProductoBaja");
       const inputCantidad = document.getElementById("cantidad");
-
+      const inputTipoProducto = document.getElementById("tipo_producto_baja");
+      
 
       // Obtener el elemento <p>
       const fechaElemento = document.querySelector('.fecha-cont .fecha_baja p');
@@ -210,6 +219,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const precio_venta = row.cells[2].innerText;
       const cantidad = row.cells[3].innerText;
       const imagen = row.cells[4].innerText;
+      const tipoProducto = row.cells[6].innerText;
+
 
       console.log("este es el id", Idproduccion);
       // Rellenar los campos del modal con los datos obtenidos
@@ -219,6 +230,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       inputNombreproduccion.value = nombre_producto;
       inputNombreproduccion.textContent = nombre_producto;
+
+      inputTipoProducto.value = tipoProducto;
+      inputTipoProducto.textContent = tipoProducto;
+
 
       inputPrecio.value = precio_venta;
       inputPrecio.textContent = precio_venta;

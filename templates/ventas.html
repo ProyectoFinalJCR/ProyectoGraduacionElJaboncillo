@@ -80,7 +80,7 @@ Ventas | El Jaboncillo
                             <label>Tipo de cliente</label>
                             <select class="input input-plantas" id="tipoCliente-select" name="tipoCliente-select">
                                 {% for tipoclientes in tipocliente %}
-                                <option name="subcategoria-select" value="{{tipoclientes[0]}}">{{tipoclientes[1]}}</option>
+                                <option name="tipoCliente-select" value="{{tipoclientes[0]}}">{{tipoclientes[1]}}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -108,18 +108,18 @@ Ventas | El Jaboncillo
                         </div>
                         <div>
                             <label>Colores</label>
-                            <select class="input input-plantas" id="caracteristicas-select" name="caracteristicas-select">
+                            <select class="input input-plantas" id="color-select" name="color-select">
                                 {% for color in colores %}
-                                <option name="subcategoria-select" value="{{color[0]}}">{{color[1]}}</option>
+                                <option name="color-select" value="{{color[0]}}">{{color[1]}}</option>
                                 {% endfor %}
                                 <option value="" selected>Selecciona una caractistica</option>
                             </select>
                         </div>
                         <div>
                             <label>Medidas</label>
-                            <select class="input input-plantas" id="caracteristicas-select" name="caracteristicas-select">
+                            <select class="input input-plantas" id="medida-select" name="medida-select">
                                 {% for medida in medidas %}
-                                <option name="subcategoria-select" value="{{medida[0]}}">{{medida[1]}}</option>
+                                <option name="medida-select" value="{{medida[0]}}">{{medida[1]}}</option>
                                 {% endfor %}
                                 <option value="" selected>Selecciona una caractistica</option>
                             </select>
@@ -168,14 +168,13 @@ Ventas | El Jaboncillo
                     <div class="inputs-cont row-4">
                         <div>
                             <label>Tipos de pago</label>
-                            <select class="input input-plantas" id="divisa-select" name="divisa-select">
+                            <select class="input input-plantas" id="tipoPago-select" name="tipoPago-select">
                                 {% for tipo_pago in tipospago %}
-                                <option value="{{tipo_pago[0]}}" data-id="{{tipo_pago[0]}}">
+                                <option name="tipoPago-select" value="{{tipo_pago[0]}}" data-id="{{tipo_pago[0]}}">
                                     {{tipo_pago[1]}}
                                 </option>
                                 {% endfor %}
                             </select>
-                            <input type="hidden" id="divisa-id" name="divisa-id" value="">
                         </div>
                         <div>
                             <label>Subtotal</label>

@@ -89,25 +89,22 @@ Compras | El Jaboncillo
                         </div>
                         <div>
                             <label>Colores</label>
-                            <select class="input inputs-compra" id="divisa-select" name="divisa-select">
+                            <select class="input inputs-compra" id="color-select" name="color-select">
                                 {% for color in colores %}
-                                <option value="{{color[0]}}" data-id="{{color[0]}}">
-                                    {{color[1]}}
-                                </option>
+                                <option value="{{color[0]}}" data-id="{{color[0]}}">{{color[1]}}</option>
                                 {% endfor %}
+                                <option value="" selected>Selecciona una caractistica</option>
                             </select>
-                            <input type="hidden" id="divisa-id" name="divisa-id" value="">
                         </div>
                         <div>
                             <label>Medidas</label>
-                            <select class="input inputs-compra" id="divisa-select" name="divisa-select">
+                            <select class="input inputs-compra" id="medida-select" name="medida-select">
                                 {% for medida in medidas %}
                                 <option value="{{medida[0]}}" data-id="{{medida[0]}}">
                                     {{medida[1]}}
                                 </option>
                                 {% endfor %}
                             </select>
-                            <input type="hidden" id="divisa-id" name="divisa-id" value="">
                         </div>
                         <div>
                             <label>Cantidad</label>
@@ -153,14 +150,13 @@ Compras | El Jaboncillo
                     <div class="inputs-cont row-4">
                         <div>
                             <label>Tipos de pago</label>
-                            <select class="input inputs-compra" id="divisa-select" name="divisa-select">
+                            <select class="input inputs-compra" id="tipoPago-select" name="tipoPago-select">
                                 {% for tipospagos in tipospago %}
                                 <option value="{{tipospagos[0]}}" data-id="{{tipospagos[0]}}">
                                     {{tipospagos[1]}}
                                 </option>
                                 {% endfor %}
                             </select>
-                            <input type="hidden" id="divisa-id" name="divisa-id" value="">
                         </div>
                         <div>
                             <label>Subtotal</label>
@@ -174,7 +170,7 @@ Compras | El Jaboncillo
                         </div>
                         <div>
                             <label>Nota</label>
-                            <input type="text" id="nota-venta" class="input inputs-compra" name="nota-venta"
+                            <input type="text" id="nota-compra" class="input inputs-compra" name="nota-compra"
                                 placeholder="Agregar nota">
                         </div>
                     </div>
