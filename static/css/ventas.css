@@ -49,13 +49,13 @@
    position: absolute;
    top: 50%;
    left: 50%;
-   transform: translate(-40%, -48%); /* Centra el modal */
+   transform: translate(-43%, -50%); /* Centra el modal */
    background-color: #fff;
    padding: 0px 50px;
    border-radius: 8px;
    width: 100%;
-   max-width: 1300px;
-   height: 684px;
+   max-width: 1326px;
+   height: 780px;
    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
    overflow-y: auto;
    scrollbar-width: none;
@@ -85,7 +85,7 @@
 }
 .container-table-inputs .container-inputVenta .form-venta  .inputs-venta{
    display: grid;
-   grid-template-rows:repeat(2, 1fr); 
+   grid-template-rows:.5fr .5fr .5fr 2fr 0.5fr; 
    gap: 20px;
    padding-bottom: 20px;
 }
