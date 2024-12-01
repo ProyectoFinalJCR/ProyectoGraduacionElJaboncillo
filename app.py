@@ -37,6 +37,7 @@ def login_required(f):
         
         if session.get("user_id") is None:
             return redirect("/login")
+            
         return f(*args, **kwargs)
     return decorated_function
 
@@ -1994,9 +1995,11 @@ def inventario_info():
 @app.route('/produccion', methods=["GET", "POST"])
 @login_required
 def produccion():
+   
     if request.method == 'POST':
         
         idPlanta = request.form.get("id_planta_produccion")
+        print(idPlanta)
         tipoMovimiento = request.form.get("tipomovi")
         precio = request.form.get("precioPlanta")
         nota = request.form.get("nota")
@@ -2041,7 +2044,52 @@ def produccion():
         return redirect(url_for("inventario"))
     
     return redirect(url_for('inventario'))
+
+@app.route('/agregar_produccion', methods=["GET", "POST"])
+@login_required
+def agregar_produccion():
+   
+    if request.method == 'POST':
+        
+        idProducto = request.form.get("id_planta_produccion")
+        print(idProducto)
+        tipoMovimiento = request.form.get("tipomovi")
+        precio = request.form.get("precioPlanta")
+        nota = request.form.get("nota")
+        cantidad = request.form.get("cantidad")
+        fechaactual = datetime.now().date()
+
+        if not nota or not cantidad:
+            flash(('Verifique los campos, estan vacios', "error"))
+            return redirect(url_for("inventario")) 
+        if not cantidad:
+            flash("Ingrese cantidad", "error")
+            return redirect(url_for("inventario"))
+        
+        insertarPlantaquery = text("INSERT INTO movimientos_kardex (planta_id,insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+        db.execute(insertarPlantaquery, {"planta_id": idProducto, "insumo_id": idProducto, "cantidad": cantidad, "tipo_movimiento_id": tipoMovimiento, "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
+
+        productos_query = text("""
+        SELECT precio_venta, 'Planta' AS tipo_producto
+        FROM plantas
+        UNION
+        SELECT precio_venta, 'Insumo' AS tipo_producto
+        FROM insumos;
+        WHERE id = :id
+    """)
+        precio_producto = db.execute(productos_query, {'id': idProducto}).fetchall()
+
+        kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
+
+        insertarInventarioquery = text("INSERT INTO stock (planta_id, insumo_id, cantidad, kardex_id, precio estado) VALUES (:planta_id, :insumo_id, :cantidad, :kardex_id, :estado)")
+        db.execute(insertarInventarioquery, {"planta_id": idProducto, "insumo_id": idProducto, "cantidad": cantidad, "kardex_id": kardexId, "estado": 'true'})
+
+        db.commit()
+        flash(('Se ha actualizado el stock correctamente', 'success'))
+        return redirect(url_for("inventario"))
+        
     
+    return redirect(url_for('inventario'))
 
 @app.route('/configuracion', methods=['GET', 'POST'])
 @login_required
@@ -2118,10 +2166,22 @@ def inventario():
         tiposmovimientosquery = text("""SELECT id, tipo_movimiento from tipo_movimientos WHERE tipo_movimiento = 'Producción'""")
         tiposmovimientos = db.execute(tiposmovimientosquery).fetchall()
 
-        # imagenquery = text("SELECT * FROM plantas WHERE id = :id_planta")
-        # Imagen = db.execute(imagenquery, {"id_planta": producto_id}).fetchall()
+        productosquery = text("""
+        SELECT p.id, p.nombre, 'Planta' AS tipo
+        FROM plantas p
+        LEFT JOIN stock s ON p.id = s.planta_id
+        WHERE s.planta_id IS NULL
 
-        return render_template("inventario.html", infoInventario=infoInventario,movimientos=tiposmovimientos)
+        UNION
+
+        SELECT i.id, i.nombre, 'Insumo' AS tipo
+        FROM insumos i
+        LEFT JOIN stock s ON i.id = s.insumo_id
+        WHERE s.insumo_id IS NULL
+        """)
+        productossinagregar = db.execute(productosquery).fetchall()
+
+        return render_template("inventario.html", infoInventario=infoInventario,movimientos=tiposmovimientos, productossinagregar=productossinagregar)
 
 @app.route('/logout')
 def logout():
