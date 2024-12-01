@@ -81,3 +81,4 @@ def test_model_creation(model, kwargs):
     instance = model(**kwargs)
     for key, value in kwargs.items():
         assert getattr(instance, key) == value
+    print(f"{model.__name__} creado exitosamente: {kwargs}")
