@@ -26,6 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   });
 
+  // Agregar producto
+  document.getElementById('btn-add-producto').addEventListener('click', function () {
+    const modalproduccion = document.getElementById("ModalAgregarProducto");
+    modalproduccion.style.display = "block";
+  });
+
   // Buscar inventario
   let inventarioData = [];
   // Cargar datos una sola vez cuando la página carga

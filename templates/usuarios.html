@@ -79,12 +79,18 @@ Usuarios | El Jaboncillo
                 <section class="input-users">
                     <div class="grupo1">
                         <div class="input-contenido">
-                            <label for="">Nombre Completo</label>
+                            <div class="contenedor-obligatorio">
+                                <label for="">Nombre Completo</label>
+                                <span class="spanobligatorio">*Obligatorio</span>
+                            </div>
                             <input type="text" id="nombre" class="input input-user input-insumos" name="nombre"
                                 placeholder="Nombre completo">
                         </div>
                         <div class="input-contenido">
-                            <label for="">Seleccione Rol</label>
+                            <div class="contenedor-obligatorio">
+                                <label for="">Seleccione Rol</label>
+                                <span class="spanobligatorio">*Obligatorio</span>
+                            </div>
                             <select class="input input-user input-insumos" id="rol" name="idrol">
                                 {% for rol in Roles %}
                                 <option name="idrol" value="{{rol[0]}}">{{rol[1]}}</option>
@@ -94,12 +100,18 @@ Usuarios | El Jaboncillo
                     </div>
                     <div class="grupo2">
                         <div class="input-contenido">
-                            <label for="">Correo</label>
+                            <div class="contenedor-obligatorio">
+                                <label for="">Correo</label>
+                                <span class="spanobligatorio">*Obligatorio</span>
+                            </div>
                             <input type="text" id="correo" class="input input-user input-insumos" name="correo"
                                 placeholder="Correo">
                         </div>
                         <div class="input-contenido">
-                            <label for="">Contraseña</label>
+                            <div class="contenedor-obligatorio">
+                                <label for="">Contraseña</label>
+                                <span class="spanobligatorio">*Obligatorio</span>
+                            </div>
                             <div class="input-forma">
                                 <input type="password" id="contraseña" class="input input-user input-insumos"
                                     name="contraseña" placeholder="Contraseña">

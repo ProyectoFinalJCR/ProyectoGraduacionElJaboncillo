@@ -108,19 +108,31 @@ Plantas | El Jaboncillo
                     <section class="inputs-plantas">
                         <div class="inputs-cont columna-1">
                             <div>
-                                <label for="">Nombre</label>
+                                <div class="contenedor-obligatorio">
+                                    <label for="">Nombre</label>
+                                    <span class="spanobligatorio">*Obligatorio</span>
+                                </div>
                                 <input type="text" id="nombrePlanta" class="input input-insumos" name="nombrePlanta"
-                                    placeholder="Nombre planta">
+                                    placeholder="Ej. Crisantemo">
+                            </div>
+                            <div class="inputs-select">
+                                <div class="contenedor-obligatorio">
+                                    <label>Subcategorias</label>
+                                    <span class="spanobligatorio">*Obligatorio</span>
+                                </div>
+                                <select class="input input-insumos" id="sub" name="idSub" required>
+                                    {% for subcategoria in Subcategorias %}
+                                    <option value="{{ subcategoria[0] }}">{{ subcategoria[2] }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div>
-                                <label>Descripcion</label>
-                                <textarea type="text" id="descripcion" class="input input-insumos" name="descripcion"
-                                    placeholder="Descripcion"></textarea>
-                            </div>
-                            <div>
-                                <label>Precio unitario</label>
+                                <div class="contenedor-obligatorio">
+                                    <label>Precio unitario</label>
+                                    <span class="spanobligatorio">*Obligatorio</span>
+                                </div>
                                 <input type="number" id="precio" class="input input-insumos" name="precio"
-                                    placeholder="Ingrese el precio" min="0">
+                                    placeholder="0.00" min="0">
                             </div>
                         </div>
                         <div class="inputs-cont columna-2">
@@ -132,11 +144,11 @@ Plantas | El Jaboncillo
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="inputs-select">
-                                <label>Subcategorias</label>
-                                <select class="input input-insumos" id="sub" name="idSub" required>
-                                    {% for subcategoria in Subcategorias %}
-                                    <option value="{{ subcategoria[0] }}">{{ subcategoria[2] }}</option>
+                            <div>
+                                <label>Temporada de plantacion</label>
+                                <select class="input input-insumos" id="temporada" name="idTemporada">
+                                    {% for temporada in Temporada %}
+                                    <option value="{{ temporada[0] }}">{{ temporada[1] }}</option required>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -158,13 +170,11 @@ Plantas | El Jaboncillo
                                     {% endfor %}
                                 </select>
                             </div>
+                           
                             <div>
-                                <label>Temporada de plantacion</label>
-                                <select class="input input-insumos" id="temporada" name="idTemporada">
-                                    {% for temporada in Temporada %}
-                                    <option value="{{ temporada[0] }}">{{ temporada[1] }}</option required>
-                                    {% endfor %}
-                                </select>
+                                <label>Descripción</label>
+                                <textarea type="text" id="descripcion" class="input input-insumos" name="descripcion"
+                                    placeholder="Ej. cuidados de la planta, etc."></textarea>
                             </div>
                         </div>
                     </section>
@@ -195,23 +205,19 @@ Plantas | El Jaboncillo
                         <input type="hidden" id="id_editar_planta" name="id_editar_planta">
                         <label for="">Nombre</label>
                         <input type="text" id="nombrePlanta_editar" class="input input-plantas"
-                            name="nombrePlanta_editar" value="">
+                            name="nombrePlanta_editar" value="" placeholder="Ej. Crisantemo">
                     </div>
                     <div>
                         <label for="">Descripción</label>
-                        <textarea id="descripcion_editar" class="input input-plantas" name="descripcion_editar"
+                        <textarea id="descripcion_editar" class="input input-plantas" name="descripcion_editar" placeholder="Ej. cuidados de la planta, etc."></textarea>
                             value=""></textarea>
                     </div>
                     <div>
                         <label for="">Precio unitario</label>
                         <input type="number" id="precio_editar" class="input input-plantas" name="precio_editar"
-                            value="" placeholder="Ingrese el precio unitario" min="0">
+                            value="" placeholder="0.00" min="0">
                     </div>
-                    <div>
-                        <label for="">Imagen</label>
-                        <input type="file" id="img_uploader_plantas_editar" name="imagenPlanta"
-                            class="input input-plantas" accept=".png, .jpg, .jpeg">
-                    </div>
+                  
                 </div>
                 <div class="inputs-cont columna-2">
                     <div>
@@ -248,6 +254,11 @@ Plantas | El Jaboncillo
                             <option name="idSuelo" value="{{ suelo[0] }}">{{ suelo[1] }}</option>
                             {% endfor %}
                         </select>
+                    </div>
+                    <div>
+                        <label for="">Imagen</label>
+                        <input type="file" id="img_uploader_plantas_editar" name="imagenPlanta"
+                            class="input input-plantas" accept=".png, .jpg, .jpeg">
                     </div>
                     <div>
                         <label for="">Temporada de plantacion</label>

@@ -6,7 +6,7 @@ Subcategorias | El Jaboncillo
 {% block main %}
 <section class="bienvenida">
     <div>
-        <h2  id="saludo"></h2>
+        <h2 id="saludo"></h2>
         <p>Bienvenid@, {{session["user_name"]}}</p>
     </div>
     <div>
@@ -78,18 +78,24 @@ Subcategorias | El Jaboncillo
                     <div class="input-sub-categoria">
 
                         <div class="input-contenido">
-                            <label for="">Subcategoria</label>
-                            <input type="text" id="nombreSub" class="input input-subcategories input-insumos" name="nombreSub"
-                            placeholder="Nombre subcategoria">
+                            <div class="contenedor-obligatorio">
+                                <label for="">Subcategoria</label><span class="spanobligatorio">*Obligatorio</span>
+                            </div>
+                            <input type="text" id="nombreSub" class="input input-subcategories input-insumos"
+                                name="nombreSub" placeholder="Nombre subcategoria">
+
                         </div>
                         <div class="input-contenido">
-                            <label for="">Categoria</label>
-                        <select class="input input-insumos input-subcategories" id="cat" name="idCat">
-                            {% for rows in categorias %}
-                            <option name="idCat" value="{{rows[0]}}">{{rows[1]}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                            <div class="contenedor-obligatorio">
+                                <label for="">Categoria</label>
+                                <span class="spanobligatorio">*Obligatorio</span>
+                            </div>
+                            <select class="input input-insumos input-subcategories" id="cat" name="idCat">
+                                {% for rows in categorias %}
+                                <option name="idCat" value="{{rows[0]}}">{{rows[1]}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                     <div class="input-contenido">
                         <label for="">Descripción</label>
@@ -101,7 +107,8 @@ Subcategorias | El Jaboncillo
                     <img class="img_sub" src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
                     <div class="btn-agregar">
                         <button type="button" class="btn-sub-eliminar" id="btn_cancel_agregar">Cancelar</button>
-                        <button type="submit" class="btn btn-sun-agregar opacity" id="btn-add-subcategories" disabled>Agregar</button>
+                        <button type="submit" class="btn btn-sun-agregar opacity" id="btn-add-subcategories"
+                            disabled>Agregar</button>
                     </div>
                 </section>
             </form>
@@ -120,24 +127,24 @@ Subcategorias | El Jaboncillo
         <form action="/editarSubcategoria" method="post" class="form_subt">
             <div class="input-subcategories">
                 <div class="input-sub-categoria">
-                <div class="input-contenido">
-                    <label for="">Nombre subcategoria</label>
-                    <input type="text" id="nombreSub_editar" class="input input-insumos " name="nombreSub_editar">
+                    <div class="input-contenido">
+                        <label for="">Subcategoria</label>
+                        <input type="text" id="nombreSub_editar" class="input input-insumos " name="nombreSub_editar">
+                    </div>
+                    <div class="input-contenido-edit">
+                        <input type="hidden" id="id_editar" name="id_editar">
+                        <label for="">Categoria</label>
+                        <select class="input input-insumos" id="idCat_editar" name="idCat_editar">
+                            {% for rows in categorias %}
+                            <option name="idCat_editar" value="{{rows[0]}}">{{rows[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-                <div class="input-contenido">
-                    <input type="hidden" id="id_editar" name="id_editar">
-                    <label for="">Categoria</label>
-                    <select class="input input-insumos" id="idCat_editar" name="idCat_editar">
-                        {% for rows in categorias %}
-                        <option name="idCat_editar" value="{{rows[0]}}">{{rows[1]}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
                 <div class="input-contenido">
                     <label for="">Descripción</label>
-                    <textarea type="text" id="descripcion_editar" class="input input-insumos" name="descripcion_editar"> </textarea>
-                    
+                    <textarea type="text" id="descripcion_editar" class="input input-insumos"
+                        name="descripcion_editar"> </textarea>
                 </div>
             </div>
             <div class="btn-modal-subcat">

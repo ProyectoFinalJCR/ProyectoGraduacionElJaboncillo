@@ -386,9 +386,20 @@
 }
 
 
+.spanobligatorio{
+    color: red;
+    font-size: 12px;
+}
+.contenedor-obligatorio{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 
-
+.eye{
+    cursor: pointer;
+}
 
 
 

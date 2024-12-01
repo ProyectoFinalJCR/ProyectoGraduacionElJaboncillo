@@ -64,17 +64,17 @@ Insumos | El Jaboncillo
                                 <img class="mini-imgInsumo" src="{{ insumo[16] }}" alt="Insumo">
                             </div>
                             {% else %}
-                                <div class="image-upload">
-                                    <form action="/insumos" class="form_agregarimg">
-                                        <input type="hidden" name="id_insumo" class="id_insumo_agregar" value="{{insumo[0]}}">
-                                        <input type="file" class="file-input"
-                                            accept=".png, .jpg, .jpeg" id="subir">
-                                        <label for="subir" class="upload-label">
-                                            <span class="upload-icon">📁</span>
-                                            <span class="upload-text">Subir imagen</span>
-                                        </label>
-                                    </form>
-                                </div>
+                            <div class="image-upload">
+                                <form action="/insumos" class="form_agregarimg">
+                                    <input type="hidden" name="id_insumo" class="id_insumo_agregar"
+                                        value="{{insumo[0]}}">
+                                    <input type="file" class="file-input" accept=".png, .jpg, .jpeg" id="subir">
+                                    <label for="subir" class="upload-label">
+                                        <span class="upload-icon">📁</span>
+                                        <span class="upload-text">Subir imagen</span>
+                                    </label>
+                                </form>
+                            </div>
                             {% endif %}
                         </td>
                         <td style="display: none;">{{insumo[0]}}</td>
@@ -120,9 +120,12 @@ Insumos | El Jaboncillo
                     <section class="inputs-insumos">
                         <div class="inputs-cont columna-1">
                             <div>
-                                <label for="">Insumo</label>
+                                <div class="contenedor-obligatorio">
+                                    <label for="">Insumo</label>
+                                    <span class="spanobligatorio">*Obligatorio</span>
+                                </div>
                                 <input type="text" id="nombre_insumo" class="input input-insumos" name="nombre_insumo"
-                                    placeholder="Ingrese el insumo" required>
+                                    placeholder="Ej. urea">
                             </div>
                             <div>
                                 <label for="">Composición principal</label>
@@ -141,8 +144,12 @@ Insumos | El Jaboncillo
                                 </select>
                             </div>
                             <div>
-                                <label for="">Precio de venta</label>
-                                <input type="number" id="precio_venta" name="precio_venta" placeholder="Ingrese el precio de venta" class="input input-insumos" min="0">
+                                <div class="contenedor-obligatorio">
+                                    <label for="">Precio de venta</label>
+                                    <span class="spanobligatorio">*Obligatorio</span>
+                                </div>
+                                <input type="number" id="precio_venta" name="precio_venta"
+                                    placeholder="0.00" class="input input-insumos" min="0">
                             </div>
                         </div>
 
@@ -159,41 +166,40 @@ Insumos | El Jaboncillo
                                 <label for="">Frecuencia de aplicacion</label>
                                 <input type="text" id="frecuenciaAplicacion_insumo" class="input input-insumos"
                                     name="frecuenciaAplicacion_insumo"
-                                    placeholder="Ingrese una frecuencia de aplicacion para este insumo" required>
+                                    placeholder="Ej. unica aplicacion, tres veces al mes, etc.">
                             </div>
                             <div>
                                 <label for="">Compatibilidad</label>
                                 <input type="text" id="compatibilidad" class="input input-insumos" name="compatibilidad"
-                                    placeholder="Ingrese compatibilidad aproximada para este insumo" required>
+                                    placeholder="Ej. compatible con citricos, etc.">
                             </div>
                             <div>
                                 <label for="">Fecha de vencimiento</label>
                                 <input type="date" id="fecha_vencimiento" name="fecha_vencimiento"
                                     class="input input-insumos">
                             </div>
-                            
+
                         </div>
-                        <div class="inputs-cont columna-3">
-                            <div>
-                                <div>
-                                    <label for="">Descripción</label>
-                                    <textarea class="input input-insumos" id="descripcion_insumo"
-                                        name="descripcion_insumo" placeholder="Ingrese una descripción para este insumo"
-                                        required></textarea>
-                                </div>
-                            </div>
+                        <div class="inputs-conts columna-3">
                             <div class="input-subcat">
-                                    <label for="">Seleccione una subcategoria</label>
-                                    <select class="input input-insumos" id="subcat" name="idsubcat" required>
-                                        {% for subcat in Subcat %}
-                                        <option value="{{subcat[0]}}">{{subcat[2]}}</option>
-                                        {% endfor %}
-                                    </select>
+                                <label for="">Seleccione una subcategoria</label>
+                                <select class="input input-insumos" id="subcat" name="idsubcat" required>
+                                    {% for subcat in Subcat %}
+                                    <option value="{{subcat[0]}}">{{subcat[2]}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div>
                                 <label for="">Precauciones</label>
                                 <input type="text" id="precauciones" class="input input-insumos" name="precauciones"
-                                    placeholder="Ingrese durabilidad aproximada para este insumo">
+                                placeholder="Ej. Se puede usar para citricos, etc.">
+                            </div>
+                            <div>
+                                <div>
+                                    <label for="">Descripción</label>
+                                    <textarea class="input input-insumos textarea-editar" id="descripcion_insumo"
+                                        name="descripcion_insumo" placeholder="Ej. Uso para citricos, etc."></textarea>
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -216,7 +222,6 @@ Insumos | El Jaboncillo
         <div class="inputinsumos-title">
             <h2>Editar insumos</h2>
             <span class="close" id="close-edit">&times;</span>
-
         </div>
         <form action="/editarinsumo" method="post" class="form_edit_insumo">
             <section class="inputs-insumos">
@@ -224,7 +229,7 @@ Insumos | El Jaboncillo
                     <div>
                         <input type="hidden" id="id_editar_insumo" name="id_editar_insumo" value="{{insumos.id}}">
                         <label for="">Insumo</label>
-                        <input type="text" id="insumo_editar" class="input input-insumos" name="insumo_editar" value="">
+                        <input type="text" id="insumo_editar" class="input input-insumos" name="insumo_editar" placeholder="Ej. urea" value="">
                     </div>
                     <div>
                         <label for="">Composición principal</label>
@@ -246,13 +251,9 @@ Insumos | El Jaboncillo
                     </div>
                     <div>
                         <label for="">Imagen</label>
-                        <input type="file" id="img_uploader_insu_editar" name="imagenInsumo"
-                            class="input input-insumos" accept=".png, .jpg, .jpeg">
+                        <input type="file" id="img_uploader_insu_editar" name="imagenInsumo" class="input input-insumos"
+                            accept=".png, .jpg, .jpeg">
                     </div>
-                    <!-- <div>
-                        <label for="">Imagen</label>
-                        <input type="text" id="imagenInsumo" name="imagenInsumo" class="input input-insumos" required>
-                    </div> -->
                 </div>
                 <div class="inputs-cont columna-2">
                     <div>
@@ -268,12 +269,12 @@ Insumos | El Jaboncillo
                     <div>
                         <label for="">Frecuencia de aplicacion</label>
                         <input type="text" id="frecuenciaAplicacion_insumo_editar" class="input input-insumos"
-                            name="frecuenciaAplicacion_insumo_editar" value="">
+                            name="frecuenciaAplicacion_insumo_editar" placeholder="Ej. unica aplicacion, tres veces al mes, etc.">
                     </div>
                     <div>
                         <label for="">Compatibilidad</label>
                         <input type="text" id="compatibilidad_editar" class="input input-insumos"
-                            name="compatibilidad_editar" value="">
+                            name="compatibilidad_editar" placeholder="Ej. compatible con citricos, etc.">
                     </div>
                     <div>
                         <label for="">Precio de venta</label>
@@ -288,10 +289,7 @@ Insumos | El Jaboncillo
                             <label for="">Descripción</label>
                             <textarea class="input input-insumos" id="descripcion_insumo_editar"
                                 name="descripcion_insumo_editar"
-                                placeholder="Ingrese una descripción para este insumo"></textarea>
-                            <!-- 
-                                <input type="text" id="descripcion_insumo_editar" class="input"
-                                name="descripcion_insumo_editar" value=""> -->
+                                placeholder="Ej. Uso para citricos, etc."></textarea>
                         </div>
                     </div>
                     <div class="input-subcat">
@@ -307,7 +305,7 @@ Insumos | El Jaboncillo
                     <div>
                         <label for="">Precauciones</label>
                         <input type="text" id="precauciones_editar" class="input input-insumos"
-                            name="precauciones_editar" value="">
+                            name="precauciones_editar" placeholder="Ej. Se puede usar para citricos, etc.">
                     </div>
                     <div>
                         <label for="">Fecha de vencimiento</label>

@@ -61,7 +61,7 @@ class Plantas(db.Model):
     __tablename__ = 'plantas'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String, nullable=False)
-    descripcion = db.Column(db.String, nullable=False)
+    descripcion = db.Column(db.String, nullable=True)
     imagen_url = db.Column(db.String, nullable=True)
     entorno_ideal_id = db.Column(db.Integer, db.ForeignKey('entornos_ideales.id'), nullable = False)
     requerimiento_agua_id = db.Column(db.Integer, db.ForeignKey('requerimientos_agua.id'), nullable = False)
@@ -76,7 +76,7 @@ class Insumos(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String, nullable=False)
     tipo_insumo = db.Column(db.String, nullable=False)
-    descripcion = db.Column(db.String, nullable=False)
+    descripcion = db.Column(db.String, nullable=True)
     composicion_principal_id =db.Column(db.Integer, db.ForeignKey('composiciones_principales.id'), nullable = False)
     frecuencia_aplicacion = db.Column(db.String, nullable=True)
     compatibilidad = db.Column(db.String, nullable=True)
@@ -244,6 +244,7 @@ class Compras(db.Model):
     __tablename__ = 'compras'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     proveedor_id = db.Column(db.Integer, db.ForeignKey('proveedores.id'), nullable = False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable = False)
     fecha_compra = db.Column(db.Date, nullable=False)
     total = db.Column(db.Float, nullable=False)
 

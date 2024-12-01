@@ -245,6 +245,9 @@
   gap: 5px;
   align-items: start;
   }
+ .modal-subcat .modal-content-subcat.form_subt .input-subcategories .input-contenido-edit{
+  width: 100%;
+  }
 
  .modal-subcat .modal-content-subcat .btn-modal-subcat{
     display: flex;
