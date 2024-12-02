@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, jsonify, render_template, redirect, request, session, flash, url_for
 from flask_socketio import SocketIO, emit
 from flask_session import Session
@@ -8,6 +8,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.security import check_password_hash, generate_password_hash
 from dotenv import load_dotenv
 from functools import wraps
+from models import *
+from sqlalchemy import extract, func, case
 
 load_dotenv()
 
@@ -2295,6 +2297,109 @@ def logout():
     # Limpiar todos los datos de sesión
     session.clear()
     return redirect('/') 
+
+
+@app.route('/reportes/mayores-ventas', methods=['GET'])
+@login_required
+def mayores_ventas():
+    # Asegúrate de que Ventas sea la tabla base
+    ventas = db.query(
+        func.coalesce(Plantas.nombre, Insumos.nombre).label('producto'),
+        func.sum(Detalle_ventas.cantidad).label('total_cantidad'),
+        func.sum(Detalle_ventas.subtotal).label('total_precio')
+    ).select_from(Ventas) \
+     .join(Detalle_ventas, Detalle_ventas.venta_id == Ventas.id) \
+     .outerjoin(Plantas, Detalle_ventas.planta_id == Plantas.id) \
+     .outerjoin(Insumos, Detalle_ventas.insumo_id == Insumos.id) \
+     .group_by(func.coalesce(Plantas.nombre, Insumos.nombre)) \
+     .order_by(func.sum(Detalle_ventas.subtotal).desc()) \
+     .limit(10).all()
+
+    # Construir el JSON
+    reporte = []
+    for venta in ventas:
+        reporte.append({
+            "producto": venta.producto,
+            "total_cantidad": venta.total_cantidad,
+            "total_precio": venta.total_precio
+        })
+
+    return jsonify(reporte)
+
+
+@app.route('/reportes/ventas-por-mes', methods=['GET'])
+@login_required
+def ventas_por_mes():
+    # Crear la lista de meses (1-12)
+    meses = list(range(1, 13))
+
+    # Consultar las ventas agrupadas por mes
+    ventas = db.query(
+        func.extract('month', Ventas.fecha_venta).label('mes'),
+        func.sum(Ventas.total).label('total_ventas')
+    ).group_by(func.extract('month', Ventas.fecha_venta)).all()
+
+    # Convertir los resultados en un diccionario {mes: total_ventas}
+    ventas_dict = {int(mes): total for mes, total in ventas}
+
+    # Crear la respuesta con todos los meses, rellenando con 0 si no hay ventas
+    reporte = []
+    for mes in meses:
+        reporte.append({
+            "mes": mes,
+            "total_ventas": ventas_dict.get(mes, 0)  # Si el mes no tiene datos, usa 0
+        })
+
+    return jsonify(reporte)
+
+
+@app.route('/reportes/ventas-por-insumos', methods=['GET'])
+@login_required
+def ventas_por_insumos():
+    # Consultar las ventas agrupadas por insumos
+    ventas = db.query(
+        Insumos.nombre.label('insumo'),
+        func.sum(Detalle_ventas.subtotal).label('total_ventas')
+    ).join(Detalle_ventas, Detalle_ventas.insumo_id == Insumos.id) \
+     .join(Ventas, Ventas.id == Detalle_ventas.venta_id) \
+     .group_by(Insumos.nombre) \
+     .order_by(func.sum(Detalle_ventas.subtotal).desc()) \
+     .all()
+
+    # Crear la respuesta JSON
+    reporte = [{"insumo": venta.insumo, "total_ventas": venta.total_ventas} for venta in ventas]
+
+    return jsonify(reporte)
+
+@app.route('/reportes/tendencia-ventas-diarias', methods=['GET'])
+@login_required
+def tendencia_ventas_diarias():
+    # Calcular la fecha de inicio y fin de la semana actual
+    today = datetime.now()
+    start_of_week = today - timedelta(days=today.weekday())  # Lunes de la semana actual
+    end_of_week = start_of_week + timedelta(days=6)         # Domingo de la semana actual
+
+    # Consultar las ventas agrupadas por día dentro de la semana actual
+    ventas = db.query(
+        func.date(Ventas.fecha_venta).label('dia'),
+        func.sum(Ventas.total).label('total_ventas')
+    ).filter(Ventas.fecha_venta >= start_of_week, Ventas.fecha_venta <= end_of_week) \
+     .group_by(func.date(Ventas.fecha_venta)) \
+     .order_by(func.date(Ventas.fecha_venta)) \
+     .all()
+
+    # Crear la respuesta JSON
+    reporte = [{"dia": venta.dia.strftime('%Y-%m-%d'), "total_ventas": venta.total_ventas} for venta in ventas]
+
+    return jsonify(reporte)
+
+
+
+@app.route('/Reportes/Ventas', methods=['GET', 'POST'])
+@login_required
+def reportes_ventas():
+    return render_template("reportes_ventas.html")
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
