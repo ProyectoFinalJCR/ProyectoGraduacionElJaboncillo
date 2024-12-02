@@ -13,6 +13,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATION"]=False
 db.init_app (app)
 
 def main():
+    print(db)
     db.create_all()
 
 if __name__ == "__main__":
