@@ -287,7 +287,7 @@ def usuarios():
         else:
             estado = "true"
             insertar_usuario = text("INSERT INTO usuarios (nombre_completo, correo, clave, rol_id, estado) VALUES (:userName, :userEmail, :userPassword, :idRol, :estado)")
-            db.execute(insertar_usuario,{"userName":nombre_completo, "userEmail":correo, "userPassword": hashed_contraseña, "idRol":rol_id})
+            db.execute(insertar_usuario,{"userName":nombre_completo, "userEmail":correo, "userPassword": hashed_contraseña, "idRol":rol_id, "estado":estado})
             db.commit()
             db.close()
             flash(('Usuario agregado con éxito.', 'success', '¡Éxito!'))
