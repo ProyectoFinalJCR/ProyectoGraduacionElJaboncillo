@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const modalproduccion = document.getElementById("ModalProduccion");
       const inputIdproduccion = document.getElementById("idProduccion");
       const inputTipoProducto = document.getElementById("tipo_producto");
-      
+
       const inputNombreproduccion = document.getElementById("nombreProductoproduccion")
       const inputPrecio = document.getElementById("precioProducto")
 
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const inputPrecio = document.getElementById("precioProductoBaja");
       const inputCantidad = document.getElementById("cantidad");
       const inputTipoProducto = document.getElementById("tipo_producto_baja");
-      
+
 
       // Obtener el elemento <p>
       const fechaElemento = document.querySelector('.fecha-cont .fecha_baja p');
@@ -271,5 +271,10 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
     }
+  });
+
+  document.getElementById('idProd').addEventListener('change', function () {
+    const tipo = this.options[this.selectedIndex].getAttribute('data-tipo');
+    document.getElementById('tipoProducto').value = tipo;
   });
 });

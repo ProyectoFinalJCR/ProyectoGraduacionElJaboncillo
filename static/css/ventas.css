@@ -54,8 +54,8 @@
    padding: 0px 50px;
    border-radius: 8px;
    width: 100%;
-   max-width: 1326px;
-   height: 780px;
+   max-width: 1300px;
+   height: 800px;
    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
    overflow-y: auto;
    scrollbar-width: none;
@@ -85,22 +85,38 @@
 }
 .container-table-inputs .container-inputVenta .form-venta  .inputs-venta{
    display: grid;
-   grid-template-rows:.5fr .5fr .5fr 2fr 0.5fr; 
+   grid-template-rows:.1fr .1fr .1fr 1fr .1fr;
    gap: 20px;
-   padding-bottom: 20px;
 }
 .container-table-inputs .container-inputVenta .form-venta .inputs-venta .inputs-cont{
    display: flex;
    flex-direction: row;
    justify-content: space-between;
+   gap: 60px;
 }
-.container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-3{
+.container-table-inputs .container-inputVenta .form-venta .inputs-venta .inputs-cont div{
    width: 100%;
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+
+}
+.container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-2{
+      width: 100%;
    display: flex;
    justify-content: space-between;
    flex-direction: row;
    gap: 60px;
 }
+.container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-3{
+   width: 100%;
+   display: flex;
+   justify-content: end;
+   flex-direction: row;
+   align-items: center;
+   gap: 45px;
+}
+
 
 .container-table-inputs .container-inputVenta .form-venta .inputs-venta .input-venta{
    width: 100%;
@@ -108,6 +124,48 @@
    border-radius: 10px;
    background-color: #ECFFED;
 }
+
+.container-table-inputs .container-inputVenta .form-venta .inputs-venta .productos-ventas{
+   width: 100%;
+   height: 225px;
+   overflow-y: auto;
+}
+.container-table-inputs .container-inputVenta .form-venta .inputs-venta .input-venta .productos-ventas .tabla-venta{
+   width: 100%;
+   border-collapse: collapse;
+   font-family: Arial, sans-serif;
+   background-color: #949494;
+   border: 1px solid #ddd;
+}
+
+.tabla-venta thead, .tabla-venta tbody{
+   width: 100%;
+ }
+ .tabla-venta th, .tabla-venta td {
+   text-align: left;
+   padding: 12px;
+   border: 1px solid #ddd;
+ }
+
+ .tabla-venta th { 
+      width : 100%;
+      background-color: #F3F2F8;
+      color: #000;
+      font-weight: bold;
+ }
+
+ .tabla-venta tr:nth-child(even) {
+   background-color:    #f2f2f2;
+ }
+
+ .tabla-venta tr:hover {
+   background-color: #ddd;
+ }
+
+ .tabla-venta td:last-child {
+   text-align: center;
+ }
+
 .container-table-inputs .container-inputVenta .btn-agregar{
    width: 100%;
    display: flex;

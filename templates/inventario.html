@@ -9,7 +9,7 @@ Inventario | El Jaboncillo
         <h2 id="saludo"></h2>
         <p>Bienvenid@, {{session["user_name"]}}</p>
     </div>
-    <div>
+    <div class="modulo-container ">
         <h3>Modulo de Inventario</h3>
     </div>
 </section>
@@ -87,15 +87,11 @@ Inventario | El Jaboncillo
                         <div class="textos">
                             <input type="hidden" name="id_planta_produccion" id="idProduccion" value="">
                             <input type="hidden" name="tipo_producto" id="tipo_producto" value="">
+                            <input type="text" name="precio" id="precioProducto" value="{{infoInventario.precio_venta}}">
 
                             <label for="">Nombre:</label>
                             <input type="text" id="nombreProductoproduccion" name="nombrePlanta"
                                 class="sinborde nombreplanta" readonly value="">
-                        </div>
-                        <div class="textos">
-                            <label for="">Precio unitario: </label>
-                            <input type="text" class="sinborde" readonly name="precioPlanta" id="precioProducto"
-                                value="">
                         </div>
                     </div>
 
@@ -105,6 +101,10 @@ Inventario | El Jaboncillo
                 <div>
                     <label for="">Nota</label>
                     <textarea name="nota" class="textarea input-plantas" id="nota"></textarea>
+                </div>
+                <div class="precio-cont">
+                    <label for="">Precio unitario</label>
+                    <input type="number" class="input input-plantas" name="precio" id="precio" value="">
                 </div>
                 <div>
                     <label for="">Cantidad</label>
@@ -142,9 +142,10 @@ Inventario | El Jaboncillo
                         <div class="textos-cont">
                             <select name="id_planta_produccion" id="idProd" class="sinborde">
                                 {% for producto in productossinagregar %}
-                                <option value="{{producto[0]}}">{{producto[1]}}</option>
+                                <option value="{{ producto[0] }}" data-tipo="{{ producto[3] }}">{{ producto[1] }}</option>
                                 {% endfor %}
                                 <option value="" selected>Selecciona un producto</option>
+                                <input type="hidden" name="tipo_producto" id="tipoProducto">
                             </select>
                         </div>
                     </div>

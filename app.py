@@ -248,7 +248,8 @@ def eliminarCategoria():
 
 
 @app.route('/usuarios', methods =["GET","POST"])
-# @login_required
+@login_required
+@ruta_permitida
 def usuarios():
     if request.method == "GET":
         print("Usuarios GET")
@@ -2162,8 +2163,9 @@ def agregar_produccion():
         
         idProducto = request.form.get("id_planta_produccion")
         print(idProducto)
-        tipoMovimiento = request.form.get("tipomovi")
-        precio = request.form.get("precioPlanta")
+        tipoProducto = request.form.get("tipo_producto")
+        print(tipoProducto)
+        tipoMovimiento = 4
         nota = request.form.get("nota")
         cantidad = request.form.get("cantidad")
         fechaactual = datetime.now().date()
@@ -2174,24 +2176,47 @@ def agregar_produccion():
         if not cantidad:
             flash("Ingrese cantidad", "error")
             return redirect(url_for("inventario"))
+
+         # Determinar si el producto es planta o insumo
+        if (tipoProducto == 'Planta'):
+            id_planta = idProducto
+            id_insumo = None
+        else:
+            id_planta = None
+            id_insumo = idProducto
+
+        print("planta", id_planta)
+        print("insumo", id_insumo)
+        # Consulta para obtener el precio y tipo del producto
+        productos_query = text("""
+            SELECT precio_venta, 'Planta' AS tipo_producto
+            FROM plantas
+            WHERE id = :id_planta
+            UNION
+            SELECT precio_venta, 'Insumo' AS tipo_producto
+            FROM insumos
+            WHERE id = :id_insumo
+        """)
+
+        # Ejecutar la consulta
+        producto = db.execute(productos_query, {'id_planta': id_planta, 'id_insumo': id_insumo}).fetchone()
+
+        if producto:
+            precio_venta = producto[0]        
+        else:
+            precio_venta = 0
+
+        print (f"precio de la compra: {precio_venta}")
+
         
         insertarPlantaquery = text("INSERT INTO movimientos_kardex (planta_id,insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
-        db.execute(insertarPlantaquery, {"planta_id": idProducto, "insumo_id": idProducto, "cantidad": cantidad, "tipo_movimiento_id": tipoMovimiento, "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
+        db.execute(insertarPlantaquery, {"planta_id": id_planta, "insumo_id": id_insumo, "cantidad": cantidad, "tipo_movimiento_id": tipoMovimiento, "precio_unitario": precio_venta, "fecha_movimiento": fechaactual, "nota": nota})
 
-        productos_query = text("""
-        SELECT precio_venta, 'Planta' AS tipo_producto
-        FROM plantas
-        UNION
-        SELECT precio_venta, 'Insumo' AS tipo_producto
-        FROM insumos;
-        WHERE id = :id
-    """)
-        precio_producto = db.execute(productos_query, {'id': idProducto}).fetchall()
-
+        # Obtener el precio del producto
         kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
 
-        insertarInventarioquery = text("INSERT INTO stock (planta_id, insumo_id, cantidad, kardex_id, precio estado) VALUES (:planta_id, :insumo_id, :cantidad, :kardex_id, :estado)")
-        db.execute(insertarInventarioquery, {"planta_id": idProducto, "insumo_id": idProducto, "cantidad": cantidad, "kardex_id": kardexId, "estado": 'true'})
+        insertarInventarioquery = text("INSERT INTO stock (planta_id, insumo_id, cantidad, kardex_id, estado) VALUES (:planta_id, :insumo_id, :cantidad, :kardex_id, :estado)")
+        db.execute(insertarInventarioquery, {"planta_id": id_planta, "insumo_id": id_insumo, "cantidad": cantidad, "kardex_id": kardexId, "estado": 'true'})
 
         db.commit()
         flash(('Se ha actualizado el stock correctamente', 'success'))
@@ -2276,14 +2301,14 @@ def inventario():
         tiposmovimientos = db.execute(tiposmovimientosquery).fetchall()
 
         productosquery = text("""
-        SELECT p.id, p.nombre, 'Planta' AS tipo
+        SELECT p.id, p.nombre, p.precio_venta, 'Planta' AS tipo
         FROM plantas p
         LEFT JOIN stock s ON p.id = s.planta_id
         WHERE s.planta_id IS NULL
 
         UNION
 
-        SELECT i.id, i.nombre, 'Insumo' AS tipo
+        SELECT i.id, i.nombre, i.precio_venta, 'Insumo' AS tipo
         FROM insumos i
         LEFT JOIN stock s ON i.id = s.insumo_id
         WHERE s.insumo_id IS NULL
