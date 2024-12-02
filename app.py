@@ -246,7 +246,7 @@ def eliminarCategoria():
 
 
 @app.route('/usuarios', methods =["GET","POST"])
-@login_required
+# @login_required
 def usuarios():
     if request.method == "GET":
         print("Usuarios GET")
