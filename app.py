@@ -285,7 +285,8 @@ def usuarios():
             flash(('Ya existe un usuario con este correo', 'error', '¡Error!'))
             return redirect(url_for('usuarios'))
         else:
-            insertar_usuario = text("INSERT INTO usuarios (nombre_completo, correo, clave, rol_id) VALUES (:userName, :userEmail, :userPassword, :idRol)")
+            estado = "true"
+            insertar_usuario = text("INSERT INTO usuarios (nombre_completo, correo, clave, rol_id, estado) VALUES (:userName, :userEmail, :userPassword, :idRol, :estado)")
             db.execute(insertar_usuario,{"userName":nombre_completo, "userEmail":correo, "userPassword": hashed_contraseña, "idRol":rol_id})
             db.commit()
             db.close()
