@@ -165,7 +165,7 @@ class Usuarios(db.Model):
     correo = db.Column(db.String, unique=True, nullable=False)
     clave = db.Column(db.String, nullable=False)
     rol_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable = False)
-    estado = db.Column(db.Boolean, nullable=False, default=True)
+    estado = db.Column(db.Boolean, nullable=False, default=1)
 
 class Cliente_Categoria(db.Model):
     __tablename__ = 'cliente_categoria'
