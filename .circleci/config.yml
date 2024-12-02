@@ -1,0 +1,33 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.9
+    steps:
+      # 1. Checkout del código
+      - checkout
+
+      # 2. Configurar entorno
+      - run:
+          name: Install dependencies
+          command: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+
+      # 3. Ejecutar pruebas con reporte HTML
+      - run:
+          name: Run tests and generate HTML report
+          command: |
+            pytest --html=report.html --self-contained-html
+
+      # 4. Guardar el reporte como artefacto
+      - store_artifacts:
+          path: report.html
+          destination: test-report
+
+workflows:
+  version: 2
+  test-workflow:
+    jobs:
+      - test

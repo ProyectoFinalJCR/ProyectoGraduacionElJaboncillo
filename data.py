@@ -128,6 +128,21 @@ def tipos_suelos():
         data = Tipos_Suelos(tipo_suelo=tipo_suelo, descripcion=descripcion)
         db.session.add(data)
         db.session.commit()
+
+def usuarios():
+    usuarios = [
+        ("admin"),
+        ("admin@gmail.com"),
+        ("1234"),
+        (1),
+        ("true"),
+        
+    ]
+    
+    for nombre_completo, correo, clave, rol_id, estado in usuarios:
+        data = Usuarios(nombre_completo=nombre_completo, correo=correo, clave=clave, rol_id=rol_id, estado=estado)
+        db.session.add(data)
+        db.session.commit()
         
 def entornos_ideales():
     entornos_ideales = [
@@ -208,13 +223,15 @@ def agregar_rutas_roles():
 
         
 with app.app_context():
-    #entornos_ideales()        
-    #tipos_suelos()
-    #tipo_movimientos()
-    #requerimientos_agua()
-    #aplicaciones()
-    #temporadas_plantacion()
-    #composiciones_principales()
-    #medidas()
-    #unidades_medidas()
+    entornos_ideales()        
+    tipos_suelos()
+    tipo_movimientos()
+    requerimientos_agua()
+    aplicaciones()
+    temporadas_plantacion()
+    composiciones_principales()
+    medidas()
+    unidades_medidas()
     colores()    
+    # usuarios()
+    # print(app.app_context)

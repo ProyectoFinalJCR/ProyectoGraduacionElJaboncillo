@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/reportes_ventas.css">
     <link rel="stylesheet" href="/static/css/inventario.css">
     <link rel="stylesheet" href="/static/css/catalogo.css">
     <link rel="stylesheet" href="/static/css/configuracion.css">
@@ -74,7 +75,7 @@
                         <ul class="list-options">
                             <li><a href="/ventas">Venta</a></li>
                             <li><a href="/devoluciones">Devoluciones</a></li>
-                            <li><a href="#">Reportes</a></li>
+                            <li><a href="/Reportes/Ventas">Reportes</a></li>
                         </ul>
                     </div>
                 </div>
@@ -150,7 +151,7 @@
                         <ul class="list-options">
                             <li><a href="/ventas">Venta</a></li>
                             <li><a href="#">Devoluciones</a></li>
-                            <li><a href="#">Reportes</a></li>
+                            <li><a href="/Reportes/Ventas">Reportes</a></li>
                         </ul>
                     </div>
                 </div>
@@ -164,7 +165,7 @@
                         <ul class="list-options">
                             <li><a href="/compras">Compras</a></li>
                             <li><a href="/proveedores">Proveedores</a></li>
-                            <li><a href="#">Reportes</a></li>
+                            <li><a href="">Reportes</a></li>
                         </ul>
                     </div>
                 </div>
@@ -211,6 +212,8 @@
 <script src="/static/js/socket.io.min.js"></script>
 <script src="/static/js/inventario.js"></script>
 <script src="/static/js/devoluciones.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 <!-- Carga jQuery primero -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 

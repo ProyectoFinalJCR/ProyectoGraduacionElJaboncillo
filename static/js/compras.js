@@ -135,9 +135,23 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const colorSeleccionado = color.options[color.selectedIndex]?.text || '';
     const medidaSeleccionada = medida.options[medida.selectedIndex]?.text || '';
-    // Concatenar nombre del producto con color y medida
-    const nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado} - ${medidaSeleccionada}`;
 
+
+    let nombreCompletoProducto = '';
+
+        if (colorSeleccionado != 'Selecciona una caractistica' && medidaSeleccionada != 'Selecciona una caractistica'){
+            // Concatenar nombre del producto con color y medida
+            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado} - ${medidaSeleccionada}`;
+        }
+        else if (colorSeleccionado != 'Selecciona una caractistica'){
+            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado}`;
+        }
+        else if (medidaSeleccionada != 'Selecciona una caractistica'){
+            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${medidaSeleccionada}`;
+        }
+        else{
+            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text}`
+        }
 
     // Leer información del producto desde los inputs
     const infoProducto = {
