@@ -9,8 +9,8 @@ Ventas | El Jaboncillo
         <h2 id="saludo"></h2>
         <p>Bienvenid@, {{session["user_name"]}}</p>
     </div>
-    <div>
-        <h3>Modulo de ventas</h3>
+    <div class="modulo-container">
+        <h3>Módulo de ventas</h3>
     </div>
 </section>
 <section class="busqueda">
@@ -18,7 +18,7 @@ Ventas | El Jaboncillo
         <div class="seccion-buscar">
             <i class="material-icons">search</i>
             <input class="input-search" name="search" id="search" placeholder="Buscar ventas">
-            
+
         </div>
         <div>
             <button class="btn-add-venta btn">Nueva venta</button>
@@ -38,8 +38,8 @@ Ventas | El Jaboncillo
                     <th>Total</th>
                     <th>Acciones</th>
                 </tr>
-            </thead> 
-            
+            </thead>
+
             <tbody>
                 {% for infoVentas in InfoVentas %}
                 <tr>
@@ -49,9 +49,9 @@ Ventas | El Jaboncillo
                     <td>{{infoVentas.total}}</td>
                     <td>{{infoVentas.nota}}</td>
                     <td>{{infoVentas.estado}}</td>
-                <td class="btn-acciones">
-                    <form action="/anularVenta" method="post" class="form-baja">
-                        <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
+                    <td class="btn-acciones">
+                        <form action="/anularVenta" method="post" class="form-baja">
+                            <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
                             <button class="btn-delete" type="submit">
                                 <i class="material-icons">delete</i>
                             </button>
@@ -80,10 +80,19 @@ Ventas | El Jaboncillo
                             <label>Tipo de cliente</label>
                             <select class="input input-plantas" id="tipoCliente-select" name="tipoCliente-select">
                                 {% for tipoclientes in tipocliente %}
-                                <option name="tipoCliente-select" value="{{tipoclientes[0]}}">{{tipoclientes[1]}}</option>
+                                <option name="tipoCliente-select" value="{{tipoclientes[0]}}">{{tipoclientes[1]}}
+                                </option>
                                 {% endfor %}
                             </select>
                         </div>
+
+                        <div>
+                            <label>Fecha</label>
+                            <input type="text" id="fecha_venta" class="input input-plantas" name="fecha"
+                                placeholder="fecha" readonly>
+                        </div>
+                    </div>
+                    <div class="inputs-cont row-2">
                         <div>
                             <label>Subcategorias</label>
                             <select class="input input-plantas" id="subcategoria-select" name="subcategoria-select">
@@ -93,13 +102,6 @@ Ventas | El Jaboncillo
                                 <option value="" selected>Selecciona una subcategoria</option>
                             </select>
                         </div>
-                        <div>
-                            <label>Fecha</label>
-                            <input type="text" id="fecha_venta" class="input input-plantas" name="fecha"
-                                placeholder="fecha" readonly>
-                        </div>
-                    </div>
-                    <div class="inputs-cont row-2">
                         <div>
                             <label>Producto</label>
                             <select class="input input-plantas" id="producto" name="producto">
@@ -124,6 +126,8 @@ Ventas | El Jaboncillo
                                 <option value="" selected>Selecciona una caractistica</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="row-3">
                         <div>
                             <label>Cantidad</label>
                             <input type="number" id="cantidad" class="input input-plantas validar-input" name="cantidad"
@@ -134,6 +138,7 @@ Ventas | El Jaboncillo
                             <input type="number" id="precio" class="input input-plantas validar-input" name="precio"
                                 placeholder="0.00">
                         </div>
+                        <button type="button" class="btn agregar_producto" id="agregar_producto">Agregar</button>
                         <div>
                             <input type="hidden" name="idProd" id="idProd">
                         </div>
@@ -143,13 +148,9 @@ Ventas | El Jaboncillo
                         <div>
                             <input type="hidden" name="tipoProducto" id="tipoProducto">
                         </div>
-                        <button type="button" class="btn agregar_producto" id="agregar_producto">Agregar</button>
                     </div>
-                </section>
-                <section>
-                    
-                    <div class="productos">
-                        <table id="lista-productos-seleccionados">
+                    <div class="productos-ventas">
+                        <table id="lista-productos-seleccionados" class="tabla-venta">
                             <thead>
                                 <tr>
                                     <th>Producto</th>
@@ -163,8 +164,6 @@ Ventas | El Jaboncillo
                             </tbody>
                         </table>
                     </div>
-                </section>
-                <section class="inputs-venta">
                     <div class="inputs-cont row-4">
                         <div>
                             <label>Tipos de pago</label>
@@ -183,8 +182,8 @@ Ventas | El Jaboncillo
                         </div>
                         <div>
                             <label>Total</label>
-                            <input type="number" id="total" class="input input-plantas" name="total"
-                                placeholder="0.00" readonly>
+                            <input type="number" id="total" class="input input-plantas" name="total" placeholder="0.00"
+                                readonly>
                         </div>
                         <div>
                             <label>Nota</label>
@@ -193,7 +192,6 @@ Ventas | El Jaboncillo
                         </div>
                     </div>
                 </section>
-
                 <section class="btn-agregar">
                     <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
                     <div>
@@ -209,14 +207,14 @@ Ventas | El Jaboncillo
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-  <script>
+<script>
     Swal.fire({
-      title:'{{ messages[0][2] }}',
-      text: '{{ messages[0][0] }}',
-      icon: '{{ messages[0][1] }}',
-      confirmButtonText: 'OK'
+        title: '{{ messages[0][2] }}',
+        text: '{{ messages[0][0] }}',
+        icon: '{{ messages[0][1] }}',
+        confirmButtonText: 'OK'
     });
-  </script>
+</script>
 {% endif %}
 {% endwith %}
 {% endblock %}

@@ -401,7 +401,27 @@
     cursor: pointer;
 }
 
+.bienvenida div h2, .seccion div p{
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 5px;
+}
 
+
+.modulo-container{
+    width: 50%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    flex-direction: column;
+    padding-right: 35px;
+}
+.modulo-container h3{
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 5px;
+}
 
 
 

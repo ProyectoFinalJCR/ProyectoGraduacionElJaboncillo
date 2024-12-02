@@ -9,7 +9,7 @@ Compras | El Jaboncillo
         <h2 id="saludo"></h2>
         <p>Bienvenid@, {{session["user_name"]}}</p>
     </div>
-    <div>
+    <div class="modulo-container">
         <h3>Modulo de compras</h3>
     </div>
 </section>
@@ -34,8 +34,8 @@ Compras | El Jaboncillo
                     <th>Fecha</th>
                     <th>Total</th>
                 </tr>
-            </thead> 
-            
+            </thead>
+
             <tbody>
                 {% for compras in Compras %}
                 <tr>
@@ -67,20 +67,21 @@ Compras | El Jaboncillo
                             </select>
                         </div>
                         <div>
-                            <label>Subcategorias</label>
-                            <select class="input inputs-compra" id="subcategoria-select" name="subcategoria-select">
-                                {% for subcategorias in Subcategorias %}
-                                <option name="subcategoria-select" value="{{subcategorias[0]}}">{{subcategorias[2]}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div>
                             <label>Fecha</label>
                             <input type="text" id="fecha_compra" class="input input-plantas" name="fecha"
                                 placeholder="fecha" readonly>
                         </div>
                     </div>
                     <div class="inputs-cont row-2">
+                        <div>
+                            <label>Subcategorias</label>
+                            <select class="input inputs-compra" id="subcategoria-select" name="subcategoria-select">
+                                {% for subcategorias in Subcategorias %}
+                                <option name="subcategoria-select" value="{{subcategorias[0]}}">{{subcategorias[2]}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <div>
                             <label>Producto</label>
                             <select class="input inputs-compra" id="producto" name="producto">
@@ -107,14 +108,21 @@ Compras | El Jaboncillo
                             </select>
                         </div>
                         <div>
-                            <label>Cantidad</label>
-                            <input type="number" id="cantidad-compra" class="input inputs-compra validar-input" name="cantidad"
-                                placeholder="Cantidad" min="0">
+                            <label for="">Unidad de medida</label>
+                            <input type="text" id="unidad-medida" class="input inputs-compra" name="unidad-medida"
+                                placeholder="Unidad de medida">
                         </div>
+                    </div>
+                    <div class="inputs-cont row-3">
                         <div>
                             <label>Precio</label>
                             <input type="number" id="precio" class="input inputs-compra validar-input" name="precio"
                                 placeholder="Precio" min="0">
+                        </div>
+                        <div>
+                            <label>Cantidad</label>
+                            <input type="number" id="cantidad-compra" class="input inputs-compra validar-input"
+                                name="cantidad" placeholder="Cantidad" min="0">
                         </div>
                         <div class="inputs-hidden">
                             <input type="hidden" name="idProd" id="idProd">
@@ -125,13 +133,11 @@ Compras | El Jaboncillo
                         <div class="inputs-hidden">
                             <input type="hidden" name="tipoProducto" id="tipoProducto">
                         </div>
-                        <button type="button" class="btn agregar_producto-compra" id="agregar_producto-compra">Agregar</button>
+                        <button type="button" class="btn agregar_producto-compra"
+                            id="agregar_producto-compra">Agregar</button>
                     </div>
-                </section>
-                <section>
-                    
-                    <div class="productos">
-                        <table id="lista-productos-seleccionados">
+                    <div class="productos-compra">
+                        <table id="lista-productos-seleccionados" class="tabla-compra">
                             <thead>
                                 <tr>
                                     <th>Producto</th>
@@ -145,8 +151,6 @@ Compras | El Jaboncillo
                             </tbody>
                         </table>
                     </div>
-                </section>
-                <section class="inputs-compra">
                     <div class="inputs-cont row-4">
                         <div>
                             <label>Tipos de pago</label>
@@ -175,7 +179,6 @@ Compras | El Jaboncillo
                         </div>
                     </div>
                 </section>
-
                 <section class="btn-agregar">
                     <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
                     <div>
@@ -191,14 +194,14 @@ Compras | El Jaboncillo
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-  <script>
+<script>
     Swal.fire({
-      title:'{{ messages[0][2] }}',
-      text: '{{ messages[0][0] }}',
-      icon: '{{ messages[0][1] }}',
-      confirmButtonText: 'OK'
+        title: '{{ messages[0][2] }}',
+        text: '{{ messages[0][0] }}',
+        icon: '{{ messages[0][1] }}',
+        confirmButtonText: 'OK'
     });
-  </script>
+</script>
 {% endif %}
 {% endwith %}
 {% endblock %}
