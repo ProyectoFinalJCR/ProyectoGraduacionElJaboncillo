@@ -158,6 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         const cantidadDisponible = parseInt(cantidadDispoInput.value) || 0;
+
         if (infoProducto.cantidad > cantidadDisponible) {
             Swal.fire({
                 title: 'Stock insuficiente',
@@ -170,11 +171,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Verificar si el producto ya existe en la lista
         const existeProducto = articulosLista.some(producto => producto.nombre === infoProducto.nombre);
+
         if (existeProducto) {
-            // Si ya existe, actualizar la cantidad
+            // Si ya existe, verificar que la suma de cantidades no exceda el stock disponible
             articulosLista = articulosLista.map(producto => {
                 if (producto.nombre === infoProducto.nombre) {
-                    producto.cantidad += infoProducto.cantidad;
+                    const nuevaCantidad = producto.cantidad + infoProducto.cantidad;
+                
+                    if (nuevaCantidad > cantidadDisponible) {
+                        Swal.fire({
+                            title: 'Stock insuficiente',
+                            text: `No puedes agregar ${infoProducto.cantidad} unidades. Solo quedan ${cantidadDisponible - producto.cantidad} disponibles.`,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                        return producto; // Retorna el producto sin cambios
+                    }
+                
+                    producto.cantidad = nuevaCantidad; // Actualiza la cantidad si es válida
                 }
                 return producto;
             });
@@ -182,6 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Si no existe, agregarlo al arreglo
             articulosLista = [...articulosLista, infoProducto];
         }
+
 
         // console.log(articulosLista);
         actualizarTabla();

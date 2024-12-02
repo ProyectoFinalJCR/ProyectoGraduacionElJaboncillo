@@ -172,16 +172,6 @@ document.addEventListener('DOMContentLoaded', function(){
         return;
     }
 
-    const cantidadDisponible = parseInt(cantidadDispoInput.value) || 0;
-    if(infoProducto.cantidad > cantidadDisponible){
-        Swal.fire({
-            title: 'Stock insuficiente',
-            text: `Solo hay ${cantidadDisponible} unidades disponibles para este producto.`,
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
     
     // Verificar si el producto ya existe en la lista
     const existeProducto = articulosLista.some(producto => producto.nombre === infoProducto.nombre);

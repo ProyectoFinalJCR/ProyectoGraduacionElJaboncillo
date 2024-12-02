@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function(){
                         // Si no hay productos disponibles
                         $('#lista-productos-seleccionados tbody').append('<tr><td colspan="5">No hay productos disponibles</td></tr>');
                     }else {
+                        // Limpiar la tabla antes de volver a llenarla
+                        $('#lista-productos-seleccionados tbody').empty();
                         // Si hay productos, agregar una fila para cada uno
                         ventas.forEach(function(venta) {
                             // Crear una nueva fila para cada producto
