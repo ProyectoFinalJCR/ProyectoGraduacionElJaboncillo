@@ -233,5 +233,5 @@ with app.app_context():
     medidas()
     unidades_medidas()
     colores()    
-    usuarios()
-    print(app.app_context)
+    # usuarios()
+    # print(app.app_context)
