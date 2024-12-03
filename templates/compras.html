@@ -57,7 +57,7 @@ Compras | El Jaboncillo
             <form action="/compras" id="form-compra" method="post" class="form-compra">
                 <section class="inputs-compra" id="lista-productos">
                     <div class="inputs-cont row-1">
-                        <div>
+                        <div class="rows-1-cont">
                             <label>Proveedor</label>
                             <select class="input inputs-compra" id="proveedor-select" name="proveedor-select">
                                 <option value="">Selecciona un proveedor</option>
@@ -66,10 +66,10 @@ Compras | El Jaboncillo
                                 {% endfor %}
                             </select>
                         </div>
-                        <div>
-                            <label>Fecha</label>
-                            <input type="text" id="fecha_compra" class="input input-plantas" name="fecha"
-                                placeholder="fecha" readonly>
+                        <div class="row-1-cont">
+                            <!-- <label>Fecha</label> -->
+                            <input type="text" id="fecha_compra" class="input input-plantas" name="fecha" value="Sabado 1 de diciembre del 2024" 
+                                 readonly>
                         </div>
                     </div>
                     <div class="inputs-cont row-2">
@@ -122,16 +122,21 @@ Compras | El Jaboncillo
                         </div>
                     </div>
                     <div class="inputs-cont row-3">
-                        <div>
-                            <label>Precio</label>
-                            <input type="number" id="precio" class="input inputs-compra validar-input" name="precio"
-                                placeholder="Precio" min="0">
+                        <div class="row-3-cont">
+
+                            <div>
+                                <label>Cantidad</label>
+                                <input type="number" id="cantidad-compra" class="input inputs-compra validar-input"
+                                    name="cantidad" placeholder="Cantidad" min="0">
+                            </div>
+                            <div>
+                                <label>Precio</label>
+                                <input type="number" id="precio" class="input inputs-compra validar-input" name="precio"
+                                    placeholder="Precio" min="0">
+                            </div>
                         </div>
-                        <div>
-                            <label>Cantidad</label>
-                            <input type="number" id="cantidad-compra" class="input inputs-compra validar-input"
-                                name="cantidad" placeholder="Cantidad" min="0">
-                        </div>
+                        <button type="button" class="btn agregar_producto-compra"
+                            id="agregar_producto-compra">Agregar</button>
                         <div class="inputs-hidden">
                             <input type="hidden" name="idProd" id="idProd">
                         </div>
@@ -141,8 +146,6 @@ Compras | El Jaboncillo
                         <div class="inputs-hidden">
                             <input type="hidden" name="tipoProducto" id="tipoProducto">
                         </div>
-                        <button type="button" class="btn agregar_producto-compra"
-                            id="agregar_producto-compra">Agregar</button>
                     </div>
                     <div class="productos-compra">
                         <table id="lista-productos-seleccionados" class="tabla-compra">

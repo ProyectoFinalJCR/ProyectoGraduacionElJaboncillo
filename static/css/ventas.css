@@ -49,7 +49,7 @@
    position: absolute;
    top: 50%;
    left: 50%;
-   transform: translate(-43%, -50%); /* Centra el modal */
+   transform: translate(-48%, -50%); /* Centra el modal */
    background-color: #fff;
    padding: 0px 50px;
    border-radius: 8px;
@@ -99,22 +99,35 @@
    display: flex;
    flex-direction: column;
    gap: 10px;
-
 }
+.container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-1 #fecha_venta{
+   width: 100%;
+   font-size: 18px;
+   border: none;
+ }
 .container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-2{
       width: 100%;
    display: flex;
    justify-content: space-between;
    flex-direction: row;
    gap: 60px;
+   justify-content: end;
 }
 .container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-3{
    width: 100%;
    display: flex;
-   justify-content: end;
+   justify-content: start;
    flex-direction: row;
    align-items: center;
    gap: 45px;
+}
+.container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-3 .row-3-cont{
+   width: 40%;
+   display: flex;
+   justify-content: space-between;
+   flex-direction: row;
+   
+  
 }
 
 

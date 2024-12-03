@@ -18,7 +18,7 @@ Devoluciones | El Jaboncillo
         <div class="seccion-buscar">
             <i class="material-icons">search</i>
             <input class="input-search" name="search" id="search" placeholder="Buscar devoluciones">
-            
+
         </div>
         <div>
             <button class="btn-add-devolucion btn">Nueva devoluciones</button>
@@ -36,8 +36,8 @@ Devoluciones | El Jaboncillo
                     <th>Fecha</th>
                     <th>Nota</th>
                 </tr>
-            </thead> 
-            
+            </thead>
+
             <tbody>
                 <!-- {% for infoVentas in InfoVentas %}
                 <tr>
@@ -59,9 +59,12 @@ Devoluciones | El Jaboncillo
             <form action="/devoluciones" id="form-devoluciones" method="post" class="form-devoluciones">
                 <section class="inputs-venta" id="lista-productos">
                     <div class="inputs-cont row-1">
-                        <div>
-                            <label>Ingrese numero de venta</label>
-                            <input type="number" value="" name="idVenta" placeholder="Ingrese el numero de la venta">
+                        <div class="numero-venta-cont">
+                            <div class="numero-venta">
+                                <label>Ingrese numero de venta</label>
+                                <input type="number" class="input input-plantas" value="" name="idVenta" min="0"
+                                    placeholder="Ingrese el numero de la venta">
+                            </div>
                             <button id="idVenta" type="button">Buscar</button>
                         </div>
                         <div>
@@ -84,14 +87,11 @@ Devoluciones | El Jaboncillo
                     </div>
                     <div class="inputs-cont row-2">
                         <div id="infoPrueba">
-                            
+
                         </div>
                     </div>
-                </section>
-                <section>
-                    
-                    <div class="productos">
-                        <table id="lista-productos-seleccionados">
+                    <div class="productos-dev">
+                        <table id="lista-productos-seleccionados" class="tabla-dev">
                             <thead>
                                 <tr>
                                     <th>Producto</th>
@@ -106,13 +106,11 @@ Devoluciones | El Jaboncillo
                             </tbody>
                         </table>
                     </div>
-                </section>
-                <section class="inputs-venta">
                     <div class="inputs-cont row-4">
                         <div>
                             <label>Subtotal</label>
-                            <input type="number" readonly id="subtotalDev" class="input input-plantas" name="subtotalDev"
-                                placeholder="Subtotal">
+                            <input type="number" readonly id="subtotalDev" class="input input-plantas"
+                                name="subtotalDev" placeholder="Subtotal">
                         </div>
                         <div>
                             <label>Total</label>
@@ -126,7 +124,6 @@ Devoluciones | El Jaboncillo
                         </div>
                     </div>
                 </section>
-
                 <section class="btn-agregar">
                     <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
                     <div>
@@ -142,14 +139,14 @@ Devoluciones | El Jaboncillo
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-  <script>
+<script>
     Swal.fire({
-      title:'{{ messages[0][2] }}',
-      text: '{{ messages[0][0] }}',
-      icon: '{{ messages[0][1] }}',
-      confirmButtonText: 'OK'
+        title: '{{ messages[0][2] }}',
+        text: '{{ messages[0][0] }}',
+        icon: '{{ messages[0][1] }}',
+        confirmButtonText: 'OK'
     });
-  </script>
+</script>
 {% endif %}
 {% endwith %}
 {% endblock %}
