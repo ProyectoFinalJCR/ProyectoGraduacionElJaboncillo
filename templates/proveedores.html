@@ -78,20 +78,29 @@ Proveedores | El Jaboncillo
                 <section class="input-proveedores">
                     <div class="grupo1">
                         <div class="input-contenido">
-                            <label>Nombre del Proveedor</label>
+                            <div class="contenedor-obligatorio">
+                                <label>Nombre del Proveedor</label>
+                                <span class="spanobligatorio"> * Obligatorio</span>
+                            </div>
                             <input type="text" id="nombreprov" class="input input-proveedor input-insumos" name="nombre"
                                 placeholder="Nombre del Proveedor">
                         </div>
 
                         <div class="input-contenido">
-                            <label>Telefono</label>
+                            <div class="contenedor-obligatorio">
+                                <label>Telefono</label>
+                                <span class="spanobligatorio"> * Obligatorio</span>
+                            </div>
                             <input type="number" id="numeroTelefono" class="input input-proveedor input-insumos validar_telefono"
                                 name="numeroTelefono" placeholder="Telefono" min="2">
                         </div>
                     </div>
                     <div class="grupo2">
                         <div class="input-contenido">
-                            <label>Correo Electronico</label>
+                            <div class="contenedor-obligatorio">
+                                <label>Correo Electronico</label>
+                                <span class="spanobligatorio"> * Obligatorio</span>
+                            </div>
                             <input type="text" id="correoProveedor" class="input input-proveedor input-insumos"
                                 name="correoProveedor" placeholder="Correo Electronico">
                         </div>

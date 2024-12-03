@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', function(){
         document.getElementById("btn-cancel").addEventListener("click", function(){
             container_table_inputs.style.display="none";
         });
+        document.getElementsByClassName("close-modal-venta")[0].addEventListener("click", function(){
+            container_table_inputs.style.display="none";
+        });
     });
 
     $(document).ready(function () {
@@ -42,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function(){
                             let tipo = $('<td hidden>').text(venta.tipo);
                             
                             let cantidadCelda = $('<td>');
-                            let cantidadInput = $('<input type="number" name="cantidadDev" min="0">')
+                            let cantidadInput = $('<input type="number" style="width: 100%; height:100%; border:none;" name="cantidadDev" min="0">')
                                 .val(venta.cantidad || '0')
                                 .addClass('cantidad-input'); // Clase para identificar el input
                             cantidadCelda.append(cantidadInput);
@@ -129,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     let productoCelda = $('<td>').text(venta.nombre || 'Producto no disponible');
                     let tipo = $('<td hidden>').text(venta.tipo);
                     let cantidadCelda = $('<td>');
-                    let cantidadInput = $('<input type="number" name="cantidadDev" min="0">')
+                    let cantidadInput = $('<input type="number" style="width: 100%; height:100%; border:none;" name="cantidadDev" min="0">')
                         .val(venta.cantidad || '0')
                         .addClass('cantidad-input'); // Clase para identificar el input
                     cantidadCelda.append(cantidadInput);
@@ -194,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     let productoCelda = $('<td>').text(venta.nombre || 'Producto no disponible');
                     let tipo = $('<td hidden>').text(venta.tipo);
                     let cantidadCelda = $('<td>');
-                    let cantidadInput = $('<input type="number" name="cantidadDev" min="0">')
+                    let cantidadInput = $('<input type="number" style="width: 100%; height:100%; border:none;" name="cantidadDev" min="0">')
                         .val(venta.cantidad || '0')
                         .addClass('cantidad-input');
                     cantidadCelda.append(cantidadInput);

@@ -24,3 +24,191 @@
    overflow-y: auto;
    scrollbar-width: none;
 }
+.container-inputDevolucion .nueva-devolucion .inputDevolucion-title{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border-bottom: 1px solid #000;
+    margin-bottom: 25px
+}
+
+.container-inputDevolucion .nueva-devolucion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+.container-inputDevolucion .nueva-devolucion .inputDevolucion-title{
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #000;
+}
+
+.container-inputDevolucion .nueva-devolucion .form-devoluciones{
+    width: 100%;
+    height: auto;
+}
+.container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta{
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-rows: .1fr .1fr 1fr .1fr;
+
+}
+.container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .row-1{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+.container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .row-1 .numero-venta-cont{
+    width: 35%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: end;
+    gap: 15px;
+}
+.container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .row-1 .numero-venta-cont button{
+    width: 120px;
+    height: 40px;
+    border-radius: 15px;
+    border: none;
+    background-color: #a9ffa9;
+    font-weight: bold;
+    cursor:pointer;
+}
+.container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .row-1 .numero-venta{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+}
+.container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .row-4{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+.container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev{
+    width: 100%;
+    height: 330px;
+}
+
+.container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev{
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+  }
+  .btn-eliminar{
+    border: none;
+    padding: 4px;
+    margin: 2px;
+    color: white;
+    border-radius: 3px;
+    background-color: rgba(184, 44, 20, 0.5);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev .btn-acciones .btn-eliminar{
+    border: none;
+    padding: 4px;
+    margin: 2px;
+    color: white;
+    border-radius: 3px;
+      background-color: rgba(11, 190, 41, 0.5);
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+  }
+  
+  .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev .btn-acciones .btn-eliminar:hover{
+    background-color: rgba(11, 190, 41, 1);
+  }
+  
+  .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev .btn-acciones .btn-eliminar:active{
+    background-color: rgba(11, 190, 41, 0.8);
+  }
+  
+  .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev .btn-acciones .btn-eliminar:focus{
+    background-color: rgba(11, 190, 41, 1);
+  }
+  
+  .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev .btn-acciones .btn-eliminar:disabled{
+    background-color: rgba(11, 190, 41, 0.5);
+  }
+
+.container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev table{
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  background-color: #949494;
+  border: 1px solid #ddd;
+
+}
+.tabla-dev thead, .tabla-dev tbody{
+   width: 100%;
+ }
+
+.tabla-dev th, .tabla-dev td {
+   text-align: left;
+   padding: 12px;
+   border: 1px solid #ddd;
+}
+
+.tabla-dev th {
+   width : 100%;
+   background-color: #F3F2F8;
+   color: #000;
+   font-weight: bold;
+}
+
+.tabla-dev tr:nth-child(even) {
+   background-color:    #f2f2f2;
+}
+
+.tabla-dev tr:hover {
+   background-color: #ddd;
+}
+
+.tabla-dev td:last-child {
+   text-align: center;
+}
+
+.container-inputDevolucion .nueva-devolucion .btn-agregar{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #000;
+    margin-bottom: 10px;
+}
+.container-inputDevolucion .nueva-devolucion .btn-agregar .logo-btn-add{
+    width: 220px;
+    height: 40px;
+}
+.container-inputDevolucion .nueva-devolucion .btn-agregar .btn {
+    width: 150px;
+    border-radius: 15px;
+  }
+.container-inputDevolucion .nueva-devolucion .btn-agregar .btn-cancel {
+    width: 120px;
+    background-color: #CF696B;
+  }

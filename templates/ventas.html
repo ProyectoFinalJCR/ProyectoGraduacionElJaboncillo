@@ -1,5 +1,9 @@
-{% extends "layout.html" %} {% block title %} Ventas | El Jaboncillo {% endblock
-%} {% block main %}
+{% extends "layout.html" %}
+{% block title %}
+Ventas | El Jaboncillo
+{% endblock %}
+
+{% block main %}
 <section class="bienvenida">
     <div>
         <h2 id="saludo"></h2>
@@ -13,7 +17,8 @@
     <div class="search">
         <div class="seccion-buscar">
             <i class="material-icons">search</i>
-            <input class="input-search" name="search" id="search" placeholder="Buscar ventas" />
+            <input class="input-search" name="search" id="search" placeholder="Buscar ventas">
+
         </div>
         <div>
             <button class="btn-add-venta btn">Nueva venta</button>
@@ -46,7 +51,7 @@
                     <td>{{infoVentas.estado}}</td>
                     <td class="btn-acciones">
                         <form action="/anularVenta" method="post" class="form-baja">
-                            <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}" />
+                            <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
                             <button class="btn-delete" type="submit">
                                 <i class="material-icons">delete</i>
                             </button>
@@ -69,102 +74,86 @@
                         <div>
                             <label for="">Cliente</label>
                             <input type="text" id="nombreCliente" class="input input-plantas" name="nombreCliente"
-                                placeholder="Ej. Ismael Hernandez" />
+                                placeholder="Ej. Ismael Hernandez">
                         </div>
                         <div>
                             <label>Tipo de cliente</label>
                             <select class="input input-plantas" id="tipoCliente-select" name="tipoCliente-select">
                                 {% for tipoclientes in tipocliente %}
-                                <option name="tipoCliente-select" value="{{tipoclientes[0]}}">
-                                    {{tipoclientes[1]}}
+                                <option name="tipoCliente-select" value="{{tipoclientes[0]}}">{{tipoclientes[1]}}
                                 </option>
                                 {% endfor %}
                             </select>
                         </div>
+
                         <div>
                             <label>Fecha</label>
                             <input type="text" id="fecha_venta" class="input input-plantas" name="fecha"
-                                placeholder="fecha" readonly />
+                                placeholder="fecha" readonly>
                         </div>
                     </div>
                     <div class="inputs-cont row-2">
                         <div>
-                            <div>
-                                <label>Subcategorias</label>
-                                <select class="input input-plantas" id="subcategoria-select" name="subcategoria-select">
-                                    {% for infoSubcat in InfoSubcat %}
-                                    <option name="subcategoria-select" value="{{infoSubcat[0]}}">
-                                        {{infoSubcat[2]}}
-                                    </option>
-                                    {% endfor %}
-                                    <option value="" selected>Selecciona una subcategoria</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>Producto</label>
-                                <select class="input input-plantas" id="producto" name="producto">
-                                    <option value="" selected>Selecciona un producto</option>
-                                </select>
-                            </div>
+                            <label>Subcategorias</label>
+                            <select class="input input-plantas" id="subcategoria-select" name="subcategoria-select">
+                                {% for infoSubcat in InfoSubcat %}
+                                <option name="subcategoria-select" value="{{infoSubcat[0]}}">{{infoSubcat[2]}}</option>
+                                {% endfor %}
+                                <option value="" selected>Selecciona una subcategoria</option>
+                            </select>
                         </div>
                         <div>
-                            <div>
-                                <label>Colores</label>
-                                <select class="input input-plantas" id="color-select" name="color-select">
-                                    {% for color in colores %}
-                                    <option name="color-select" value="{{color[0]}}">
-                                        {{color[1]}}
-                                    </option>
-                                    {% endfor %}
-                                    <option value="" selected>Selecciona una caractistica</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>Medidas</label>
-                                <select class="input input-plantas" id="medida-select" name="medida-select">
-                                    {% for medida in medidas %}
-                                    <option name="medida-select" value="{{medida[0]}}">
-                                        {{medida[1]}}
-                                    </option>
-                                    {% endfor %}
-                                    <option value="" selected>Selecciona una caractistica</option>
-                                </select>
-                            </div>
+                            <label>Producto</label>
+                            <select class="input input-plantas" id="producto" name="producto">
+                                <option value="" selected>Selecciona un producto</option>
+                            </select>
                         </div>
                         <div>
-                            <div>
-                                <label>Unidad de medida</label>
-                                <select class="input input-plantas" id="color-select" name="color-select">
-                                    {% for color in colores %}
-                                    <option name="color-select" value="{{color[0]}}">
-                                        {{color[1]}}
-                                    </option>
-                                    {% endfor %}
-                                    <option value="" selected>Selecciona una caractistica</option>
-                                </select>
-                            </div>
+                            <label>Colores</label>
+                            <select class="input input-plantas" id="color-select" name="color-select">
+                                {% for color in colores %}
+                                <option name="color-select" value="{{color[0]}}">{{color[1]}}</option>
+                                {% endfor %}
+                                <option value="" selected>Selecciona una caractistica</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Medidas</label>
+                            <select class="input input-plantas" id="medida-select" name="medida-select">
+                                {% for medida in medidas %}
+                                <option name="medida-select" value="{{medida[0]}}">{{medida[1]}}</option>
+                                {% endfor %}
+                                <option value="" selected>Selecciona una caractistica</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Unidades de medida</label>
+
                         </div>
                     </div>
-                    <div class="row3">
-                        <div>
-                            <label>Cantidad</label>
-                            <input type="number" id="cantidad" class="input input-plantas validar-input" name="cantidad"
-                                placeholder="0" step="0.01" inputmode="decimal" min="0" />
-                        </div>
-                        <div>
-                            <label>Precio</label>
-                            <input type="number" id="precio" class="input input-plantas validar-input" name="precio"
-                                placeholder="0.00" />
+                    <div class="row-3">
+                        <div class="row-3-cont">
+                            <div>
+                                <label>Cantidad</label>
+                                <input type="number" id="cantidad" class="input input-plantas validar-input"
+                                    name="cantidad" placeholder="0" step="0.01" inputmode="decimal" min="0">
+                            </div>
+                            <div>
+                                <label>Precio</label>
+                                <input type="number" id="precio" class="input input-plantas validar-input" name="precio"
+                                    placeholder="0.00">
+                            </div>
                         </div>
                         <button type="button" class="btn agregar_producto" id="agregar_producto">Agregar</button>
+
                         <div>
-                            <input type="hidden" name="idProd" id="idProd" />
+                            <input type="hidden" name="idProd" id="idProd">
                         </div>
                         <div>
-                            <input type="hidden" name="cantidadDispo" id="cantidadDispo" />
+                            <input type="hidden" name="cantidadDispo" id="cantidadDispo">
                         </div>
                         <div>
-                            <input type="hidden" name="tipoProducto" id="tipoProducto" />
+                            <input type="hidden" name="tipoProducto" id="tipoProducto">
                         </div>
                     </div>
                     <div class="productos-ventas">
@@ -196,7 +185,7 @@
                         <div>
                             <label>Subtotal</label>
                             <input type="number" id="subtotal" class="input input-plantas" name="subtotal"
-                                placeholder="0.00" readonly />
+                                placeholder="0.00" readonly>
                         </div>
                         <div>
                             <label>Total</label>
@@ -206,20 +195,16 @@
                         <div>
                             <label>Nota</label>
                             <input type="text" id="nota-venta" class="input input-plantas" name="nota-venta"
-                                placeholder="Ej. " />
+                                placeholder="Ej. ">
                         </div>
                     </div>
                 </section>
                 <section class="btn-agregar">
-                    <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add" />
+                    <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
                     <div>
                         <div id="productos-dinamicos"></div>
-                        <button type="button" class="btn btn-cancel" id="btn-cancel">
-                            Cancelar
-                        </button>
-                        <button type="submit" class="btn" id="btn-add-venta">
-                            Agregar
-                        </button>
+                        <button type="button" class="btn btn-cancel" id="btn-cancel">Cancelar</button>
+                        <button type="submit" class="btn" id="btn-add-venta">Agregar</button>
                     </div>
                 </section>
             </form>
