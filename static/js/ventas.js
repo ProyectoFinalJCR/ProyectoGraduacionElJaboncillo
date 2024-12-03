@@ -105,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const productosDinamicos = document.querySelector('#productos-dinamicos');
     const color = document.querySelector('#color-select')
     const medida = document.querySelector('#medida-select')
+    const unidad = document.querySelector('#unidad-select')
     const clienteCategoria = document.querySelector('tipoCliente-select')
     let articulosLista = [];
 
@@ -118,22 +119,24 @@ document.addEventListener("DOMContentLoaded", function () {
     function agregarProducto(e) {
         e.preventDefault();
 
+        const unidadSeleccionada = unidad.options[unidad.selectedIndex]?.value || '';
         const colorSeleccionado = color.options[color.selectedIndex]?.text || '';
-        const medidaSeleccionada = medida.options[medida.selectedIndex]?.text || '';
+        const medidaSeleccionada = medida.options[medida.selectedIndex]?.value || '';
         let nombreCompletoProducto = '';
 
-        if (colorSeleccionado != 'Selecciona una caractistica' && medidaSeleccionada != 'Selecciona una caractistica'){
-            // Concatenar nombre del producto con color y medida
+        // Evaluar las combinaciones posibles
+        if (colorSeleccionado != 'Selecciona una caracteristica' && medidaSeleccionada != 'Selecciona una caracteristica') {
+            // Si ambos están seleccionados
             nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado} - ${medidaSeleccionada}`;
-        }
-        else if (colorSeleccionado != 'Selecciona una caractistica'){
+        } else if (colorSeleccionado != 'Selecciona una caracteristica') {
+            // Solo color seleccionado
             nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado}`;
-        }
-        else if (medidaSeleccionada != 'Selecciona una caractistica'){
+        } else if (medidaSeleccionada != 'Selecciona una caracteristica') {
+            // Solo medida seleccionada
             nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${medidaSeleccionada}`;
-        }
-        else{
-            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text}`
+        } else {
+            // Ninguno seleccionado
+            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text}`;
         }
 
         // Leer información del producto desde los inputs
@@ -143,6 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
             nombre: nombreCompletoProducto,
             precio: parseFloat(precioInput.value) || 0,
             cantidad: parseInt(cantidadInput.value) || 1,
+            unidad: unidadSeleccionada || '',
         };
 
 
@@ -208,13 +212,13 @@ document.addEventListener("DOMContentLoaded", function () {
         limpiarListaHtml();
 
         articulosLista.forEach(producto => {
-            const { id, nombre, precio, cantidad } = producto;
+            const { id, nombre, precio, cantidad, unidad } = producto;
 
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td style="display: none;">${id}</td>
                 <td> ${nombre}</td>
-                <td> ${cantidad}</td>
+                <td> ${cantidad} <span>${unidad}</span></td>
                 <td> ${precio}</td>
                 <td> ${(cantidad * precio).toFixed(2)}</td>
                 <td class="btn-acciones">

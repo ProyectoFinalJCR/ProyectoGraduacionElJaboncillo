@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', function(){
                 success: function (data) {
                     ventas = data;
                     $('#infoPrueba').empty();
-
+                    $('#lista-productos-seleccionados tbody').empty()
                     if (ventas.length === 0) {
                         // Si no hay productos disponibles
-                        $('#lista-productos-seleccionados tbody').append('<tr><td colspan="5">No hay productos disponibles</td></tr>');
+                        $('#lista-productos-seleccionados tbody').append('<tr><td colspan="5">No existe la venta o ya se realizo una devolucion asociada a esa venta </td></tr>');
                     }else {
                         // Limpiar la tabla antes de volver a llenarla
                         $('#lista-productos-seleccionados tbody').empty();
@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function(){
                             let cantidadCelda = $('<td>');
                             let cantidadInput = $('<input type="number" name="cantidadDev" min="0">')
                                 .val(venta.cantidad || '0')
+                                .attr('max', venta.cantidad)
                                 .addClass('cantidad-input'); // Clase para identificar el input
                             cantidadCelda.append(cantidadInput);
                             
@@ -74,6 +75,15 @@ document.addEventListener('DOMContentLoaded', function(){
                                 let cantidad = parseFloat($(this).val()) || 0;
                                 let precio = parseFloat(precioCelda.text()) || 0;
                                 let subtotal = (cantidad * precio).toFixed(2);
+
+                                let maxCantidad = parseFloat($(this).attr('max')) || 0; // Obtener el máximo permitido
+
+                                // Validar si la cantidad excede el máximo permitido
+                                if (cantidad > maxCantidad) {
+                                    alert("La cantidad no puede exceder el máximo permitido.");
+                                    $(this).val(maxCantidad); // Restablecer al valor máximo permitido
+                                    cantidad = maxCantidad; // Actualizar la cantidad para el cálculo del subtotal
+                                }
                     
                                 // Actualizar el subtotal en la celda correspondiente
                                 subtotalCelda.text(subtotal);
@@ -131,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     let cantidadCelda = $('<td>');
                     let cantidadInput = $('<input type="number" name="cantidadDev" min="0">')
                         .val(venta.cantidad || '0')
+                        .attr('max', venta.cantidad || '0')
                         .addClass('cantidad-input'); // Clase para identificar el input
                     cantidadCelda.append(cantidadInput);
 
@@ -169,6 +180,15 @@ document.addEventListener('DOMContentLoaded', function(){
                         let precio = parseFloat(precioCelda.text()) || 0;
                         let subtotal = (cantidad * precio).toFixed(2);
                     
+                        let maxCantidad = parseFloat($(this).attr('max')) || 0; // Obtener el máximo permitido
+
+                        // Validar si la cantidad excede el máximo permitido
+                        if (cantidad > maxCantidad) {
+                            alert("La cantidad no puede exceder el máximo permitido.");
+                            $(this).val(maxCantidad); // Restablecer al valor máximo permitido
+                            cantidad = maxCantidad; // Actualizar la cantidad para el cálculo del subtotal
+                        }
+
                         // Actualizar el subtotal en la celda correspondiente
                         subtotalCelda.text(subtotal);
                     });
@@ -196,9 +216,10 @@ document.addEventListener('DOMContentLoaded', function(){
                     let cantidadCelda = $('<td>');
                     let cantidadInput = $('<input type="number" name="cantidadDev" min="0">')
                         .val(venta.cantidad || '0')
+                        .attr('max', venta.cantidad || '0')
                         .addClass('cantidad-input');
                     cantidadCelda.append(cantidadInput);
-                    let idProducto = $('<td hiddden>').text(venta.idProd);
+                    let idProducto = $('<td hidden>').text(venta.idProd);
                     let precioCelda = $('<td>').text(venta.precio.toFixed(2) || '0.00');
                 
                     let subtotalCelda = $('<td>').text((venta.cantidad * venta.precio).toFixed(2) || '0.00');
@@ -220,6 +241,15 @@ document.addEventListener('DOMContentLoaded', function(){
                     cantidadInput.change(function () {
                         let cantidad = parseFloat($(this).val()) || 0;
                         let precio = parseFloat(precioCelda.text()) || 0;
+
+                        let maxCantidad = parseFloat($(this).attr('max')) || 0; // Obtener el máximo permitido
+
+                         // Validar si la cantidad excede el máximo permitido
+                         if (cantidad > maxCantidad) {
+                             alert("La cantidad no puede exceder el máximo permitido.");
+                             $(this).val(maxCantidad); // Restablecer al valor máximo permitido
+                             cantidad = maxCantidad; // Actualizar la cantidad para el cálculo del subtotal
+                         }
                         let subtotal = (cantidad * precio).toFixed(2);
                         subtotalCelda.text(subtotal);
                     });

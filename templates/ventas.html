@@ -116,7 +116,7 @@
                                         {{color[1]}}
                                     </option>
                                     {% endfor %}
-                                    <option value="" selected>Selecciona una caractistica</option>
+                                    <option value="" selected>Selecciona una caracteristica</option>
                                 </select>
                             </div>
                             <div>
@@ -127,20 +127,18 @@
                                         {{medida[1]}}
                                     </option>
                                     {% endfor %}
-                                    <option value="" selected>Selecciona una caractistica</option>
+                                    <option value="" selected>Selecciona una caracteristica</option>
                                 </select>
                             </div>
-                        </div>
-                        <div>
                             <div>
-                                <label>Unidad de medida</label>
-                                <select class="input input-plantas" id="color-select" name="color-select">
-                                    {% for color in colores %}
-                                    <option name="color-select" value="{{color[0]}}">
-                                        {{color[1]}}
+                                <label for="">Unidad de medida</label>
+                                <select class="input inputs-compra" id="unidad-select" name="unidad-select">
+                                    <option value="" selected>Selecciona una caracteristica</option>
+                                    {% for unidad in unidades %}
+                                    <option value="{{unidad[2]}}">
+                                        {{unidad[1]}}
                                     </option>
                                     {% endfor %}
-                                    <option value="" selected>Selecciona una caractistica</option>
                                 </select>
                             </div>
                         </div>

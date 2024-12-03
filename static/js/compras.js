@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const productosDinamicos = document.querySelector('#productos-dinamicos')
     const color = document.querySelector('#color-select')
     const medida = document.querySelector('#medida-select')
+    const unidad = document.querySelector('#unidad-select')
     let articulosLista = [];
 
 
@@ -133,25 +134,28 @@ document.addEventListener('DOMContentLoaded', function(){
     function agregarProd(e){
     e.preventDefault();
 
+    
+    const unidadSeleccionada = unidad.options[unidad.selectedIndex]?.value || '';
     const colorSeleccionado = color.options[color.selectedIndex]?.text || '';
     const medidaSeleccionada = medida.options[medida.selectedIndex]?.text || '';
-
-
     let nombreCompletoProducto = '';
 
-        if (colorSeleccionado != 'Selecciona una caractistica' && medidaSeleccionada != 'Selecciona una caractistica'){
-            // Concatenar nombre del producto con color y medida
-            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado} - ${medidaSeleccionada}`;
-        }
-        else if (colorSeleccionado != 'Selecciona una caractistica'){
-            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado}`;
-        }
-        else if (medidaSeleccionada != 'Selecciona una caractistica'){
-            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${medidaSeleccionada}`;
-        }
-        else{
-            nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text}`
-        }
+    // Evaluar las combinaciones posibles
+    if (colorSeleccionado != 'Selecciona una caracteristica' && medidaSeleccionada != 'Selecciona una caracteristica') {
+        // Si ambos están seleccionados
+        nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado} - ${medidaSeleccionada}`;
+    } else if (colorSeleccionado != 'Selecciona una caracteristica') {
+        // Solo color seleccionado
+        nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${colorSeleccionado}`;
+    } else if (medidaSeleccionada != 'Selecciona una caracteristica') {
+        // Solo medida seleccionada
+        nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text} - ${medidaSeleccionada}`;
+    } else {
+        // Ninguno seleccionado
+        nombreCompletoProducto = `${productoInput.options[productoInput.selectedIndex].text}`;
+    }
+
+
 
     // Leer información del producto desde los inputs
     const infoProducto = {
@@ -159,7 +163,8 @@ document.addEventListener('DOMContentLoaded', function(){
         tipo: tipoInput.value || '',
         nombre: nombreCompletoProducto,
         precio: parseFloat(precioInput.value) || 0,
-        cantidad: parseInt(cantidadInput.value) || 1
+        cantidad: parseInt(cantidadInput.value) || 1,
+        unidad: unidadSeleccionada || '',
     };
 
     if (!infoProducto.nombre || infoProducto.precio <= 0 || infoProducto.cantidad <= 0) {
@@ -203,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function(){
             row.innerHTML = `
                 <td style="display: none;">${id}</td>
                 <td> ${nombre}</td>
-                <td> ${cantidad}</td>
+                <td> ${cantidad} <span>${unidad}</span></td>
                 <td> ${precio}</td>
                 <td> ${(cantidad * precio).toFixed(2)}</td>
                 <td class="btn-acciones">
