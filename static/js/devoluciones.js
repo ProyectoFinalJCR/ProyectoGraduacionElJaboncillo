@@ -3,6 +3,20 @@ document.addEventListener('DOMContentLoaded', function(){
         const container_table_inputs = document.querySelector(".container-inputDevolucion");
         container_table_inputs.style.display = "block";
 
+        //obtener fecha actual
+        const inputFecha = document.getElementById("fecha_devolucion");
+        const hoy = new Date();
+    
+        // Obtén día, mes y año
+        const dia = hoy.getDate();
+        const mes = hoy.toLocaleString('default', { month: 'long' }); // Nombre completo del mes
+        const anio = hoy.getFullYear();
+    
+        // Formatea la fecha
+        const fechaFormateada = `${dia} de ${mes} del ${anio}`;
+        inputFecha.value = fechaFormateada;
+
+
         document.getElementById("btn-cancel").addEventListener("click", function(){
             container_table_inputs.style.display="none";
         });
@@ -45,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function(){
                             let tipo = $('<td hidden>').text(venta.tipo);
                             
                             let cantidadCelda = $('<td>');
-                            let cantidadInput = $('<input type="number" style="width: 100%; height:100%; border:none;" name="cantidadDev" min="0">')
+                            let cantidadInput = $('<input type="number" name="cantidadDev" min="0">')
                                 .val(venta.cantidad || '0')
                                 .attr('max', venta.cantidad)
                                 .addClass('cantidad-input'); // Clase para identificar el input
@@ -113,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 <tr>
                     <th>Producto</th>
                     <th>Cantidad</th>
-                    <th>Precio Unit</th>
+                    <th>Precio</th>
                     <th>Subtotal</th>`;
             
             // Si el motivo es "Devolución por daños", agregar la columna adicional

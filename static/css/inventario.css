@@ -1,10 +1,18 @@
   .container-table-inputs .table-inventario{
     width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    overflow-x: auto;
+    overflow-y: auto;
   }
   .container-table-inputs .table-inventario .table{
-    width: 100%;
+    width: 90%;
+    max-width: 90%;
     border-collapse: collapse;
-    margin-bottom: 0;
+    text-align: center;
     
   }
   
@@ -14,6 +22,12 @@ background-color: #4bdb82;
   .container-table-inputs .table-inventario .table .btn-acciones .btn-darbaja{
 background-color: #CF696B;
   }
+  .container-table-inputs .table-inventario .table .btn-acciones .btn-baja-produccion{
+background-color: #4b77db;
+width: 30px;
+height: 36px;
+  }
+
   
   /*modal produccion*/
   .modal-produccion{
@@ -37,7 +51,7 @@ background-color: #CF696B;
     border-radius: 8px;
     width: 100%;
     max-width: 800px;
-    height: 650px;
+    height: 845px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
     scrollbar-width: none;
@@ -59,25 +73,52 @@ background-color: #CF696B;
     grid-template-columns: 1fr;
     grid-template-rows: 2fr 1fr 1fr;
   }
+  .modal-produccion .modal-content-produccion .form-produccion .fecha-cont{
+    width: 100%;
+    height: 45px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    flex-direction: row;
+    padding-left: 20px;
+}
+.fecha-cont .nombreplanta{
+  width: 50%;
+  height: 40px;
+  padding: 10px;
+  font-size: 25px;
+  letter-spacing: 8px;
+  /* color: #2c9b6d; */
+  color: #000;
+  font-weight: bold;
+}
+.fecha-cont p{
+  height: 40px;
+  padding: 10px;
+  font-size: 17px;
+  color: #000;
+  font-weight: bold;
+}
   .modal-produccion .modal-content-produccion .form-produccion .img-info-cont{
     width: 100%;
-    height: 100%;
+    height: 375px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 20px;
   }
+
   .modal-produccion .modal-content-produccion .form-produccion .img-info-cont .img-cont{
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
     padding: 25px; 
-    background-color: #caffd3;
+    /* background-color: #caffd3; */
     border-radius: 16px;
 }
   .modal-produccion .modal-content-produccion .form-produccion .img-info-cont .img-cont .imgProduccion {
     width: 100%;
     height: 100%;
-    border-radius: 16px ;
+    border-radius: 16px;
 }
   .modal-produccion .modal-content-produccion .form-produccion .info-planta-cont{
     width: 100%;
@@ -86,15 +127,7 @@ background-color: #CF696B;
     display: flex;
     flex-direction: column;
 }
-  .modal-produccion .modal-content-produccion .form-produccion .info-planta-cont .fecha-cont{
-    width: 100%;
-    height: 45px;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-    flex-direction: column;
-    padding-right: 20px;
-}
+
   .modal-produccion .modal-content-produccion .form-produccion .info-planta-cont .textos-cont{
     width: 100%;
     height: 100%;
@@ -103,21 +136,13 @@ background-color: #CF696B;
     flex-direction: column;
     padding: 0px 20px;
 }
-.textos-cont .textos{
+.textos-cont .textos .precio-cantidad-cont{
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 70px;
 }
-.textos-cont .textos .nombreplanta{
-  width: 100%;
-  height: 40px;
-  padding: 10px;
-  font-size: 25px;
-  letter-spacing: 15px;
-  color: #2c9b6d;
-  font-size: bold;
-  
-}
+
 .sinborde{
   border: none;
   outline: none;
@@ -128,19 +153,23 @@ background-color: #CF696B;
     height: 100%;
     padding: 20px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
+    justify-content: start;
+    align-items: end;
     gap: 20px;
 }
-.modal-produccion .modal-content-produccion .form-produccion .cantidad-cont .textarea{
-  width: 100%;           /* Ancho completo del contenedor */
-  max-width: 260px;      /* Ancho máximo de 500px */
-  height: 80px;         /* Altura inicial de 150px */
-  max-height: 80px;
-  min-height: 80px;
-  min-width:260px; 
+.modal-produccion .modal-content-produccion .form-produccion .cantidad-cont .nota-precio-cont{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-produccion .modal-content-produccion .form-produccion .cantidad-cont .textarea-inventario{
+  width: 100%;         
+  height: 120px;  
+  resize: none;
   padding: 10px;
+  font-size: 17px;
 }
 .modal-produccion .modal-content-produccion .form-produccion .btn-agregar{
   width: 100%;
@@ -189,8 +218,8 @@ background-color: #CF696B;
   padding: 20px;
   border-radius: 8px;
   width: 100%;
-  max-width: 950px;
-  height: 684px;
+  max-width: 800px;
+  height: 845px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
   scrollbar-width: none;
@@ -212,24 +241,50 @@ margin-bottom: 25px;
   grid-template-columns: 1fr;
   grid-template-rows: 2fr 1fr 1fr;
 }
+.modal-content-baja .form-produccion .fecha-cont{
+  width: 100%;
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  flex-direction: row;
+  padding-right: 20px;
+}
+.fecha-cont .nombreplanta{
+  width: 50%;
+  height: 40px;
+  padding: 10px;
+  font-size: 25px;
+  letter-spacing: 8px;
+  /* color: #2c9b6d; */
+  color: #000;
+  font-weight: bold;
+}
+.fecha-cont p{
+  height: 40px;
+  padding: 10px;
+  font-size: 17px;
+  color: #000;
+  font-weight: bold;
+}
 .modal-content-baja .form-produccion .img-info-cont{
   width: 100%;
-  height: 100%;
+  height: 375px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   gap: 20px;
 }
 .modal-content-baja .form-produccion .img-info-cont .img-cont{
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
   padding: 25px; 
 
 }
 .modal-content-baja .form-produccion .img-info-cont .img-cont .imgBaja {
   width: 100%;
   height: 100%;
-  border-radius: 16px ;
+  border-radius: 16px;
 }
 .modal-content-baja .form-produccion .info-planta-cont{
   width: 100%;
@@ -238,15 +293,7 @@ margin-bottom: 25px;
   display: flex;
   flex-direction: column;
 }
-.modal-content-baja .form-produccion .info-planta-cont .fecha-cont{
-  width: 100%;
-  height: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: end;
-  flex-direction: column;
-  padding-right: 20px;
-}
+
 .modal-content-baja .form-produccion .info-planta-cont .textos-cont{
   width: 100%;
   height: 100%;
@@ -260,15 +307,11 @@ margin-bottom: 25px;
   flex-direction: column;
   gap: 10px;
 }
-.textos-cont .textos .nombreplanta{
-  width: 100%;
-  height: 40px;
-  padding: 10px;
-  font-size: 25px;
-  letter-spacing: 15px;
-  color: #2c9b6d;
-  font-size: bold;
-  
+.textos-cont .textos .precio-cantidad-cont{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 70px;
 }
 .sinborde{
   border: none;
@@ -280,19 +323,22 @@ margin-bottom: 25px;
   height: 100%;
   padding: 20px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
+  justify-content: start;
+  align-items: end;
   gap: 20px;
 }
+.modal-content-baja .form-produccion .cantidad-cont .nota-precio-cont{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .modal-content-baja .form-produccion .cantidad-cont .textarea{
-  width: 100%;           /* Ancho completo del contenedor */
-  max-width: 260px;      /* Ancho máximo de 500px */
-  height: 80px;         /* Altura inicial de 150px */
-  max-height: 80px;
-  min-height: 80px;
-  min-width:260px; 
+  width: 100%;         
+  height: 120px;  
+  resize: none;
   padding: 10px;
+  font-size: 17px;
 }
 .modal-content-baja .form-produccion .btn-agregar{
   width: 100%;
@@ -341,8 +387,8 @@ margin-bottom: 25px;
   padding: 0px 50px;
   border-radius: 8px;
   width: 100%;
-  max-width: 800px;
-  height: 650px;
+  max-width: 600px;
+  height: 580px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
   scrollbar-width: none;
@@ -362,9 +408,9 @@ margin-bottom: 25px;
   height: 520px;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 2fr 1fr 1fr;
+  grid-template-rows: .5fr 1fr 1fr;
 }
-.modal-inventario .modal-content-inventario .form-produccion .img-info-cont{
+.modal-inventario .modal-content-inventario .form-produccion .info-fecha-cont{
   width: 100%;
   height: 100%;
   display: grid;
@@ -372,39 +418,238 @@ margin-bottom: 25px;
   grid-template-rows: 1fr;
   gap: 20px;
 }
-.modal-inventario .modal-content-inventario .form-produccion .img-info-cont .img-cont{
+
+.modal-inventario .modal-content-inventario .form-produccion .info-fecha-cont .textos-cont .select-producto{
   width: 100%;
-  height: 100%;
-  padding: 25px; 
-  background-color: #caffd3;
+  height: 45px;
+}
+.modal-inventario .modal-content-inventario .form-produccion .cantidad-cont {
+  width: 100%;
+  height: 60%;
   border-radius: 16px;
-}
-.modal-inventario .modal-content-inventario .form-produccion .img-info-cont .img-cont .imgProduccion {
-  width: 100%;
-  height: 100%;
-  border-radius: 16px ;
-}
-.modal-inventario .modal-content-inventario .form-produccion .info-planta-cont{
-  width: 100%;
-  height: 100%;
-  border-radius: 16px ;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+
 }
-.modal-inventario .modal-content-inventario .form-produccion .info-planta-cont .fecha-cont{
+.modal-inventario .modal-content-inventario .form-produccion .cantidad-cont .cant-precio-cont{
+  width: 100%;
+  height: 60%;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+
+}
+.modal-inventario .modal-content-inventario .form-produccion .cantidad-cont .textarea-baja{
+  width: 100%;
+  height: 150px;
+  resize: none;
+  padding: 10px;
+  font-size: 17px;
+
+}
+.modal-inventario .modal-content-inventario .form-produccion .btn-agregar{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 50px;
+  gap: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #000;
+  margin-bottom: 10px;
+}
+.modal-inventario .modal-content-inventario .form-produccion .btn-agregar .logo-btn-add{
+  width: 220px;
+  height: 40px;
+}
+.modal-inventario .modal-content-inventario .form-produccion .btn-agregar div{
   width: 100%;
   height: 45px;
   display: flex;
-  justify-content: center;
-  align-items: end;
-  flex-direction: column;
-  padding-right: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 15px;
 }
-.modal-inventario .modal-content-inventario .form-produccion .info-planta-cont .textos-cont{
+.modal-inventario .modal-content-inventario .form-produccion .btn-agregar .btn{
+  width: 150px;
+  border-radius: 15px;
+  background-color: #2db87e;
+}
+.modal-inventario .modal-content-inventario .form-produccion .btn-agregar .btn-cancel{  
+  width: 120px;
+  background-color: #CF696B;
+}
+
+/* Modal dar de baja produccion */
+.modal-baja-produccion {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Contenido del Modal */
+.modal-content-baja-produccion {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-30%, -50%); /* Centra el modal */
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 800px;
+  height: 845px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.modal-content-baja-produccion .inputplantas-title{
+  width: 100%;
+height: 80px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 5px;
+border-bottom: 1px solid #000;
+margin-bottom: 25px;
+}
+.modal-content-baja-produccion .form-produccion {
+  width: 100%;
+  height: 520px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 2fr 1fr 1fr;
+}
+.modal-content-baja-produccion .form-produccion .fecha-cont{
+  width: 100%;
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  flex-direction: row;
+  padding-left: 20px;
+}
+.fecha-cont .nombreplanta{
+  width: 50%;
+  height: 40px;
+  padding: 10px;
+  font-size: 25px;
+  letter-spacing: 8px;
+  /* color: #2c9b6d; */
+  color: #000;
+  font-weight: bold;
+}
+.fecha-cont p{
+  height: 40px;
+  padding: 10px;
+  font-size: 17px;
+  color: #000;
+  font-weight: bold;
+}
+.modal-content-baja-produccion .form-produccion .img-info-cont{
+  width: 100%;
+  height: 375px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 20px;
+}
+
+.modal-content-baja-produccion .form-produccion .img-info-cont .img-cont{
+  width: auto;
+  height: auto;
+  padding: 25px; 
+
+}
+.modal-content-baja-produccion .form-produccion .img-info-cont .img-cont .imgBajaP {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+}
+.modal-content-baja-produccion .form-produccion .info-planta-cont{
+  width: 100%;
+  height: 100%;
+  border-radius: 16px ;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content-baja-produccion .form-produccion .info-planta-cont .textos-cont{
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
   padding: 0px 20px;
+}
+.textos-cont .textos{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.textos-cont .textos .precio-cantidad-cont{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 70px;
+} 
+.sinborde{
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+.modal-content-baja-produccion .form-produccion .cantidad-cont{ 
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: start;
+  align-items: end;
+  gap: 20px;
+}
+.modal-content-baja-produccion .form-produccion .cantidad-cont .nota-precio-cont{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.modal-content-baja-produccion .form-produccion .cantidad-cont .textarea{
+  width: 100%;         
+  height: 120px;  
+  resize: none;
+  padding: 10px;
+  font-size: 17px;
+}
+.modal-content-baja-produccion .form-produccion .btn-agregar{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 50px;
+  gap: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #000;
+  margin-bottom: 10px;
+}
+.modal-content-baja-produccion .form-produccion .btn-agregar .logo-btn-add{
+  width: 220px;
+  height: 40px;
+}
+.modal-content-baja-produccion .form-produccion .btn-agregar .btn{
+  width: 150px;
+  border-radius: 15px;
+  background-color: #2db87e;
+}
+.modal-content-baja-produccion .form-produccion .btn-agregar .btn-cancel{  
+  width: 120px;
+  background-color: #CF696B;
 }

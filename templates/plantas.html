@@ -203,7 +203,10 @@ Plantas | El Jaboncillo
                 <div class="inputs-cont columna-1">
                     <div>
                         <input type="hidden" id="id_editar_planta" name="id_editar_planta">
-                        <label for="">Nombre</label>
+                        <div class="contenedor-obligatorio">
+                            <label for="">Nombre</label>
+                            <span class="spanobligatorio">*Obligatorio</span>
+                        </div>
                         <input type="text" id="nombrePlanta_editar" class="input input-plantas"
                             name="nombrePlanta_editar" value="" placeholder="Ej. Crisantemo">
                     </div>
@@ -212,7 +215,10 @@ Plantas | El Jaboncillo
                         <textarea id="descripcion_editar" class="input input-plantas" name="descripcion_editar" placeholder="Ej. cuidados de la planta, etc."></textarea>
                     </div>
                     <div>
-                        <label for="">Precio unitario</label>
+                        <div class="contenedor-obligatorio">
+                            <label>Precio unitario</label>
+                            <span class="spanobligatorio">*Obligatorio</span>
+                        </div>
                         <input type="number" id="precio_editar" class="input input-plantas" name="precio_editar"
                             value="" placeholder="0.00" min="0">
                     </div>
@@ -228,7 +234,10 @@ Plantas | El Jaboncillo
                         </select>
                     </div>
                     <div class="input-subcat">
-                        <label for="">Subcategorias</label>
+                        <div class="contenedor-obligatorio">
+                            <label>Subcategorias</label>
+                            <span class="spanobligatorio">*Obligatorio</span>
+                        </div>
                         <select class="input input-plantas" id="idSubcategoria_editar" name="idSubcategoria_editar"
                             required>
                             {% for subcat in Subcategorias %}

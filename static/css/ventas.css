@@ -116,20 +116,27 @@
 .container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-3{
    width: 100%;
    display: flex;
-   justify-content: start;
+   justify-content: space-between;
    flex-direction: row;
    align-items: center;
    gap: 45px;
 }
+.container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-3 .agregar_producto{
+   width: 180px;
+   height: 40px;
+   border-radius: 15px;
+   font-size: 16px;
+   font-weight: bold;
+}
 .container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-3 .row-3-cont{
    width: 40%;
    display: flex;
-   justify-content: space-between;
    flex-direction: row;
-   
-  
+   gap: 60px;
 }
-
+.container-table-inputs .container-inputVenta .form-venta .inputs-venta .row-3 .row-3-cont div{
+   width: 40%;
+}
 
 .container-table-inputs .container-inputVenta .form-venta .inputs-venta .input-venta{
    width: 100%;
@@ -161,7 +168,7 @@
  }
 
  .tabla-venta th { 
-      width : 100%;
+      width : 25%;
       background-color: #F3F2F8;
       color: #000;
       font-weight: bold;

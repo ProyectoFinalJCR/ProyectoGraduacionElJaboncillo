@@ -81,9 +81,10 @@
     height: 40px;
     border-radius: 15px;
     border: none;
-    background-color: #a9ffa9;
-    font-weight: bold;
+    background-color: #2db87e;
+    font-weight: 600;
     cursor:pointer;
+    color: #fff;
 }
 .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .row-1 .numero-venta{
     width: 100%;
@@ -102,6 +103,7 @@
 .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev{
     width: 100%;
     height: 330px;
+    overflow-y: auto;
 }
 
 .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev{
@@ -136,22 +138,6 @@
       cursor: pointer;
   }
   
-  .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev .btn-acciones .btn-eliminar:hover{
-    background-color: rgba(11, 190, 41, 1);
-  }
-  
-  .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev .btn-acciones .btn-eliminar:active{
-    background-color: rgba(11, 190, 41, 0.8);
-  }
-  
-  .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev .btn-acciones .btn-eliminar:focus{
-    background-color: rgba(11, 190, 41, 1);
-  }
-  
-  .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev .btn-acciones .btn-eliminar:disabled{
-    background-color: rgba(11, 190, 41, 0.5);
-  }
-
 .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .productos-dev .tabla-dev table{
   width: 100%;
   border-collapse: collapse;
@@ -171,7 +157,7 @@
 }
 
 .tabla-dev th {
-   width : 100%;
+   width : 25%;
    background-color: #F3F2F8;
    color: #000;
    font-weight: bold;
@@ -211,4 +197,12 @@
 .container-inputDevolucion .nueva-devolucion .btn-agregar .btn-cancel {
     width: 120px;
     background-color: #CF696B;
+  }
+  
+
+  .cantidad-input{
+    height: 58px;
+    font-size: 17px;
+    background-color: transparent;
+    border: none;
   }

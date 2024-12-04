@@ -32,6 +32,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     });
 
+     // validar contraseña length
+  document.getElementById("password").addEventListener("input", function () {
+    const clave = this.value;
+
+    // Expresión regular para validar caracteres especiales y longitud mínima
+    const regex = /^(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+
+    if (clave.length < 8) {
+      this.setCustomValidity("La contraseña debe tener al menos 8 caracteres.");
+      this.reportValidity();
+    } else if (!regex.test(clave)) {
+      this.setCustomValidity("La contraseña debe contener al menos un carácter especial.");
+      this.reportValidity();
+    } else {
+      this.setCustomValidity(""); // Limpia el mensaje de validación
+      this.reportValidity();
+    }
+  });
+
     // funcion donde se validan los campos
     function validate_inputs() {
         const userName_input = document.getElementById("userName").value.trim();

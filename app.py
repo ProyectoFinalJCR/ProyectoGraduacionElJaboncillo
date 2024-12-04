@@ -533,7 +533,16 @@ def insumos():
         precaucionesInsumo = request.form.get('precauciones')
         imgInsumo = request.form.get('imgInsumo')
         fechaVencimientoInsumo = request.form.get('fecha_vencimiento')
-        fecha_vencimiento = datetime.strptime(fechaVencimientoInsumo, "%Y-%m-%d").date()
+        if fechaVencimientoInsumo:  # Verifica si no está vacío o es None
+            try:
+                fecha_vencimiento = datetime.strptime(fechaVencimientoInsumo, "%Y-%m-%d").date()
+            except ValueError:
+                flash(('La fecha de vencimiento no tiene un formato válido. Por favor, verifique.', 'error'))
+                return redirect(url_for('insumos'))
+        else:
+            fecha_vencimiento = None 
+        # fecha_vencimiento = datetime.strptime(fechaVencimientoInsumo, "%Y-%m-%d").date()
+
         fecha_actual = datetime.now().date()
         precioVentaInsumo = request.form.get("precio_venta")
         unidadMedidaInsumo = request.form.get('idUnidadMedida')
@@ -566,12 +575,21 @@ def insumos():
             flash(('Ingrese las precauciones', 'error', '¡Error!'))
             return redirect(url_for('insumos'))
                 
-        if fecha_vencimiento < fecha_actual:
+        if fecha_vencimiento is not None and fecha_vencimiento < fecha_actual:
             flash(("No puedes ingresar un producto con la fecha de vencimiento caducada", 'error', '¡Error!'))
             return redirect(url_for("insumos"))
-        
+
         if not precioVentaInsumo:
             flash(("No se ha ingresado el precio de venta", 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        precio = float(precioVentaInsumo)
+        if precio < 0:
+            flash(("El precio de venta no puede ser negativo", 'error', '¡Error!'))
+            return redirect(url_for('insumos'))
+        
+        if precio == 0:
+            flash(("El precio de venta no puede ser 0", 'error', '¡Error!'))
             return redirect(url_for('insumos'))
         
         if not unidadMedidaInsumo:
@@ -650,7 +668,15 @@ def editarinsumo():
        compatibilidadInsumo_editar = request.form.get('compatibilidad_editar')
        precaucionesInsumo_editar = request.form.get('precauciones_editar')
        fechaVencimientoInsumo_editar = request.form.get('fechaVencimientoInsumo_editar')
-       fecha_vencimiento = datetime.strptime(fechaVencimientoInsumo_editar, "%Y-%m-%d").date()
+       if fechaVencimientoInsumo_editar:  # Verifica si no está vacío o es None
+            try:
+                fecha_vencimiento = datetime.strptime(fechaVencimientoInsumo_editar, "%Y-%m-%d").date()
+            except ValueError:
+                flash(('La fecha de vencimiento no tiene un formato válido. Por favor, verifique.', 'error'))
+                return redirect(url_for('insumos'))
+       else:
+            fecha_vencimiento = None
+    #    fecha_vencimiento = datetime.strptime(fechaVencimientoInsumo_editar, "%Y-%m-%d").date()
        fecha_actual = datetime.now().date()
        precio_ventaInsumo_editar = request.form.get('precioVentaInsumo_editar')
        unidadMedida_editar = request.form.get('unidadMedida_editar')
@@ -686,14 +712,10 @@ def editarinsumo():
        if not precaucionesInsumo_editar:
            flash(('Ingrese las precauciones', 'error', '¡Error!'))
            return redirect(url_for('insumos'))
-
-       if not fechaVencimientoInsumo_editar:
-            flash(('Ingrese la fecha de vencimiento', 'error', '¡Error!'))
-            return redirect(url_for('insumos'))
         
-       if fecha_vencimiento < fecha_actual:
-            flash(('La fecha de vencimiento no puede ser anterior a la fecha actual', 'error', '¡Error!'))
-            return redirect(url_for('insumos'))
+       if fecha_vencimiento is not None and fecha_vencimiento < fecha_actual:
+            flash(("No puedes ingresar un producto con la fecha de vencimiento caducada", 'error', '¡Error!'))
+            return redirect(url_for("insumos"))
 
        if not precio_ventaInsumo_editar:
             flash(('Ingrese el precio de venta', 'error', '¡Error!'))
@@ -902,6 +924,16 @@ GROUP BY
         if not precio:
             flash(('Ingrese el precio', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
+        
+        precioverificar = float(precio)
+
+        if precioverificar < 0:
+            flash(('El precio no puede ser negativo', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        if precioverificar == 0:
+            flash(('El precio no puede estar en cero. verifique su entrada', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+        
         if not subcategoria:
             flash(('Seleccione la subcategoria', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
@@ -1072,7 +1104,6 @@ def agregarLogoEmpresa(data):
 
 @app.route('/editarPlantas', methods=["POST"])
 @login_required
-@ruta_permitida
 def editarplantas():
     if request.method == "POST":
        
@@ -1099,6 +1130,15 @@ def editarplantas():
        if not precio_editar:
            flash(('Ingrese el precio de la planta', 'error', '¡Error!'))
            return redirect(url_for('plantas'))
+
+       precio_editarv = float(precio_editar)
+       if precio_editarv < 0:
+            flash(('El precio no puede ser negativo', 'error', '¡Error!'))
+            return redirect(url_for('plantas'))
+       
+       if precio_editarv == 0:
+            flash(('El precio no puede estar en cero. verifique su entrada', 'error', '¡Error!'))   
+            return redirect(url_for('plantas'))
       
        if not subcatplanta_editar:
            flash(('Seleccione al menos una subcategoría', 'error', '¡Error!'))
@@ -2119,10 +2159,13 @@ def inventario_info():
     CASE
         WHEN p.id IS NOT NULL THEN 'planta'
         WHEN i.id IS NOT NULL THEN 'insumo'
-    END AS tipo_producto
+    END AS tipo_producto,
+    COALESCE(u.unidad_medida, 'N/A') AS unidad_medida
         FROM stock as inv
         LEFT JOIN plantas as p ON p.id = inv.planta_id
         LEFT JOIN insumos as i ON i.id = inv.insumo_id
+        LEFT JOIN insumos_unidades AS iu ON iu.insumo_id = i.id
+        LEFT JOIN unidades_medidas AS u ON u.id = iu.id 
         INNER JOIN movimientos_kardex as mk ON mk.id = inv.kardex_id
               """)
     
@@ -2137,6 +2180,7 @@ def inventario_info():
             "imagen_url": prod.imagen_url,
             "cantidad": prod.cantidad,
             "tipo_producto": prod.tipo_producto,
+            "unidad_medida": prod.unidad_medida,
         }
         for prod in productos
     ]
@@ -2388,10 +2432,13 @@ def inventario():
     COALESCE(p.nombre, i.nombre) AS nombre_producto,
     COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
     COALESCE(p.imagen_url, i.imagen_url) AS imagen_url,
-    inv.cantidad
+    inv.cantidad,
+    COALESCE(u.unidad_medida, 'N/A') AS unidad_medida
         FROM stock as inv
         LEFT JOIN plantas as p ON p.id = inv.planta_id
         LEFT JOIN insumos as i ON i.id = inv.insumo_id
+        LEFT JOIN insumos_unidades AS iu ON iu.insumo_id = i.id
+        LEFT JOIN unidades_medidas AS u ON u.id = iu.id 
         INNER JOIN movimientos_kardex as mk ON mk.id = inv.kardex_id""")
         infoInventario = db.execute(mostrarInventario).fetchall()
         
