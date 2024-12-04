@@ -2240,6 +2240,60 @@ def produccion():
     
     return redirect(url_for('inventario'))
 
+@app.route('/insumosproduccion', methods=["POST"])
+@login_required
+def insumosproduccion():
+    if request.method == 'POST':
+        idInsumo = request.form.get('id_producto_baja')
+        print(idInsumo)
+        cantidad = request.form.get('cantidad')
+        print(cantidad)
+        fechaactual = datetime.now().date()
+        precio = request.form.get('precioPlanta')
+        nota = request.form.get('nota')
+
+        if not nota or not cantidad:
+            flash(('Verifique los campos, estan vacios', "error"))
+            return redirect(url_for("inventario")) 
+
+        
+        ObtenerInsumoStock = text('SELECT * FROM stock WHERE insumo_id=:id')
+        infoStock = db.execute(ObtenerInsumoStock,{"id":idInsumo}).mappings().fetchone()
+
+        ObtenerMovimiento = text('SELECT * FROM tipo_movimientos WHERE tipo_movimiento=:tipo_movimiento')
+        infoMovimiento = db.execute(ObtenerMovimiento, {"tipo_movimiento": 'Salida a producción'}).mappings().fetchone()
+
+        cantidadStock = int(infoStock["cantidad"])
+        nuevaCantidad = cantidadStock - int(cantidad)
+        print(infoStock['cantidad'])
+        
+        insertarPlantaquery = text("INSERT INTO movimientos_kardex (insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+        db.execute(insertarPlantaquery, {"insumo_id": idInsumo, "cantidad": cantidad, "tipo_movimiento_id": infoMovimiento["id"], "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
+        
+        kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
+
+        actualizar_stock = text("""
+                    UPDATE stock 
+                    SET cantidad = :cantidad, 
+                            kardex_id = :kardex_id,
+                            estado = CASE WHEN :cantidad <= 0 THEN false ELSE true END
+                        WHERE id = :id
+                """)
+        db.execute(
+            actualizar_stock, 
+            {
+                "cantidad": nuevaCantidad, 
+                "kardex_id": kardexId, 
+                "id": infoStock['id']
+            }
+        )
+        db.commit()
+
+        flash(('Se ha actualizado el stock correctamente', 'success'))
+        return redirect(url_for("inventario"))
+    
+    return redirect(url_for('inventario'))
+
 @app.route('/bajaproductos', methods=["GET", "POST"])
 @login_required
 def bajaproductos():
