@@ -1230,6 +1230,8 @@ def ventas():
         obtenerTipoCliente = text("SELECT * FROM cliente_categoria")
         obtenerColores = text("SELECT * FROM colores")
         obtenerMedidas = text("SELECT * FROM medidas")
+        ObtenerUnidades = text('SELECT * FROM unidades_medidas')
+        unidades = db.execute(ObtenerUnidades).fetchall()
 
         tipoCliente = db.execute(obtenerTipoCliente).fetchall()
         colores = db.execute(obtenerColores).fetchall()
@@ -1237,7 +1239,7 @@ def ventas():
         tiposPago = db.execute(obtenerTiposPago).fetchall()
         infoSubcat = db.execute(ObtenerSubcat).fetchall()
         infoVentas = db.execute(ObtenerVentas).fetchall()
-        return render_template('ventas.html', InfoSubcat = infoSubcat, InfoVentas = infoVentas, tipospago = tiposPago, colores = colores, medidas = medidas, tipocliente = tipoCliente)
+        return render_template('ventas.html', InfoSubcat = infoSubcat, InfoVentas = infoVentas, tipospago = tiposPago, colores = colores, medidas = medidas, tipocliente = tipoCliente, unidades=unidades)
     else:
         cliente = request.form.get('nombreCliente')
         cliente_categoria = request.form.get('tipoCliente-select')
@@ -1331,8 +1333,10 @@ def ventas():
             if stockInfo['id']:
                 actualizar_stock = text("""
                     UPDATE stock 
-                    SET cantidad=:cantidad, kardex_id=:kardex_id    
-                    WHERE id=:id
+                        SET cantidad = :cantidad, 
+                            kardex_id = :kardex_id,
+                            estado = CASE WHEN :cantidad <= 0 THEN false ELSE true END
+                        WHERE id = :id
                 """)
                 db.execute(
                     actualizar_stock, 
@@ -1439,6 +1443,9 @@ def compras():
         ObtenerProveedores = text('SELECT * FROM proveedores')
         proveedores = db.execute(ObtenerProveedores).fetchall()
 
+        ObtenerUnidades = text('SELECT * FROM unidades_medidas')
+        unidades = db.execute(ObtenerUnidades).fetchall()
+
         obtenerTiposPago = text("SELECT * FROM tipos_pagos")
         obtenerColores = text("SELECT * FROM colores")
         obtenerMedidas = text("SELECT * FROM medidas")
@@ -1452,7 +1459,7 @@ def compras():
         medidas = db.execute(obtenerMedidas).fetchall()
         tiposPago = db.execute(obtenerTiposPago).fetchall()
         compras = db.execute(ObtenerCompras).fetchall()
-        return render_template('compras.html', Subcategorias = subcategorias, Proveedores = proveedores, Compras = compras, colores = colores, medidas = medidas, tipospago = tiposPago)
+        return render_template('compras.html', Subcategorias = subcategorias, Proveedores = proveedores, Compras = compras, colores = colores, medidas = medidas, tipospago = tiposPago, unidades = unidades)
     else:
         proveedorId = request.form.get('proveedor-select')
         fecha_actual = datetime.now()
@@ -1547,8 +1554,10 @@ def compras():
             if stockInfo['id']:
                 actualizar_stock = text("""
                     UPDATE stock 
-                    SET cantidad=:cantidad, kardex_id=:kardex_id
-                    WHERE id=:id
+                    SET cantidad = :cantidad, 
+                            kardex_id = :kardex_id,
+                            estado = CASE WHEN :cantidad <= 0 THEN false ELSE true END
+                        WHERE id = :id
                 """)
                 db.execute(
                     actualizar_stock, 
@@ -1783,21 +1792,28 @@ def obtener_ventas():
     # print(subcategoria)
 
     ObtenerVenta = text("""
-                SELECT 	detalle_ventas.id AS idDetalleVenta,
-		            detalle_ventas.planta_id AS plantaId,
-		            plantas.nombre AS nombrePlanta,
-		            detalle_ventas.insumo_id AS insumoID,
-		            insumos.nombre AS nombreInsumo,
-		            detalle_ventas.venta_id AS ventaId, 
-		            detalle_ventas.kardex_id AS kardexId, 
-		            detalle_ventas.cantidad AS cantidad,
-                    detalle_ventas.precio_unitario AS precio
-	            FROM public.detalle_ventas
-	            LEFT JOIN
-                        plantas ON detalle_ventas.planta_id = plantas.id
-                    LEFT JOIN
-                        insumos ON detalle_ventas.insumo_id = insumos.id
-	            WHERE venta_id =:venta_id
+                SELECT 
+            detalle_ventas.id AS idDetalleVenta,
+            detalle_ventas.planta_id AS plantaId,
+            plantas.nombre AS nombrePlanta,
+            detalle_ventas.insumo_id AS insumoID,
+            insumos.nombre AS nombreInsumo,
+            detalle_ventas.venta_id AS ventaId, 
+            detalle_ventas.kardex_id AS kardexId, 
+            detalle_ventas.cantidad AS cantidad,
+            detalle_ventas.precio_unitario AS precio
+        FROM public.detalle_ventas
+        LEFT JOIN plantas 
+            ON detalle_ventas.planta_id = plantas.id
+        LEFT JOIN insumos 
+            ON detalle_ventas.insumo_id = insumos.id
+        WHERE detalle_ventas.venta_id = :venta_id
+          AND NOT EXISTS (
+              SELECT 1
+              FROM public.devoluciones
+              WHERE devoluciones.venta_id = detalle_ventas.venta_id
+          );
+        
     """)
     
     infoVenta = db.execute(ObtenerVenta, {'venta_id': ventaId}).mappings().all()
@@ -2126,8 +2142,10 @@ def produccion():
 
         actualizar_stock = text("""
                     UPDATE stock 
-                    SET cantidad=:cantidad, kardex_id=:kardex_id
-                    WHERE id=:id
+                    SET cantidad = :cantidad, 
+                            kardex_id = :kardex_id,
+                            estado = CASE WHEN :cantidad <= 0 THEN false ELSE true END
+                        WHERE id = :id
                 """)
         db.execute(
             actualizar_stock, 
@@ -2181,8 +2199,10 @@ def bajaproductos():
 
         actualizar_stock = text("""
                     UPDATE stock 
-                    SET cantidad=:cantidad, kardex_id=:kardex_id 
-                    WHERE id=:id
+                    SET cantidad = :cantidad, 
+                            kardex_id = :kardex_id,
+                            estado = CASE WHEN :cantidad <= 0 THEN false ELSE true END
+                        WHERE id = :id
                 """)
         db.execute(
             actualizar_stock, 
