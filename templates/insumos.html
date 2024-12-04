@@ -228,7 +228,10 @@ Insumos | El Jaboncillo
                 <div class="inputs-cont columna-1">
                     <div>
                         <input type="hidden" id="id_editar_insumo" name="id_editar_insumo" value="{{insumos.id}}">
-                        <label for="">Insumo</label>
+                        <div class="contenedor-obligatorio">
+                            <label for="">Insumo</label>
+                            <span class="spanobligatorio">*Obligatorio</span>
+                        </div>
                         <input type="text" id="insumo_editar" class="input input-insumos" name="insumo_editar" placeholder="Ej. urea" value="">
                     </div>
                     <div>
@@ -277,7 +280,10 @@ Insumos | El Jaboncillo
                             name="compatibilidad_editar" placeholder="Ej. compatible con citricos, etc.">
                     </div>
                     <div>
-                        <label for="">Precio de venta</label>
+                        <div class="contenedor-obligatorio">
+                            <label for="">Precio de venta </label>
+                            <span class="spanobligatorio">*Obligatorio</span>
+                        </div>
                         <input type="number" id="precioVentaInsumo_editar" class="input input-insumos"
                             name="precioVentaInsumo_editar" value="" required>
                     </div>
@@ -310,7 +316,7 @@ Insumos | El Jaboncillo
                     <div>
                         <label for="">Fecha de vencimiento</label>
                         <input type="date" id="fechaVencimientoInsumo_editar" class="input input-insumos"
-                            name="fechaVencimientoInsumo_editar" value="" required>
+                            name="fechaVencimientoInsumo_editar" value="" >
                     </div>
                 </div>
             </section>

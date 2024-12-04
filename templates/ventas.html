@@ -140,12 +140,11 @@ Ventas | El Jaboncillo
                             </div>
                             <div>
                                 <label>Precio</label>
-                                <input type="number" id="precio" class="input input-plantas validar-input" name="precio"
+                                <input type="number" id="precio" class="input input-plantas validar-input" name="precio" min="0"
                                     placeholder="0.00">
                             </div>
                         </div>
-                        <button type="button" class="btn agregar_producto" id="agregar_producto">Agregar</button>
-
+                        
                         <div>
                             <input type="hidden" name="idProd" id="idProd">
                         </div>
@@ -155,6 +154,7 @@ Ventas | El Jaboncillo
                         <div>
                             <input type="hidden" name="tipoProducto" id="tipoProducto">
                         </div>
+                        <button type="button" class="btn agregar_producto" id="agregar_producto">Agregar</button>
                     </div>
                     <div class="productos-ventas">
                         <table id="lista-productos-seleccionados" class="tabla-venta">

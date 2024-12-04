@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+
   //Evento para mostrar formulario
   const btn_produccion = document.querySelectorAll('.btn-produccion');
 
@@ -30,6 +31,15 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('btn-add-producto').addEventListener('click', function () {
     const modalproduccion = document.getElementById("ModalAgregarProducto");
     modalproduccion.style.display = "block";
+
+    document.getElementById("btn-cancel-producto").addEventListener("click", function () {
+      const modalproduccion = document.getElementById("ModalAgregarProducto");
+      modalproduccion.style.display = "none";
+    });
+    document.getElementById("close-producto").addEventListener("click", function () {
+      const modalproduccion = document.getElementById("ModalAgregarProducto");
+      modalproduccion.style.display = "none";
+    });
   });
 
   // Buscar inventario
@@ -49,7 +59,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const resultados = valorBuscar === "" ? inventarioData :
       inventarioData.filter(inventario =>
         inventario.nombre_producto.toLowerCase().includes(valorBuscar) ||
-        (inventario.precio_venta ? inventario.precio_venta.toString().toLowerCase() : "").includes(valorBuscar.toLowerCase()) || (inventario.cantidad ? inventario.cantidad.toString().toLowerCase() : "").includes(valorBuscar.toLowerCase())
+        (inventario.precio_venta ? inventario.precio_venta.toString().toLowerCase() : "").includes(valorBuscar.toLowerCase()) || (inventario.cantidad ? inventario.cantidad.toString().toLowerCase() : "").includes(valorBuscar.toLowerCase()) ||
+        (inventario.unidad_medida ? inventario.unidad_medida.toString().toLowerCase() : "").includes(valorBuscar.toLowerCase())
       );
 
     // Mostrar resultados filtrados o todos los inventario si el input está vacío
@@ -70,14 +81,20 @@ document.addEventListener("DOMContentLoaded", function () {
         <td> ${inventario.nombre_producto}</td>
         <td> ${inventario.precio_venta}</td>
         <td> ${inventario.cantidad}</td>
-        <td style="display: none;"><img src="${inventario.imagen_url}" alt="producto" class="mini-imgInsumo"></td>
+        <td style="display: none;" ><img src="${inventario.imagen_url}" alt="producto" class="mini-imgInsumo"></td>
         <td style="display: none;">${inventario.produccion_id}</td>
-        <td style="display: none;">${inventario.tipo_producto}</td>
-                    
+        <td style="display: none;" class="tipoProducto">${inventario.tipo_producto}</td>                    
+        <td style="display: none;" class="unidad_medida">${inventario.unidad_medida}</td>
+
         <td class="btn-acciones">
             <button class="btn-produccion" data-id="${inventario.producto_id}">
                 <i class="material-icons">compost</i>
             </button>
+            
+            <button class="btn-baja-produccion" data-id="${inventario.producto_id}">
+                <i class="material-symbols-outlined">grocery</i>
+            </button>
+
             <button class="btn-darbaja" data-id="${inventario.producto_id}">
                 <i class="material-icons">delete</i>
             </button>
@@ -85,6 +102,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
       </tr>`;
         tableBody.insertAdjacentHTML('beforeend', row);
+      });
+
+      const tipoProductoElements = document.querySelectorAll('.tipoProducto');
+      tipoProductoElements.forEach((tipoProducto, index) => {
+        if (tipoProducto.textContent.trim() === "insumo") {
+          const botonesProduccion = document.querySelectorAll('.btn-produccion');
+          if (botonesProduccion[index]) {
+            botonesProduccion[index].style.display = "none";
+          }
+        }
+      });
+      
+      const tipoProductoParaBaja = document.querySelectorAll(".tipoProducto");
+      tipoProductoParaBaja.forEach((tipoProducto, index) => {
+        if (tipoProducto.textContent.trim() === "planta") {
+          const botonesBaja = document.querySelectorAll('.btn-baja-produccion');
+          if (botonesBaja[index]) {
+            botonesBaja[index].style.display = "none";
+          }
+        }
       });
     }
   }
@@ -134,6 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const cantidad = row.cells[3].innerText;
       const imagen = row.cells[4].innerText;
       const tipoProducto = row.cells[6].innerText;
+      const unidad_medida = row.cells[7].innerText;
 
       console.log("este es el id", Idproduccion);
       // Rellenar los campos del modal con los datos obtenidos
@@ -152,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function () {
       inputPrecio.textContent = precio_venta;
 
 
-
       // Establecer la fecha en el <p>
       fechaElemento.textContent = fechaFormateada;
       // ABRIR MODAL Y MOSTRAR LA IMAGEN
@@ -166,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Mostrar el modal
-      modalproduccion.style.display = "block";
+      modalProduccion.style.display = "block";
 
       document.getElementById("btn-cancel-pro").addEventListener("click", function () {
         const modalproduccion = document.getElementById("ModalProduccion");
@@ -197,6 +234,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const inputPrecio = document.getElementById("precioProductoBaja");
       const inputCantidad = document.getElementById("cantidad");
       const inputTipoProducto = document.getElementById("tipo_producto_baja");
+      const inputUnidadMedida = document.getElementById("unidad_medida_baja");
+
 
 
       // Obtener el elemento <p>
@@ -226,6 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const cantidad = row.cells[3].innerText;
       const imagen = row.cells[4].innerText;
       const tipoProducto = row.cells[6].innerText;
+      const unidad_medida = row.cells[7].innerText;
 
 
       console.log("este es el id", Idproduccion);
@@ -244,8 +284,8 @@ document.addEventListener("DOMContentLoaded", function () {
       inputPrecio.value = precio_venta;
       inputPrecio.textContent = precio_venta;
 
-
-
+      inputUnidadMedida.value = unidad_medida;
+      inputUnidadMedida.textContent = unidad_medida;
 
       // Establecer la fecha en el <p>
       fechaElemento.textContent = fechaFormateada;
@@ -260,6 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Mostrar el modal
       modalbaja.style.display = "block";
 
+
       document.getElementById("btn-cancel-baja").addEventListener("click", function () {
         const modalbaja = document.getElementById("ModalBaja");
         modalbaja.style.display = "none";
@@ -268,6 +309,103 @@ document.addEventListener("DOMContentLoaded", function () {
         const modalbaja = document.getElementById("ModalBaja");
         console.log("esta en el btn de arriba");
         modalbaja.style.display = "none";
+      });
+
+    }
+  });
+
+  // Delegacion de eventos para el boton de baja a produccion
+  document.getElementById('tabla_inventario').addEventListener('click', function (event) {
+    if (event.target.closest('.btn-baja-produccion')) {
+      const button = event.target.closest('.btn-baja-produccion');
+      const producto_id = button.getAttribute('data-id');
+      console.log("Planta ID produccion:", producto_id);
+
+      // ABRIR Y OBTENER DATOS PARA EL MODAL
+      //Obtener datos para mostrar en el modal de editar
+      const modalbajaP = document.getElementById("ModalBajaProduccion");
+      const inputIdproduccionP = document.getElementById("id_producto_bajaP");
+      const inputNombreproduccionP = document.getElementById("nombreProductoBajaP");
+      const inputPrecioP = document.getElementById("precioProductoBajaP");
+      const inputCantidadP = document.getElementById("cantidad-bajaP");
+      const inputTipoProductoP = document.getElementById("tipo_producto_bajaP");
+      const inputUnidadMedidaP = document.getElementById("unidad_medida_bajaP");
+
+
+
+      // Obtener el elemento <p>
+      const fechaElemento = document.querySelector('.fecha-cont .fecha_baja p');
+
+      // Obtener la fecha actual
+      const fechaActual = new Date();
+      const fechaFormateada = fechaActual.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+
+      const row = event.target.closest("tr");
+      // console.log("esta entrando en este js");
+      console.log("esta en plantas.js")
+
+      // Obtener el src de la imagen dentro de la fila
+      const imgElement = row.querySelector(".mini-imgInsumo");
+      const imgSrc = imgElement ? imgElement.src : null;
+      console.log("Imagen src:", imgSrc);
+      // Obtener los datos de la categoría de esa fila
+      const IdproduccionP = row.cells[0].innerText;
+      const nombre_productoP = row.cells[1].innerText;
+      const precio_ventaP = row.cells[2].innerText;
+      const cantidadP = row.cells[3].innerText;
+      const imagenP = row.cells[4].innerText;
+      const tipoProductoP = row.cells[6].innerText;
+      const unidad_medidaP = row.cells[7].innerText;
+
+
+      console.log("este es el id", IdproduccionP);
+      // Rellenar los campos del modal con los datos obtenidos
+      inputIdproduccionP.value = IdproduccionP;
+      inputIdproduccionP.textContent = IdproduccionP;
+
+
+      inputNombreproduccionP.value = nombre_productoP;
+      inputNombreproduccionP.textContent = nombre_productoP;
+
+      inputTipoProductoP.value = tipoProductoP;
+      inputTipoProductoP.textContent = tipoProductoP;
+
+
+      inputPrecioP.value = precio_ventaP;
+      inputPrecioP.textContent = precio_ventaP;
+
+      inputUnidadMedidaP.value = unidad_medidaP;
+      inputUnidadMedidaP.textContent = unidad_medidaP;
+
+      // Establecer la fecha en el <p>
+      fechaElemento.textContent = fechaFormateada;
+      // ABRIR MODAL Y MOSTRAR LA IMAGEN
+      const modalBajaP = document.getElementById("ModalBajaProduccion");
+      const modalImg = document.querySelector(".imgBajaP");
+
+      if (imgSrc && imgSrc.trim() !== "") {
+        modalImg.src = imgSrc; // Actualizar la imagen del modal
+      } else {
+        modalImg.src = "/static/img/pordefecto.png";
+      }
+
+      // Mostrar el modal
+      modalBajaP.style.display = "block";
+
+
+      document.getElementById("btn-cancel-bajaP").addEventListener("click", function () {
+        const modalBajaP = document.getElementById("ModalBajaProduccion");
+        modalBajaP.style.display = "none";
+      });
+      document.getElementById("close-bajaP").addEventListener("click", function () {
+        const modalBajaP = document.getElementById("ModalBajaProduccion");
+        console.log("esta en el btn de arriba");
+        modalBajaP.style.display = "none";
       });
 
     }

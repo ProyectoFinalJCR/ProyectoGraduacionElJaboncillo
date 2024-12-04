@@ -269,4 +269,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log(productosDinamicos.innerHTML);
     });
+
+    
 });
