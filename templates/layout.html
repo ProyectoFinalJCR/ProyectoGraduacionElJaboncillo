@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/reportes_ventas.css">
+    <link rel="stylesheet" href="/static/css/gastos.css">
     <link rel="stylesheet" href="/static/css/inventario.css">
     <link rel="stylesheet" href="/static/css/catalogo.css">
     <link rel="stylesheet" href="/static/css/configuracion.css">
@@ -15,6 +16,7 @@
     <link rel="stylesheet" href="/static/css/plantas.css">
     <link rel="stylesheet" href="/static/css/proveedores.css">
     <link rel="stylesheet" href="/static/css/insumos.css">
+    <link rel="stylesheet" href="/static/css/lista_deseo.css">
     <link rel="stylesheet" href="/static/css/ventas.css">
     <link rel="stylesheet" href="/static/css/proveedores.css">
     <link rel="stylesheet" href="/static/css/inicio_admin.css">
@@ -55,7 +57,7 @@
                 <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">inventory</i>
-                        <p class="btn_texto">Gestión inventario</p>
+                        <p class="btn_texto">Inventario</p>
                         <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
@@ -69,7 +71,7 @@
                 <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">payments</i>
-                        <p class="btn_texto">Gestion ventas</p>
+                        <p class="btn_texto">Ventas</p>
                         <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
@@ -83,21 +85,33 @@
                 <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">local_mall</i>
-                        <p class="btn_texto">Gestión compras</p>
+                        <p class="btn_texto">Compras</p>
                         <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
                         <ul class="list-options">
                             <li><a href="/compras">Compras</a></li>
                             <li><a href="/proveedores">Proveedores</a></li>
-                            <li><a href="#">Reportes</a></li>
+                            <li><a href="/gastos">Gastos</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="items-back">
+                    <button class="btn-items">
+                        <i class="material-icons">fact_check</i>
+                        <p class="btn_texto">Listas de deseo</p>
+                        <i class="material-icons key">keyboard_arrow_right</i>
+                    </button>
+                    <div class="options">
+                        <ul class="list-options">
+                            <li><a href="/listaDAdmin">Listas de deseo por usuario</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">group_add</i>
-                        <p class="btn_texto">Gestión usuarios</p>
+                        <p class="btn_texto">Usuarios</p>
                         <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
@@ -109,7 +123,7 @@
                 <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">category</i>
-                        <p class="btn_texto">Gestión categorias</p>
+                        <p class="btn_texto">Categorias</p>
                         <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
@@ -145,7 +159,7 @@
                 <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">payments</i>
-                        <p class="btn_texto">Gestion ventas</p>
+                        <p class="btn_texto">Ventas</p>
                         <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
@@ -159,7 +173,7 @@
                 <div class="items-back">
                     <button class="btn-items">
                         <i class="material-icons">local_mall</i>
-                        <p class="btn_texto">Gestión compras</p>
+                        <p class="btn_texto">Compras</p>
                         <i class="material-icons key">keyboard_arrow_right</i>
                     </button>
                     <div class="options">
@@ -211,8 +225,10 @@
 <script src="/static/js/compras.js"></script>
 <script src="/static/js/configuracion.js"></script>
 <script src="/static/js/socket.io.min.js"></script>
+<script src="/static/js/gastos.js"></script>
 <script src="/static/js/inventario.js"></script>
 <script src="/static/js/devoluciones.js"></script>
+<script src="/static/js/lista_deseo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <!-- Carga jQuery primero -->

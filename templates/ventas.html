@@ -103,39 +103,47 @@ Ventas | El Jaboncillo
                             </select>
                         </div>
                         <div>
-                            <div>
-                                <label>Colores</label>
-                                <select class="input input-plantas" id="color-select" name="color-select">
-                                    {% for color in colores %}
-                                    <option name="color-select" value="{{color[0]}}">
-                                        {{color[1]}}
-                                    </option>
-                                    {% endfor %}
-                                    <option value="" selected>Selecciona una caracteristica</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>Medidas</label>
-                                <select class="input input-plantas" id="medida-select" name="medida-select">
-                                    {% for medida in medidas %}
-                                    <option name="medida-select" value="{{medida[0]}}">
-                                        {{medida[1]}}
-                                    </option>
-                                    {% endfor %}
-                                    <option value="" selected>Selecciona una caracteristica</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="">Unidad de medida</label>
-                                <select class="input inputs-compra" id="unidad-select" name="unidad-select">
-                                    <option value="" selected>Selecciona una caracteristica</option>
-                                    {% for unidad in unidades %}
-                                    <option value="{{unidad[2]}}">
-                                        {{unidad[1]}}
-                                    </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                            <label for="">Producto</label>
+                            <select class="input input-plantas" id="producto" name="producto">
+                                {% for producto in productos %}
+                                <option name="producto" value="{{producto[0]}}">
+                                    {{producto[1]}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label>Colores</label>
+                            <select class="input input-plantas" id="color-select" name="color-select">
+                                {% for color in colores %}
+                                <option name="color-select" value="{{color[0]}}">
+                                    {{color[1]}}
+                                </option>
+                                {% endfor %}
+                                <option value="" selected>Selecciona una caracteristica</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Medidas</label>
+                            <select class="input input-plantas" id="medida-select" name="medida-select">
+                                {% for medida in medidas %}
+                                <option name="medida-select" value="{{medida[0]}}">
+                                    {{medida[1]}}
+                                </option>
+                                {% endfor %}
+                                <option value="" selected>Selecciona una caracteristica</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="">Unidad de medida</label>
+                            <select class="input input-plantas" id="unidad-select" name="unidad-select">
+                                <option value="" selected>Selecciona una caracteristica</option>
+                                {% for unidad in unidades %}
+                                <option value="{{unidad[2]}}">
+                                    {{unidad[1]}}
+                                </option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <div class="row-3">
@@ -147,11 +155,11 @@ Ventas | El Jaboncillo
                             </div>
                             <div>
                                 <label>Precio</label>
-                                <input type="number" id="precio" class="input input-plantas validar-input" name="precio" min="0"
-                                    placeholder="0.00">
+                                <input type="number" id="precio" class="input input-plantas validar-input" name="precio"
+                                    min="0" placeholder="0.00">
                             </div>
                         </div>
-                        
+
                         <div>
                             <input type="hidden" name="idProd" id="idProd">
                         </div>

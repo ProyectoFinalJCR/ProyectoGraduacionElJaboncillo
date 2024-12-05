@@ -1612,7 +1612,11 @@ def listaDeseos():
             planta_id = None
             insumo_id = productoId
 
-        obtenerListaDeseo = text('SELECT * FROM listas_deseo WHERE usuario_id=:usuario_id AND planta_id=:planta_id OR insumo_id=:insumo_id')
+        obtenerListaDeseo = text('''SELECT * FROM listas_deseo WHERE usuario_id=:usuario_id AND (
+          (planta_id = :planta_id AND :planta_id IS NOT NULL) 
+          OR 
+          (insumo_id = :insumo_id AND :insumo_id IS NOT NULL)
+      )''')
         if db.execute(obtenerListaDeseo, {'usuario_id': usuarioId, 'planta_id': planta_id, 'insumo_id':insumo_id}).rowcount > 0:
             flash(('El producto ya ha sido agregado a la lista!', 'error', '¡Error!'))
             return redirect(url_for('catalogo'))
@@ -1835,7 +1839,7 @@ def obtener_ventas():
     return jsonify(detalleVenta)
 
 @app.route('/catalogo', methods=["GET", "POST"])
-# @login_required
+@login_required
 # @ruta_permitida
 def catalogo():
     if request.method == "GET":
@@ -2345,6 +2349,8 @@ def configuracion():
         return redirect(url_for("configuracion"))
 
 @app.route("/inventario", methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def inventario():
     if request.method == "GET":
         producto_id = request.args.get("producto_id")
@@ -2491,6 +2497,78 @@ def tendencia_ventas_diarias():
 @login_required
 def reportes_ventas():
     return render_template("reportes_ventas.html")
+
+
+@app.route('/listaDAdmin', methods=['GET'])
+@login_required
+def lista_dadmin():
+    #selecciona la lista de deseo por usuarios
+    lista_deseo_query = text("""SELECT DISTINCT u.id, u.nombre_completo, l.fecha
+FROM usuarios AS u
+INNER JOIN listas_deseo AS l ON u.id = l.usuario_id;
+""")
+    lista_deseo = db.execute(lista_deseo_query).fetchall()
+    return render_template("listaDAdmin.html", Lista_deseo = lista_deseo)
+
+@app.route('/verDetallesListaDeseo', methods=['POST'])
+@login_required
+def verDetallesListaDeseo():
+    data = request.get_json()
+    idListaDeseo = data.get('id_anular')
+    detalleListaDeseo = text("""
+        SELECT 
+            l.lista_deseo_id, 
+            COALESCE(p.nombre, i.nombre) AS producto_nombre, 
+            COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
+            u.nombre_completo AS usuario_nombre
+        FROM 
+            listas_deseo AS l
+        INNER JOIN 
+            usuarios AS u ON l.usuario_id = u.id
+        LEFT JOIN 
+            plantas AS p ON l.planta_id = p.id
+        LEFT JOIN 
+            insumos AS i ON l.insumo_id = i.id
+        WHERE 
+            u.id = :id
+    """)
+    detalleListaDeseo = db.execute(detalleListaDeseo, {"id": idListaDeseo}).fetchall()
+
+   # Convertir los resultados en una lista de diccionarios
+    if detalleListaDeseo:
+        detalles = []
+        for row in detalleListaDeseo:
+            detalles.append({
+                "lista_deseo_id": row.lista_deseo_id,
+                "producto_nombre": row.producto_nombre,
+                "precio_venta": row.precio_venta,
+                "usuario_nombre": row.usuario_nombre
+            })
+
+        return jsonify(detalles)
+    else:
+        return jsonify({"error": "No se encontró la lista de deseos"}), 404
+    
+
+    
+@app.route('/gastos', methods=['GET', 'POST'])
+@login_required
+def gastos():
+    if request.method == 'GET':
+        obtenerGastos = text("SELECT * FROM gastos")
+        gastos = db.execute(obtenerGastos).fetchall()
+        return render_template('gastos.html', gastos=gastos)
+    else:
+        monto = request.form.get('monto')
+        descripcion = request.form.get('descripcion')
+        fecha = datetime.now()
+
+        insertarGasto = text("INSERT INTO gastos (monto, fecha, descripcion) VALUES (:monto, :fecha, :descripcion)")
+        db.execute(insertarGasto, {"monto": monto, "fecha": fecha, "descripcion": descripcion})
+        db.commit()
+        db.close()
+        flash(('Producto agregado a la lista de deseos!', 'success', '¡Exito!'))
+        return redirect(url_for('gastos'))
 
 
 if __name__ == '__main__':
