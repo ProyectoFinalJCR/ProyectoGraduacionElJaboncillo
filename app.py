@@ -1,4 +1,5 @@
 import os
+import requests
 from datetime import datetime, timedelta
 from flask import Flask, jsonify, render_template, redirect, request, session, flash, url_for
 from flask_socketio import SocketIO, emit
@@ -135,6 +136,24 @@ def registrarse():
         userEmail = request.form.get('email')
         userPassword = request.form.get('password')
         userConfirmPassword = request.form.get('confirm_password')
+        captcha_response = request.form.get('g-recaptcha-response') 
+
+        if not captcha_response:
+            return render_template("registrarse.html", error_msg="Por favor, completa el CAPTCHA.")
+
+
+        # Validar CAPTCHA con Google
+        secret_key = "6Ld-4pIqAAAAADM2JVXK_ulOEbybYC1IZLQvPge-"
+        captcha_validation_url = "https://www.google.com/recaptcha/api/siteverify"
+        data = {
+            'secret': secret_key,
+            'response': captcha_response
+        }
+        captcha_response = requests.post(captcha_validation_url, data=data).json()
+        
+        if not captcha_response.get('success'):
+            return render_template("registrarse.html", error_msg="Por favor, completa el CAPTCHA correctamente.")
+        
 
         if userPassword != userConfirmPassword:
             return render_template("registrarse.html", error_msg = "Las contraseñas no coinciden")
@@ -1652,7 +1671,7 @@ def devoluciones():
         idVenta = request.form.get('idVenta')
         idMovimiento = int(request.form.get('movimiento-select'))
         tipoDevolucion = request.form.get('tipoDev-select')
-        fecha = request.form.get('fecha_devolucion')
+        fecha = datetime.now()
         total = request.form.get('totalDev')
         nota = request.form.get('nota-devolucion')
         usuarioId = session["user_id"]
