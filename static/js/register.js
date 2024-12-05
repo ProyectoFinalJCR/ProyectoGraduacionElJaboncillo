@@ -172,4 +172,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 PasswordEyeOn2.style.display = 'inline';  // Mostrar icono de ojo abierto
             }
         });
+
+        
+        
 });

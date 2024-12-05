@@ -1,4 +1,5 @@
 import os
+import requests
 from datetime import datetime, timedelta
 from flask import Flask, jsonify, render_template, redirect, request, session, flash, url_for
 from flask_socketio import SocketIO, emit
@@ -135,6 +136,24 @@ def registrarse():
         userEmail = request.form.get('email')
         userPassword = request.form.get('password')
         userConfirmPassword = request.form.get('confirm_password')
+        captcha_response = request.form.get('g-recaptcha-response') 
+
+        if not captcha_response:
+            return render_template("registrarse.html", error_msg="Por favor, completa el CAPTCHA.")
+
+
+        # Validar CAPTCHA con Google
+        secret_key = "6Ld-4pIqAAAAADM2JVXK_ulOEbybYC1IZLQvPge-"
+        captcha_validation_url = "https://www.google.com/recaptcha/api/siteverify"
+        data = {
+            'secret': secret_key,
+            'response': captcha_response
+        }
+        captcha_response = requests.post(captcha_validation_url, data=data).json()
+        
+        if not captcha_response.get('success'):
+            return render_template("registrarse.html", error_msg="Por favor, completa el CAPTCHA correctamente.")
+        
 
         if userPassword != userConfirmPassword:
             return render_template("registrarse.html", error_msg = "Las contraseñas no coinciden")
@@ -1632,7 +1651,7 @@ def listaDeseos():
 @app.route('/devoluciones', methods=["GET", "POST"])
 def devoluciones():
     if request.method == "GET":
-        ObtenerMovimientos = text('SELECT * FROM tipo_movimientos WHERE id = 5 OR id = 6')
+        ObtenerMovimientos = text("SELECT * FROM tipo_movimientos WHERE tipo_movimiento = 'Devolución' OR tipo_movimiento = 'Devolucion por daños'")
         movimientos = db.execute(ObtenerMovimientos).fetchall()
         return render_template("devoluciones.html", Movimientos=movimientos)
     else:
@@ -1655,9 +1674,11 @@ def devoluciones():
 
         idVenta = request.form.get('idVenta')
         idMovimiento = int(request.form.get('movimiento-select'))
-        fecha = request.form.get('fecha_devolucion')
+        tipoDevolucion = request.form.get('tipoDev-select')
+        fecha = datetime.now()
         total = request.form.get('totalDev')
         nota = request.form.get('nota-devolucion')
+        usuarioId = session["user_id"]
 
         # print(idVenta, idMovimiento, fecha, total, nota, productos)
         if not idVenta:
@@ -1776,6 +1797,82 @@ def devoluciones():
                         UPDATE stock 
                         SET cantidad=:cantidad, kardex_id=:kardex_id    
                         WHERE id=:id
+                    """)
+                    db.execute(
+                        actualizar_stock, 
+                        {
+                            "cantidad": nuevaCantidad, 
+                            "kardex_id": kardexId, 
+                            "id": stockInfo['id']
+                        }
+                    )
+
+                # Lógica adicional según tipo de devolución
+        if tipoDevolucion == "1":
+            # Inserta el reembolso en la tabla de gastos
+            insertarGasto = text("INSERT INTO gastos (monto, fecha, descripcion) VALUES (:monto, :fecha, :motivo)")
+            db.execute(insertarGasto, {"monto": total, "fecha": fecha, "motivo": f"Reposición por devolución {idVenta}"})
+        
+        elif tipoDevolucion == "2":
+            ObtenerVenta = text('SELECT * FROM ventas WHERE id=:id')
+            venta = db.execute(ObtenerVenta, {'id': idVenta}).mappings().fetchone()
+
+            insertarVenta = text("INSERT INTO ventas (nombre_cliente, usuario_id, id_cliente_categoria, id_tipo_pago, fecha_venta, nota, total, estado) VALUES (:nombre_cliente, :usuario_id, :id_cliente_categoria, :id_tipo_pago, :fecha_venta, :nota,:total, :estado)")
+            db.execute(insertarVenta, {"nombre_cliente": venta["nombre_cliente"], "usuario_id": session["user_id"], "id_cliente_categoria": venta["id_cliente_categoria"], "id_tipo_pago": 1 ,"fecha_venta": fecha, "nota": f"Reposición por devolución {idVenta}", "total": 0, "estado": 'true'})
+
+
+            for producto in productos:
+                if producto['tipo'] == 'planta':
+                    planta_id = producto['idProduc']
+                    insumo_id = None
+                elif producto['tipo'] == 'insumo':
+                    planta_id = None
+                    insumo_id = producto['idProduc']
+
+                insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+                db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": '2', "precio_unitario": producto['precio'], "fecha_movimiento": fecha, "nota": f"Reposición por devolución {idVenta}"})
+
+            ventaId = db.execute(text("SELECT * FROM ventas ORDER BY id DESC LIMIT 1")).fetchone()[0]
+            kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
+
+            for producto in productos:
+                if producto['tipo'] == 'planta':
+                    planta_id = producto['idProduc']
+                    insumo_id = None
+                elif producto['tipo'] == 'insumo':
+                    planta_id = None
+                    insumo_id = producto['idProduc']
+
+                insertarProductos = text("INSERT INTO detalle_ventas (planta_id, insumo_id, venta_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:planta_id, :insumo_id, :venta_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
+                db.execute(insertarProductos, {"planta_id": planta_id, "insumo_id": insumo_id, "venta_id": ventaId, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal": 0})
+
+            for producto in productos:
+                stock_query = text("""
+                        SELECT id, cantidad
+                        FROM stock 
+                        WHERE 
+                            (planta_id = :planta_id OR :planta_id IS NULL)
+                            AND 
+                            (insumo_id = :insumo_id OR :insumo_id IS NULL)
+                """)
+                stockInfo = db.execute(
+                    stock_query, 
+                    {
+                        "planta_id": producto['idProduc'] if producto['tipo'] == 'planta' else None,
+                        "insumo_id": producto['idProduc'] if producto['tipo'] == 'insumo' else None
+                    }
+                ).mappings().fetchone()
+
+                stock_cantidad = int(stockInfo['cantidad'])
+                nuevaCantidad = stock_cantidad - int(producto['cantidad'])
+
+                if stockInfo['id']:
+                    actualizar_stock = text("""
+                        UPDATE stock 
+                            SET cantidad = :cantidad, 
+                                kardex_id = :kardex_id,
+                                estado = CASE WHEN :cantidad <= 0 THEN false ELSE true END
+                            WHERE id = :id
                     """)
                     db.execute(
                         actualizar_stock, 
@@ -2141,6 +2238,60 @@ def produccion():
         
         insertarPlantaquery = text("INSERT INTO movimientos_kardex (planta_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
         db.execute(insertarPlantaquery, {"planta_id": idPlanta, "cantidad": cantidad, "tipo_movimiento_id": tipoMovimiento, "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
+        
+        kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
+
+        actualizar_stock = text("""
+                    UPDATE stock 
+                    SET cantidad = :cantidad, 
+                            kardex_id = :kardex_id,
+                            estado = CASE WHEN :cantidad <= 0 THEN false ELSE true END
+                        WHERE id = :id
+                """)
+        db.execute(
+            actualizar_stock, 
+            {
+                "cantidad": nuevaCantidad, 
+                "kardex_id": kardexId, 
+                "id": infoStock['id']
+            }
+        )
+        db.commit()
+
+        flash(('Se ha actualizado el stock correctamente', 'success'))
+        return redirect(url_for("inventario"))
+    
+    return redirect(url_for('inventario'))
+
+@app.route('/insumosproduccion', methods=["POST"])
+@login_required
+def insumosproduccion():
+    if request.method == 'POST':
+        idInsumo = request.form.get('id_producto_baja')
+        print(idInsumo)
+        cantidad = request.form.get('cantidad')
+        print(cantidad)
+        fechaactual = datetime.now().date()
+        precio = request.form.get('precioPlanta')
+        nota = request.form.get('nota')
+
+        if not nota or not cantidad:
+            flash(('Verifique los campos, estan vacios', "error"))
+            return redirect(url_for("inventario")) 
+
+        
+        ObtenerInsumoStock = text('SELECT * FROM stock WHERE insumo_id=:id')
+        infoStock = db.execute(ObtenerInsumoStock,{"id":idInsumo}).mappings().fetchone()
+
+        ObtenerMovimiento = text('SELECT * FROM tipo_movimientos WHERE tipo_movimiento=:tipo_movimiento')
+        infoMovimiento = db.execute(ObtenerMovimiento, {"tipo_movimiento": 'Salida a producción'}).mappings().fetchone()
+
+        cantidadStock = int(infoStock["cantidad"])
+        nuevaCantidad = cantidadStock - int(cantidad)
+        print(infoStock['cantidad'])
+        
+        insertarPlantaquery = text("INSERT INTO movimientos_kardex (insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
+        db.execute(insertarPlantaquery, {"insumo_id": idInsumo, "cantidad": cantidad, "tipo_movimiento_id": infoMovimiento["id"], "precio_unitario": precio, "fecha_movimiento": fechaactual, "nota": nota})
         
         kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
 

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link rel="shortcut icon" href="/static/img/logoElJaboncilloflor.png">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Registrarse | El Jaboncillo </title>
@@ -23,7 +24,7 @@
                 <div class="container-loginTitle">
                     <h3>Crear nueva cuenta</h3>
                 </div>
-                <form class="container-input" id="registerForm" action="/register" method="post" >
+                <form class="container-input" id="registerForm" action="/register" method="post" onsubmit="return validateForm();"  >
                     <div class="inputs-group">
                         <div class="input-shape">
                             <i class="material-icons-outlined">person</i>
@@ -51,6 +52,7 @@
                             <i class="material-icons-outlined noneye" id="noneye2">visibility_off</i>
                         </div>
                     </div>
+                    <div class="g-recaptcha" data-sitekey="6Ld-4pIqAAAAANWBOeG99_lR-xjZL-IP67TFyXC7"></div>
                     <div class="btn_login">
                         <button type="submit">CREAR CUENTA</button>
                     </div>
@@ -73,5 +75,24 @@
     </div>
 </body>
 <script src="/static/js/register.js"></script>
+<script>
+    function validateForm() {
+    // Obtén el valor del CAPTCHA
+    const captchaResponse = grecaptcha.getResponse();
 
+        // Si el CAPTCHA no está resuelto
+        if (!captchaResponse) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Por favor, completa el CAPTCHA',
+                text: 'Debes marcar la casilla "No soy un robot" antes de continuar.',
+            });
+            return false; // Detén el envío del formulario
+        }
+
+    // Permite el envío del formulario si el CAPTCHA está resuelto
+    return true;
+    }
+
+</script>
 </html>
