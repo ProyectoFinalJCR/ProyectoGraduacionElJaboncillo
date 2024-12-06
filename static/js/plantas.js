@@ -98,9 +98,6 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="btn-edit btn-edit-plantas" data-id="${planta.id}">
               <i class="material-icons">edit</i>
           </button>
-          <button class="btn-produccion btn-produccion-plantas" data-id="${planta.id}">
-              <i class="material-icons">compost</i>
-          </button>
           <form action="/eliminarPlanta" method="post" class="form-eliminar">
               <input type="hidden"  class="id_eliminar" name="id_eliminar" value="${planta.id}">
               <button class="btn-delete" type="submit">

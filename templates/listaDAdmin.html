@@ -31,6 +31,7 @@ Listas de deseo | El Jaboncillo
             <thead>
                 <tr>
                     <th>Cliente</th>
+                    <th>Correo</th>
                     <th>Fecha</th>
                     <th>Acciones</th>
                 </tr>
@@ -39,6 +40,7 @@ Listas de deseo | El Jaboncillo
                 {% for infoListaDeseo in Lista_deseo %}
                 <tr>
                     <td>{{infoListaDeseo.nombre_completo}}</td>
+                    <td>{{infoListaDeseo.correo}}</td>
                     <td>{{infoListaDeseo.fecha}}</td>
                     <td class="btn-acciones">
                         <input type="hidden" id="id_anular" name="id_anular" value="{{infoListaDeseo.id}}">
@@ -90,7 +92,7 @@ Listas de deseo | El Jaboncillo
     <div class="nueva-venta">
         <div class="inputVenta-title">
             <h3>NUEVA VENTA</h3>
-            <span class="close close-modal-ventas">&times;</span>
+            <span class="close" id="close-modal-ventas">&times;</span>
         </div>
         <form action="/ventas" id="form-venta" method="post" class="form-venta">
             <section class="inputs-venta" id="lista-productos">
@@ -120,7 +122,7 @@ Listas de deseo | El Jaboncillo
                     <div>
                         <label>Subcategorias</label>
                         <select class="input input-plantas" id="subcategoria-select" name="subcategoria-select">
-                            {% for infoSubcat in InfoSubcat %}
+                            {% for infoSubcat in infoSubcat %}
                             <option name="subcategoria-select" value="{{infoSubcat[0]}}">{{infoSubcat[2]}}</option>
                             {% endfor %}
                             <option value="" selected>Selecciona una subcategoria</option>
@@ -134,6 +136,7 @@ Listas de deseo | El Jaboncillo
                                 {{producto[1]}}
                             </option>
                             {% endfor %}
+                            <option value="" selected>Selecciona un producto</option>
                         </select>
                     </div>
                     <div>
@@ -249,6 +252,9 @@ Listas de deseo | El Jaboncillo
         </form>
     </div>
 </div>
+
+<script src="/static/js/lista_deseo.js"></script>
+
 
 
 <!-- Mostrar mensaje de éxito -->

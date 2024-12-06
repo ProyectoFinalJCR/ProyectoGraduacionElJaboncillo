@@ -4,14 +4,14 @@ from datetime import datetime, timedelta
 from flask import Flask, jsonify, render_template, redirect, request, session, flash, url_for
 from flask_socketio import SocketIO, emit
 from flask_session import Session
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.security import check_password_hash, generate_password_hash
 from dotenv import load_dotenv
 from functools import wraps
 from models import *
 from sqlalchemy import extract, func, case
 
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import scoped_session, sessionmaker
 load_dotenv()
 
 app = Flask(__name__)
@@ -1268,6 +1268,10 @@ def ventas():
         nota = request.form.get('nota-venta')
         tipoPago = request.form.get('tipoPago-select')
 
+        # Obtener id_movimiento
+        ObtenerMovimiento = text('SELECT id FROM tipo_movimientos WHERE tipo_movimiento=:tipo_movimiento')
+        movimientoId = db.execute(ObtenerMovimiento, {"tipo_movimiento": "Venta"}).fetchone()[0]
+
         productos = []
         index = 0
         while True:
@@ -1312,7 +1316,7 @@ def ventas():
                 insumo_id = producto['id']
 
             insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
-            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": '2', "precio_unitario": producto['precio'], "fecha_movimiento": fecha_formateada, "nota": nota})
+            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": movimientoId, "precio_unitario": producto['precio'], "fecha_movimiento": fecha_formateada, "nota": nota})
 
         ventaId = db.execute(text("SELECT * FROM ventas ORDER BY id DESC LIMIT 1")).fetchone()[0]
         kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
@@ -1612,7 +1616,7 @@ def cambiarContraseña():
 @app.route('/listaDeseos', methods=["GET", "POST"])
 def listaDeseos():
     if request.method == "GET":
-        return render_template("listaDeseos")
+        return render_template("listaDeseos.html")
     else:
         productoId = request.form.get('productoId')
         tipo = request.form.get('tipo')
@@ -1649,6 +1653,8 @@ def listaDeseos():
         return redirect(url_for('catalogo'))
 
 @app.route('/devoluciones', methods=["GET", "POST"])
+@login_required
+
 def devoluciones():
     if request.method == "GET":
         ObtenerMovimientos = text("SELECT * FROM tipo_movimientos WHERE tipo_movimiento = 'Devolución' OR tipo_movimiento = 'Devolucion por daños'")
@@ -2654,12 +2660,29 @@ def reportes_ventas():
 @login_required
 def lista_dadmin():
     #selecciona la lista de deseo por usuarios
-    lista_deseo_query = text("""SELECT DISTINCT u.id, u.nombre_completo, l.fecha
+    lista_deseo_query = text("""SELECT DISTINCT u.id, u.nombre_completo, u.correo, l.fecha
 FROM usuarios AS u
 INNER JOIN listas_deseo AS l ON u.id = l.usuario_id;
 """)
     lista_deseo = db.execute(lista_deseo_query).fetchall()
-    return render_template("listaDAdmin.html", Lista_deseo = lista_deseo)
+
+    #modal ventas info
+    ObtenerSubcat = text("SELECT * FROM subcategorias")
+    # ObtenerVentas = text("SELECT id, nombre_cliente AS nombre, fecha_venta AS fecha, total, nota, estado FROM ventas")
+    obtenerTiposPago = text("SELECT * FROM tipos_pagos")
+    obtenerTipoCliente = text("SELECT * FROM cliente_categoria")
+    obtenerColores = text("SELECT * FROM colores")
+    obtenerMedidas = text("SELECT * FROM medidas")
+    ObtenerUnidades = text('SELECT * FROM unidades_medidas')
+    unidades = db.execute(ObtenerUnidades).fetchall()
+
+    tipoCliente = db.execute(obtenerTipoCliente).fetchall()
+    colores = db.execute(obtenerColores).fetchall()
+    medidas = db.execute(obtenerMedidas).fetchall()
+    tiposPago = db.execute(obtenerTiposPago).fetchall()
+    infoSubcat = db.execute(ObtenerSubcat).fetchall()
+    # infoVentas = db.execute(ObtenerVentas).fetchall()
+    return render_template("listaDAdmin.html", Lista_deseo = lista_deseo, infoSubcat = infoSubcat, tipospago = tiposPago, colores = colores, medidas = medidas, tipocliente = tipoCliente, unidades=unidades)
 
 @app.route('/verDetallesListaDeseo', methods=['POST'])
 @login_required
@@ -2671,7 +2694,8 @@ def verDetallesListaDeseo():
             l.lista_deseo_id, 
             COALESCE(p.nombre, i.nombre) AS producto_nombre, 
             COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
-            u.nombre_completo AS usuario_nombre
+            u.nombre_completo AS usuario_nombre,
+            u.correo AS correo
         FROM 
             listas_deseo AS l
         INNER JOIN 
@@ -2692,6 +2716,7 @@ def verDetallesListaDeseo():
             detalles.append({
                 "lista_deseo_id": row.lista_deseo_id,
                 "producto_nombre": row.producto_nombre,
+                "correo": row.correo,
                 "precio_venta": row.precio_venta,
                 "usuario_nombre": row.usuario_nombre
             })

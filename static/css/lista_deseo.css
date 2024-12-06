@@ -289,7 +289,8 @@
    border-radius: 15px;
  }
    .container-inputVenta .btn-agregar .btn-cancel{
-   width: 120px;
+   width: 100px;
+   border-radius: 16px;
    background-color: #CF696B;
    
  }
@@ -312,3 +313,16 @@
    cursor: pointer;
  }
 
+.btn-eliminar-producto{
+    width: 100px;
+    height: 40px;
+    border-radius: 16px;
+    background-color: #CF696B;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+.btn-eliminar-producto:hover{
+    background-color: #aa4c4d;
+}

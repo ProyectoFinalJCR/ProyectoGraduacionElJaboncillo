@@ -17,20 +17,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Función para ir a la venta
-    document.getElementById("ir_a_venta").addEventListener("click", function () {
+        document.getElementById("ir_a_venta").addEventListener("click", function () {
         const modal_lista_deseo = document.querySelector(".container-inputVenta");
         const modal_LD = document.querySelector(".modal-lista-deseo");
         modal_LD.style.display = "none";
         modal_lista_deseo.style.display = "block";
 
-
+        
+        const modal_ventas = document.querySelector(".container-inputVenta");
         // cerrar modal ventas
         document.getElementById("close-modal-ventas").addEventListener("click", function () {
-           modal_LD.style.display = "none";
+            modal_ventas.style.display = "none";
         });
 
         document.getElementById("btn-cancel-venta").addEventListener("click", function () {
-                modal_LD.style.display = "none";
+            modal_ventas.style.display = "none";
             }
         )
     });
@@ -108,19 +109,47 @@ document.addEventListener('DOMContentLoaded', function () {
                         <tr>
                             <td>${item.producto_nombre}</td>
                             <td>
-                                <input type="number" value="1" min="1" class="cantidad-producto">
+                                <input type="number" value="1" min="1" class="input-tabla input-cantidad">
                             </td>
                             <td>
-                                <input type="number" value="0.00" step="0.01" class="precio-producto">
+                                <input type="number" value="${item.precio_venta}" min="0" class="input-tabla input-precio">
                             </td>
-                            <td class="subtotal-producto">0.00</td>
+                            <td class="subtotal-producto"></td>
                             <td>
-                                <button type="button" class="btn eliminar-producto">Eliminar</button>
+                                <button type="button" class="btn-eliminar-producto">Eliminar</button>
                             </td>
                         </tr>
                     `;
                     tableBody.innerHTML += row;
                 });
+
+                // Actualizar subtotales al cambiar cantidad o precio
+            tableBody.querySelectorAll("tr").forEach(row => {
+                const cantidadInput = row.querySelector(".input-cantidad");
+                const precioInput = row.querySelector(".input-precio");
+                const subtotalCell = row.querySelector(".subtotal-producto");
+                const eliminarBtn = row.querySelector(".btn-eliminar-producto");
+
+                // Función para actualizar el subtotal
+                const actualizarSubtotal = () => {
+                    const cantidad = parseFloat(cantidadInput.value) || 0;
+                    const precio = parseFloat(precioInput.value) || 0;
+                    const subtotal = cantidad * precio;
+                    subtotalCell.textContent = subtotal.toFixed(2); // Mostrar con dos decimales
+                };
+
+                // Escuchar cambios en cantidad y precio
+                cantidadInput.addEventListener("input", actualizarSubtotal);
+                precioInput.addEventListener("input", actualizarSubtotal);
+
+                // Calcular subtotal inicial
+                actualizarSubtotal();
+
+                // Función para eliminar la fila
+                eliminarBtn.addEventListener("click", () => {
+                    row.remove(); // Elimina la fila del DOM
+                });
+             });
 
                 // Mostrar el modal de ventas
                 modalVenta.style.display = "block";
@@ -132,9 +161,28 @@ document.addEventListener('DOMContentLoaded', function () {
     // Cerrar el modal de ventas
     btnCloseModalVenta.addEventListener("click", function () {
         modalVenta.style.display = "none";
+        
     });
 
     btnCancelVenta.addEventListener("click", function () {
         modalVenta.style.display = "none";
+    });
+
+
+    form.addEventListener('submit', (e) => {
+        // e.preventDefault();
+        productosDinamicos.innerHTML = '';
+
+        articulosLista.forEach((producto, index) => {
+            Object.keys(producto).forEach(key => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = `productos[${index}][${key}]`;
+                input.value = producto[key];
+                productosDinamicos.appendChild(input);
+            });
+        });
+
+        console.log(productosDinamicos.innerHTML);
     });
 })

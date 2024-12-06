@@ -13,12 +13,12 @@
     position: absolute;
    top: 50%;
    left: 50%;
-   transform: translate(-40%, -48%); /* Centra el modal */
+   transform: translate(-40%, -50%); /* Centra el modal */
    background-color: #fff;
    padding: 0px 50px;
    border-radius: 8px;
    width: 100%;
-   max-width: 1100px;
+   max-width: 1120px;
    height: 684px;
    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
    overflow-y: auto;
@@ -66,7 +66,8 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    align-items: center;
+    align-items: end;
+    gap: 10px;
 }
 .container-inputDevolucion .nueva-devolucion .form-devoluciones .inputs-venta .row-1 .numero-venta-cont{
     width: 35%;

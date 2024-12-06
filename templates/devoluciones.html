@@ -69,7 +69,7 @@ Devoluciones | El Jaboncillo
                         </div>
                         <div>
                             <label>Motivo</label>
-                            <select class="input inputs-venta" id="movimiento-select" name="movimiento-select">
+                            <select class="input input-plantas" id="movimiento-select" name="movimiento-select">
                                 <option value="">Selecciona el motivo de devolucion</option>
                                 {% for movimientos in Movimientos %}
                                 <option name="movimiento-select" value="{{movimientos[0]}}">{{movimientos[1]}}</option>
@@ -78,7 +78,7 @@ Devoluciones | El Jaboncillo
                         </div>
                         <div>
                             <label>Tipo de devolucion</label>
-                            <select class="input inputs-venta" id="tipoDev-select" name="tipoDev-select">
+                            <select class="input input-plantas" id="tipoDev-select" name="tipoDev-select">
                                 <option value="">Selecciona el tipo de devolucion</option>
                                 <option value="1">Reembolso de dinero</option>
                                 <option value="2">Cambio del producto</option>
@@ -144,6 +144,8 @@ Devoluciones | El Jaboncillo
         </div>
     </div>
 </div>
+<script src="/static/js/devoluciones.js"></script>
+
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
 {% if messages %}
