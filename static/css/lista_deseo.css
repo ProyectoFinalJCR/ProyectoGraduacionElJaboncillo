@@ -1,0 +1,328 @@
+/* Estilos generales del modal */
+.modal-lista-deseo {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    overflow: auto;
+}
+
+/* Contenedor del modal */
+.modal-content-lista-deseo {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+/* Título del modal */
+.detalle-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 20px;
+}
+
+.detalle-title h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0;
+}
+
+.close {
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: #333;
+}
+
+/* Tabla */
+.detalle-lista-deseo-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.detalle-lista-deseo-table th, .detalle-lista-deseo-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.detalle-lista-deseo-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.detalle-lista-deseo-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Animación */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* estilos para los btn*/
+.btn-contenedor{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+.btn-contenedor .btn-ver-detalle{
+    width: 120px;
+    background-color: #007BFF;
+    border-radius: 15px;
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+.btn-contenedor .btn-cancelar{
+    width: 120px;
+    background-color: #CF696B;
+    border-radius: 15px;
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+/* MODAL VENTAS */
+
+  .container-inputVenta{
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+
+}
+  .container-inputVenta .nueva-venta{
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-48%, -50%); /* Centra el modal */
+   background-color: #fff;
+   padding: 0px 50px;
+   border-radius: 8px;
+   width: 100%;
+   max-width: 1300px;
+   height: 800px;
+   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+   overflow-y: auto;
+   scrollbar-width: none;
+}
+
+/*Aplciamos el grid, las diviciones*/
+/*  .active{
+   grid-template-columns: 2fr 1fr;
+}
+.container-inputPlantas.show {
+   display: flex; /* Muestra el formulario al activar la clase 'show' 
+} */    
+  
+  .container-inputVenta .inputVenta-title{
+   width: 100%;
+   height: 80px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 5px;
+   border-bottom: 1px solid #000;
+   margin-bottom: 25px;
+}
+  .container-inputVenta .form-venta{
+   width: 100%;
+   height: auto;
+}
+  .container-inputVenta .form-venta  .inputs-venta{
+   display: grid;
+   grid-template-rows:.1fr .1fr .1fr 1fr .1fr;
+   gap: 20px;
+}
+  .container-inputVenta .form-venta .inputs-venta .inputs-cont{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   gap: 60px;
+}
+  .container-inputVenta .form-venta .inputs-venta .inputs-cont div{
+   width: 100%;
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+}
+  .container-inputVenta .form-venta .inputs-venta .row-1 #fecha_venta{
+   width: 100%;
+   font-size: 18px;
+   border: none;
+ }
+  .container-inputVenta .form-venta .inputs-venta .row-2{
+      width: 100%;
+   display: flex;
+   justify-content: space-between;
+   flex-direction: row;
+   gap: 60px;
+   justify-content: end;
+}
+  .container-inputVenta .form-venta .inputs-venta .row-3{
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+   flex-direction: row;
+   align-items: center;
+   gap: 45px;
+}
+  .container-inputVenta .form-venta .inputs-venta .row-3 .agregar_producto{
+   width: 180px;
+   height: 40px;
+   border-radius: 15px;
+   font-size: 16px;
+   font-weight: bold;
+}
+  .container-inputVenta .form-venta .inputs-venta .row-3 .row-3-cont{
+   width: 40%;
+   display: flex;
+   flex-direction: row;
+   gap: 60px;
+}
+  .container-inputVenta .form-venta .inputs-venta .row-3 .row-3-cont div{
+   width: 40%;
+}
+
+  .container-inputVenta .form-venta .inputs-venta .input-venta{
+   width: 100%;
+   margin-top: 8px;
+   border-radius: 10px;
+   background-color: #ECFFED;
+}
+
+  .container-inputVenta .form-venta .inputs-venta .productos-ventas{
+   width: 100%;
+   height: 225px;
+   overflow-y: auto;
+}
+  .container-inputVenta .form-venta .inputs-venta .input-venta .productos-ventas .tabla-venta{
+   width: 100%;
+   border-collapse: collapse;
+   font-family: Arial, sans-serif;
+   background-color: #949494;
+   border: 1px solid #ddd;
+}
+
+.tabla-venta thead, .tabla-venta tbody{
+   width: 100%;
+ }
+ .tabla-venta th, .tabla-venta td {
+   text-align: left;
+   padding: 12px;
+   border: 1px solid #ddd;
+ }
+
+ .tabla-venta th { 
+      width : 25%;
+      background-color: #F3F2F8;
+      color: #000;
+      font-weight: bold;
+ }
+
+ .tabla-venta tr:nth-child(even) {
+   background-color:    #f2f2f2;
+ }
+
+ .tabla-venta tr:hover {
+   background-color: #ddd;
+ }
+
+ .tabla-venta td:last-child {
+   text-align: center;
+ }
+
+  .container-inputVenta .btn-agregar{
+   width: 100%;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   margin-top: 20px;
+   gap: 15px;
+   padding-top: 10px;
+   border-top: 1px solid #000;
+   margin-bottom: 10px;
+}
+  .container-inputVenta .btn-agregar .logo-btn-add{
+   width: 220px;
+   height: 40px;
+ }
+ 
+   .container-inputVenta .btn-agregar .btn{
+   width: 150px;
+   border-radius: 15px;
+ }
+   .container-inputVenta .btn-agregar .btn-cancel{
+   width: 100px;
+   border-radius: 16px;
+   background-color: #CF696B;
+   
+ }
+.productos{
+    display: flex;
+    justify-content: center;
+    margin: 60px;
+}
+.productos table{
+    width: 80%;
+}
+.btn-acciones .btn-delete i{
+   background-color: #f84444;
+   color: #fff;
+   border-radius: 3px;
+   padding: 4px;
+   margin: 2px;
+ }
+ .btn-acciones .btn-delete i:hover{
+   cursor: pointer;
+ }
+
+.btn-eliminar-producto{
+    width: 100px;
+    height: 40px;
+    border-radius: 16px;
+    background-color: #CF696B;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+.btn-eliminar-producto:hover{
+    background-color: #aa4c4d;
+}

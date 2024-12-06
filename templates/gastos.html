@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+{% block title %}
+Gastos | El Jaboncillo
+{% endblock %}
+
+{% block main %}
+<section class="bienvenida">
+    <div>
+        <h2 id="saludo"></h2>
+        <p>Bienvenid@, {{session["user_name"]}}</p>
+    </div>
+    <div class="modulo-container ">
+        <h3>Módulo de gastos</h3>
+    </div>
+</section>
+<section class="busqueda">
+    <div class="search">
+        <div class="seccion-buscar">
+            <i class="material-icons">search</i>
+            <input class="input-search" name="search" id="buscar_gastos" placeholder="Buscar gastos">
+        </div>
+        <div>
+            <button class="btn" id="btn-add-gasto">Agregar gastos</button>
+        </div>
+    </div>
+</section>
+<div class="container-table-inputs">
+    <div class="table-categories">
+        <table class="table table-striped table-bordered" id="table-users">
+            <thead>
+                <tr>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody id="tabla_usuarios">
+                {% for gasto in gastos%}
+                <tr>
+                    <td>{{gasto.monto}}</td>
+                    <td>{{gasto.fecha}}</td>
+                    <td>{{gasto.descripcion}}</td>      
+                    <td class="btn-acciones">
+                        <button class="btn-edit btn-edit-usuario">
+                            <i class="material-icons">edit</i>
+                        </button>
+
+                        <form action="/eliminarGasto" method="post" class="form-eliminar">
+                            <input type="hidden" class="id_eliminar" name="id_gasto" value="{{gasto[0]}}">
+                            <button class="btn-delete" type="submit">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </form>
+                    </td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="container-inputsGasto">
+        <div class="agregar-usuario">
+            <div class="inputUser-title">
+                <h2>Nuevo Gasto</h2>
+                <span class="close" id="close_agregar_user">&times;</span>
+            </div>
+            <form class="formUser" action="#" id="formGastos" method="post">
+                <section class="input-users">
+                    <div class="grupo1">
+                        <div class="input-contenido">
+                            <div class="contenedor-obligatorio">
+                                <label for="">Monto</label>
+                                <span class="spanobligatorio">*Obligatorio</span>
+                            </div>
+                            <input type="number" id="nombre" class="input input-user input-insumos" name="monto"
+                                placeholder="Ej. 1000">
+                        </div>
+                    </div>
+                    <div class="grupo2">
+                        <div class="input-contenido">
+                            <div class="contenedor-obligatorio">
+                                <label for="">Descripcion</label>
+                                <span class="spanobligatorio">*Obligatorio</span>
+                            </div>
+                            <input type="text" id="correo" class="input input-user input-insumos" name="descripcion"
+                                placeholder="Ej. Gasolina">
+                        </div>
+                    </div>
+
+                </section>
+                <section class="btn-agregar-user">
+                    <img class="img-btn-add" src="/static/img/logoElJaboncillo.png" alt="logo">
+                    <div class="btn-agregar">
+                        <button type="button" class=" btn-cancel-gasto" id="btn-cancel-user ">Cancelar</button>
+                        <button type="submit" class="btn btn-agregar-users" id="btn-agregar-user">Agregar</button>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/static/js/gastos.js"></script>
+
+<!-- Mostrar mensaje de éxito -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<script>
+    Swal.fire({
+        title: '{{ messages[0][2] }}',
+        text: '{{ messages[0][0] }}',
+        icon: '{{ messages[0][1] }}',
+        confirmButtonText: 'OK'
+    });
+</script>
+{% endif %}
+{% endwith %}
+{% endblock %}

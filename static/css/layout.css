@@ -189,16 +189,15 @@
 }
 .list-options li:hover {
     background-color: #2EAC3D;
-
-
 }
 .list-options li a {
+    display: block;
+    width: 100%;
     color: #fff;
 	text-decoration: none;
 	transition: all 0.3s ease;
 	cursor: pointer;
     font-size: 14px;
-    display: block;
     padding: 12px;
 }
 /* -- seccion-wrapper --*/
@@ -423,8 +422,16 @@
     letter-spacing: 5px;
 }
 
-
-
+.input-tabla{
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+}
 
 
 

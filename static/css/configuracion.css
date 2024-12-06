@@ -21,7 +21,10 @@
 }
 .img-info-cont-config .img-info-config .img{
     width: 350px;
+<<<<<<< HEAD
     /* height: 60px; */
+=======
+>>>>>>> 4eb754dd91c93260788dc5714b973f858cc376f4
 }
 .img-info-cont-config{
     display: grid;

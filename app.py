@@ -4,14 +4,14 @@ from datetime import datetime, timedelta
 from flask import Flask, jsonify, render_template, redirect, request, session, flash, url_for
 from flask_socketio import SocketIO, emit
 from flask_session import Session
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.security import check_password_hash, generate_password_hash
 from dotenv import load_dotenv
 from functools import wraps
 from models import *
 from sqlalchemy import extract, func, case
 
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import scoped_session, sessionmaker
 load_dotenv()
 
 app = Flask(__name__)
@@ -1624,7 +1624,7 @@ def cambiarContraseña():
 @app.route('/listaDeseos', methods=["GET", "POST"])
 def listaDeseos():
     if request.method == "GET":
-        return render_template("listaDeseos")
+        return render_template("listaDeseos.html")
     else:
         productoId = request.form.get('productoId')
         tipo = request.form.get('tipo')
@@ -1643,7 +1643,11 @@ def listaDeseos():
             planta_id = None
             insumo_id = productoId
 
-        obtenerListaDeseo = text('SELECT * FROM listas_deseo WHERE usuario_id=:usuario_id AND planta_id=:planta_id OR insumo_id=:insumo_id')
+        obtenerListaDeseo = text('''SELECT * FROM listas_deseo WHERE usuario_id=:usuario_id AND (
+          (planta_id = :planta_id AND :planta_id IS NOT NULL) 
+          OR 
+          (insumo_id = :insumo_id AND :insumo_id IS NOT NULL)
+      )''')
         if db.execute(obtenerListaDeseo, {'usuario_id': usuarioId, 'planta_id': planta_id, 'insumo_id':insumo_id}).rowcount > 0:
             flash(('El producto ya ha sido agregado a la lista!', 'error', '¡Error!'))
             return redirect(url_for('catalogo'))
@@ -1657,6 +1661,8 @@ def listaDeseos():
         return redirect(url_for('catalogo'))
 
 @app.route('/devoluciones', methods=["GET", "POST"])
+@login_required
+
 def devoluciones():
     if request.method == "GET":
         ObtenerMovimientos = text("SELECT * FROM tipo_movimientos WHERE tipo_movimiento = 'Devolución' OR tipo_movimiento = 'Devolucion por daños'")
@@ -1944,7 +1950,7 @@ def obtener_ventas():
     return jsonify(detalleVenta)
 
 @app.route('/catalogo', methods=["GET", "POST"])
-# @login_required
+@login_required
 # @ruta_permitida
 def catalogo():
     if request.method == "GET":
@@ -2508,6 +2514,8 @@ def configuracion():
         return redirect(url_for("configuracion"))
 
 @app.route("/inventario", methods=["GET", "POST"])
+@login_required
+@ruta_permitida
 def inventario():
     if request.method == "GET":
         producto_id = request.args.get("producto_id")
@@ -2654,6 +2662,97 @@ def tendencia_ventas_diarias():
 @login_required
 def reportes_ventas():
     return render_template("reportes_ventas.html")
+
+
+@app.route('/listaDAdmin', methods=['GET'])
+@login_required
+def lista_dadmin():
+    #selecciona la lista de deseo por usuarios
+    lista_deseo_query = text("""SELECT DISTINCT u.id, u.nombre_completo, u.correo, l.fecha
+FROM usuarios AS u
+INNER JOIN listas_deseo AS l ON u.id = l.usuario_id;
+""")
+    lista_deseo = db.execute(lista_deseo_query).fetchall()
+
+    #modal ventas info
+    ObtenerSubcat = text("SELECT * FROM subcategorias")
+    # ObtenerVentas = text("SELECT id, nombre_cliente AS nombre, fecha_venta AS fecha, total, nota, estado FROM ventas")
+    obtenerTiposPago = text("SELECT * FROM tipos_pagos")
+    obtenerTipoCliente = text("SELECT * FROM cliente_categoria")
+    obtenerColores = text("SELECT * FROM colores")
+    obtenerMedidas = text("SELECT * FROM medidas")
+    ObtenerUnidades = text('SELECT * FROM unidades_medidas')
+    unidades = db.execute(ObtenerUnidades).fetchall()
+
+    tipoCliente = db.execute(obtenerTipoCliente).fetchall()
+    colores = db.execute(obtenerColores).fetchall()
+    medidas = db.execute(obtenerMedidas).fetchall()
+    tiposPago = db.execute(obtenerTiposPago).fetchall()
+    infoSubcat = db.execute(ObtenerSubcat).fetchall()
+    # infoVentas = db.execute(ObtenerVentas).fetchall()
+    return render_template("listaDAdmin.html", Lista_deseo = lista_deseo, infoSubcat = infoSubcat, tipospago = tiposPago, colores = colores, medidas = medidas, tipocliente = tipoCliente, unidades=unidades)
+
+@app.route('/verDetallesListaDeseo', methods=['POST'])
+@login_required
+def verDetallesListaDeseo():
+    data = request.get_json()
+    idListaDeseo = data.get('id_anular')
+    detalleListaDeseo = text("""
+        SELECT 
+            l.lista_deseo_id, 
+            COALESCE(p.nombre, i.nombre) AS producto_nombre, 
+            COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
+            u.nombre_completo AS usuario_nombre,
+            u.correo AS correo
+        FROM 
+            listas_deseo AS l
+        INNER JOIN 
+            usuarios AS u ON l.usuario_id = u.id
+        LEFT JOIN 
+            plantas AS p ON l.planta_id = p.id
+        LEFT JOIN 
+            insumos AS i ON l.insumo_id = i.id
+        WHERE 
+            u.id = :id
+    """)
+    detalleListaDeseo = db.execute(detalleListaDeseo, {"id": idListaDeseo}).fetchall()
+
+   # Convertir los resultados en una lista de diccionarios
+    if detalleListaDeseo:
+        detalles = []
+        for row in detalleListaDeseo:
+            detalles.append({
+                "lista_deseo_id": row.lista_deseo_id,
+                "producto_nombre": row.producto_nombre,
+                "correo": row.correo,
+                "precio_venta": row.precio_venta,
+                "usuario_nombre": row.usuario_nombre
+            })
+
+        return jsonify(detalles)
+    else:
+        return jsonify({"error": "No se encontró la lista de deseos"}), 404
+    
+
+    
+@app.route('/gastos', methods=['GET', 'POST'])
+@login_required
+def gastos():
+    if request.method == 'GET':
+        obtenerGastos = text("SELECT * FROM gastos")
+        gastos = db.execute(obtenerGastos).fetchall()
+        return render_template('gastos.html', gastos=gastos)
+    else:
+        monto = request.form.get('monto')
+        descripcion = request.form.get('descripcion')
+        fecha = datetime.now()
+
+        insertarGasto = text("INSERT INTO gastos (monto, fecha, descripcion) VALUES (:monto, :fecha, :descripcion)")
+        db.execute(insertarGasto, {"monto": monto, "fecha": fecha, "descripcion": descripcion})
+        db.commit()
+        db.close()
+        flash(('Producto agregado a la lista de deseos!', 'success', '¡Exito!'))
+        return redirect(url_for('gastos'))
 
 
 if __name__ == '__main__':
