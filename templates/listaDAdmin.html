@@ -121,9 +121,9 @@ Listas de deseo | El Jaboncillo
                 <div class="inputs-cont row-2">
                     <div>
                         <label>Subcategorias</label>
-                        <select class="input input-plantas" id="subcategoria-select" name="subcategoria-select">
+                        <select class="input input-plantas" id="subcategoria-selectLista" name="subcategoria-selectLista">
                             {% for infoSubcat in infoSubcat %}
-                            <option name="subcategoria-select" value="{{infoSubcat[0]}}">{{infoSubcat[2]}}</option>
+                            <option name="subcategoria-selectLista" value="{{infoSubcat[0]}}">{{infoSubcat[2]}}</option>
                             {% endfor %}
                             <option value="" selected>Selecciona una subcategoria</option>
                         </select>
@@ -178,7 +178,7 @@ Listas de deseo | El Jaboncillo
                         <div>
                             <label>Cantidad</label>
                             <input type="number" id="cantidad" class="input input-plantas validar-input" name="cantidad"
-                                placeholder="0" step="0.01" inputmode="decimal" min="0">
+                                placeholder="0" min="0">
                         </div>
                         <div>
                             <label>Precio</label>
@@ -227,12 +227,12 @@ Listas de deseo | El Jaboncillo
                     <div>
                         <label>Subtotal</label>
                         <input type="number" id="subtotal" class="input input-plantas" name="subtotal"
-                            placeholder="0.00" readonly>
+                            placeholder="0.00" >
                     </div>
                     <div>
                         <label>Total</label>
                         <input type="number" id="total" class="input input-plantas" name="total" placeholder="0.00"
-                            readonly>
+                            >
                     </div>
                     <div>
                         <label>Nota</label>

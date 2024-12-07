@@ -1268,6 +1268,9 @@ def ventas():
         nota = request.form.get('nota-venta')
         tipoPago = request.form.get('tipoPago-select')
 
+        print(request.form)  # Esto te mostrará todos los datos que llegan del formulario
+
+
         # Obtener id_movimiento
         ObtenerMovimiento = text('SELECT id FROM tipo_movimientos WHERE tipo_movimiento=:tipo_movimiento')
         movimientoId = db.execute(ObtenerMovimiento, {"tipo_movimiento": "Venta"}).fetchone()[0]
@@ -1292,7 +1295,8 @@ def ventas():
             })
             index += 1
 
-            
+        print(productos)
+
         if not cliente:
             flash(('Ingrese el nombre del cliente', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
@@ -2700,10 +2704,15 @@ def verDetallesListaDeseo():
     detalleListaDeseo = text("""
         SELECT 
             l.lista_deseo_id, 
+			COALESCE(p.id, i.id) AS producto_id, 
             COALESCE(p.nombre, i.nombre) AS producto_nombre, 
             COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
             u.nombre_completo AS usuario_nombre,
-            u.correo AS correo
+            u.correo AS correo,
+			CASE
+                WHEN p.id IS NOT NULL THEN 'planta'
+                WHEN i.id IS NOT NULL THEN 'insumo'
+            END AS tipo_producto
         FROM 
             listas_deseo AS l
         INNER JOIN 
@@ -2722,6 +2731,8 @@ def verDetallesListaDeseo():
         detalles = []
         for row in detalleListaDeseo:
             detalles.append({
+                "producto_id": row.producto_id,
+                "tipo_producto": row.tipo_producto,
                 "lista_deseo_id": row.lista_deseo_id,
                 "producto_nombre": row.producto_nombre,
                 "correo": row.correo,
