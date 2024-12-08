@@ -30,7 +30,7 @@
                 <a href="#">Servicios</a>
                 <a href="#">Catálogo</a>
                 <a href="#">Contacto</a>
-                <a href="#">Localización</a>
+                <a href="/logout">Cerrar sesión</a>
             </div>
         </nav>
         <div class="container-img">
@@ -38,6 +38,7 @@
         </div>
         <div class="container-busqueda">
             <div class="seccion-categorias">
+                <a href="/catalogo">Borrar filtro</a>
                 <div class="lista-categorias">
                     <select class="input-categorias" name="categorias" id="categorias">
                         {% for categoria in categorias %}
@@ -48,7 +49,7 @@
                 </div>
                 <div class="lista-subcategorias" id="none">
                     <div class="select-subcategorias">
-                        <select name="subcategorias" id="subcategorias">
+                        <select name="subcategorias" id="subcategorias" class="input-subcategorias">
                             <option selected>Selecciona una subcategoría</option>
                         </select>
                     </div>
@@ -61,9 +62,46 @@
                 </div>
             </div>
             <div class="btn-lista-cont">
-                <div class="btn-lista">
-                    <a href="#">Lista de deseo </a>
-                    <i class="material-icons">list_alt</i>
+                <button id="btn-lista-deseo" class="btn-lista">Lista de deseo <i
+                        class="material-icons">list_alt</i></button>
+                <div id="lista-deseo-dropdown" class="dropdown-list">
+                    <div class="lista-header">
+                        <h4>Lista de deseos</h4>
+                        <img src="/static/img/catalogo/listadeseo.png" alt="lista de deseos">
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>acción</th>
+                            </tr>
+                        <tbody id="lista-deseos">
+                            {% for infoListaDeseo in listadeseos %}
+                            <tr>
+                                <td>{{infoListaDeseo.nombre_producto}}</td>
+                                <td>C$ {{infoListaDeseo.precio_producto}}</td>
+                                <td class="btn-acciones">
+                                    <form action="/eliminarProductoLD" method="post" class="form-eliminar">
+                                        <input type="hidden" id="id_eliminar" name="id_eliminar"
+                                            value="{{infoListaDeseo.id}}">
+                                        <input type="hidden" id="tipo" name="tipo" value="{{infoListaDeseo.tipo_producto}}">
+                                        <button type="submit" class="btn-eliminar">X</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="total-cont">
+                        <p>Total: </p>
+                        <p id="total-lista-deseo"></p>
+                    </div>
+                    <div class="botones">
+                        <form action="/vaciarListaDeseo" method="post" class="form-vaciar">
+                            <button type="submit" id="borrar-lista-deseo" class="btn-borrar">Vaciar lista</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,85 +114,69 @@
     </section> -->
 
     <section class="resultado-plantas">
-        <div class="cards-plantas">
+        <div class="cards-plantas" id="cards-plantas">
             <!-- <-- aqui se crean las card plantas -->
-            <div class="card-plantas">
-                <div class="img-card">
-                    <img class="img-planta" src="/static/img/gerberas.jpg" alt="Jade Crassula">
+
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-texto-contenedor">
+            <div class="columna1">
+                <div class="img-cont">
+                    <img src="/static/img/logoElJaboncillo.png" class="footer-logo" alt="logo">
                 </div>
-                <div class="card-info">
-                    <div class="nombre-planta">
-                        <p>Gerbera, gerbera jamesonii</p>
-                    </div>
-                    <div class="btn-catalogo">
-                        <button><a href="#">Ir al catálogo</a></button>
-                    </div>
-                    <div class="minilogoEJ">
-                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
-                    </div>
+                <div class="titulo-cont">
+                    <p class="footer-titulo">Vivero</p>
                 </div>
-            </div> 
-            <div class="card-plantas">
-                <div class="img-card img-plantaCorona">
-                    <img class="img-planta" src="/static/img/coronadecristo.jpg" alt="Jade Crassula">
+                <div class="direccion-cont">
+                    <p class="direccion">Dirección: km 40, Carretera Masaya-Catarina, Catarina, Masaya, Nicaragua</p>
                 </div>
-                <div class="card-info">
-                    <div class="nombre-planta">
-                        <p>Corona de cristo, euphorbia milii</p>
-                    </div>
-                    <div class="btn-catalogo">
-                        <button><a href="#">Ir al catálogo</a></button>
-                    </div>
-                    <div class="minilogoEJ">
-                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
-                    </div>
+                <div class="telefono-cont">
+                    <p class="telefono">Teléfono: 8577 8984</p>
                 </div>
             </div>
-            <div class="card-plantas">
-                <div class="img-card">
-                    <img class="img-planta" src="/static/img/gazanias.jpg" alt="gazanias">
+            <div class="columna2">
+                <div class="titulo-columna2">
+                    <p class="footer-titulo">Horario</p>
                 </div>
-                <div class="card-info">
-                    <div class="nombre-planta">
-                        <p>Gazania, gazania rigens</p>
-                    </div>
-                    <div class="btn-catalogo">
-                        <button><a href="#">Ir al catálogo</a></button>
-                    </div>
-                    <div class="minilogoEJ">
-                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
-                    </div>
+                <div class="horario-columna2">
+                    <p class="horario">Lunes a Domingo</p>
+                    <p class="horario">8 am a 5 pm</p>
+                </div>
+                <div class="iconos-cont">
+                    <img class="icono" src="/static/img/whatsapp.png" alt="icono de whatsapp">
+                    <img class="icono" src="/static/img/facebook.png" alt="icono de facebook">
+                    <img class="icono" src="/static/img/social.png" alt="icono de instagram">
+                    <img class="icono" src="/static/img/tik-tok.png" alt="icono de twitter">
                 </div>
             </div>
-            <div class="card-plantas">
-                <div class="img-card">
-                    <img class="img-planta" src="/static/img/crisantemo.jpg" alt="Jade Crassula">
+            <div class="columna3">
+                <div class="titulo-columna3">
+                    <p class="footer-titulo">Ubicación</p>
                 </div>
-                <div class="card-info">
-                    <div class="nombre-planta">
-                        <p>Crisantemo, chrysanthemum morifolium</p>
-                    </div>
-                    <div class="btn-catalogo">
-                        <button><a href="#">Ir al catálogo</a></button>
-                    </div>
-                    <div class="minilogoEJ">
-                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
-                    </div>
+                <div class="direccion-columna3">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1951.927689611761!2d-86.07922327259769!3d11.915151317455!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f740f0ccfbe382f%3A0x5a61e144b98cc288!2sVivero%20El%20Jaboncillo!5e0!3m2!1ses-419!2sni!4v1732176643161!5m2!1ses-419!2sni"
+                        width="480" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>
-    </section>
+        <div class="footer-creditos-conteiner">
+            <p class="footer-creditos">© UNAN - Managua CUR Carazo, Vivero El Jaboncillo 2024</p>
+        </div>
+    </footer>
     <section>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-          <script>
+        <script>
             Swal.fire({
-              title:'{{ messages[0][2] }}',
-              text: '{{ messages[0][0] }}',
-              icon: '{{ messages[0][1] }}',
-              confirmButtonText: 'OK'
+                title: '{{ messages[0][2] }}',
+                text: '{{ messages[0][0] }}',
+                icon: '{{ messages[0][1] }}',
+                confirmButtonText: 'OK'
             });
-          </script>
+        </script>
         {% endif %}
         {% endwith %}
     </section>

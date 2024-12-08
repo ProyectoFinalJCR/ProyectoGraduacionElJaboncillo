@@ -1,0 +1,52 @@
+/* IMG INFO */
+.img-info{
+    width: 100%;
+    height: 65vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-image: url("/static/img/coronadecristo.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative; /* Necesario para posicionar hijos con `absolute` */
+    overflow: hidden; /* Asegura que no haya contenido desbordante */
+    transform: scale(1); /* Inicia en escala normal */
+    transition: background-size 0.1s ease-out; /* Suaviza el cambio */
+    opacity: 0; /* Oculto al inicio */
+    transform: translateY(30px); /* Posición inicial hacia abajo */
+    transition: opacity 1.5s ease, transform 1.5s ease; /* Transición suave */
+}
+.img-info .opacidad{
+    top: 0;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.3;
+    z-index: 1;
+}
+.texto-img{
+    position: absolute;
+    width: 50%;
+    top: 95px;
+    right: 136px;
+    z-index: 2;
+    color: #fff;
+    font-size: 33rem;
+    font-weight: bold;
+    text-align: left;
+    height: 250px;
+    opacity: 0; /* Oculto al inicio */
+    transform: translateY(30px); /* Posición inicial hacia abajo */
+    transition: opacity 1.5s ease, transform 1.5s ease; /* Transición suave */
+}
+.texto-img h2{
+    font-size: 60px;
+    color: #fff;
+    letter-spacing: 10px;
+    font-weight: 900;
+}

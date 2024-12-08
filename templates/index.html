@@ -23,10 +23,28 @@
             <img class="logoEJ" src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jabocillo">
         </div>
         <div class="seccion-items">
+            {% if session.get("user_rol") == none %}
             <a class="item-navb" href="#inicio-link">Inicio</a>
             <a class="item-navb" href="#servicios">Servicios</a>
             <a class="item-navb" href="/catalogo">Catálogo</a>
             <a class="item-navb" href="#">Nosotros</a>
+            {% elif session.get("user_rol") == 'CLIENTE' %}
+            <a class="item-navb" href="#inicio-link">Inicio</a>
+            <a class="item-navb" href="#servicios">Servicios</a>
+            <a class="item-navb" href="/catalogo">Catálogo</a>
+            <a class="item-navb" href="#">Nosotros</a>
+            {% elif session.get("user_rol") == 'OPERADOR' %}
+            <a class="item-navb" href="/inicioAdmin">Inicio admin</a>
+            <a class="item-navb" href="/ventas">Ventas</a>
+            <a class="item-navb" href="/compras">Compras</a>
+            <a class="item-navb" href="/gastos">Gastos</a>
+            {% else %}
+            <a class="item-navb" href="/inicioAdmin">Inicio admin</a>
+            <a class="item-navb" href="/usuarios">Usuarios</a>
+            <a class="item-navb" href="/listaDeseos">Listas de deseo</a>
+            <a class="item-navb" href="/subCategorias">Subcategorias</a>
+            <a class="item-navb" href="/categorias">Categorias</a>
+            {% endif %}
         </div>
       
         {% if session.get("user_id") is none %}
@@ -303,7 +321,7 @@
             </div>
             <div class="columna3">
                 <div class="titulo-columna3">
-                    <p class="footer-titulo">Dirección</p>
+                    <p class="footer-titulo">Ubicación</p>
                 </div>
                 <div class="direccion-columna3">
                     <iframe

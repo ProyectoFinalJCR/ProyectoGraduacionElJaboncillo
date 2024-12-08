@@ -1,4 +1,66 @@
 document.addEventListener('DOMContentLoaded', function(){
+    // buscar compras
+    let compras = [];
+    fetch("/generar_json_compras")
+        .then(response => response.json())
+        .then(data => {
+            compras = data;
+            mostrarCompras(compras);  // Mostrar todos los compras inicialmente
+        });
+
+        //escuchar evento para buscar compras
+    document.getElementById("buscar_compras").addEventListener('input', function () {
+        const valorBuscar = this.value.toLowerCase();
+        console.log(valorBuscar);
+        // Filtrar resultados cuando hay texto en el input
+        const resultados = valorBuscar === "" ? compras :
+            compras.filter(compra =>
+                compra.nombre.toLowerCase().includes(valorBuscar) ||
+                compra.fecha_compra.toLowerCase().includes(valorBuscar) ||
+                compra.cantidad.toString().toLowerCase().includes(valorBuscar) ||
+                compra.total.toString().toLowerCase().includes(valorBuscar) // Convertir el total a texto
+            );
+
+        // Mostrar resultados filtrados o todos los compras si el input está vacío
+        mostrarCompras(resultados);
+    });
+    // Función para mostrar compras en la tabla
+    function mostrarCompras(data) {
+        const tableBody = document.getElementById('tabla_compras');
+        tableBody.innerHTML = '';  // Limpiar tabla
+
+        if (data.length === 0) {
+            tableBody.innerHTML = "<tr><td colspan='12' style='text-align: center;'>No hay resultados</td></tr>";
+        } else {
+            data.forEach(compra => {
+                        let fechaFormateada = "";
+                if (compra.fecha_compra) {
+                const fecha = new Date(compra.fecha_compra);
+
+                // Construir el formato "YYYY-MM-DD" requerido por <input type="date">
+                const anio = fecha.getUTCFullYear();
+                const mes = (fecha.getUTCMonth() + 1).toString().padStart(2, '0'); // Mes comienza en 0
+                const dia = fecha.getUTCDate().toString().padStart(2, '0');
+
+                fechaFormateada = `${anio}-${mes}-${dia}`;
+                compra.fecha_compra = fechaFormateada;
+                }
+                const row = `
+            <tr>
+                <td>${compra.id}</td>
+                <td>${compra.nombre}</td>
+                <td>${compra.nombre_proveedor}</td>
+                <td>${compra.fecha_compra}</td>
+                <td>${compra.cantidad}</td>
+                <td>${compra.total}</td>
+            </tr>`;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+    }
+
+
+
     //Evento para mostrar modal
     document.querySelector('.btn-add-compra').addEventListener('click', function(){
 

@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+ document.addEventListener("DOMContentLoaded", function () {
   //Evento para mostrar formulario
   document.querySelector('#btn-add-insumos').addEventListener('click', function () {
 

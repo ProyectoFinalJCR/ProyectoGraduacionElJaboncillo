@@ -34,24 +34,12 @@ Gastos | El Jaboncillo
                     <th>Descripcion</th>
                 </tr>
             </thead>
-            <tbody id="tabla_usuarios">
+            <tbody id="tabla_gastos">
                 {% for gasto in gastos%}
                 <tr>
                     <td>{{gasto.monto}}</td>
                     <td>{{gasto.fecha}}</td>
                     <td>{{gasto.descripcion}}</td>      
-                    <td class="btn-acciones">
-                        <button class="btn-edit btn-edit-usuario">
-                            <i class="material-icons">edit</i>
-                        </button>
-
-                        <form action="/eliminarGasto" method="post" class="form-eliminar">
-                            <input type="hidden" class="id_eliminar" name="id_gasto" value="{{gasto[0]}}">
-                            <button class="btn-delete" type="submit">
-                                <i class="material-icons">delete</i>
-                            </button>
-                        </form>
-                    </td>
                     {% endfor %}
                 </tr>
             </tbody>

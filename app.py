@@ -40,7 +40,7 @@ def login_required(f):
         
         if session.get("user_id") is None:
             return redirect("/login")
-            
+        
         return f(*args, **kwargs)
     return decorated_function
 
@@ -1377,7 +1377,6 @@ def ventas():
 
 @app.route('/anularVenta', methods=['POST'])
 @login_required
-@ruta_permitida
 def anularVenta():
     idVenta = request.form.get('id_anular')
 
@@ -1437,7 +1436,7 @@ def get_products():
             insumos.imagen_url
             ;
     """)
-    
+
     infoProd = db.execute(ObtenerProd, {'subcategoria': subcategoria}).fetchall()
     # print (infoProd)
     productos = [
@@ -1456,6 +1455,74 @@ def get_products():
     # print(productos)
     return jsonify(productos)
 
+
+@app.route("/get_all_products", methods=["GET"])
+def get_all_products():
+
+    ObtenerAllProd = text("""
+           SELECT
+                stock.id AS id,
+                stock.cantidad AS cantidad_disponible,
+                plantas.id AS planta_id,
+                plantas.nombre AS nombre_planta,
+                plantas.precio_venta AS precio_planta,
+                plantas.imagen_url AS imagen_planta,
+                subcategorias.subcategoria AS subcategoria,
+                insumos.id AS insumo_id,
+                insumos.nombre AS nombre_insumo,
+                insumos.imagen_url AS imagen_insumo,
+                insumos.precio_venta AS precio_insumo
+            FROM
+                stock
+            LEFT JOIN
+                plantas ON stock.planta_id = plantas.id
+            LEFT JOIN
+                insumos ON stock.insumo_id = insumos.id
+            LEFT JOIN
+                plantas_subcategoria ON plantas.id = plantas_subcategoria.planta_id
+            LEFT JOIN
+                insumos_subcategoria ON insumos.id = insumos_subcategoria.insumo_id
+            LEFT JOIN
+                subcategorias ON
+                    (plantas_subcategoria.subcategoria_id = subcategorias.id OR
+                    insumos_subcategoria.subcategoria_id = subcategorias.id)
+            LEFT JOIN
+                categorias ON subcategorias.categoria_id = categorias.id
+            WHERE
+            stock.estado = 'true'
+            ORDER BY
+                stock.id,
+                plantas.id,
+                plantas.nombre,
+                plantas.precio_venta,
+                subcategorias.subcategoria,
+                insumos.id,
+                insumos.nombre,
+                insumos.precio_venta,
+                stock.cantidad,
+                plantas.imagen_url,
+                insumos.imagen_url
+                ;
+        """)
+    
+    infoProd = db.execute(ObtenerAllProd).fetchall()
+    # print (infoProd)
+    allProductos = [
+    {
+        'id': prod.id,
+        'idProd': prod.planta_id if prod.planta_id is not None else prod.insumo_id, 
+        'nombre': prod.nombre_planta if prod.nombre_planta else prod.nombre_insumo,
+        'precio': prod.precio_planta if prod.precio_planta is not None else prod.precio_insumo,
+        'cantidad': prod.cantidad_disponible,
+        'tipo': 'planta' if prod.planta_id is not None else 'insumo',
+        'imagen': prod.imagen_planta if prod.imagen_planta is not None else prod.imagen_insumo,
+    }
+    for prod in infoProd
+]
+    
+    return jsonify(allProductos)
+        
+
 @app.route('/compras', methods=['GET', 'POST'])
 @login_required
 @ruta_permitida
@@ -1472,10 +1539,22 @@ def compras():
         obtenerTiposPago = text("SELECT * FROM tipos_pagos")
         obtenerColores = text("SELECT * FROM colores")
         obtenerMedidas = text("SELECT * FROM medidas")
-        ObtenerCompras = text("""SELECT compras.id, proveedores.nombre_proveedor, compras.fecha_compra, compras.total  
-                                    FROM compras
-                                    LEFT JOIN
-                                        proveedores ON compras.proveedor_id = proveedores.id""")
+        ObtenerCompras = text("""SELECT 
+    compras.id,
+    i.nombre ,
+    proveedores.nombre_proveedor,
+    d.cantidad,
+    compras.fecha_compra,
+    compras.total
+FROM 
+    compras
+INNER JOIN 
+    detalle_compra AS d ON compras.id = d.compra_id
+INNER JOIN 
+    insumos AS i ON d.insumo_id = i.id
+LEFT JOIN 
+    proveedores ON compras.proveedor_id = proveedores.id;
+""")
 
 
         colores = db.execute(obtenerColores).fetchall()
@@ -1524,8 +1603,8 @@ def compras():
        
         # Insertar datos en la base de datos
 
-        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, nota, id_tipo_pago) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :nota, :id_tipo_pago)")
-        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha_formateada, "total": total, "usuario_id": session["user_id"], "nota": nota , "id_tipo_pago": tipoPago})
+        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, nota, tipo_pago_id) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :nota, :tipo_pago_id)")
+        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha_formateada, "total": total, "usuario_id": session["user_id"], "nota": nota , "tipo_pago_id": tipoPago})
 
         for producto in productos:
             if producto['tipo'] == 'planta':
@@ -1946,13 +2025,74 @@ def obtener_ventas():
 # @ruta_permitida
 def catalogo():
     if request.method == "GET":
+        
+        #mostrar los productos en las cards en general y filtrar por categoria pero todas
+        
         id_categoria = request.args.get("categoriaSeleccionada")
 
         obtenerCategorias = text("SELECT c.id, c.categoria FROM categorias as c ORDER BY c.id ASC")
         categorias = db.execute(obtenerCategorias).fetchall()
 
-        return render_template("catalogo.html",categorias=categorias)
+        #obtener los productos en lista de deseo por cliente
+        usuarioID = session["user_id"]
+        obtenerListaDeseo = text(""" SELECT
+    COALESCE(p.id, i.id) AS id,
+    COALESCE(p.nombre, i.nombre) AS nombre_producto,
+    COALESCE(p.precio_venta, i.precio_venta) AS precio_producto,
+    CASE 
+        WHEN l.planta_id IS NOT NULL THEN 'planta'
+        WHEN l.insumo_id IS NOT NULL THEN 'insumo'
+    END AS tipo_producto,
+    l.fecha AS fecha_agregado
+FROM 
+    listas_deseo AS l
+LEFT JOIN 
+    plantas AS p ON l.planta_id = p.id
+LEFT JOIN 
+    insumos AS i ON l.insumo_id = i.id
+WHERE 
+    l.usuario_id = :id;""")
+        listaDeseos = db.execute(obtenerListaDeseo,{"id":usuarioID}).fetchall()
+
+
+        return render_template("catalogo.html",categorias=categorias, listadeseos=listaDeseos)
     return render_template('catalogo.html')
+
+@app.route("/vaciarListaDeseo", methods=["POST"])
+def varciarListaDeseo():
+    # Eliminar todos los productos de la lista de deseos
+    idUsuario = session["user_id"]
+
+    queryEliminarListaDeseo = text("DELETE FROM listas_deseo WHERE usuario_id = :idUsuario")
+    db.execute(queryEliminarListaDeseo, {"idUsuario": idUsuario})
+    db.commit()
+    flash(('Lista de deseos vaciada', 'success', '¡Éxito!'))
+    return redirect(url_for('catalogo'))
+
+@app.route("/eliminarProductoLD", methods=["POST"])
+def eliminarProductoLD():
+    idProducto = request.form.get("id_eliminar")
+    tipo = request.form.get("tipo")  # Se debe enviar el tipo ('planta' o 'insumo') desde el formulario
+    print(idProducto, tipo)
+
+    if not idProducto or not tipo:
+        flash(('Error al eliminar el producto. Datos incompletos.', 'error', '¡Error!'))
+        return redirect(url_for('catalogo'))
+
+    # Construir la consulta dependiendo del tipo de producto
+    if tipo == "planta":
+        queryEliminarProducto = text("DELETE FROM listas_deseo WHERE planta_id = :idProducto")
+    elif tipo == "insumo":
+        queryEliminarProducto = text("DELETE FROM listas_deseo WHERE insumo_id = :idProducto")
+    else:
+        flash(('Tipo de producto desconocido.', 'error', '¡Error!'))
+        return redirect(url_for('catalogo'))
+
+    # Ejecutar la consulta
+    db.execute(queryEliminarProducto, {"idProducto": idProducto})
+    db.commit()
+    flash(('Producto eliminado de la lista de deseos', 'success', '¡Éxito!'))
+    return redirect(url_for('catalogo'))
 
 @app.route("/obtener_subcategorias", methods=["POST"])
 def obtener_subcategorias():
@@ -2215,7 +2355,109 @@ def inventario_info():
     ]
 
     return jsonify(resultado)
-   
+
+@app.route('/generar_json_lista_deseo', methods=["GET"])
+def generar_json_lista_deseo():
+    print("entro a generar json lista de deseos")
+    listaDeseoquery = text("""SELECT DISTINCT u.id, u.nombre_completo, u.correo, l.fecha
+FROM usuarios AS u
+INNER JOIN listas_deseo AS l ON u.id = l.usuario_id;
+""")
+    listaDeseo = db.execute(listaDeseoquery, {'id': session["user_id"]}).fetchall()
+
+   # Convertir los resultados en un diccionario {mes: total_ventas}
+    listaDeseoJson = [
+        {'id': listaDeseo[0],
+        'usuario_nombre': listaDeseo[1],
+        'correo': listaDeseo[2],
+        'fecha': listaDeseo[3]
+    }
+    for listaDeseo in listaDeseo
+    ]
+
+    return jsonify(listaDeseoJson)
+
+@app.route("/generar_json_ventas", methods=["GET"])
+def generar_json_ventas():
+    print("entro a generar json ventas")
+    ventasquery = text("""SELECT 
+    v.id, 
+    v.nombre_cliente AS nombre, 
+    v.fecha_venta AS fecha, 
+    v.total
+FROM 
+    ventas AS v
+""")
+    ventas = db.execute(ventasquery).fetchall()
+
+    # Convertir los resultados en un diccionario {mes: total_ventas}
+    ventasJson = [
+        {'id': venta[0],
+        'nombre': venta[1],
+        'fecha': venta[2],
+        'total': venta[3]
+    }
+    for venta in ventas
+    ]   
+
+    return jsonify(ventasJson)
+
+@app.route("/generar_json_compras", methods=["GET"])
+def generar_json_compras():
+    print("entro a generar json compras")
+    comprasquery = text("""SELECT 
+    compras.id,
+    i.nombre ,
+    proveedores.nombre_proveedor,
+    d.cantidad,
+    compras.fecha_compra,
+    compras.total
+FROM 
+    compras
+INNER JOIN 
+    detalle_compra AS d ON compras.id = d.compra_id
+INNER JOIN 
+    insumos AS i ON d.insumo_id = i.id
+LEFT JOIN 
+    proveedores ON compras.proveedor_id = proveedores.id;""")
+    comprainfo = db.execute(comprasquery).fetchall()
+    # Convertir los resultados en un diccionario {mes: total_ventas}
+    comprasJson = [
+        {'id': compra[0],
+        'nombre': compra[1],
+        'nombre_proveedor': compra[2],
+        'cantidad': compra[3],
+        'fecha_compra': compra[4],
+        'total': compra[5]
+    }
+    for compra in comprainfo
+    ]       
+    return jsonify(comprasJson)
+
+@app.route("/generar_json_gastos", methods=["GET"])
+def generar_json_gastos():
+    print("entro a generar json gastos")
+    gastosquery = text("""SELECT 
+    g.id, 
+    g.monto,
+    g.fecha,
+    g.descripcion
+FROM 
+    gastos g
+""")
+    gastos = db.execute(gastosquery).fetchall()
+
+    # Convertir los resultados en un diccionario {mes: total_ventas}
+    gastosJson = [
+        {'id': gasto[0],
+        'monto': gasto[1],
+        'fecha': gasto[2],
+        'descripcion': gasto[3]
+    }
+    for gasto in gastos
+    ]   
+
+    return jsonify(gastosJson)
 
 @app.route('/produccion', methods=["GET", "POST"])
 @login_required
@@ -2746,6 +2988,10 @@ def gastos():
         flash(('Producto agregado a la lista de deseos!', 'success', '¡Exito!'))
         return redirect(url_for('gastos'))
 
+
+@app.route("/inicio_catalogo", methods=["GET", "POST"])
+def inicio_catalogo():
+    return render_template("inicio_catalogo.html")
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)

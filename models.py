@@ -245,6 +245,7 @@ class Compras(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     proveedor_id = db.Column(db.Integer, db.ForeignKey('proveedores.id'), nullable = False)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable = False)
+    tipo_pago_id = db.Column(db.Integer, db.ForeignKey('tipos_pagos.id'), nullable = False)
     fecha_compra = db.Column(db.Date, nullable=False)
     total = db.Column(db.Float, nullable=False)
 
