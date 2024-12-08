@@ -280,3 +280,10 @@ class configuracion_sistema(db.Model):
     link_instagram = db.Column (db.String, nullable=False)
     link_tiktok = db.Column (db.String, nullable=False)
     link_whatsapp = db.Column (db.String, nullable=False)
+
+class Gastos(db.Model):
+    __tablename__ = 'gastos'
+    id = db.Column(db.Integer, primary_key=True)
+    monto = db.Column(db.Float, nullable=False)
+    fecha = db.Column(db.Date, nullable=False)
+    descripcion = db.Column(db.String, nullable=False)

@@ -280,6 +280,7 @@ document.addEventListener('DOMContentLoaded', function(){
             // Seleccionar todas las filas en el tbody
             const filas = document.querySelectorAll('#lista-productos-seleccionados tbody tr');
         
+            
             filas.forEach(fila => {
                 // Obtener los valores de cantidad y precio unitario
                 const cantidad = parseFloat(fila.querySelector('.cantidad-input').value) || 0;
