@@ -1268,6 +1268,9 @@ def ventas():
         nota = request.form.get('nota-venta')
         tipoPago = request.form.get('tipoPago-select')
 
+        print(request.form)  # Esto te mostrará todos los datos que llegan del formulario
+
+
         # Obtener id_movimiento
         ObtenerMovimiento = text('SELECT id FROM tipo_movimientos WHERE tipo_movimiento=:tipo_movimiento')
         movimientoId = db.execute(ObtenerMovimiento, {"tipo_movimiento": "Venta"}).fetchone()[0]
@@ -1292,7 +1295,8 @@ def ventas():
             })
             index += 1
 
-            
+        print(productos)
+
         if not cliente:
             flash(('Ingrese el nombre del cliente', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
@@ -1303,8 +1307,11 @@ def ventas():
             flash(('Ingrese el total', 'error', '¡Error!'))
             return redirect(url_for('ventas'))
         
-        insertarVenta = text("INSERT INTO ventas (nombre_cliente, usuario_id, id_cliente_categoria, id_tipo_pago, fecha_venta, nota, total, estado) VALUES (:nombre_cliente, :usuario_id, :id_cliente_categoria, :id_tipo_pago, :fecha_venta, :nota,:total, :estado)")
-        db.execute(insertarVenta, {"nombre_cliente": cliente, "usuario_id": session["user_id"], "id_cliente_categoria": cliente_categoria, "id_tipo_pago": tipoPago ,"fecha_venta": fecha_formateada, "nota": nota, "total": total, "estado": 'true'})
+        insertarVenta = text("""INSERT INTO ventas (nombre_cliente, usuario_id, id_cliente_categoria, id_tipo_pago, fecha_venta,    nota, total, estado) 
+        VALUES (:nombre_cliente, :usuario_id, :id_cliente_categoria, :id_tipo_pago, :fecha_venta, :nota,:total, :estado)""")
+        db.execute(insertarVenta, {"nombre_cliente": cliente, "usuario_id": session["user_id"], "id_cliente_categoria": 
+            cliente_categoria, "id_tipo_pago": tipoPago ,"fecha_venta": fecha_formateada, "nota": nota, "total": 
+            total, "estado": 'true'})
 
 
         for producto in productos:
@@ -1315,8 +1322,10 @@ def ventas():
                 planta_id = None
                 insumo_id = producto['id']
 
-            insertarKardex = text("INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)")
-            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": movimientoId, "precio_unitario": producto['precio'], "fecha_movimiento": fecha_formateada, "nota": nota})
+            insertarKardex = text("""INSERT INTO movimientos_kardex (planta_id, insumo_id, cantidad, tipo_movimiento_id, precio_unitario, fecha_movimiento, nota) 
+            VALUES (:planta_id, :insumo_id, :cantidad, :tipo_movimiento_id, :precio_unitario,:fecha_movimiento, :nota)""")
+            db.execute(insertarKardex, {"planta_id": planta_id, "insumo_id": insumo_id, "cantidad": producto['cantidad'], "tipo_movimiento_id": movimientoId, "precio_unitario": producto['precio'], 
+            "fecha_movimiento": fecha_formateada, "nota": nota})
 
         ventaId = db.execute(text("SELECT * FROM ventas ORDER BY id DESC LIMIT 1")).fetchone()[0]
         kardexId = db.execute(text("SELECT * FROM movimientos_kardex ORDER BY id DESC LIMIT 1")).fetchone()[0]
@@ -1330,8 +1339,11 @@ def ventas():
                 insumo_id = producto['id']
 
             subtotal = (producto['cantidad'] * producto['precio'])
-            insertarProductos = text("INSERT INTO detalle_ventas (planta_id, insumo_id, venta_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES (:planta_id, :insumo_id, :venta_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)")
-            db.execute(insertarProductos, {"planta_id": planta_id, "insumo_id": insumo_id, "venta_id": ventaId, "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], "subtotal": subtotal})
+            insertarProductos = text("""INSERT INTO detalle_ventas (planta_id, insumo_id, venta_id, kardex_id, cantidad, precio_unitario, subtotal) VALUES 
+            (:planta_id, :insumo_id, :venta_id, :kardex_id, :cantidad, :precio_unitario, :subtotal)""")
+            db.execute(insertarProductos, {"planta_id": planta_id, "insumo_id": insumo_id, "venta_id": ventaId, 
+                "kardex_id": kardexId, "cantidad": producto['cantidad'], "precio_unitario": producto['precio'], 
+                "subtotal": subtotal})
 
         for producto in productos:
             stock_query = text("""
@@ -2934,10 +2946,15 @@ def verDetallesListaDeseo():
     detalleListaDeseo = text("""
         SELECT 
             l.lista_deseo_id, 
+			COALESCE(p.id, i.id) AS producto_id, 
             COALESCE(p.nombre, i.nombre) AS producto_nombre, 
             COALESCE(p.precio_venta, i.precio_venta) AS precio_venta,
             u.nombre_completo AS usuario_nombre,
-            u.correo AS correo
+            u.correo AS correo,
+			CASE
+                WHEN p.id IS NOT NULL THEN 'planta'
+                WHEN i.id IS NOT NULL THEN 'insumo'
+            END AS tipo_producto
         FROM 
             listas_deseo AS l
         INNER JOIN 
@@ -2956,6 +2973,8 @@ def verDetallesListaDeseo():
         detalles = []
         for row in detalleListaDeseo:
             detalles.append({
+                "producto_id": row.producto_id,
+                "tipo_producto": row.tipo_producto,
                 "lista_deseo_id": row.lista_deseo_id,
                 "producto_nombre": row.producto_nombre,
                 "correo": row.correo,
