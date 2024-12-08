@@ -17,7 +17,7 @@ Ventas | El Jaboncillo
     <div class="search">
         <div class="seccion-buscar">
             <i class="material-icons">search</i>
-            <input class="input-search" name="search" id="search" placeholder="Buscar ventas">
+            <input class="input-search" name="search" id="buscar_ventas" placeholder="Buscar ventas">
 
         </div>
         <div>
@@ -32,23 +32,21 @@ Ventas | El Jaboncillo
                 <tr>
                     <th>Id</th>
                     <th>Cliente</th>
-                    <th>Vendedor</th>
                     <th>Fecha</th>
-                    <th>Nota</th>
                     <th>Total</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody id="tabla_ventas">
                 {% for infoVentas in InfoVentas %}
                 <tr>
                     <td>{{infoVentas.id}}</td>
                     <td>{{infoVentas.nombre}}</td>
                     <td>{{infoVentas.fecha}}</td>
                     <td>{{infoVentas.total}}</td>
-                    <td>{{infoVentas.nota}}</td>
-                    <td>{{infoVentas.estado}}</td>
+                    <td style="display: none;">{{infoVentas.nota}}</td>
+                    <td style="display: none;">{{infoVentas.estado}}</td>
                     <td class="btn-acciones">
                         <form action="/anularVenta" method="post" class="form-baja">
                             <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">

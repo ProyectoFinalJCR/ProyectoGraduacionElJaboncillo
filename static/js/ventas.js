@@ -1,4 +1,76 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+    // buscar ventas
+    let ventas = [];
+    fetch("/generar_json_ventas")
+        .then(response => response.json())
+        .then(data => {
+            ventas = data;
+            console.log(ventas);
+            mostrarVentas(ventas);  // Mostrar todos los ventas inicialmente
+        });
+
+        //escuchar evento para buscar ventas
+    document.getElementById("buscar_ventas").addEventListener('input', function () {
+        const valorBuscar = this.value.toLowerCase();
+        console.log(valorBuscar);
+        // Filtrar resultados cuando hay texto en el input
+        const resultados = valorBuscar === "" ? ventas :
+            ventas.filter(venta =>
+                venta.nombre.toLowerCase().includes(valorBuscar) ||
+                venta.fecha.toLowerCase().includes(valorBuscar) ||
+                venta.total.toString().toLowerCase().includes(valorBuscar) // Convertir el total a texto
+            );
+
+        // Mostrar resultados filtrados o todos los ventas si el input está vacío
+        mostrarVentas(resultados);
+    });
+
+    // Función para mostrar ventas en la tabla
+    function mostrarVentas(data) {
+        const tableBody = document.getElementById('tabla_ventas');
+        tableBody.innerHTML = '';  // Limpiar tabla
+
+        if (data.length === 0) {
+            tableBody.innerHTML = "<tr><td colspan='12' style='text-align: center;'>No hay resultados</td></tr>";
+        } else {
+            data.forEach(venta => {
+                        let fechaFormateada = "";
+                if (venta.fecha) {
+                const fecha = new Date(venta.fecha);
+
+                // Construir el formato "YYYY-MM-DD" requerido por <input type="date">
+                const anio = fecha.getUTCFullYear();
+                const mes = (fecha.getUTCMonth() + 1).toString().padStart(2, '0'); // Mes comienza en 0
+                const dia = fecha.getUTCDate().toString().padStart(2, '0');
+
+                fechaFormateada = `${anio}-${mes}-${dia}`;
+                venta.fecha = fechaFormateada;
+                }
+                const row = `
+            <tr>
+                <td>${venta.id}</td>
+                <td>${venta.nombre}</td>
+                <td>${venta.fecha}</td>
+                <td>${venta.total}</td>
+                <td class="btn-acciones"> 
+                    <button class="btn-edit btn-edit-venta" data-id="${venta.id}">
+                       Ver detalles
+                    </button>
+                    <form action="/anularVenta" method="post" class="form-anular">
+                        <input type="hidden" class="id_anular" name="id_anular" value="${venta.id}">
+                        <button class="btn-delete" type="submit">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </form>
+                </td>
+            </tr>`;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+    }
+
+
     //Evento para mostrar formulario
     const btneditar = document.querySelector('.btn-add-venta').addEventListener('click', function(){
 

@@ -17,7 +17,7 @@ Listas de deseo | El Jaboncillo
     <div class="search">
         <div class="seccion-buscar">
             <i class="material-icons">search</i>
-            <input class="input-search" name="search" id="search" placeholder="Buscar listas de deseo">
+            <input class="input-search" name="search" id="search-lista" placeholder="Buscar listas de deseo">
 
         </div>
         <div>
@@ -36,7 +36,7 @@ Listas de deseo | El Jaboncillo
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="lista-deseo-filtrada">
                 {% for infoListaDeseo in Lista_deseo %}
                 <tr>
                     <td>{{infoListaDeseo.nombre_completo}}</td>
@@ -63,9 +63,10 @@ Listas de deseo | El Jaboncillo
             <span class="close" id="close-modal-lista-deseo">&times;</span>
         </div>
         <div class="lista-deseo-content">
-            <div>
-                <label for="">Nombre del cliente</label>
-                <input type="text" id="nombre_completo" name="nombre_completo" placeholder="Nombre completo">
+            <div class="nombre-cliente">
+                <label for="">Nombre del cliente:</label>
+                <input type="text" id="correo" name="correo" placeholder="Correo electronico">
+                <input type="hidden" id="nombre_completo" name="nombre_completo" placeholder="Nombre completo">
             </div>
             <table class="detalle-lista-deseo-table">
                 <thead>
@@ -81,8 +82,11 @@ Listas de deseo | El Jaboncillo
             </table>
         </div>
         <div class="btn-contenedor">
-            <button id="ir_a_venta" class="btn">Ir a Venta</button>
-            <button class=" btn-cancelar" id="btn-cancelar">Cancelar</button>
+            <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+            <div class="botones">
+                <button class=" btn-cancelar" id="btn-cancelar">Cancelar</button>
+                <button id="ir_a_venta" class="venta">Ir a Venta</button>
+            </div>
         </div>
     </div>
 </div>
