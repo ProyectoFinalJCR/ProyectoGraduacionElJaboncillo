@@ -26,8 +26,8 @@ Ventas | El Jaboncillo
     </div>
 </section>
 <div class="container-table-inputs">
-    <div class="table-venta">
-        <table class="table">
+    <div class="table-venta" id="table-container">
+        <table class="table" id="data-table">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -60,6 +60,12 @@ Ventas | El Jaboncillo
             </tbody>
         </table>
     </div>
+    <div id="pagination">
+        <button id="prev-page">Previous</button>
+        <span id="page-info"></span>
+        <button id="next-page">Next</button>
+    </div>
+    
     <div class="container-inputVenta">
         <div class="nueva-venta">
             <div class="inputVenta-title">

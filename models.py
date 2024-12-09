@@ -215,7 +215,6 @@ class Devoluciones (db.Model):
     __tablename__ = 'devoluciones'
     id =db.Column (db.Integer, primary_key=True, autoincrement =True)
     venta_id = db.Column (db.Integer, db.ForeignKey('ventas.id'), nullable = True)
-    cantidad_producto = db.Column (db.Float, nullable=False)
     fecha_devolucion = db.Column (db.Date, nullable=False)
     motivo = db.Column (db.String, nullable=True)
     total = db.Column (db.Float, nullable=False)

@@ -1617,8 +1617,8 @@ LEFT JOIN
        
         # Insertar datos en la base de datos
 
-        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, nota, tipo_pago_id) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :nota, :tipo_pago_id)")
-        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha_formateada, "total": total, "usuario_id": session["user_id"], "nota": nota , "tipo_pago_id": tipoPago})
+        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, nota, id_tipo_pago) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :nota, :id_tipo_pago)")
+        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha_formateada, "total": total, "usuario_id": session["user_id"], "nota": nota , "id_tipo_pago": tipoPago})
 
         for producto in productos:
             if producto['tipo'] == 'planta':
@@ -3066,6 +3066,10 @@ def gastos():
 @app.route("/inicio_catalogo", methods=["GET", "POST"])
 def inicio_catalogo():
     return render_template("inicio_catalogo.html")
+
+@app.route('/reportes_compras')
+def reportes_compras():
+    return render_template('reportes_compras.html')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura A5</title>
+    <style>
+        /* Configuración general */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            line-height: 1.5rem;
+        }
+
+        .ticket {
+            width: 148mm; /* Ancho A5 */
+            height: 210mm; /* Alto A5 */
+            padding: 10px 20px;
+            margin: auto;
+            background: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ticket h1 {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 5px 0;
+        }
+
+        .ticket p {
+            font-size: 12px;
+            text-align: center;
+            margin: 2px 2px;
+        }
+
+        .ticket .details {
+            display: flex;
+            flex-direction:row;
+            padding: 20px;
+            gap: 25%;
+        }
+
+        .ticket .details .info p {
+            margin: 3px 0;
+            font-size: 12px;
+            text-align: left;
+        }
+        .ticket .details .info-personal p {
+            margin: 3px 0;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .ticket table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .ticket table th, .ticket table td {
+            font-size: 12px;
+            text-align: left;
+            padding: 5px;
+        }
+
+        .ticket table th {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .ticket .totals {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .ticket .totals p {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ticket .footer {
+            text-align: center;
+            font-size: 10px;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        /* Estilos para impresión */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: none;
+            }
+
+            .ticket {
+                width: 148mm; /* Tamaño A5 */
+                height: 210mm; /* Tamaño A5 */
+                border: none;
+                box-shadow: none;
+            }
+
+            /* Ajuste para impresión sin márgenes */
+            @page {
+                size: A5;
+                margin: 0;
+            }
+        }
+        .img{
+            display: flex;
+            justify-content: center;
+            padding-top: 10%;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <div class="img">
+            <img src="/static/img/logoElJaboncillo.png" alt="" srcset="">
+        </div>
+        
+        <div class="details">
+            <div class="info">
+                <p>Factura ruc: B04172</p>
+                <p>Fecha: 28/10/2019</p>
+                <p>Método de pago: Tarjeta</p>
+            </div>
+            <div class="info-personal">
+                <p>Nombre del cliente: Juan Carlos</p>
+                <p>Nombre del vendedor: Raymond Garcia</p>
+            </div>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Artículo</th>
+                    <th>Ud</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Manzana golden 1Kg</td>
+                    <td>2</td>
+                    <td>3,00€</td>
+                    <td>6,00€</td>
+                </tr>
+                <tr>
+                    <td>Malla naranjas 3Kg</td>
+                    <td>1</td>
+                    <td>1,25€</td>
+                    <td>1,25€</td>
+                </tr>
+                <tr>
+                    <td>Uvas</td>
+                    <td>5</td>
+                    <td>1,00€</td>
+                    <td>5,00€</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="totals">
+            <p><span>Subtotal:</span><span>10,12€</span></p>
+            <p><span>Total:</span><span>12,25€</span></p>
+        </div>
+        
+        <div class="footer">
+            <p>Km 40 Carretera Masaya - Catarina, Catarina, Nicaragua</p>
+            <p>EL PERIODO DE DEVOLUCIONES</p>
+            <p>CADUCA EL DÍA 01/11/2019</p>
+        </div>
+    </div>
+</body>
+</html>
