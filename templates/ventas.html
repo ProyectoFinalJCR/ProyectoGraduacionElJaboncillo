@@ -48,6 +48,9 @@ Ventas | El Jaboncillo
                     <td style="display: none;">{{infoVentas.nota}}</td>
                     <td style="display: none;">{{infoVentas.estado}}</td>
                     <td class="btn-acciones">
+                        <button class="btn-detalle-venta" data-id="{{infoVentas.id}}">
+                            Ver detalles
+                         </button>
                         <form action="/anularVenta" method="post" class="form-baja">
                             <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
                             <button class="btn-delete" type="submit">
@@ -60,12 +63,52 @@ Ventas | El Jaboncillo
             </tbody>
         </table>
     </div>
+<<<<<<< HEAD
     <div id="pagination">
         <button id="prev-page">Previous</button>
         <span id="page-info"></span>
         <button id="next-page">Next</button>
     </div>
     
+=======
+
+    <!-- Modal de detalle de ventas -->
+    <div id="ModalDetalleVentas" class="modal-detalle-ventas">
+        <div class="modal-content-ventas">
+            <div class="detalle-title">
+                <h2>Detalle de la Venta</h2>
+                <span class="close" id="close-modal-ventas">&times;</span>
+            </div>
+            <div class="ventas-content">
+                <div class="detalle-venta-info">
+                    
+                </div>
+                <table id="detalle-venta-table">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detalle-venta-body">
+                        <!-- Los detalles se cargarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-contenedor">
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                <div class="botones">
+                    <button class="btn-cancelar" id="btn-cancelar-ventas">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AGREGAR VENTA -->
+>>>>>>> 83d7fcdf8d5ac5110cdbb423bfdaf02a8443a305
     <div class="container-inputVenta">
         <div class="nueva-venta">
             <div class="inputVenta-title">

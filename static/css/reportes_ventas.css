@@ -1,7 +1,64 @@
-.contenedor-grafico{
+.container-dashboard{
     width: 100%;
-    height: 85%;
+    height: 95vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 8px;
+    overflow-y: auto;
+    background-color: #D7DAE4;
+    margin-top: 15px;
+    border-radius: 16px;
+}
+.contenedor-grafico1 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
     background-color: #fff;
     border-radius: 16px;
-    margin-top: 15px;
 }
+
+.contenedor-grafico2 {
+    grid-row: span 2 / span 2;
+    grid-column-start: 3;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 15px;
+}
+
+.contenedor-grafico3 {
+    grid-row: span 2 / span 2;
+    grid-row-start: 3;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 15px;
+
+}
+
+.contenedor-grafico4 {
+    grid-column: span 2 / span 2;
+    grid-row: span 2 / span 2;
+    grid-row-start: 3;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 15px;
+}
+
+/* General para los gráficos */
+#heatmap, #chart, #chart2, #chart3 {
+    width: 100%; /* Ajusta al ancho del contenedor */
+    height: 100%; /* Ajusta al alto del contenedor */
+    max-width: 100%; /* Evita que exceda el tamaño */
+    max-height: 100%; /* Evita que exceda el tamaño */
+    display: block; /* Asegura que no se comporte como inline */
+}
+
+/* Contenedores */
+.contenedor-grafico1, .contenedor-grafico2, .contenedor-grafico3, .contenedor-grafico4 {
+    display: flex; /* Flex para centrar el contenido */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    overflow: hidden; /* Evita que el contenido exceda el contenedor */
+}
+
+    

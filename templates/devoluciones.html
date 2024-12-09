@@ -17,11 +17,11 @@ Devoluciones | El Jaboncillo
     <div class="search">
         <div class="seccion-buscar">
             <i class="material-icons">search</i>
-            <input class="input-search" name="search" id="search" placeholder="Buscar devoluciones">
+            <input class="input-search" name="search" id="buscar-devoluciones" placeholder="Buscar devoluciones">
 
         </div>
         <div>
-            <button class="btn-add-devolucion btn">Nueva devoluciones</button>
+            <button class="btn-add-devolucion btn">Nueva devolución</button>
         </div>
     </div>
 </section>
@@ -30,30 +30,71 @@ Devoluciones | El Jaboncillo
         <table class="table">
             <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>Numero de venta</th>
                     <th>Cliente</th>
                     <th>Vendedor</th>
                     <th>Fecha</th>
                     <th>Nota</th>
+                    <th>Acciones</th>
                 </tr>
-            </thead>
-
-            <tbody>
-                <!-- {% for infoVentas in InfoVentas %}
+            </thead> 
+            <tbody id="tabla_devoluciones">
+                {% for infoDevoluciones in Dev %}
                 <tr>
-                    <td>{{infoVentas.id}}</td>
-                    <td>{{infoVentas.nombre}}</td>
-                    <td>{{infoVentas.fecha}}</td>
-                    <td>{{infoVentas.nota}}</td>
+                    <td>{{infoDevoluciones.venta_id}}</td>
+                    <td>{{infoDevoluciones.cliente}}</td>
+                    <td>{{infoDevoluciones.vendedor}}</td>
+                    <td>{{infoDevoluciones.fecha_devolucion}}</td>
+                    <td>{{infoDevoluciones.motivo}}</td>
+                    <td>
+                        <button type="button" class="btn-detalle-devolucion" data-idDev="{{infoDevoluciones.venta_id}}">Ver detalle</button>
+                    </td>
                 </tr>
-                {% endfor %} -->
+                {% endfor %}
             </tbody>
         </table>
     </div>
+    <!-- Modal de detalle de la devolución -->
+    <div id="ModalDetalleDevoluciones" class="modal-devoluciones">
+        <div class="modal-content-devoluciones">
+            <div class="detalle-title">
+                <h2>Detalle de la Devolución</h2>
+                <span class="close" id="close-modal-devoluciones">&times;</span>
+            </div>
+            <div class="devoluciones-content">
+                <div class="detalle-devolucion-info">
+                   
+                </div>
+                <table id="detalle-devolucion-table">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Motivo</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detalle-devolucion-body">
+                        <!-- Los detalles se cargarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-contenedor">
+                <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+                <div class="botones">
+                    <button class="btn-cancelar" id="btn-cancelar-devoluciones">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal agregar devolucion -->
     <div class="container-inputDevolucion">
         <div class="nueva-devolucion">
             <div class="inputDevolucion-title">
-                <h3>DEVOLUCION</h3>
+                <h3>DEVOLUCIÓN</h3>
                 <span class="close close-modal-venta">&times;</span>
             </div>
             <form action="/devoluciones" id="form-devoluciones" method="post" class="form-devoluciones">
@@ -102,6 +143,7 @@ Devoluciones | El Jaboncillo
                         <table id="lista-productos-seleccionados" class="tabla-dev">
                             <thead>
                                 <tr>
+                                    <th>Motivo</th>
                                     <th>Producto</th>
                                     <th>Cantidad</th>
                                     <th>Precio</th>

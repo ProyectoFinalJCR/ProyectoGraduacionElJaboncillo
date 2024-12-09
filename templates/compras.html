@@ -30,28 +30,63 @@ Compras | El Jaboncillo
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Producto</th>
+                    <th>Empleado</th>
                     <th>Proveedor</th>
                     <th>Fecha</th>
-                    <th>Cantidad</th>
                     <th>Total</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
 
             <tbody id="tabla_compras">
                 {% for compras in Compras %}
                 <tr>
-                    <td>{{compras.id}}</td>
-                    <td>{{compras.nombre}}</td>
-                    <td>{{compras.nombre_proveedor}}</td>
+                    <td>{{compras.compra_id}}</td>
+                    <td>{{compras.empleado}}</td>
+                    <td>{{compras.proveedor}}</td>
                     <td>{{compras.fecha_compra}}</td>
-                    <td>{{compras.cantidad}}</td>
                     <td>{{compras.total}}</td>
+                    <td><button type="button" class="btn-detalle-compra" data-idCompra="{{compras.compra_id}}">Ver detalle</button></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    <!-- Modal de detalle de compras -->
+<div id="ModalDetalleCompras" class="modal-detalle-compras">
+    <div class="modal-content-compras">
+        <div class="detalle-title">
+            <h2>Detalle de la Compra</h2>
+            <span class="close" id="close-modal-compras">&times;</span>
+        </div>
+        <div class="compras-content">
+            <div class="detalle-compra-info">
+                
+            </div>
+            <table id="detalle-compra-table">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody id="detalle-compra-body">
+                    <!-- Los detalles se cargarán dinámicamente aquí -->
+                </tbody>
+            </table>
+        </div>
+        <div class="btn-contenedor">
+            <img src="/static/img/logoElJaboncillo.png" alt="logo" class="logo-btn-add">
+            <div class="botones">
+                <button class="btn-cancelar" id="btn-cancelar-compras">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- modal para agregar compra -->
     <div class="container-inputCompra">
         <div class="nueva-compra">
             <div class="inputCompra-title">

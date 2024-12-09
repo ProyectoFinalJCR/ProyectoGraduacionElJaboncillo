@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const tableBody = document.getElementById("lista-deseo-filtrada");
         tableBody.innerHTML = ""; // Limpiar contenido previo
 
-        if (data.length === 0) {"<tr><td tyle='text-align: center;'>No hay resultados</td></tr>";
+        if (data.length === 0) {"<tr><td style='text-align: center;'>No hay resultados</td></tr>";
         }
         else {
             data.forEach(item => {
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     tableBody.innerHTML = `<tr><td colspan="3">${data.error}</td></tr>`;
                 } else {
                     // renderizar el nombre del cliente
-                    document.querySelector('#nombre_completo').value = data[0].usuario_nombre;
+                    document.querySelector('#correo').value = data[0].correo;
                     // Renderizar cada producto
                     data.forEach((item, index) => {
                         const row = `
@@ -172,6 +172,23 @@ document.addEventListener('DOMContentLoaded', function () {
             } 
             else 
             {
+                let fechaFormateada = "";
+const fecha = new Date();
+
+// Formatear la fecha con día, número, mes y año
+const opcionesFormato = { 
+    weekday: 'long',  // Nombre del día (ej. domingo)
+    day: 'numeric',   // Día del mes
+    month: 'long',    // Nombre del mes (ej. diciembre)
+    year: 'numeric'   // Año
+};
+
+// Formatear la fecha con opciones de idioma
+fechaFormateada = new Intl.DateTimeFormat('es-ES', opcionesFormato).format(fecha);
+
+// Asignar la fecha formateada a un elemento
+document.getElementById("fecha_venta").value = fechaFormateada;
+
                 // Cargar datos en el modal de ventas
                 document.getElementById("nombreCliente").value = data[0].usuario_nombre;
 

@@ -36,6 +36,7 @@
         insumo.nombre.toLowerCase().includes(valorBuscar) ||
         (insumo.subcategoria || "").toLowerCase().includes(valorBuscar) ||
         (insumo.color || "").toLowerCase().includes(valorBuscar) ||
+        (insumo.precio_venta !== undefined && insumo.precio_venta.toString().toLowerCase().includes(valorBuscar)) ||
         (insumo.unidad_medida || "").toLowerCase().includes(valorBuscar) ||
         (insumo.composicion || "").toLowerCase().includes(valorBuscar) ||
         (insumo.precauciones || "").toLowerCase().includes(valorBuscar) ||

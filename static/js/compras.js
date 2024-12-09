@@ -15,9 +15,10 @@ document.addEventListener('DOMContentLoaded', function(){
         // Filtrar resultados cuando hay texto en el input
         const resultados = valorBuscar === "" ? compras :
             compras.filter(compra =>
-                compra.nombre.toLowerCase().includes(valorBuscar) ||
+                compra.compra_id.toString().toLowerCase().includes(valorBuscar) ||
+                compra.nombre_empleado.toLowerCase().includes(valorBuscar) ||
+                compra.nombre_proveedor.toLowerCase().includes(valorBuscar) ||
                 compra.fecha_compra.toLowerCase().includes(valorBuscar) ||
-                compra.cantidad.toString().toLowerCase().includes(valorBuscar) ||
                 compra.total.toString().toLowerCase().includes(valorBuscar) // Convertir el total a texto
             );
 
@@ -47,17 +48,83 @@ document.addEventListener('DOMContentLoaded', function(){
                 }
                 const row = `
             <tr>
-                <td>${compra.id}</td>
-                <td>${compra.nombre}</td>
+                <td>${compra.compra_id}</td>
+                <td>${compra.nombre_empleado}</td>
                 <td>${compra.nombre_proveedor}</td>
                 <td>${compra.fecha_compra}</td>
-                <td>${compra.cantidad}</td>
                 <td>${compra.total}</td>
+                <td><button type="button" class="btn-detalle-compra" data-idCompra="${compra.compra_id}">Ver detalle</button></td>
             </tr>`;
                 tableBody.insertAdjacentHTML('beforeend', row);
             });
         }
     }
+
+    //agregar delegacion de eventos btn ver detalles
+    document.getElementById('tabla_compras').addEventListener('click', function (event) {
+        if (event.target.closest('.btn-detalle-compra')) {
+            const button = event.target.closest('.btn-detalle-compra');
+            const compraId = button.getAttribute('data-idCompra');
+    
+            // Mostrar el modal
+            const modal = document.getElementById("ModalDetalleCompras");
+            modal.style.display = "block";
+    
+            // Obtener los detalles de la compra
+            fetchDetalleCompras(compraId);
+        }
+    });
+    
+
+    function fetchDetalleCompras(id) {
+        fetch("/obtener_compra", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ idCompra: id }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                const tableBody = document.getElementById("detalle-compra-body");
+                console.log(data);
+                // Limpiar contenido previo
+                tableBody.innerHTML = "";
+    
+                if (data.length === 0) {
+                   
+                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No se encontraron detalles para esta compra</td></tr>`;
+                } else {
+                     // Renderizar los detalles
+                     data.forEach((item, index) => {
+                        const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${item.nombre}</td>
+                            <td>${item.cantidad}</td>
+                            <td>C$ ${parseFloat(item.precio).toFixed(2)}</td>
+                            <td>C$ ${parseFloat(item.subtotal).toFixed(2)}</td>
+                        </tr>`;
+                        tableBody.insertAdjacentHTML("beforeend", row);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Error al obtener los detalles:", error);
+            });
+    }
+    
+    // Cerrar el modal
+    document.getElementById("close-modal-compras").addEventListener("click", function () {
+        const modal = document.getElementById("ModalDetalleCompras");
+        modal.style.display = "none";
+    });
+    
+    document.getElementById("btn-cancelar-compras").addEventListener("click", function () {
+        const modal = document.getElementById("ModalDetalleCompras");
+        modal.style.display = "none";
+    });
+    
 
 
 
@@ -89,18 +156,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
             container_table_inputs.style.display="none";
         });
-
-        // const inputCantidad = document.getElementById("cantidad-compra");
-
-        // inputCantidad.addEventListener("input", function () {
-        //     if (this.value < 0) {
-        //         this.value = 0; // Restablece a 0 si es negativo
-        //     }
-        //     // Verificar si el valor es un número válido
-        //     if (!/^\d*\.?\d*$/.test(this.value)) {
-        //         this.value = this.value.slice(0, -1); // Elimina el último carácter inválido
-        //     }
-        // });
 
         const Validarinputs = document.querySelectorAll('.validar-input');
 
@@ -326,5 +381,5 @@ document.addEventListener('DOMContentLoaded', function(){
             });
         });
     
-    });
+    });   
 })

@@ -1,15 +1,31 @@
-{% extends "layout.html" %} {% block title %} Ventas | El Jaboncillo {% endblock
+{% extends "layout.html" %} {% block title %} Dashboard | El Jaboncillo {% endblock
 %} {% block main %}
 <section class="bienvenida">
-  <div>
-    <h2 id="saludo"></h2>
-    <p>Bienvenid@, {{session["user_name"]}}</p>
-  </div>
-  <div>
-    <h3>Modulo de Insumos</h3>
-  </div>
-</section>  
+    <div>
+        <h2 id="saludo"></h2>
+        <p>{{session["user_name"]}}</p>
+    </div>
+    <div>
+        <h3>Modulo de Dashboard</h3>
+    </div>
+</section>
+<section class="container-dashboard">
+    
+    <div class="contenedor-grafico1">
+        <div id="chart" style="max-width: 100%; max-height: 100%; margin: auto"></div>
+    </div>    
 
+    <div class="contenedor-grafico2">
+        <div id="heatmap" style="max-width: 800px; margin: auto;"></div>
+    </div>
+    
+    <div class="contenedor-grafico3">
+        <div id="chart2" style="max-width: 800px; margin: auto;"></div>
+    </div>
+    
+    <div class="contenedor-grafico4">
+        <div id="chart3" style="max-width: 800px; margin: auto;"></div>
+    </div>
 
 <div class="contenedor-grafico">
     <div id="heatmap" style="max-width: 800px; margin: auto;"></div>
@@ -36,94 +52,95 @@
   </div>
   
 <script>
-  document.addEventListener("DOMContentLoaded", (event) => {
-    fetch("/reportes/mayores-ventas") // Corrige la URL
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data); // Verifica los datos recibidos
+    document.addEventListener("DOMContentLoaded", (event) => {
 
-        // Preparar datos para el gráfico
-        const productos = data.map((item) => item.producto);
-        const totalesPrecios = data.map((item) => item.total_precio);
+        fetch("/reportes/mayores-ventas") // Corrige la URL
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data); // Verifica los datos recibidos
 
-        // Configuración del gráfico
-        var options = {
-          chart: {
-            height: 400,
-            type: "line",
-            animations: {
-              enabled: true,
-            },
-          },
-          series: [
-            {
-              name: "Total en Ventas",
-              data: totalesPrecios,
-            },
-          ],
-          xaxis: {
-            categories: productos,
-            title: {
-              text: "Productos",
-            },
-          },
-          yaxis: {
-            title: {
-              text: "Total en Ventas ($)",
-            },
-          },
-          annotations: {
-            yaxis: [
-              {
-                y: Math.max(...totalesPrecios), // Punto más alto en ventas
-                borderColor: "#FF4560",
-                label: {
-                  borderColor: "#FF4560",
-                  style: {
-                    color: "#fff",
-                    background: "#FF4560",
-                  },
-                  text: "Venta Máxima",
-                },
-              },
-            ],
-            xaxis: [
-              {
-                x: productos[
-                  totalesPrecios.indexOf(Math.max(...totalesPrecios))
-                ], // Producto con mayor venta
-                borderColor: "#775DD0",
-                label: {
-                  style: {
-                    color: "#fff",
-                    background: "#775DD0",
-                  },
-                  text: "Producto Más Vendido",
-                },
-              },
-            ],
-          },
-          title: {
-            text: "Mayores Ventas por Producto",
-            align: "center",
-          },
-          colors: ["#1E90FF"],
-          stroke: {
-            width: 3,
-            curve: "smooth",
-          },
-        };
+                // Preparar datos para el gráfico
+                const productos = data.map((item) => item.producto);
+                const totalesPrecios = data.map((item) => item.total_precio);
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-      })
-      .catch((error) => console.error("Error al obtener los datos:", error));
-  });
+                // Configuración del gráfico
+                var options = {
+                    chart: {
+                        height: 400,
+                        type: "line",
+                        animations: {
+                            enabled: true,
+                        },
+                    },
+                    series: [
+                        {
+                            name: "Total en Ventas",
+                            data: totalesPrecios,
+                        },
+                    ],
+                    xaxis: {
+                        categories: productos,
+                        title: {
+                            text: "Productos",
+                        },
+                    },
+                    yaxis: {
+                        title: {
+                            text: "Total en Ventas ($)",
+                        },
+                    },
+                    annotations: {
+                        yaxis: [
+                            {
+                                y: Math.max(...totalesPrecios), // Punto más alto en ventas
+                                borderColor: "#FF4560",
+                                label: {
+                                    borderColor: "#FF4560",
+                                    style: {
+                                        color: "#fff",
+                                        background: "#FF4560",
+                                    },
+                                    text: "Venta Máxima",
+                                },
+                            },
+                        ],
+                        xaxis: [
+                            {
+                                x: productos[
+                                    totalesPrecios.indexOf(Math.max(...totalesPrecios))
+                                ], // Producto con mayor venta
+                                borderColor: "#775DD0",
+                                label: {
+                                    style: {
+                                        color: "#fff",
+                                        background: "#775DD0",
+                                    },
+                                    text: "Producto Más Vendido",
+                                },
+                            },
+                        ],
+                    },
+                    title: {
+                        text: "Mayores Ventas por Producto",
+                        align: "center",
+                    },
+                    colors: ["#1E90FF"],
+                    stroke: {
+                        width: 3,
+                        curve: "smooth",
+                    },
+                };
+
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            })
+            .catch((error) => console.error("Error al obtener los datos:", error));
+    });
 </script>
 
 <script>
@@ -133,8 +150,8 @@
             .then(data => {
                 // Preparar los datos para el gráfico Heatmap
                 const meses = [
-                    "Enero", "Febrero", "Marzo", "Abril", "Mayo", 
-                    "Junio", "Julio", "Agosto", "Septiembre", 
+                    "Enero", "Febrero", "Marzo", "Abril", "Mayo",
+                    "Junio", "Julio", "Agosto", "Septiembre",
                     "Octubre", "Noviembre", "Diciembre"
                 ];
 
@@ -199,7 +216,7 @@
                     },
                     tooltip: {
                         y: {
-                            formatter: function(value) {
+                            formatter: function (value) {
                                 return `$${value}`;
                             }
                         }
@@ -395,6 +412,9 @@
     });
 </script>
 
+<<<<<<< HEAD
+{% endblock %}
+=======
 <!-- <script>
     document.addEventListener("DOMContentLoaded", (event) => {
       fetch("/reportes/resumen-diario") // Cambia por la URL correcto
@@ -539,3 +559,4 @@
   
 
 {% endblock %}
+>>>>>>> 984f6afa584612599758e966f97613cecbd02c42

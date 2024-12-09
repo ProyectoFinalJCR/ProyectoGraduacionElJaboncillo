@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Filtrar resultados cuando hay texto en el input
         const resultados = valorBuscar === "" ? ventas :
             ventas.filter(venta =>
+                venta.id.toString().toLowerCase().includes(valorBuscar) ||
                 venta.nombre.toLowerCase().includes(valorBuscar) ||
                 venta.fecha.toLowerCase().includes(valorBuscar) ||
                 venta.total.toString().toLowerCase().includes(valorBuscar) // Convertir el total a texto
@@ -89,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>${venta.fecha}</td>
                 <td>${venta.total}</td>
                 <td class="btn-acciones"> 
-                    <button class="btn-edit btn-edit-venta" data-id="${venta.id}">
+                    <button class="btn-detalle-venta" data-id="${venta.id}">
                        Ver detalles
                     </button>
                     <form action="/anularVenta" method="post" class="form-anular">
@@ -105,6 +106,70 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    //agregar delegacion de eventos btn ver detalles
+    document.getElementById('tabla_ventas').addEventListener('click', function (event) {
+        if (event.target.closest('.btn-detalle-venta')) {
+            const button = event.target.closest('.btn-detalle-venta');
+            const ventaId = button.getAttribute('data-id');
+            console.log("ID de venta a editar:", ventaId);
+
+            // Mostrar el modal
+            const modal = document.getElementById("ModalDetalleVentas");
+            modal.style.display = "block";
+    
+            // Obtener los detalles de la venta
+            fetchDetalleVentas(ventaId);
+        }
+    });
+    // funcion para obtener los detalles de la venta
+    function fetchDetalleVentas(id) {
+        fetch("/obtener_venta", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id_venta: id }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                const tableBody = document.getElementById("detalle-venta-body");
+                console.log(data);
+                // Limpiar contenido previo
+                tableBody.innerHTML = "";
+    
+                if (data.length === 0) {
+                   
+                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No se encontraron detalles para esta venta</td></tr>`;
+                } else {
+                     // Renderizar los detalles
+                     data.forEach((item, index) => {
+                        const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${item.nombre}</td>
+                            <td>${item.cantidad}</td>
+                            <td>C$ ${parseFloat(item.precio).toFixed(2)}</td>
+                            <td>C$ ${parseFloat(item.subtotal).toFixed(2)}</td>
+                        </tr>`;
+                        tableBody.insertAdjacentHTML("beforeend", row);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Error al obtener los detalles:", error);
+            });
+    }
+    
+    // Cerrar el modal
+    document.getElementById("close-modal-ventas").addEventListener("click", function () {
+        const modal = document.getElementById("ModalDetalleVentas");
+        modal.style.display = "none";
+    });
+    
+    document.getElementById("btn-cancelar-ventas").addEventListener("click", function () {
+        const modal = document.getElementById("ModalDetalleVentas");
+        modal.style.display = "none";
+    });
 
     //Evento para mostrar formulario
     const btneditar = document.querySelector('.btn-add-venta').addEventListener('click', function(){

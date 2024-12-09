@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         (planta.subcategoria || "").toLowerCase().includes(valorBuscar) ||
         (planta.color || "").toLowerCase().includes(valorBuscar) ||
         (planta.rango || "").toLowerCase().includes(valorBuscar) ||
-        (planta.precio ? planta.precio.toString().toLowerCase() : "").includes(valorBuscar.toLowerCase()) ||
+        (planta.precio_venta !== undefined && planta.precio_venta.toString().toLowerCase().includes(valorBuscar)) ||
         (planta.entorno || "").toLowerCase().includes(valorBuscar) ||
         (planta.agua || "").toLowerCase().includes(valorBuscar) ||
         (planta.suelo || "").toLowerCase().includes(valorBuscar) ||
