@@ -1552,21 +1552,18 @@ def compras():
         obtenerColores = text("SELECT * FROM colores")
         obtenerMedidas = text("SELECT * FROM medidas")
         ObtenerCompras = text("""SELECT 
-    compras.id,
-    i.nombre ,
-    proveedores.nombre_proveedor,
-    d.cantidad,
-    compras.fecha_compra,
-    compras.total
+    c.id AS compra_id,
+    u.nombre_completo AS empleado,
+    p.nombre_proveedor AS proveedor,
+	c.fecha_compra,
+    c.total
 FROM 
-    compras
+    compras AS c
 INNER JOIN 
-    detalle_compra AS d ON compras.id = d.compra_id
+    proveedores AS p ON c.proveedor_id = p.id
 INNER JOIN 
-    insumos AS i ON d.insumo_id = i.id
-LEFT JOIN 
-    proveedores ON compras.proveedor_id = proveedores.id;
-""")
+    usuarios AS u ON c.usuario_id = u.id;""")
+
 
 
         colores = db.execute(obtenerColores).fetchall()
@@ -1745,12 +1742,25 @@ def listaDeseos():
 
 @app.route('/devoluciones', methods=["GET", "POST"])
 @login_required
-
 def devoluciones():
     if request.method == "GET":
         ObtenerMovimientos = text("SELECT * FROM tipo_movimientos WHERE tipo_movimiento = 'Devolución' OR tipo_movimiento = 'Devolucion por daños'")
+
+        obtenerDev = text("""SELECT 
+    d.id AS id,
+    v.id AS venta_id,
+    v.nombre_cliente AS cliente,
+    u.nombre_completo AS vendedor,
+    d.fecha_devolucion,
+    d.Motivo
+FROM 
+	devoluciones as d
+	LEFT JOIN ventas AS v ON d.venta_id = v.id
+	LEFT JOIN usuarios as u ON usuario_id = u.id""")
+        
+        dev = db.execute(obtenerDev).fetchall()
         movimientos = db.execute(ObtenerMovimientos).fetchall()
-        return render_template("devoluciones.html", Movimientos=movimientos)
+        return render_template("devoluciones.html", Movimientos=movimientos, Devoluciones=devoluciones, Dev = dev)
     else:
         datos_formulario = request.form.to_dict(flat=False)
         print(datos_formulario)
@@ -2414,37 +2424,114 @@ FROM
 
     return jsonify(ventasJson)
 
+@app.route("/obtener_venta", methods=["POST"])
+def obtener_venta():
+    id_venta = request.json.get('id_venta', 'id')
+    obtener_ventaquery = text("""	SELECT 
+    v.id AS venta_id,
+    COALESCE(p.nombre, i.nombre) AS producto, -- Nombre del producto, ya sea planta o insumo
+    dv.cantidad,
+    dv.precio_unitario,
+	dv.subtotal,
+	v.total,
+    CASE 
+        WHEN dv.planta_id IS NOT NULL THEN 'planta'
+        WHEN dv.insumo_id IS NOT NULL THEN 'insumo'
+    END AS tipo_producto
+FROM 
+    detalle_ventas AS dv
+LEFT JOIN ventas as v ON dv.venta_id = v.id
+
+LEFT JOIN 
+    plantas AS p ON dv.planta_id = p.id
+LEFT JOIN 
+    insumos AS i ON dv.insumo_id = i.id
+WHERE 
+    dv.venta_id = :id """)
+    ventas = db.execute(obtener_ventaquery, {'id': id_venta}).fetchall()
+    # Convertir el resultado a un diccionario {mes: total_ventas}
+    ventasJson = [
+        {'id': venta[0],
+        'nombre': venta[1],
+        'cantidad': venta[2],
+        'precio': venta[3],
+        'subtotal': venta[4],
+        'total': venta[5],
+        'tipo': venta[6]
+    }
+    for venta in ventas
+    ]
+
+    return jsonify(ventasJson)
+
 @app.route("/generar_json_compras", methods=["GET"])
 def generar_json_compras():
     print("entro a generar json compras")
     comprasquery = text("""SELECT 
-    compras.id,
-    i.nombre ,
-    proveedores.nombre_proveedor,
-    d.cantidad,
-    compras.fecha_compra,
-    compras.total
+    c.id AS compra_id,
+    u.nombre_completo AS empleado,
+    p.nombre_proveedor AS proveedor,
+	c.fecha_compra,
+    c.total
 FROM 
-    compras
+    compras AS c
 INNER JOIN 
-    detalle_compra AS d ON compras.id = d.compra_id
+    proveedores AS p ON c.proveedor_id = p.id
 INNER JOIN 
-    insumos AS i ON d.insumo_id = i.id
-LEFT JOIN 
-    proveedores ON compras.proveedor_id = proveedores.id;""")
+    usuarios AS u ON c.usuario_id = u.id;""")
     comprainfo = db.execute(comprasquery).fetchall()
     # Convertir los resultados en un diccionario {mes: total_ventas}
     comprasJson = [
-        {'id': compra[0],
-        'nombre': compra[1],
+        {'compra_id': compra[0],
+        'nombre_empleado': compra[1],
         'nombre_proveedor': compra[2],
-        'cantidad': compra[3],
-        'fecha_compra': compra[4],
-        'total': compra[5]
+        'fecha_compra': compra[3],
+        'total': compra[4]
     }
     for compra in comprainfo
     ]       
     return jsonify(comprasJson)
+
+@app.route("/obtener_compra", methods=["POST"])
+def obtener_compra():
+    idCompra = request.json.get('idCompra', 'id')
+    print(idCompra)
+    obtenerCompraquery = text("""SELECT
+    c.id AS compra_id,
+    COALESCE(p.nombre, i.nombre) AS producto, -- Nombre del producto, ya sea planta o insumo
+    dc.cantidad,
+    dc.precio_unitario,
+    dc.subtotal,
+    CASE 
+        WHEN dc.planta_id IS NOT NULL THEN 'planta'
+        WHEN dc.insumo_id IS NOT NULL THEN 'insumo'
+    END AS tipo_producto
+FROM 
+    detalle_compra AS dc
+LEFT JOIN 
+    compras AS c ON dc.compra_id = c.id
+LEFT JOIN 
+    plantas AS p ON dc.planta_id = p.id
+LEFT JOIN 
+    insumos AS i ON dc.insumo_id = i.id
+WHERE 
+    dc.compra_id = :id """)
+    compras = db.execute(obtenerCompraquery, {'id': idCompra}).fetchall()
+    print(compras)
+    # Convertir el resultado a un diccionario {mes: total_ventas}
+    comprasJson = [
+        {'compra_id': compra[0],
+        'nombre': compra[1],
+        'cantidad': compra[2],
+        'precio': compra[3],
+        'subtotal': compra[4],
+        'tipo': compra[5]
+    }
+    for compra in compras
+    ]
+    return jsonify(comprasJson)
+
+
 
 @app.route("/generar_json_gastos", methods=["GET"])
 def generar_json_gastos():
@@ -2470,6 +2557,34 @@ FROM
     ]   
 
     return jsonify(gastosJson)
+
+@app.route('/generar_json_devoluciones', methods=["GET"])
+def generar_json_devoluciones():
+     #obtener devoluciones
+    ObtenerDevoluciones = text("""SELECT 
+    v.id AS venta_id,
+    v.nombre_cliente AS cliente,
+    u.nombre_completo AS vendedor,
+    d.fecha_devolucion,
+    d.Motivo
+FROM 
+	devoluciones as d
+	LEFT JOIN ventas AS v ON d.venta_id = v.id
+	LEFT JOIN usuarios as u ON usuario_id = u.id""")
+
+    devoluciones = db.execute(ObtenerDevoluciones).fetchall()
+    devolucionesJson = [
+        {"venta_id": devolucion[0],
+         "cliente": devolucion[1],
+         "vendedor": devolucion[2],
+         "fecha": devolucion[3],
+         "motivo": devolucion[4]
+        }
+    for devolucion in devoluciones
+    ]
+    return jsonify(devolucionesJson)
+
+
 
 @app.route('/produccion', methods=["GET", "POST"])
 @login_required
@@ -2986,7 +3101,50 @@ def verDetallesListaDeseo():
     else:
         return jsonify({"error": "No se encontró la lista de deseos"}), 404
     
+@app.route('/obtener_devolucion', methods=["POST"])
+def verDetalleDevolucion():
+    id_devolucion = request.json.get('idDev', 'id')
+     #obtener devoluciones
+    ObtenerDevoluciones = text("""SELECT 
+    d.id AS devolucion_id,
+	t.tipo_movimiento as tipo_movimiento,
+    COALESCE(p.nombre, i.nombre) AS producto,  -- Nombre del producto (planta o insumo)
+    dd.cantidad AS cantidad,
+    COALESCE(p.precio_venta, i.precio_venta) AS precio, -- Precio del producto
+    dd.subtotal as subtotal,
+    CASE 
+        WHEN dd.planta_id IS NOT NULL THEN 'planta'
+        WHEN dd.insumo_id IS NOT NULL THEN 'insumo'
+    END AS tipo_producto
+FROM 
+    devoluciones AS d
+LEFT JOIN detalle_devoluciones as dd ON dd.devolucion_id = d.id 
+LEFT JOIN 
+    plantas AS p ON dd.planta_id = p.id
+LEFT JOIN 
+    insumos AS i ON dd.insumo_id = i.id
 
+LEFT JOIN movimientos_kardex as m ON dd.kardex_id = m.id
+
+LEFT JOIN tipo_movimientos as t ON m.tipo_movimiento_id = t.id
+                               WHERE d.venta_id = :id""")
+    
+    devoluciones = db.execute(ObtenerDevoluciones, {"id": id_devolucion}).fetchall()
+    # Convertir los resultados en un diccionario {mes: total_ventas}
+    devolucionesJson = [
+        {'id': devolucion[0],
+        'tipo_movimiento': devolucion[1],
+        'producto': devolucion[2],
+        'cantidad': devolucion[3],
+        'precio': devolucion[4],
+        'subtotal': devolucion[5],
+        'tipo_producto': devolucion[6]
+    }
+    for devolucion in devoluciones
+    ]   
+
+    return jsonify(devolucionesJson)
+    
     
 @app.route('/gastos', methods=['GET', 'POST'])
 @login_required

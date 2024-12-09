@@ -31,6 +31,20 @@
     height: 55px;
     text-align: center;
 }
+.btn-detalle-compra{
+    border-radius: 16px;
+    font-weight: bold;
+    background-color: #b1e7dc;
+    width: 120px;
+    height: 35px;
+    color: #000;
+    border: none;
+    cursor: pointer;
+}
+.btn-detalle-compra:hover{
+    background-color: #0ca358;
+    color: #fff;
+}
 .container-table-inputs .container-inputCompra{
     display: none; 
     position: fixed; 
@@ -201,3 +215,117 @@
    display: none;
   }
  
+
+  /* MODAL DETALLE COMPRAS */
+  /* Modal */
+.modal-detalle-compras {
+   display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    overflow: auto;
+}
+
+.modal-content-compras {
+   background-color: #fff;
+   margin: 10% auto;
+   padding: 20px;
+   border-radius: 10px;
+   max-width: 700px;
+   height: 500px;
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+   animation: fadeIn 0.3s ease;  
+}
+
+/* Título del modal */
+.detalle-title {
+   width: 100%;
+   height: 80px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 5px;
+   border-bottom: 1px solid #000;
+   margin-bottom: 25px;
+ }
+ 
+ .detalle-title h2 {
+     font-size: 1.2rem;
+     color: #333;
+     margin: 0;
+ }
+ 
+ .compras-content{
+   width: 100%;
+   height: 65%;
+   display: flex;
+   flex-direction: column;
+   gap: 15px;
+   align-items: center;
+ }
+ .devoluciones-content .detalle-compra-info{
+   width: 100%;
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   gap: 10px;
+ }
+ .devoluciones-content .detalle-compra-info input{
+   width: 50%;
+   height: 40px;
+   padding: 10px;
+   border-radius: 10px;
+   border: none;
+   font-size: 18px;
+   font-weight: bold;
+ }
+
+/* Tabla */
+#detalle-compra-table {
+   width: 100%;
+   border-collapse: collapse;
+   margin: 20px 0;
+   font-size: 16px;
+   text-align: left;
+}
+
+#detalle-compra-table th,
+#detalle-compra-table td {
+   border: 1px solid #ddd;
+   padding: 8px;
+}
+
+#detalle-compra-table th {
+   background-color: #F3F2F8;
+   color: #000;
+}
+
+#detalle-compra-table tr:nth-child(even) {
+   background-color: #f3f3f3;
+}
+
+#detalle-compra-table tr:hover {
+   background-color: #d1e7dd;
+   cursor: pointer;
+}
+#detalle-compra-body{
+    overflow-y: auto;
+}
+
+/* Botones */
+.btn-cancelar {
+   background-color: #d9534f;
+   color: white;
+   padding: 10px 20px;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+}
+
+.btn-cancelar:hover {
+   background-color: #c9302c;
+}
