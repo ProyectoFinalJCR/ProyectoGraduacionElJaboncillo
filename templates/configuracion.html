@@ -55,30 +55,34 @@ Configuración del sistema | El Jaboncillo
         <div class="inputs">
             <label for="">Facebook</label>
             <div class="input-link">
-                <img src="/static/img/facebook.png" class="icon" alt="facebook">
-                <input type="text" class="facebook" name="facebook" value="{{ Configuracion.link_facebook }}" readonly>
+                <a href="{{ Configuracion.link_facebook }}" target="_blank">
+                    <img class="icon" src="/static/img/facebook.png" alt="icono de facebook">
+                </a>
             </div>
         </div>
         <div class="inputs">
             <label for="">Instagram</label>
             <div class="input-link">
-                <img src="/static/img/social.png" class="icon" alt="instagram">
-                <input type="text" class="instagram" name="instagram" value="{{ Configuracion.link_instagram }}"
-                    readonly>
+                <a href="{{ Configuracion.link_instagram }}" target="_blank">
+                    <img class="icon" src="/static/img/social.png" alt="icono de instagram">
+                </a>
             </div>
         </div>
         <div class="inputs">
             <label for="">Tiktok</label>
             <div class="input-link">
-                <img src="/static/img/tik-tok.png" class="icon" alt="tiktok">
-                <input type="text" class="tiktok" name="tiktok" value="{{ Configuracion.link_tiktok }}" readonly>
+                <a href="{{ Configuracion.link_tiktok }}" target="_blank">
+                    <img class="icon" src="/static/img/tik-tok.png" alt="icono de tik-tok">
+                </a>
             </div>
         </div>
         <div class="inputs">
             <label for="">WhatsApp</label>
             <div class="input-link">
-                <img src="/static/img/whatsapp.png" class="icon" alt="whatsapp">
-                <input type="text" class="whatsApp" name="whatsApp" value="{{ Configuracion.link_whatsapp }}" readonly>
+                <a href="https://wa.me/{{ Configuracion.link_whatsapp }}?text=Hola,%20necesito%20información%20de%20los%20servicio." target="_blank">
+
+                    <img class="icon" src="/static/img/whatsapp.png" alt="icono de whatsapp">
+                </a>
             </div>
         </div>
     </div>

@@ -27,8 +27,30 @@
         <div id="chart3" style="max-width: 800px; margin: auto;"></div>
     </div>
 
-</section>
+<div class="contenedor-grafico">
+    <div id="heatmap" style="max-width: 800px; margin: auto;"></div>
+</div>
 
+
+<div class="contenedor-grafico">
+    <div id="chart" style="max-width: 800px; margin: auto"></div>
+    <!-- Ajusta el tamaño -->
+  </div>
+
+  <div class="contenedor-grafico">
+    <div id="chart2" style="max-width: 800px; margin: auto;"></div>
+    <!-- Ajusta el tamaño -->
+  </div>
+
+  <div class="contenedor-grafico">
+    <div id="chart3" style="max-width: 800px; margin: auto;"></div>
+    <!-- Ajusta el tamaño -->
+  </div>
+
+  <div id="chart4" style="max-width: 800px; margin: auto;">
+    <!-- Gráfico renderizado aquí -->
+  </div>
+  
 <script>
     document.addEventListener("DOMContentLoaded", (event) => {
 
@@ -390,4 +412,151 @@
     });
 </script>
 
+<<<<<<< HEAD
 {% endblock %}
+=======
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+      fetch("/reportes/resumen-diario") // Cambia por la URL correcto
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data); // Verifica los datos recibidos
+  
+          // Preparar datos para el gráfico
+          const dias = data.map((item) => item.dia);
+          const efectivo = data.map((item) => item.efectivo);
+          const transferencia = data.map((item) => item.transferencia);
+          const gastos = data.map((item) => item.gastos);
+  
+          // Configuración del gráfico de barras apiladas
+          var options = {
+            chart: {
+              type: "bar",
+              height: 400,
+              stacked: true,
+            },
+            series: [
+              {
+                name: "Efectivo",
+                data: efectivo,
+              },
+              {
+                name: "Transferencia",
+                data: transferencia,
+              },
+              {
+                name: "Gastos",
+                data: gastos,
+              },
+            ],
+            xaxis: {
+              categories: dias,
+              title: {
+                text: "Días",
+              },
+            },
+            yaxis: {
+              title: {
+                text: "Montos Totales ($)",
+              },
+            },
+            title: {
+              text: "Resumen Diario (Efectivo, Transferencia, Gastos)",
+              align: "center",
+            },
+            colors: ["#1E90FF", "#00C49F", "#FF4560"], // Personaliza colores
+          };
+  
+          var chart = new ApexCharts(document.querySelector("#chart4"), options);
+          chart.render();
+        })
+        .catch((error) => console.error("Error al obtener los datos:", error));
+    });
+  </script> -->
+  
+
+  <script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+      fetch("/reportes/resumen-diario") // Cambia por la URL correcto
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data); // Verifica los datos recibidos
+  
+          // Preparar los datos para el gráfico
+          const dias = data.map((item) => item.dia); // Fechas
+          const efectivo = data.map((item) => item.efectivo); // Valores de efectivo
+          const tarjeta = data.map((item) => item.tarjeta); // Valores de tarjeta
+          const gastos = data.map((item) => item.gastos); // Valores de gastos
+  
+          // Configuración del gráfico de área apilada
+          var options = {
+            chart: {
+              type: "area",
+              height: 400,
+              stacked: true,
+            },
+            series: [
+              {
+                name: "Efectivo",
+                data: efectivo,
+              },
+              {
+                name: "Tarjeta",
+                data: tarjeta,
+              },
+              {
+                name: "Gastos",
+                data: gastos,
+              },
+            ],
+            xaxis: {
+              categories: dias,
+              title: {
+                text: "Días",
+              },
+            },
+            yaxis: {
+              title: {
+                text: "Montos Totales ($)",
+              },
+            },
+            fill: {
+              type: "gradient",
+              gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+              },
+            },
+            title: {
+              text: "Entradas y salidas, Efectivo, Tarjeta y Gastos por Día",
+              align: "center",
+            },
+            colors: ["#1E90FF", "#00C49F", "#FF4560"], // Personaliza colores
+            legend: {
+              position: "top",
+              horizontalAlign: "center",
+            },
+          };
+  
+          // Renderizar el gráfico en el contenedor con id "chart"
+          var chart = new ApexCharts(document.querySelector("#chart4"), options);
+          chart.render();
+        })
+        .catch((error) => console.error("Error al obtener los datos:", error));
+    });
+  </script>
+  
+
+{% endblock %}
+>>>>>>> 984f6afa584612599758e966f97613cecbd02c42

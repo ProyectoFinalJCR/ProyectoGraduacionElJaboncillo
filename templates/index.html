@@ -313,11 +313,29 @@
                     <p class="horario">8 am a 5 pm</p>
                 </div>
                 <div class="iconos-cont">
-                    <img class="icono" src="/static/img/whatsapp.png" alt="icono de whatsapp">
-                    <img class="icono" src="/static/img/facebook.png" alt="icono de facebook">
-                    <img class="icono" src="/static/img/social.png" alt="icono de instagram">
-                    <img class="icono" src="/static/img/tik-tok.png" alt="icono de twitter">
+                    {% if datos_configuracion.link_whatsapp %}
+                    <a href="https://wa.me/{{ datos_configuracion.link_whatsapp }}?text=Hola,%20necesito%20información%20de%20los%20servicio." target="_blank">
+
+                            <img class="icono" src="/static/img/whatsapp.png" alt="icono de whatsapp">
+                        </a>
+                    {% endif %}
+                    {% if datos_configuracion.link_facebook %}
+                        <a href="{{ datos_configuracion.link_facebook }}" target="_blank">
+                            <img class="icono" src="/static/img/facebook.png" alt="icono de facebook">
+                        </a>
+                    {% endif %}
+                    {% if datos_configuracion.link_instagram %}
+                        <a href="{{ datos_configuracion.link_instagram }}" target="_blank">
+                            <img class="icono" src="/static/img/social.png" alt="icono de instagram">
+                        </a>
+                    {% endif %}
+                    {% if datos_configuracion.link_tiktok %}
+                        <a href="{{ datos_configuracion.link_tiktok }}" target="_blank">
+                            <img class="icono" src="/static/img/tik-tok.png" alt="icono de tik-tok">
+                        </a>
+                    {% endif %}
                 </div>
+                
             </div>
             <div class="columna3">
                 <div class="titulo-columna3">

@@ -76,7 +76,9 @@ def ruta_permitida(f):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    ObtenerDatosConfig = text('SELECT * FROM configuracion_sistema')
+    datos_configuracion = db.execute(ObtenerDatosConfig).fetchone()
+    return render_template('index.html', datos_configuracion=datos_configuracion)
 
 
 @app.route('/login', methods = ["GET", "POST"])
@@ -3016,6 +3018,59 @@ def tendencia_ventas_diarias():
     reporte = [{"dia": venta.dia.strftime('%Y-%m-%d'), "total_ventas": venta.total_ventas} for venta in ventas]
 
     return jsonify(reporte)
+    
+@app.route('/reportes/resumen-diario', methods=['GET'])
+@login_required
+def resumen_diario():
+    # Calcular la fecha de inicio y fin de la semana actual
+    today = datetime.now()
+    start_of_week = today - timedelta(days=today.weekday())  # Lunes de la semana actual
+    end_of_week = start_of_week + timedelta(days=6)         # Domingo de la semana actual
+
+    # Subconsulta para ingresos por tipo de pago (efectivo y tarjeta)
+    ingresos_por_tipo = db.query(
+        func.date(Ventas.fecha_venta).label('dia'),
+        tipos_pagos.tipo_pago.label('tipo_pago'),
+        func.sum(Ventas.total).label('total_ingreso')
+    ).join(tipos_pagos, Ventas.id_tipo_pago == tipos_pagos.id) \
+     .filter(Ventas.fecha_venta >= start_of_week, Ventas.fecha_venta <= end_of_week) \
+     .group_by(func.date(Ventas.fecha_venta), tipos_pagos.tipo_pago)
+
+    # Subconsulta para gastos diarios
+    gastos_diarios = db.query(
+        func.date(Gastos.fecha).label('dia'),
+        func.sum(Gastos.monto).label('total_gastos')
+    ).filter(Gastos.fecha >= start_of_week, Gastos.fecha <= end_of_week) \
+     .group_by(func.date(Gastos.fecha))
+
+    # Combinar resultados en una estructura
+    ingresos = ingresos_por_tipo.all()
+    gastos = gastos_diarios.all()
+
+    # Crear un diccionario para organizar los resultados
+    reporte = {}
+    for ingreso in ingresos:
+        dia = ingreso.dia.strftime('%Y-%m-%d')
+        if dia not in reporte:
+            reporte[dia] = {"efectivo": 0, "tarjeta": 0, "gastos": 0}
+        if ingreso.tipo_pago.lower() == "efectivo":
+            reporte[dia]["efectivo"] += ingreso.total_ingreso
+        elif ingreso.tipo_pago.lower() == "tarjeta":
+            reporte[dia]["tarjeta"] += ingreso.total_ingreso
+
+    for gasto in gastos:
+        dia = gasto.dia.strftime('%Y-%m-%d')
+        if dia not in reporte:
+            reporte[dia] = {"efectivo": 0, "tarjeta": 0, "gastos": 0}
+        reporte[dia]["gastos"] += gasto.total_gastos
+
+    # Convertir el reporte a una lista ordenada por día
+    reporte_ordenado = [
+        {"dia": dia, "efectivo": valores["efectivo"], "tarjeta": valores["tarjeta"], "gastos": valores["gastos"]}
+        for dia, valores in sorted(reporte.items())
+    ]
+
+    return jsonify(reporte_ordenado)
 
 
 
