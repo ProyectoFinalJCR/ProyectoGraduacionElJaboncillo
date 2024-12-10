@@ -69,7 +69,7 @@ from models import (
     (Ventas, {"id": 1, "nombre_cliente": "Cliente 1", "usuario_id": 1, "id_cliente_categoria": 1, "id_tipo_pago": 1, "fecha_venta": "2024-01-01", "total": 100.0, "estado": True}),
     (Movimientos_kardex, {"id": 1, "planta_id": 1, "insumo_id": None, "cantidad": 10.0, "tipo_movimiento_id": 1, "precio_unitario": 5.0, "fecha_movimiento": "2024-01-01"}),
     (Detalle_ventas, {"id": 1, "venta_id": 1, "kardex_id": 1, "cantidad": 2.0, "precio_unitario": 5.0, "subtotal": 10.0}),
-    (Devoluciones, {"id": 1, "venta_id": 1, "cantidad_producto": 1.0, "fecha_devolucion": "2024-01-01", "total": 5.0}),
+    (Devoluciones, {"id": 1, "venta_id": 1, "fecha_devolucion": "2024-01-01", "total": 5.0}),
     (Detalle_devoluciones, {"id": 1, "devolucion_id": 1, "kardex_id": 1, "cantidad": 1.0, "precio_unitario": 5.0, "subtotal": 5.0}),
     (Proveedores, {"id": 1, "nombre_proveedor": "Proveedor SA", "correo_electronico": "contacto@proveedor.com", "telefono": 12345678, "direccion": "Calle Principal", "estado": True}),
     (Compras, {"id": 1, "proveedor_id": 1, "usuario_id": 1, "fecha_compra": "2024-01-01", "total": 50.0}),

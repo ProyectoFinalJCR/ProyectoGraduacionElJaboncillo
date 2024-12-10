@@ -472,7 +472,10 @@ th.sortable:hover {
     padding: 10px;
     border: none;
 }
-
+.btn-reportes{
+    display: flex;
+    justify-content: center;
+}
 
 #pagination {
     margin-top: 20px;
