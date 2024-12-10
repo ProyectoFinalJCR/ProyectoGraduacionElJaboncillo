@@ -51,14 +51,19 @@ Ventas | El Jaboncillo
                         <button class="btn-detalle-venta" data-id="{{infoVentas.id}}">
                             Ver detalles
                          </button>
-                         <button class="btn-detalle-venta" data-id="${venta.id}">
-                            Ver factura
-                         </button>
+                       <button class="btn-detalle-venta" data-id="${venta.id}">
+                        Ver factura
+                     </button>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div id="pagination">
+        <button id="prev-page">Previous</button>
+        <span id="page-info"></span>
+        <button id="next-page">Next</button>
     </div>
 
     <!-- Modal de detalle de ventas -->

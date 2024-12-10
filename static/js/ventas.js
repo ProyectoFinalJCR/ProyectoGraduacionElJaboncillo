@@ -1,4 +1,39 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const rowsPerPage = 5; // Número de filas por página
+    let currentPage = 1;
+    const table = document.getElementById("data-table");
+    const tbody = table.querySelector("tbody");
+    const rows = Array.from(tbody.rows);
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    const renderTable = (page) => {
+        tbody.innerHTML = ""; // Limpia las filas visibles
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const rowsToDisplay = rows.slice(start, end);
+
+        rowsToDisplay.forEach((row) => tbody.appendChild(row));
+
+        document.getElementById("page-info").textContent = `Page ${page} of ${totalPages}`;
+        document.getElementById("prev-page").disabled = page === 1;
+        document.getElementById("next-page").disabled = page === totalPages;
+    };
+
+    document.getElementById("prev-page").addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable(currentPage);
+        }
+    });
+
+    document.getElementById("next-page").addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable(currentPage);
+        }
+    });
+
+    renderTable(currentPage); // Renderiza la primera página
 
     // buscar ventas
     let ventas = [];

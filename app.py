@@ -1614,8 +1614,8 @@ INNER JOIN
        
         # Insertar datos en la base de datos
 
-        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, nota, tipo_pago_id) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :nota, :tipo_pago_id)")
-        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha_formateada, "total": total, "usuario_id": session["user_id"], "nota": nota , "tipo_pago_id": tipoPago})
+        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, nota, id_tipo_pago) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :nota, :id_tipo_pago)")
+        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha_formateada, "total": total, "usuario_id": session["user_id"], "nota": nota , "id_tipo_pago": tipoPago})
 
         for producto in productos:
             if producto['tipo'] == 'planta':
@@ -3235,6 +3235,150 @@ def gastos():
 @app.route("/inicio_catalogo", methods=["GET", "POST"])
 def inicio_catalogo():
     return render_template("inicio_catalogo.html")
+
+@app.route('/reportesCompras', methods=["GET"])
+def reportesCompras():
+    return render_template('reportes_compras.html')
+
+@app.route('/reportes_compras', methods=["GET"])
+def reportes_compras():
+      # Obtener los parámetros de fecha del frontend
+    fecha_inicio = request.args.get('fecha_inicio')
+    fecha_fin = request.args.get('fecha_fin')
+
+    # Validar que las fechas no sean nulas
+    if not fecha_inicio or not fecha_fin:
+        return jsonify({"error": "Las fechas son obligatorias"}), 400
+
+    # Consulta SQL con filtro de fechas
+    consulta_sql = text("""
+        SELECT 
+            c.id AS compra_id,
+            u.nombre_completo AS empleado,
+            p.nombre_proveedor AS proveedor,
+            c.fecha_compra,
+            c.total
+        FROM 
+            compras AS c
+        INNER JOIN 
+            proveedores AS p ON c.proveedor_id = p.id
+        INNER JOIN 
+            usuarios AS u ON c.usuario_id = u.id
+        WHERE 
+            c.fecha_compra BETWEEN :fecha_inicio AND :fecha_fin
+    """)
+
+    # Ejecutar la consulta con parámetros
+    consulta = db.execute(consulta_sql, {'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin}).fetchall()
+
+    # Formatear los resultados como JSON
+    datos = [
+        {
+            "compra_id": fila.compra_id,
+            "empleado": fila.empleado,
+            "proveedor": fila.proveedor,
+            "fecha_compra": fila.fecha_compra.strftime('%Y-%m-%d'),
+            "total": float(fila.total)
+        }
+        for fila in consulta
+    ]
+
+    return jsonify(datos)
+
+@app.route('/reportesVentas', methods=["GET"])
+def reportesVentas():
+    return render_template('reportes_vent.html')
+
+@app.route('/reportes_vent', methods=["GET"])
+def reportes_vent():
+      # Obtener los parámetros de fecha del frontend
+    fecha_inicio = request.args.get('fecha_inicio')
+    fecha_fin = request.args.get('fecha_fin')
+
+    # Validar que las fechas no sean nulas
+    if not fecha_inicio or not fecha_fin:
+        return jsonify({"error": "Las fechas son obligatorias"}), 400
+
+    # Consulta SQL con filtro de fechas
+    consulta_sql = text("""
+        SELECT 
+            id AS venta_id, 
+            nombre_cliente AS nombre, 
+            fecha_venta AS fecha, 
+            total, 
+            nota 
+        FROM ventas
+        WHERE 
+            fecha_venta BETWEEN :fecha_inicio AND :fecha_fin
+    """)
+
+    # Ejecutar la consulta con parámetros
+    consulta = db.execute(consulta_sql, {'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin}).fetchall()
+
+    # Formatear los resultados como JSON
+    datos = [
+        {
+            "venta_id": fila.venta_id,
+            "nombre": fila.nombre,
+            "fecha": fila.fecha.strftime('%Y-%m-%d'),
+            "total": float(fila.total),
+            "nota": fila.nota
+        }
+        for fila in consulta
+    ]
+
+    return jsonify(datos)
+
+@app.route('/reportesDevoluciones', methods=["GET"])
+def reportesDevoluciones():
+    # Renderiza la plantilla HTML
+    return render_template('reportes_devoluciones.html')
+
+@app.route('/reportes_devoluciones', methods=["GET"])
+def reportes_devoluciones():
+    # Obtener los parámetros de fecha del frontend
+    fecha_inicio = request.args.get('fecha_inicio')
+    fecha_fin = request.args.get('fecha_fin')
+
+    # Validar que las fechas no sean nulas
+    if not fecha_inicio or not fecha_fin:
+        return jsonify({"error": "Las fechas son obligatorias"}), 400
+
+    # Consulta SQL con filtro de fechas
+    consulta_sql = text("""
+        SELECT 
+            d.id AS devolucion_id,
+            v.id AS venta_id,
+            v.nombre_cliente AS cliente,
+            u.nombre_completo AS vendedor,
+            d.fecha_devolucion,
+            d.Motivo
+        FROM 
+	        devoluciones as d
+	        LEFT JOIN ventas AS v ON d.venta_id = v.id
+	        LEFT JOIN usuarios as u ON usuario_id = u.id
+        WHERE 
+            d.fecha_devolucion BETWEEN :fecha_inicio AND :fecha_fin
+    """)
+
+    # Ejecutar la consulta con parámetros
+    consulta = db.execute(consulta_sql, {'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin}).fetchall()
+
+    # Formatear los resultados como JSON
+    datos = [
+        {
+            "devolucion_id": fila.devolucion_id,
+            "venta_id": fila.venta_id,
+            "cliente": fila.cliente,
+            "vendedor": fila.vendedor,
+            "fecha_devolucion": fila.fecha_devolucion.strftime('%Y-%m-%d'),
+            "motivo": fila.motivo
+        }
+        for fila in consulta
+    ]
+
+    return jsonify(datos)
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
