@@ -108,42 +108,64 @@ document.addEventListener("DOMContentLoaded", function () {
             type: "GET",
             success: function (data) {
                 all_productos = data;
-                $('.cards-plantas').empty();
-
-                if (all_productos.length === 0) {
-                    console.log("No hay productos disponibles");
-                    $('.cards-plantas').append('<h3>No hay productos disponibles</h3>')
-                } else {
-                    all_productos.forEach(function (producto) {
-                        const cardHTML = `
-                        <div class="card-plantas">
-                                <form action="/listaDeseos" method="POST" class="agregar-producto">
-                                <input text hidden name="tipo" value="${producto.tipo}">
-                                <input text hidden name="productoId" value="${producto.idProd}">
-                                <div class="img-card">
-                                    <img class="img-planta" src="${producto.imagen}" alt="${producto.nombre}">
-                                </div>
-                                <div class="card-info">
-                                    <div class="nombre-planta">
-                                        <p>${producto.nombre}</p>
-                                        <p>C$  ${producto.precio}</p>
-                                    </div>
-                                    <div class="btn-catalogo">
-                                        <button id="agregar" class="btn-agregar-lista" data-idProd="${producto.idProd}" data-nombre="${producto.nombre}" data-precio="${producto.precio}" data-tipo="${producto.tipo}" > Agregar lista</button>
-                                    </div>
-                                    <div class="minilogoEJ">
-                                        <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jaboncillo">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>`;
-                        $('.cards-plantas').append(cardHTML); // Agrega la tarjeta al contenedor
-                    });
-                }
+                mostrarProductos(all_productos); // Mostrar todos los productos al cargar
             }
         });
-
+    
+        // Escuchar el evento de búsqueda en el input
+        document.getElementById("buscar-productos").addEventListener("input", function () {
+            const valorBuscar = this.value.toLowerCase();
+    
+            // Filtrar los productos según el texto ingresado
+            const resultados = valorBuscar === "" 
+                ? all_productos // Mostrar todos si no hay texto
+                : all_productos.filter(producto =>
+                    producto.nombre.toLowerCase().includes(valorBuscar) ||
+                    producto.precio.toString().toLowerCase().includes(valorBuscar) ||
+                    producto.tipo.toLowerCase().includes(valorBuscar)
+                );
+    
+            // Mostrar los resultados filtrados
+            mostrarProductos(resultados);
+        });
+    
+        // Función para mostrar los productos en la página
+        function mostrarProductos(data) {
+            const container = $('.cards-plantas');
+            container.empty(); // Limpiar las tarjetas existentes
+    
+            if (data.length === 0) {
+                container.append('<h3>No hay productos disponibles</h3>');
+            } else {
+                data.forEach(function (producto) {
+                    const cardHTML = `
+                    <div class="card-plantas">
+                        <form action="/listaDeseos" method="POST" class="agregar-producto">
+                            <input type="hidden" name="tipo" value="${producto.tipo}">
+                            <input type="hidden" name="productoId" value="${producto.idProd}">
+                            <div class="img-card">
+                                <img class="img-planta" src="${producto.imagen}" alt="${producto.nombre}">
+                            </div>
+                            <div class="card-info">
+                                <div class="nombre-planta">
+                                    <p>${producto.nombre}</p>
+                                    <p>C$ ${producto.precio}</p>
+                                </div>
+                                <div class="btn-catalogo">
+                                    <button class="btn-agregar-lista" data-idProd="${producto.idProd}" data-nombre="${producto.nombre}" data-precio="${producto.precio}" data-tipo="${producto.tipo}">Agregar lista</button>
+                                </div>
+                                <div class="minilogoEJ">
+                                    <img src="/static/img/logoElJaboncillo.png" alt="logo del vivero El Jaboncillo">
+                                </div>
+                            </div>
+                        </form>
+                    </div>`;
+                    container.append(cardHTML);
+                });
+            }
+        }
     });
+    
 
         // agregar lista de deseo
         const btnAbrirListaDeseo = document.getElementById("btn-lista-deseo");

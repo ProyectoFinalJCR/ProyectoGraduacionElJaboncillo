@@ -51,12 +51,9 @@ Ventas | El Jaboncillo
                         <button class="btn-detalle-venta" data-id="{{infoVentas.id}}">
                             Ver detalles
                          </button>
-                        <form action="/anularVenta" method="post" class="form-baja">
-                            <input type="hidden" id="id_anular" name="id_anular" value="{{infoVentas.id}}">
-                            <button class="btn-delete" type="submit">
-                                <i class="material-icons">delete</i>
-                            </button>
-                        </form>
+                         <button class="btn-detalle-venta" data-id="${venta.id}">
+                            Ver factura
+                         </button>
                     </td>
                 </tr>
                 {% endfor %}

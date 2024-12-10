@@ -79,7 +79,7 @@ Inventario | El Jaboncillo
             <div class="fecha-cont">
                 <input type="text" id="nombreProductoproduccion" name="nombrePlanta" class="sinborde nombreplanta"
                     readonly value="">
-                <div class="fecha">
+                <div class="fecha_agregar">
                     <!-- <label for="">Fecha: </label> -->
                     <p></p>
                 </div>
@@ -99,13 +99,13 @@ Inventario | El Jaboncillo
                                 <div>
                                     <label for="">Precio</label>
                                     <input type="number" class="input input-plantas" name="precio" id="precioProducto"
-                                        value="{{infoInventario.precio_venta}}">
+                                        value="{{infoInventario.precio_venta}}" placeholder="0.00">
 
                                 </div>
                                 <div>
                                     <label for="">Ingrese una cantidad</label>
                                     <input type="number" class="input input-plantas" min="0" name="cantidad"
-                                        id="cantidad">
+                                        id="cantidad" placeholder="0.00">
                                 </div>
                             </div>
                             <input type="hidden" name="id_planta_produccion" id="idProduccion" value="">
@@ -117,7 +117,7 @@ Inventario | El Jaboncillo
             <div class="cantidad-cont">
                 <div class="nota-precio-cont">
                     <label for="">Nota</label>
-                    <textarea name="nota" class="textarea-inventario input-plantas" id="nota"></textarea>
+                    <textarea name="nota" class="textarea-inventario input-plantas" id="nota"  placeholder="Ej. planta de jades 40 unidades"></textarea>
                 </div>
             </div>
             <div class="btn-agregar">
@@ -161,16 +161,16 @@ Inventario | El Jaboncillo
                 <div class="cant-precio-cont">
                     <div>
                         <label for="">Ingrese una cantidad</label>
-                        <input type="number" class="input input-plantas" name="cantidad" id="cantidad">
+                        <input type="number" placeholder="0.00" class="input input-plantas" name="cantidad" id="cantidad">
                     </div>
                     <div>
                         <label for="">Precio</label>
-                        <input type="number" class="input input-plantas" name="cantidad" id="cantidad">
+                        <input type="number" class="input input-plantas" placeholder="0.00" name="cantidad" id="cantidad">
                     </div>
                 </div>
                 <div>
                     <label for="">Nota</label>
-                    <textarea name="nota" class="textarea-baja input-plantas" id="nota"></textarea>
+                    <textarea name="nota" class="textarea-baja input-plantas" placeholder="Ej. planta de jades 40 unidades" id="nota"></textarea>
                 </div>
             </div>
             <div class="btn-agregar">
@@ -193,8 +193,7 @@ Inventario | El Jaboncillo
         </div>
         <form action="/bajaproductos" class="form-produccion" method="post">
             <div class="fecha-cont">
-                <input type="text" id="nombreProductoBaja" name="nombrePlanta" class="sinborde nombreplanta" readonly
-                    value="">
+                <input type="text" id="nombreProductoBaja" name="nombrePlanta" class="sinborde nombreplanta" readonly value="">
                 <div class="fecha_baja">
                     <!-- <label for="">Fecha: </label> -->
                     <p></p>

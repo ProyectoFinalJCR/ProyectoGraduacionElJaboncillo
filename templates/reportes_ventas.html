@@ -10,412 +10,386 @@
     </div>
 </section>
 <section class="container-dashboard">
-    
+
     <div class="contenedor-grafico1">
         <div id="chart" style="max-width: 100%; max-height: 100%; margin: auto"></div>
-    </div>    
+    </div>
 
     <div class="contenedor-grafico2">
         <div id="heatmap" style="max-width: 800px; margin: auto;"></div>
     </div>
-    
+
     <div class="contenedor-grafico3">
-        <div id="chart2" style="max-width: 800px; margin: auto;"></div>
+        <div id="chart4" style="max-width: 100%; margin: auto;"></div>
     </div>
-    
+
     <div class="contenedor-grafico4">
         <div id="chart3" style="max-width: 800px; margin: auto;"></div>
     </div>
 
-<div class="contenedor-grafico">
-    <div id="heatmap" style="max-width: 800px; margin: auto;"></div>
-</div>
+</section>
+    <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
 
-
-<div class="contenedor-grafico">
-    <div id="chart" style="max-width: 800px; margin: auto"></div>
-    <!-- Ajusta el tamaño -->
-  </div>
-
-  <div class="contenedor-grafico">
-    <div id="chart2" style="max-width: 800px; margin: auto;"></div>
-    <!-- Ajusta el tamaño -->
-  </div>
-
-  <div class="contenedor-grafico">
-    <div id="chart3" style="max-width: 800px; margin: auto;"></div>
-    <!-- Ajusta el tamaño -->
-  </div>
-
-  <div id="chart4" style="max-width: 800px; margin: auto;">
-    <!-- Gráfico renderizado aquí -->
-  </div>
-  
-<script>
-    document.addEventListener("DOMContentLoaded", (event) => {
-
-        fetch("/reportes/mayores-ventas") // Corrige la URL
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log(data); // Verifica los datos recibidos
-
-                // Preparar datos para el gráfico
-                const productos = data.map((item) => item.producto);
-                const totalesPrecios = data.map((item) => item.total_precio);
-
-                // Configuración del gráfico
-                var options = {
-                    chart: {
-                        height: 400,
-                        type: "line",
-                        animations: {
-                            enabled: true,
-                        },
-                    },
-                    series: [
-                        {
-                            name: "Total en Ventas",
-                            data: totalesPrecios,
-                        },
-                    ],
-                    xaxis: {
-                        categories: productos,
-                        title: {
-                            text: "Productos",
-                        },
-                    },
-                    yaxis: {
-                        title: {
-                            text: "Total en Ventas ($)",
-                        },
-                    },
-                    annotations: {
-                        yaxis: [
-                            {
-                                y: Math.max(...totalesPrecios), // Punto más alto en ventas
-                                borderColor: "#FF4560",
-                                label: {
-                                    borderColor: "#FF4560",
-                                    style: {
-                                        color: "#fff",
-                                        background: "#FF4560",
-                                    },
-                                    text: "Venta Máxima",
-                                },
-                            },
-                        ],
-                        xaxis: [
-                            {
-                                x: productos[
-                                    totalesPrecios.indexOf(Math.max(...totalesPrecios))
-                                ], // Producto con mayor venta
-                                borderColor: "#775DD0",
-                                label: {
-                                    style: {
-                                        color: "#fff",
-                                        background: "#775DD0",
-                                    },
-                                    text: "Producto Más Vendido",
-                                },
-                            },
-                        ],
-                    },
-                    title: {
-                        text: "Mayores Ventas por Producto",
-                        align: "center",
-                    },
-                    colors: ["#1E90FF"],
-                    stroke: {
-                        width: 3,
-                        curve: "smooth",
-                    },
-                };
-
-                var chart = new ApexCharts(document.querySelector("#chart"), options);
-                chart.render();
-            })
-            .catch((error) => console.error("Error al obtener los datos:", error));
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        fetch('/reportes/ventas-por-mes')
-            .then(response => response.json())
-            .then(data => {
-                // Preparar los datos para el gráfico Heatmap
-                const meses = [
-                    "Enero", "Febrero", "Marzo", "Abril", "Mayo",
-                    "Junio", "Julio", "Agosto", "Septiembre",
-                    "Octubre", "Noviembre", "Diciembre"
-                ];
-
-                // Transformar los datos para el Heatmap
-                const series = meses.map((mes, index) => {
-                    return {
-                        name: mes,
-                        data: [
-                            {
-                                x: "Ventas",
-                                y: data.find(d => d.mes === index + 1)?.total_ventas || 0
-                            }
-                        ]
-                    };
-                });
-
-                // Configuración del Heatmap
-                var options = {
-                    chart: {
-                        height: 350,
-                        type: 'heatmap'
-                    },
-                    series: series,
-                    plotOptions: {
-                        heatmap: {
-                            shadeIntensity: 0.5,
-                            colorScale: {
-                                ranges: [
-                                    { from: 0, to: 1000, color: "#ffff", name: "Bajo" },
-                                    { from: 1001, to: 5000, color: "#00E396", name: "Medio" },
-                                    { from: 5001, to: 10000, color: "#008FFB", name: "Alto" },
-                                    { from: 10001, to: 20000, color: "#FF4560", name: "Muy Alto" }
-                                ]
-                            }
-                        }
-                    },
-                    xaxis: {
-                        categories: ["Ventas"], // Solo una categoría en el eje X
-                        title: {
-                            text: "Categoría"
-                        }
-                    },
-                    yaxis: {
-                        title: {
-                            text: "Meses"
-                        },
-                        labels: {
-                            style: {
-                                fontSize: "12px",
-                                colors: ["#333"]
-                            }
-                        }
-                    },
-                    title: {
-                        text: "Ventas Totales por Mes",
-                        align: "center",
-                        style: {
-                            fontSize: "18px",
-                            fontWeight: "bold",
-                            color: "#333"
-                        }
-                    },
-                    tooltip: {
-                        y: {
-                            formatter: function (value) {
-                                return `$${value}`;
-                            }
-                        }
+            fetch("/reportes/mayores-ventas") // Corrige la URL
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                };
-
-                var chart = new ApexCharts(document.querySelector("#heatmap"), options);
-                chart.render();
-            })
-            .catch(error => console.error('Error al obtener los datos:', error));
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Configuración inicial del gráfico
-        var options = {
-            chart: {
-                height: 350,
-                type: 'rangeArea',
-                toolbar: {
-                    show: true
-                }
-            },
-            series: [
-                {
-                    name: "Rango de Ventas",
-                    data: [] // Rango [mínimo, máximo]
-                },
-                {
-                    name: "Ventas Totales",
-                    type: 'line',
-                    data: [] // Totales
-                }
-            ],
-            xaxis: {
-                categories: [],
-                title: {
-                    text: "Insumos"
-                }
-            },
-            yaxis: {
-                title: {
-                    text: "Total en Ventas ($)"
-                }
-            },
-            title: {
-                text: "Ventas Totales por Insumos (Combo Chart)",
-                align: "center"
-            }
-        };
-
-        var chart = new ApexCharts(document.querySelector("#chart2"), options);
-        chart.render();
-
-        // Función para actualizar los datos del gráfico
-        function actualizarDatos() {
-            fetch('/reportes/ventas-por-insumos')
-                .then(response => response.json())
-                .then(data => {
-                    // Preparar datos para Rango (mínimo, máximo) y Totales
-                    const categorias = data.map(item => item.insumo);
-                    const rango = data.map(item => [item.total_ventas * 0.8, item.total_ventas * 1.2]); // Rango ficticio
-                    const totales = data.map(item => item.total_ventas);
-
-                    // Actualizar el gráfico
-                    chart.updateOptions({
-                        series: [
-                            {
-                                name: "Rango de Ventas",
-                                data: rango
-                            },
-                            {
-                                name: "Ventas Totales",
-                                type: 'line',
-                                data: totales
-                            }
-                        ],
-                        xaxis: {
-                            categories: categorias
-                        }
-                    });
+                    return response.json();
                 })
-                .catch(error => console.error('Error al obtener los datos:', error));
-        }
+                .then((data) => {
+                    console.log(data); // Verifica los datos recibidos
 
-        // Cargar los datos al inicio
-        actualizarDatos();
-    });
-</script>
+                    // Preparar datos para el gráfico
+                    const productos = data.map((item) => item.producto);
+                    const totalesPrecios = data.map((item) => item.total_precio);
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Configuración inicial del gráfico
-        var options = {
-            chart: {
-                height: 350,
-                type: 'line',
-                toolbar: {
-                    show: true
-                }
-            },
-            series: [
-                {
-                    name: "Total en Ventas",
-                    type: "line", // Línea para el total
-                    data: []
-                },
-                {
-                    name: "Promedio Diario",
-                    type: "column", // Barras para el promedio
-                    data: []
-                }
-            ],
-            stroke: {
-                width: [3, 0], // Ancho de la línea y las barras
-                curve: 'smooth'
-            },
-            xaxis: {
-                categories: [],
-                title: {
-                    text: "Días de la Semana"
-                }
-            },
-            yaxis: [
-                {
-                    title: {
-                        text: "Total en Ventas ($)"
-                    },
-                    labels: {
-                        formatter: function (val) {
-                            return "$" + val.toFixed(2);
-                        }
-                    }
-                },
-                {
-                    opposite: true, // Eje secundario
-                    title: {
-                        text: "Promedio Diario ($)"
-                    },
-                    labels: {
-                        formatter: function (val) {
-                            return "$" + val.toFixed(2);
-                        }
-                    }
-                }
-            ],
-            title: {
-                text: "Tendencia de Ventas Diarias (Semana Actual)",
-                align: "center"
-            }
-        };
-
-        var chart = new ApexCharts(document.querySelector("#chart3"), options);
-        chart.render();
-
-        // Función para actualizar los datos del gráfico
-        function actualizarDatos() {
-            fetch('/reportes/tendencia-ventas-diarias')
-                .then(response => response.json())
-                .then(data => {
-                    // Extraer días y totales
-                    const dias = data.map(item => item.dia);
-                    const totales = data.map(item => item.total_ventas);
-                    const promedios = totales.map(total => total / 1); // Usa un divisor si necesario
-
-                    // Actualizar el gráfico
-                    chart.updateOptions({
+                    // Configuración del gráfico
+                    var options = {
+                        chart: {
+                            height: 400,
+                            type: "line",
+                            animations: {
+                                enabled: true,
+                            },
+                        },
                         series: [
                             {
                                 name: "Total en Ventas",
-                                type: "line",
-                                data: totales
+                                data: totalesPrecios,
                             },
-                            {
-                                name: "Promedio Diario",
-                                type: "column",
-                                data: promedios
-                            }
                         ],
                         xaxis: {
-                            categories: dias.map(dia =>
-                                new Date(dia).toLocaleDateString('es', { weekday: 'long' })
-                            )
-                        }
+                            categories: productos,
+                            title: {
+                                text: "Productos",
+                            },
+                        },
+                        yaxis: {
+                            title: {
+                                text: "Total en Ventas ($)",
+                            },
+                        },
+                        annotations: {
+                            yaxis: [
+                                {
+                                    y: Math.max(...totalesPrecios), // Punto más alto en ventas
+                                    borderColor: "#FF4560",
+                                    label: {
+                                        borderColor: "#FF4560",
+                                        style: {
+                                            color: "#fff",
+                                            background: "#FF4560",
+                                        },
+                                        text: "Venta Máxima",
+                                    },
+                                },
+                            ],
+                            xaxis: [
+                                {
+                                    x: productos[
+                                        totalesPrecios.indexOf(Math.max(...totalesPrecios))
+                                    ], // Producto con mayor venta
+                                    borderColor: "#775DD0",
+                                    label: {
+                                        style: {
+                                            color: "#fff",
+                                            background: "#775DD0",
+                                        },
+                                        text: "Producto Más Vendido",
+                                    },
+                                },
+                            ],
+                        },
+                        title: {
+                            text: "Mayores Ventas por Producto",
+                            align: "center",
+                        },
+                        colors: ["#1E90FF"],
+                        stroke: {
+                            width: 3,
+                            curve: "smooth",
+                        },
+                    };
+
+                    var chart = new ApexCharts(document.querySelector("#chart"), options);
+                    chart.render();
+                })
+                .catch((error) => console.error("Error al obtener los datos:", error));
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('/reportes/ventas-por-mes')
+                .then(response => response.json())
+                .then(data => {
+                    // Preparar los datos para el gráfico Heatmap
+                    const meses = [
+                        "Enero", "Febrero", "Marzo", "Abril", "Mayo",
+                        "Junio", "Julio", "Agosto", "Septiembre",
+                        "Octubre", "Noviembre", "Diciembre"
+                    ];
+
+                    // Transformar los datos para el Heatmap
+                    const series = meses.map((mes, index) => {
+                        return {
+                            name: mes,
+                            data: [
+                                {
+                                    x: "Ventas",
+                                    y: data.find(d => d.mes === index + 1)?.total_ventas || 0
+                                }
+                            ]
+                        };
                     });
+
+                    // Configuración del Heatmap
+                    var options = {
+                        chart: {
+                            height: 350,
+                            type: 'heatmap'
+                        },
+                        series: series,
+                        plotOptions: {
+                            heatmap: {
+                                shadeIntensity: 0.5,
+                                colorScale: {
+                                    ranges: [
+                                        { from: 0, to: 1000, color: "#ffff", name: "Bajo" },
+                                        { from: 1001, to: 5000, color: "#00E396", name: "Medio" },
+                                        { from: 5001, to: 10000, color: "#008FFB", name: "Alto" },
+                                        { from: 10001, to: 20000, color: "#FF4560", name: "Muy Alto" }
+                                    ]
+                                }
+                            }
+                        },
+                        xaxis: {
+                            categories: ["Ventas"], // Solo una categoría en el eje X
+                            title: {
+                                text: "Categoría"
+                            }
+                        },
+                        yaxis: {
+                            title: {
+                                text: "Meses"
+                            },
+                            labels: {
+                                style: {
+                                    fontSize: "12px",
+                                    colors: ["#333"]
+                                }
+                            }
+                        },
+                        title: {
+                            text: "Ventas Totales por Mes",
+                            align: "center",
+                            style: {
+                                fontSize: "18px",
+                                fontWeight: "bold",
+                                color: "#333"
+                            }
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function (value) {
+                                    return `$${value}`;
+                                }
+                            }
+                        }
+                    };
+
+                    var chart = new ApexCharts(document.querySelector("#heatmap"), options);
+                    chart.render();
                 })
                 .catch(error => console.error('Error al obtener los datos:', error));
-        }
+        });
+    </script>
 
-        // Cargar los datos al inicio
-        actualizarDatos();
-    });
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Configuración inicial del gráfico
+            var options = {
+                chart: {
+                    height: 350,
+                    type: 'rangeArea',
+                    toolbar: {
+                        show: true
+                    }
+                },
+                series: [
+                    {
+                        name: "Rango de Ventas",
+                        data: [] // Rango [mínimo, máximo]
+                    },
+                    {
+                        name: "Ventas Totales",
+                        type: 'line',
+                        data: [] // Totales
+                    }
+                ],
+                xaxis: {
+                    categories: [],
+                    title: {
+                        text: "Insumos"
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: "Total en Ventas ($)"
+                    }
+                },
+                title: {
+                    text: "Ventas Totales por Insumos (Combo Chart)",
+                    align: "center"
+                }
+            };
 
-<<<<<<< HEAD
-{% endblock %}
-=======
-<!-- <script>
+            var chart = new ApexCharts(document.querySelector("#chart2"), options);
+            chart.render();
+
+            // Función para actualizar los datos del gráfico
+            function actualizarDatos() {
+                fetch('/reportes/ventas-por-insumos')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Preparar datos para Rango (mínimo, máximo) y Totales
+                        const categorias = data.map(item => item.insumo);
+                        const rango = data.map(item => [item.total_ventas * 0.8, item.total_ventas * 1.2]); // Rango ficticio
+                        const totales = data.map(item => item.total_ventas);
+
+                        // Actualizar el gráfico
+                        chart.updateOptions({
+                            series: [
+                                {
+                                    name: "Rango de Ventas",
+                                    data: rango
+                                },
+                                {
+                                    name: "Ventas Totales",
+                                    type: 'line',
+                                    data: totales
+                                }
+                            ],
+                            xaxis: {
+                                categories: categorias
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error al obtener los datos:', error));
+            }
+
+            // Cargar los datos al inicio
+            actualizarDatos();
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Configuración inicial del gráfico
+            var options = {
+                chart: {
+                    height: 350,
+                    type: 'line',
+                    toolbar: {
+                        show: true
+                    }
+                },
+                series: [
+                    {
+                        name: "Total en Ventas",
+                        type: "line", // Línea para el total
+                        data: []
+                    },
+                    {
+                        name: "Promedio Diario",
+                        type: "column", // Barras para el promedio
+                        data: []
+                    }
+                ],
+                stroke: {
+                    width: [3, 0], // Ancho de la línea y las barras
+                    curve: 'smooth'
+                },
+                xaxis: {
+                    categories: [],
+                    title: {
+                        text: "Días de la Semana"
+                    }
+                },
+                yaxis: [
+                    {
+                        title: {
+                            text: "Total en Ventas ($)"
+                        },
+                        labels: {
+                            formatter: function (val) {
+                                return "$" + val.toFixed(2);
+                            }
+                        }
+                    },
+                    {
+                        opposite: true, // Eje secundario
+                        title: {
+                            text: "Promedio Diario ($)"
+                        },
+                        labels: {
+                            formatter: function (val) {
+                                return "$" + val.toFixed(2);
+                            }
+                        }
+                    }
+                ],
+                title: {
+                    text: "Tendencia de Ventas Diarias (Semana Actual)",
+                    align: "center"
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart3"), options);
+            chart.render();
+
+            // Función para actualizar los datos del gráfico
+            function actualizarDatos() {
+                fetch('/reportes/tendencia-ventas-diarias')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Extraer días y totales
+                        const dias = data.map(item => item.dia);
+                        const totales = data.map(item => item.total_ventas);
+                        const promedios = totales.map(total => total / 1); // Usa un divisor si necesario
+
+                        // Actualizar el gráfico
+                        chart.updateOptions({
+                            series: [
+                                {
+                                    name: "Total en Ventas",
+                                    type: "line",
+                                    data: totales
+                                },
+                                {
+                                    name: "Promedio Diario",
+                                    type: "column",
+                                    data: promedios
+                                }
+                            ],
+                            xaxis: {
+                                categories: dias.map(dia =>
+                                    new Date(dia).toLocaleDateString('es', { weekday: 'long' })
+                                )
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error al obtener los datos:', error));
+            }
+
+            // Cargar los datos al inicio
+            actualizarDatos();
+        });
+    </script>
+
+    <!-- <script>
     document.addEventListener("DOMContentLoaded", (event) => {
       fetch("/reportes/resumen-diario") // Cambia por la URL correcto
         .then((response) => {
@@ -478,85 +452,84 @@
         .catch((error) => console.error("Error al obtener los datos:", error));
     });
   </script> -->
-  
 
-  <script>
-    document.addEventListener("DOMContentLoaded", (event) => {
-      fetch("/reportes/resumen-diario") // Cambia por la URL correcto
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data); // Verifica los datos recibidos
-  
-          // Preparar los datos para el gráfico
-          const dias = data.map((item) => item.dia); // Fechas
-          const efectivo = data.map((item) => item.efectivo); // Valores de efectivo
-          const tarjeta = data.map((item) => item.tarjeta); // Valores de tarjeta
-          const gastos = data.map((item) => item.gastos); // Valores de gastos
-  
-          // Configuración del gráfico de área apilada
-          var options = {
-            chart: {
-              type: "area",
-              height: 400,
-              stacked: true,
-            },
-            series: [
-              {
-                name: "Efectivo",
-                data: efectivo,
-              },
-              {
-                name: "Tarjeta",
-                data: tarjeta,
-              },
-              {
-                name: "Gastos",
-                data: gastos,
-              },
-            ],
-            xaxis: {
-              categories: dias,
-              title: {
-                text: "Días",
-              },
-            },
-            yaxis: {
-              title: {
-                text: "Montos Totales ($)",
-              },
-            },
-            fill: {
-              type: "gradient",
-              gradient: {
-                shadeIntensity: 1,
-                opacityFrom: 0.7,
-                opacityTo: 0.9,
-              },
-            },
-            title: {
-              text: "Entradas y salidas, Efectivo, Tarjeta y Gastos por Día",
-              align: "center",
-            },
-            colors: ["#1E90FF", "#00C49F", "#FF4560"], // Personaliza colores
-            legend: {
-              position: "top",
-              horizontalAlign: "center",
-            },
-          };
-  
-          // Renderizar el gráfico en el contenedor con id "chart"
-          var chart = new ApexCharts(document.querySelector("#chart4"), options);
-          chart.render();
-        })
-        .catch((error) => console.error("Error al obtener los datos:", error));
-    });
-  </script>
-  
 
-{% endblock %}
->>>>>>> 984f6afa584612599758e966f97613cecbd02c42
+    <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            fetch("/reportes/resumen-diario") // Cambia por la URL correcto
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data); // Verifica los datos recibidos
+
+                    // Preparar los datos para el gráfico
+                    const dias = data.map((item) => item.dia); // Fechas
+                    const efectivo = data.map((item) => item.efectivo); // Valores de efectivo
+                    const tarjeta = data.map((item) => item.tarjeta); // Valores de tarjeta
+                    const gastos = data.map((item) => item.gastos); // Valores de gastos
+
+                    // Configuración del gráfico de área apilada
+                    var options = {
+                        chart: {
+                            type: "area",
+                            height: 400,
+                            stacked: true,
+                        },
+                        series: [
+                            {
+                                name: "Efectivo",
+                                data: efectivo,
+                            },
+                            {
+                                name: "Tarjeta",
+                                data: tarjeta,
+                            },
+                            {
+                                name: "Gastos",
+                                data: gastos,
+                            },
+                        ],
+                        xaxis: {
+                            categories: dias,
+                            title: {
+                                text: "Días",
+                            },
+                        },
+                        yaxis: {
+                            title: {
+                                text: "Montos Totales ($)",
+                            },
+                        },
+                        fill: {
+                            type: "gradient",
+                            gradient: {
+                                shadeIntensity: 1,
+                                opacityFrom: 0.7,
+                                opacityTo: 0.9,
+                            },
+                        },
+                        title: {
+                            text: "Entradas y salidas, Efectivo, Tarjeta y Gastos por Día",
+                            align: "center",
+                        },
+                        colors: ["#1E90FF", "#00C49F", "#FF4560"], // Personaliza colores
+                        legend: {
+                            position: "top",
+                            horizontalAlign: "center",
+                        },
+                    };
+
+                    // Renderizar el gráfico en el contenedor con id "chart"
+                    var chart = new ApexCharts(document.querySelector("#chart4"), options);
+                    chart.render();
+                })
+                .catch((error) => console.error("Error al obtener los datos:", error));
+        });
+    </script>
+
+
+    {% endblock %}

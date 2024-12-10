@@ -58,12 +58,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     <button class="btn-detalle-venta" data-id="${venta.id}">
                        Ver detalles
                     </button>
-                    <form action="/anularVenta" method="post" class="form-anular">
-                        <input type="hidden" class="id_anular" name="id_anular" value="${venta.id}">
-                        <button class="btn-delete" type="submit">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </form>
+                    <button class="btn-factura-venta" data-id="${venta.id}">
+                        Ver factura
+                     </button>
                 </td>
             </tr>`;
                 tableBody.insertAdjacentHTML('beforeend', row);

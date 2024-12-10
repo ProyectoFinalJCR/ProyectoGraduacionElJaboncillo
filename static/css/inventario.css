@@ -15,6 +15,12 @@
     text-align: center;
     
   }
+
+  .busqueda .search .btn-add-producto {
+    width: 120px;
+    border-radius: 16px;
+    font-size: 12px;
+  }
   
   .container-table-inputs .table-inventario .table .btn-acciones .btn-produccion{
 background-color: #4bdb82;
@@ -528,7 +534,7 @@ margin-bottom: 25px;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 2fr 1fr 1fr;
-}
+} 
 .modal-content-baja-produccion .form-produccion .fecha-cont{
   width: 100%;
   height: 45px;
@@ -653,3 +659,144 @@ margin-bottom: 25px;
   width: 120px;
   background-color: #CF696B;
 }
+
+/*MEDIA QUERIES*/
+@media (min-width: 1024px) and (max-width: 1919px) {
+  .bienvenida div h2, .bienvenida div p{
+    font-size: 15px;
+  }
+  .bienvenida .modulo-container h3{
+    font-size: 15px;
+  }
+  /**/ 
+  
+  
+  .container-table-inputs {
+   width: 100%;
+   height: 50vh;
+  }
+  .container-table-inputs .table-inventario table .mini-imgInsumo {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    object-fit: cover;
+   }
+
+
+   /* MODAL */
+   .modal-inventario .modal-content-inventario .inputplantas-title, .form-produccion{
+    font-size: 13px;
+    }
+    .modal-baja .modal-content-baja .inputplantas-title, .modal-baja-produccion .modal-content-baja-produccion .inputplantas-title{
+      font-size: 13px;
+    }
+    /*modal baja*/
+    .modal-content-baja-produccion {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-30%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 600px;
+      height:645px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
+      scrollbar-width: none;
+  }
+  .modal-content-baja-produccion .inputplantas-title {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .fecha-cont .nombreplanta {
+    font-size: 18px;
+  }
+  .modal-content-baja-produccion .form-produccion .img-info-cont .img-cont{
+    width: 100%;
+    height: 80%;
+
+  }
+  .modal-content-baja-produccion .form-produccion {
+    width: 100%;
+    height: 520px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 1fr 1fr;
+  }
+  .modal-content-baja-produccion .form-produccion .img-info-cont{
+    width: 100%;
+    height: 295px;
+  }
+  .modal-content-baja-produccion .form-produccion .info-planta-cont .textos-cont{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+  }
+  .modal-content-baja-produccion .form-produccion .cantidad-cont{
+    height: 70%;
+  }
+  .modal-content-baja-produccion .form-produccion .btn-agregar{
+    margin-top: 20px;
+  }
+  .textos-cont .textos .precio-cantidad-cont{
+    gap: 30px;
+  }
+  /*agregar plantas*/
+  .modal-produccion .modal-content-produccion {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    height:645px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+.modal-produccion .modal-content-produccion .inputplantas-title {
+  font-size: 15px;
+}
+.modal-produccion .modal-content-produccion .form-produccion .img-info-cont .img-cont{
+  width: 100%;
+  height: 80%;
+}
+.modal-produccion .modal-content-produccion .form-produccion {
+  width: 100%;
+  height: 520px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 2fr 1fr 1fr;
+}
+.modal-produccion .modal-content-produccion .form-produccion .img-info-cont{
+  width: 100%;
+  height: 295px;
+}
+.modal-produccion .modal-content-produccion .form-produccion .info-planta-cont .textos-cont{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+}
+.modal-produccion .modal-content-produccion .form-produccion .cantidad-cont{
+  height: 70%;
+}
+.modal-produccion .modal-content-produccion .form-produccion .btn-agregar{
+  margin-top: 20px;
+}
+.textos-cont .textos .precio-cantidad-cont{
+  gap: 30px;
+}
+.fecha-cont p {
+  font-size: 15px;
+}
+ }

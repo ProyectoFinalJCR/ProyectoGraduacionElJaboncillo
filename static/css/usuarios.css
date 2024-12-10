@@ -1,4 +1,13 @@
 
+.bienvenida div{
+    width: 50%;
+}
+.bienvenida div h2{
+    font-size: 22px;
+}
+.bienvenida div p{
+    font-size: 14px;
+}
 .seccion-buscar{
     width: 30%;
     height: 45px;
@@ -20,6 +29,11 @@
     box-shadow: 0px 5px 8px 0px #ececec;
     outline: none;
     border: none;
+}
+.busqueda .search .btn {
+  width: 150px;
+  border-radius: 16px;
+  font-size: 12px;
 }
 .container-table-inputs{
     width: 100%;
@@ -85,7 +99,8 @@
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #000;
-    margin-bottom: 25px;;
+    margin-bottom: 25px;
+    font-size: 14px;
 }
 .container-table-inputs .container-inputsUser .formUser{
     width: 100%;
@@ -245,11 +260,12 @@
         border: 3px solid #F3F2F8;
     }
 }
-.modal-editar-usuario .modal-content .form_edit_user .input-usuario .grupo1, .grupo2{
+.modal-editar-usuario .modal-content .form_edit_user .input-usuario .grupo1,.modal-editar-usuario .modal-content .form_edit_user .input-usuario .grupo2{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    align-items: start;
+    align-items: end;
+    justify-content: center;
     width: 100%;
     height: 105px;
 }
@@ -313,6 +329,22 @@
     color: #fff;
   }
 
+  .btn-cambiar-contraseña{
+    width: 100%;
+    height: 45px;
+    border: none;
+    color: #000;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor:pointer;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #B1E7DC;
+
+  }
+
   /* Botón de cerrar */
   .cerrar {
     color: #aaa;
@@ -348,7 +380,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-36%, -50%); /* Centra el modal */
+    transform: translate(-48%, -50%); /* Centra el modal */
     background-color: #fff;
     padding: 0px 50px;
     border-radius: 8px;
@@ -479,3 +511,104 @@
     color: #000;
     text-decoration: none;
   } 
+
+
+  /*Media Queries*/
+  @media (min-width: 768px) and (max-width: 1919px) {
+    .bienvenida {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .bienvenida div h2 {
+      font-size: 16px;
+    }
+    .bienvenida p {
+      font-size: 12px;
+    }
+    .bienvenida .modulo-container {
+      margin-top: 14px;
+      width: 50%;
+    }
+    .bienvenida .modulo-container h3 {
+      font-size:14px;
+    }
+    .seccion-buscar {
+      width: 50%;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+    }
+    .seccion-buscar .input-search {
+      width: 100%;
+      height: 40px;
+      border-radius: 10px;
+      border: none;
+      padding: 10px;
+      font-size: 13px;
+    }
+    .seccion-buscar .btn {
+      width: 100%;
+      height: 40px;
+      border-radius: 10px;
+      border: none;
+      padding: 10px;
+      font-size: 1.2rem;
+    }
+    .table-categories {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+    }
+    .table-categories table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    .table-categories table thead {
+      width: 100%;
+      height: 55px;
+      text-align: center;
+    }
+    
+    /* MODAL */
+    .container-table-inputs .container-inputsUser .agregar-usuario{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-48%, -50%);
+      background-color: #fff;
+      padding: 0px 50px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 600px;
+      height: 465px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .container-table-inputs .container-inputsUser .agregar-usuario .inputUser-title, .formUser .input-users .grupo1 .input-contenido, .formUser .input-users .grupo2 .input-contenido {
+    font-size: 14px;
+  }
+
+  /*MODAL EDITAR*/
+  .modal-editar-usuario .modal-content {
+    /* background-color: white;     */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-48%, -50%);
+    background-color: #fff;
+    padding: 0px 50px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    height: 465px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .modal-editar-usuario .modal-content .usuario-title{
+    font-size: 14px;
+  }
+  .modal-editar-usuario .modal-content form .input-usuario .grupo1 .input-contenido, .modal-editar-usuario .modal-content form .input-usuario .grupo2 .input-contenido {
+    font-size: 14px;
+  }
+}

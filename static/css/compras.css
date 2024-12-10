@@ -329,3 +329,59 @@
 .btn-cancelar:hover {
    background-color: #c9302c;
 }
+
+
+/*MEDIA QUERIES*/
+@media (min-width: 1024px) and (max-width: 1919px) {
+   .bienvenida div h2, .bienvenida div p{
+    font-size: 15px;
+  }
+  .bienvenida .modulo-container h3{
+    font-size: 15px;
+  }
+
+  .container-table-inputs .container-inputCompra{
+   display: none; 
+   position: fixed; 
+   z-index: 1; 
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   justify-content: center;
+
+}
+.container-table-inputs .container-inputCompra .nueva-compra{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-48%, -48%); /* Centra el modal */
+  background-color: #fff;
+  padding: 0px 50px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 900px;
+  height: 770px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  scrollbar-width: none;
+ }
+ .container-table-inputs .container-inputCompra .inputCompra-title{
+    font-size: 15px;
+ }
+ .container-table-inputs .container-inputCompra .form-compra{
+    font-size: 14px;
+ }
+ .container-table-inputs .container-inputCompra .form-compra .inputs-compra{
+    font-size: 14px;
+    gap: 20px;
+ }
+ .container-table-inputs .container-inputCompra .form-compra .inputs-compra .inputs-cont{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+ }
+
+}

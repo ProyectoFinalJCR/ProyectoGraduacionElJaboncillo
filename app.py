@@ -1704,13 +1704,15 @@ def cambiarContraseña():
     return redirect(url_for('usuarios'))
 
 @app.route('/listaDeseos', methods=["GET", "POST"])
+@login_required
 def listaDeseos():
     if request.method == "GET":
         return render_template("listaDeseos.html")
     else:
         productoId = request.form.get('productoId')
         tipo = request.form.get('tipo')
-        usuarioId = session["user_id"]
+        if session.get("user_id"):
+            usuarioId = session["user_id"]
         fecha_actual = datetime.now()
         fecha_formateada = fecha_actual.strftime('%Y-%m-%d')
 
@@ -2045,8 +2047,6 @@ def obtener_ventas():
     return jsonify(detalleVenta)
 
 @app.route('/catalogo', methods=["GET", "POST"])
-@login_required
-# @ruta_permitida
 def catalogo():
     if request.method == "GET":
         
@@ -2058,35 +2058,46 @@ def catalogo():
         categorias = db.execute(obtenerCategorias).fetchall()
 
         #obtener los productos en lista de deseo por cliente
-        usuarioID = session["user_id"]
-        obtenerListaDeseo = text(""" SELECT
-    COALESCE(p.id, i.id) AS id,
-    COALESCE(p.nombre, i.nombre) AS nombre_producto,
-    COALESCE(p.precio_venta, i.precio_venta) AS precio_producto,
-    CASE 
-        WHEN l.planta_id IS NOT NULL THEN 'planta'
-        WHEN l.insumo_id IS NOT NULL THEN 'insumo'
-    END AS tipo_producto,
-    l.fecha AS fecha_agregado
-FROM 
-    listas_deseo AS l
-LEFT JOIN 
-    plantas AS p ON l.planta_id = p.id
-LEFT JOIN 
-    insumos AS i ON l.insumo_id = i.id
-WHERE 
-    l.usuario_id = :id;""")
-        listaDeseos = db.execute(obtenerListaDeseo,{"id":usuarioID}).fetchall()
-
+        if session.get("user_id"):
+            usuarioID = session["user_id"]
+            obtenerListaDeseo = text(""" SELECT
+            COALESCE(p.id, i.id) AS id,
+            COALESCE(p.nombre, i.nombre) AS nombre_producto,
+            COALESCE(p.precio_venta, i.precio_venta) AS precio_producto,
+            CASE 
+                WHEN l.planta_id IS NOT NULL THEN 'planta'
+                WHEN l.insumo_id IS NOT NULL THEN 'insumo'
+            END AS tipo_producto,
+            l.fecha AS fecha_agregado
+        FROM 
+            listas_deseo AS l
+        LEFT JOIN 
+            plantas AS p ON l.planta_id = p.id
+        LEFT JOIN 
+            insumos AS i ON l.insumo_id = i.id
+        WHERE 
+            l.usuario_id = :id;""")
+            listaDeseos = db.execute(obtenerListaDeseo,{"id":usuarioID}).fetchall()
+        else:
+            return render_template("/catalogo.html",categorias=categorias)
 
         return render_template("catalogo.html",categorias=categorias, listadeseos=listaDeseos)
     return render_template('catalogo.html')
 
 @app.route("/vaciarListaDeseo", methods=["POST"])
+@login_required
 def varciarListaDeseo():
     # Eliminar todos los productos de la lista de deseos
     idUsuario = session["user_id"]
+     # Verificar si hay registros en la lista de deseos
+    queryVerificarLista = text("SELECT COUNT(*) FROM listas_deseo WHERE usuario_id = :idUsuario")
+    resultado = db.execute(queryVerificarLista, {"idUsuario": idUsuario}).scalar()
 
+    if resultado == 0:
+        # No hay registros en la lista de deseos
+        flash(('No se puede vaciar la lista de deseos porque está vacía.', 'error', '¡Error!'))
+        return redirect(url_for('catalogo'))
+        
     queryEliminarListaDeseo = text("DELETE FROM listas_deseo WHERE usuario_id = :idUsuario")
     db.execute(queryEliminarListaDeseo, {"idUsuario": idUsuario})
     db.commit()
