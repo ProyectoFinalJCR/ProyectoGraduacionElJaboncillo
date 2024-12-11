@@ -26,8 +26,8 @@ Ventas | El Jaboncillo
     </div>
 </section>
 <div class="container-table-inputs">
-    <div class="table-venta">
-        <table class="table">
+    <div class="table-venta" id="table-container">
+        <table class="table" id="data-table">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -37,7 +37,6 @@ Ventas | El Jaboncillo
                     <th>Acciones</th>
                 </tr>
             </thead>
-
             <tbody id="tabla_ventas">
                 {% for infoVentas in InfoVentas %}
                 <tr>
@@ -50,22 +49,13 @@ Ventas | El Jaboncillo
                     <td class="btn-acciones">
                         <button class="btn-detalle-venta" data-id="{{infoVentas.id}}">
                             Ver detalles
-                         </button>
-                       <button class="btn-detalle-venta" data-id="${venta.id}">
-                        Ver factura
-                     </button>
+                        </button>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <div id="pagination">
-        <button id="prev-page">Previous</button>
-        <span id="page-info"></span>
-        <button id="next-page">Next</button>
-    </div>
-
     <!-- Modal de detalle de ventas -->
     <div id="ModalDetalleVentas" class="modal-detalle-ventas">
         <div class="modal-content-ventas">
@@ -75,7 +65,7 @@ Ventas | El Jaboncillo
             </div>
             <div class="ventas-content">
                 <div class="detalle-venta-info">
-                    
+
                 </div>
                 <table id="detalle-venta-table">
                     <thead>
@@ -267,7 +257,219 @@ Ventas | El Jaboncillo
         </div>
     </div>
 </div>
+<div class="ticket-cont" id="ticket-cont">
+    <div class="ticket">
+        <div class="img">
+            <img src="/static/img/logoElJaboncillo.png" alt="" srcset="">
+        </div>
+
+        <div class="details">
+            <div class="info">
+                <p>Número RUC: <p id="numRUC"></p> </p>
+                <p>Fecha: <p id="fecha"></p> </p>
+                <p>Método de pago: <p id="metodoPago"></p> </p>
+            </div>
+            <div class="info-personal">
+                <p>Nombre del cliente: <p id="nombreCliente"></p> </p>
+                <p>Nombre del vendedor: <p id="nombreVendedor"></p> </p>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Artículo</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="factura-body">
+                
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <p><span></span><span id="subtotal_factura"></span></p>
+            <p><span>Total: C$<span id="total_factura"></span></span></p>
+        </div>
+
+        <div class="footer">
+            <p>Km 40 Carretera Masaya - Catarina, Catarina, Nicaragua</p>
+            <p>EL PERIODO DE DEVOLUCIONES</p>
+            <p>CADUCA EL DÍA <span id="fecha_caducacion"></span></p>
+            <button class="btn btn-print" id="btn-print">Imprimir</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('btn-print').addEventListener('click', function() {
+        const ticketContent = document.querySelector('.ticket').innerHTML;
+        const printWindow = window.open('', '', 'width=800,height=600');
+        printWindow.document.write('<html><head><title>Ticket</title>');
+        printWindow.document.write('<style>');
+        printWindow.document.write('body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }');
+        printWindow.document.write('.ticket { position: relative; width: 148mm; height: 210mm; padding: 10px 20px; margin: auto; background: #fff; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; }');
+        printWindow.document.write('.ticket h1 { font-size: 20px; font-weight: bold; text-align: center; margin: 5px 0; }');
+        printWindow.document.write('.ticket p { font-size: 12px; text-align: center; margin: 2px 2px; }');
+        printWindow.document.write('.ticket .details { display: flex; flex-direction: row; padding: 20px; gap: 25%; }');
+        printWindow.document.write('.ticket .details .info p, .ticket .details .info-personal p { margin: 3px 0; font-size: 12px; text-align: left; }');
+        printWindow.document.write('.ticket table { width: 100%; border-collapse: collapse; margin-top: 10px; }');
+        printWindow.document.write('.ticket table th, .ticket table td { font-size: 12px; text-align: left; padding: 5px; }');
+        printWindow.document.write('.ticket table th { border-bottom: 1px solid #ddd; }');
+        printWindow.document.write('.ticket .totals { margin-top: 10px; font-size: 12px; }');
+        printWindow.document.write('.ticket .totals p { display: flex; justify-content: space-between; }');
+        printWindow.document.write('.ticket .footer { text-align: center; font-size: 10px; margin-top: 10px; color: #666; }');
+        printWindow.document.write('</style>');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(ticketContent);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    });
+    
+</script>
+
+
+<style>
+    /* Configuración general */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        line-height: 1.5rem;
+    }
+
+    .ticket-cont {
+        display: none; 
+        position: fixed; 
+        z-index: 1; 
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .ticket {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -50%); /* Centra el modal */
+        width: 148mm;
+        /* Ancho A5 */
+        height: 210mm;
+        /* Alto A5 */
+        padding: 10px 20px;
+        margin: auto;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ticket h1 {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        margin: 5px 0;
+    }
+
+    .ticket p {
+        font-size: 12px;
+        text-align: center;
+        margin: 2px 2px;
+    }
+
+    .ticket .details {
+        display: flex;
+        flex-direction: row;
+        padding: 20px;
+        gap: 25%;
+    }
+
+    .ticket .details .info p {
+        margin: 3px 0;
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .ticket .details .info-personal p {
+        margin: 3px 0;
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .ticket table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .ticket table th,
+    .ticket table td {
+        font-size: 12px;
+        text-align: left;
+        padding: 5px;
+    }
+
+    .ticket table th {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .ticket .totals {
+        margin-top: 10px;
+        font-size: 12px;
+    }
+
+    .ticket .totals p {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .ticket .footer {
+        text-align: center;
+        font-size: 10px;
+        margin-top: 10px;
+        color: #666;
+    }
+
+    /* Estilos para impresión */
+    @media print {
+        body {
+            margin: 0;
+            padding: 0;
+            background: none;
+        }
+
+        .ticket {
+            width: 148mm;
+            /* Tamaño A5 */
+            height: 210mm;
+            /* Tamaño A5 */
+            border: none;
+            box-shadow: none;
+        }
+
+        /* Ajuste para impresión sin márgenes */
+        @page {
+            size: A5;
+            margin: 0;
+        }
+    }
+
+    .img {
+        display: flex;
+        justify-content: center;
+        padding-top: 10%;
+    }
+</style>
 <script src="/static/js/ventas.js"></script>
+
 
 <!-- Mostrar mensaje de éxito -->
 {% with messages = get_flashed_messages() %}
