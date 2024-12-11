@@ -246,9 +246,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                 // Validar si la cantidad excede el máximo permitido
                                 if (cantidad > maxCantidad) {
-                                    alert("La cantidad no puede exceder el máximo permitido.");
-                                    $(this).val(maxCantidad); // Restablecer al valor máximo permitido
-                                    cantidad = maxCantidad; // Actualizar la cantidad para el cálculo del subtotal
+                                    Swal.fire({
+                                        title: 'Advertencia',
+                                        text: 'La cantidad no puede exceder el máximo permitido.',
+                                        icon: 'warning',
+                                        confirmButtonText: 'OK'
+                                    }).then(() => {
+                                        $(this).val(maxCantidad); // Restablecer al valor máximo permitido
+                                        cantidad = maxCantidad; // Actualizar la cantidad para el cálculo del subtotal
+                                    });
                                 }
 
                                 // Actualizar el subtotal en la celda correspondiente
@@ -318,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let subtotalCelda = $('<td>').text((venta.cantidad * venta.precio).toFixed(2) || '0.00');
 
                     let cantidadDañadosCelda = $('<td>');
-                    let cantidadDañadosInput = $('<input type="number" min="0" placeholder="Dañados">')
+                    let cantidadDañadosInput = $('<input type="number" min="0" class="input input-plantas" placeholder="Dañados">')
                         .val(venta.dañados || '0')
                         .addClass('dañados-input'); // Clase para identificar los productos dañados
                     cantidadDañadosCelda.append(cantidadDañadosInput);
@@ -350,9 +356,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         // Validar si la cantidad excede el máximo permitido
                         if (cantidad > maxCantidad) {
-                            alert("La cantidad no puede exceder el máximo permitido.");
-                            $(this).val(maxCantidad); // Restablecer al valor máximo permitido
-                            cantidad = maxCantidad; // Actualizar la cantidad para el cálculo del subtotal
+                            Swal.fire({
+                                title: 'Advertencia',
+                                text: 'La cantidad no puede exceder el máximo permitido.',
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                $(this).val(maxCantidad); // Restablecer al valor máximo permitido
+                                cantidad = maxCantidad; // Actualizar la cantidad para el cálculo del subtotal
+                            });
                         }
 
                         // Actualizar el subtotal en la celda correspondiente
@@ -365,8 +377,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         // Validar que los productos dañados no excedan la cantidad total
                         if (dañados > parseFloat(cantidadInput.val())) {
-                            alert("La cantidad de productos dañados no puede exceder la cantidad total.");
-                            $(this).val(0); // Restablecer el valor
+                            Swal.fire({
+                            title: 'Advertencia',
+                            text: 'La cantidad de productos dañados no puede exceder la cantidad total.',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            $(this).val(0); // Restablecer el valor a 0 después de cerrar la alerta
+                        });
                         }
                     });
                 });
@@ -412,9 +430,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         // Validar si la cantidad excede el máximo permitido
                         if (cantidad > maxCantidad) {
-                            alert("La cantidad no puede exceder el máximo permitido.");
-                            $(this).val(maxCantidad); // Restablecer al valor máximo permitido
-                            cantidad = maxCantidad; // Actualizar la cantidad para el cálculo del subtotal
+                            Swal.fire({
+                                title: 'Advertencia',
+                                text: 'La cantidad no puede exceder el máximo permitido.',
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                $(this).val(maxCantidad); // Restablecer al valor máximo permitido
+                                cantidad = maxCantidad; // Actualizar la cantidad para el cálculo del subtotal
+                            });
                         }
                         let subtotal = (cantidad * precio).toFixed(2);
                         subtotalCelda.text(subtotal);

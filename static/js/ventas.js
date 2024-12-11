@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const unidadSeleccionada = unidad.options[unidad.selectedIndex]?.value || '';
         const colorSeleccionado = color.options[color.selectedIndex]?.text || '';
-        const medidaSeleccionada = medida.options[medida.selectedIndex]?.value || '';
+        const medidaSeleccionada = medida.options[medida.selectedIndex]?.text || '';
         let nombreCompletoProducto = '';
 
         // Evaluar las combinaciones posibles
