@@ -1,40 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const rowsPerPage = 5; // Número de filas por página
-    let currentPage = 1;
-    const table = document.getElementById("data-table");
-    const tbody = table.querySelector("tbody");
-    const rows = Array.from(tbody.rows);
-    const totalPages = Math.ceil(rows.length / rowsPerPage);
-
-    const renderTable = (page) => {
-        tbody.innerHTML = ""; // Limpia las filas visibles
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const rowsToDisplay = rows.slice(start, end);
-
-        rowsToDisplay.forEach((row) => tbody.appendChild(row));
-
-        document.getElementById("page-info").textContent = `Page ${page} of ${totalPages}`;
-        document.getElementById("prev-page").disabled = page === 1;
-        document.getElementById("next-page").disabled = page === totalPages;
-    };
-
-    document.getElementById("prev-page").addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderTable(currentPage);
-        }
-    });
-
-    document.getElementById("next-page").addEventListener("click", () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTable(currentPage);
-        }
-    });
-
-    renderTable(currentPage); // Renderiza la primera página
-
+    
     // buscar ventas
     let ventas = [];
     fetch("/generar_json_ventas")
@@ -93,12 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     <button class="btn-detalle-venta" data-id="${venta.id}">
                        Ver detalles
                     </button>
-                    <form action="/anularVenta" method="post" class="form-anular">
-                        <input type="hidden" class="id_anular" name="id_anular" value="${venta.id}">
-                        <button class="btn-delete" type="submit">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </form>
+                    <button class="btn-factura-venta" data-idFact="${venta.id}">
+                       Ver factura
+                    </button>
+
+                    
                 </td>
             </tr>`;
                 tableBody.insertAdjacentHTML('beforeend', row);
@@ -446,5 +410,73 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(productosDinamicos.innerHTML);
     });
 
+    //delegacion de eventos para ver factura
+    document.getElementById('table-container').addEventListener('click', function (event) {
+        if (event.target.closest('.btn-factura-venta')) {
+            const button = event.target.closest('.btn-factura-venta');
+            const ventaId = button.getAttribute('data-idFact');
+            console.log("ID de venta a editar:", ventaId);
+
+            // Mostrar el modal
+            const modal = document.getElementById("ticket-cont");
+            modal.style.display = "block";
     
+            // Obtener los detalles de la venta
+            fetchFactura(ventaId);
+        }
+    });
+    // funcion para obtener los detalles de la venta
+    function fetchFactura(id) {
+        fetch("/obtener_factura", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id_venta: id }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                const tableBody = document.getElementById("factura-body");
+                console.log(data);
+                // Limpiar contenido previo
+                tableBody.innerHTML = "";
+    
+                    if (data.length === 0) {
+                   
+                        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No se encontraron detalles para esta venta</td></tr>`;
+                    } else {
+                         // Renderizar los detalles
+                         data.forEach((item, index) => {
+                            const row = `
+                            <tr>
+                                <td>${item.nombre}</td>
+                                <td>${item.cantidad}</td>
+                                <td>C$ ${parseFloat(item.precio).toFixed(2)}</td>
+                                <td>C$ ${parseFloat(item.subtotal).toFixed(2)}</td>
+                            </tr>`;
+                            tableBody.insertAdjacentHTML("beforeend", row);
+                        });
+
+                        document.getElementById("subtotal_factura").textContent = data.subtotal;
+                        document.getElementById("total_factura").textContent = data[0].total;
+                        document.getElementById("nombreCliente").textContent = data[0].nombre_cliente;
+                        document.getElementById("nombreVendedor").textContent = data[0].nombre_completo;
+
+                        let fechaFactura = new Date(data[0].fecha); // Convierte la fecha en un objeto Date
+
+                        // Sumar 7 días a la fecha
+                        fechaFactura.setDate(fechaFactura.getDate() + 7);
+
+                        document.getElementById("fecha_caducacion").textContent = fechaFactura.toISOString().split('T')[0];
+
+                        // Retorna la nueva fecha
+                        console.log(fechaFactura.toISOString().split('T')[0]); // Formato YYYY-MM-DD
+
+                    }
+                
+            })
+            .catch((error) => {
+                console.error("Error al obtener los detalles:", error);
+            });
+    }
 });

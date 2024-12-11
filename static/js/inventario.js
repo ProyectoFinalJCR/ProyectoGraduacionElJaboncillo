@@ -31,6 +31,19 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('btn-add-producto').addEventListener('click', function () {
     const modalproduccion = document.getElementById("ModalAgregarProducto");
     modalproduccion.style.display = "block";
+    // Obtener el elemento <p>
+    const fechaElemento = document.querySelector('.fecha-cont .fecha_agregar p');
+
+    // Obtener la fecha actual
+    const fechaActual = new Date();
+    const fechaFormateada = fechaActual.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    // Actualizar el contenido del <p> con la fecha actual
+    fechaElemento.textContent = fechaFormateada;
 
     document.getElementById("btn-cancel-producto").addEventListener("click", function () {
       const modalproduccion = document.getElementById("ModalAgregarProducto");
@@ -40,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const modalproduccion = document.getElementById("ModalAgregarProducto");
       modalproduccion.style.display = "none";
     });
+
   });
 
   // Buscar inventario

@@ -51,9 +51,8 @@ Gastos | El Jaboncillo
                 <h2>Nuevo Gasto</h2>
                 <span class="close" id="close_agregar_user">&times;</span>
             </div>
-            <form class="formUser" action="#" id="formGastos" method="post">
-                <section class="input-users">
-                    <div class="grupo1">
+            <form class="formGasto" action="#" id="formGastos" method="post">
+                <section class="input-gastos">
                         <div class="input-contenido">
                             <div class="contenedor-obligatorio">
                                 <label for="">Monto</label>
@@ -62,18 +61,14 @@ Gastos | El Jaboncillo
                             <input type="number" id="nombre" class="input input-user input-insumos" name="monto"
                                 placeholder="Ej. 1000">
                         </div>
-                    </div>
-                    <div class="grupo2">
                         <div class="input-contenido">
                             <div class="contenedor-obligatorio">
                                 <label for="">Descripcion</label>
                                 <span class="spanobligatorio">*Obligatorio</span>
                             </div>
-                            <input type="text" id="correo" class="input input-user input-insumos" name="descripcion"
-                                placeholder="Ej. Gasolina">
-                        </div>
-                    </div>
-
+                            <textarea type="text" id="descripcion" class="input input-user input-insumos" name="descripcion"
+                                placeholder="Ej. Gasolina"></textarea>
+                        </div>             
                 </section>
                 <section class="btn-agregar-user">
                     <img class="img-btn-add" src="/static/img/logoElJaboncillo.png" alt="logo">

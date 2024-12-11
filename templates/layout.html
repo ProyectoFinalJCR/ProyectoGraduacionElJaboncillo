@@ -28,7 +28,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=grocery" />
-    <link rel="shortcut icon" href="/static/img/logoElJaboncilloflor.png">
+        <link rel="shortcut icon" href="/static/img/logoElJaboncilloflor.png">
+        
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -49,7 +50,7 @@
                 <div class="items-back">
                     <button class="btn-items-inicio">
                         <i class="material-icons">home</i>
-                        <a href="inicioAdmin">
+                        <a href="/inicioAdmin">
                             <p class="btn_texto">Inicio</p>
                         </a>
                     </button>
@@ -122,7 +123,7 @@
                     </button>
                     <div class="options">
                         <ul class="list-options">
-                            <li><a href="usuarios">Usuarios</a></li>
+                            <li><a href="/usuarios">Usuarios</a></li>
                         </ul>
                     </div>
                 </div>
@@ -134,8 +135,8 @@
                     </button>
                     <div class="options">
                         <ul class="list-options">
-                            <li><a href="categorias">Categorias</a></li>
-                            <li><a href="subCategorias">Subcategorias</a></li>
+                            <li><a href="/categorias">Categorias</a></li>
+                            <li><a href="/subCategorias">Subcategorias</a></li>
                         </ul>
                     </div>
                 </div>
@@ -171,7 +172,7 @@
                 <div class="items-back">
                     <button class="btn-items-inicio">
                         <i class="material-icons">home</i>
-                        <a href="inicioAdmin">
+                        <a href="/inicioAdmin">
                             <p class="btn_texto">Inicio</p>
                         </a>
                     </button>
@@ -236,7 +237,7 @@
             <nav class="navbar">
                 <div class="navbar-content">
                     <i class="material-icons  menu-toggle">menu</i>
-                    <a href="inicioAdmin"> <img src="/static/img/logoElJaboncillo.png" alt="logo"></a>
+                    <a href="/inicioAdmin"> <img src="/static/img/logoElJaboncillo.png" alt="logo"></a>
                 </div>
                 <div class="fecha-btnlogout">
                     <div class="fecha">
@@ -265,6 +266,7 @@
 
 <!-- Carga jQuery primero -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- <script src="https://jasonday.github.io/printThis/printThis.js"></script> -->
 
     <!-- Luego carga Select2 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
@@ -273,6 +275,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Cargar Socket.io desde un CDN -->
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    
 
 
 </body>

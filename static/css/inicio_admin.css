@@ -34,3 +34,11 @@
     font-size: 3rem;
     color: #fff;
 }
+
+
+/*Medias Queries*/
+@media (min-width: 319px) and (max-width: 424px) 
+{    .section-inicio .titulo-principal img{
+        width: 60%;
+    }
+ }
