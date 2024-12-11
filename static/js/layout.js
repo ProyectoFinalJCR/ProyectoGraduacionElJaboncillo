@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function(){
         allScreen.classList.toggle("hidden-sidebar"); // Cambia la estructura del grid
         sidebar.classList.toggle("hidden"); // Oculta o muestra el sidebar
     });
-})
 
 // Saludo de la página
 const saludo = document.getElementById("saludo");
@@ -92,3 +91,36 @@ span.onclick = function() {
       modal.style.display = "show";
     }
   }
+
+  const menuTogglee = document.querySelector('.menu-toggle');
+    const sidebarr = document.querySelector('.sidebar');
+
+   
+
+    function handleSidebarToggle() {
+        // Verifica si el tamaño de la pantalla está dentro del rango deseado
+        if (window.innerWidth >= 319 && window.innerWidth <= 640) {
+            sidebarr.classList.toggle('hidden');
+            // Mostrar el menú toggle y activar la funcionalidad del sidebar
+            menuTogglee.addEventListener('click', function () {
+                sidebarr.classList.toggle('active');
+            });
+
+            // Cerrar el sidebar al hacer clic fuera de él
+            document.addEventListener('click', function (event) {
+                if (!sidebar.contains(event.target) && !menuTogglee.contains(event.target)) {
+                    sidebarr.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    // Ejecutar la función al cargar la página
+    handleSidebarToggle();
+
+    // Agregar un evento para escuchar cambios en el tamaño de la ventana
+    window.addEventListener('resize', function () {
+        // Si el tamaño de la pantalla cambia, ejecutar la lógica nuevamente
+        handleSidebarToggle();
+    });
+});

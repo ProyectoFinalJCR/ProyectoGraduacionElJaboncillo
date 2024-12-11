@@ -165,7 +165,7 @@
       color: #000;
       font-weight: bold;
  }
- .btn-acciones .btn-detalle-venta{
+ .btn-acciones .btn-detalle-venta, .btn-acciones .btn-factura-venta{
    border-radius: 16px;
    font-weight: bold;
    background-color: #b1e7dc;
@@ -175,6 +175,7 @@
    border: none;
    cursor: pointer;
 }
+
 
 .btn-detalle-venta:hover{
    background-color: #0ca358;

@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function(){
         limpiarListaHtml();
     
         articulosLista.forEach( producto =>{
-            const {id, nombre, precio, cantidad} = producto;
+            const {id, nombre, precio, cantidad, unidad} = producto;
     
             const row = document.createElement('tr');
             row.innerHTML = `

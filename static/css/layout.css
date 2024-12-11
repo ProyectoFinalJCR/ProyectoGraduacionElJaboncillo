@@ -475,82 +475,83 @@ th.sortable:hover {
 
 /*MEDIA QUERIES*/
 /* Estilos para dispositivos móviles pequeños (pantallas menores a 576px) */
-@media (max-width: 576px) {
+/* Estilos responsivos */
+@media (min-width: 320px) and (max-width: 640px) {
     .all-screen {
-        grid-template-columns: 1fr; /* Elimina la barra lateral */
-        grid-template-areas:
-            "navbar"
-            "main";
+       
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        overflow: hidden;
     }
-
-    .sidebar {
-        position: fixed;
+       .sidebar {
+        position: fixed; /* Fija el sidebar sobre el contenido */
         top: 0;
         left: 0;
-        width: 70%;
-        max-width: 300px;
-        height: 100vh;
-        z-index: 1000;
-        transform: translateX(-100%);
+        height: 100%;
+        width: 80%; /* Ajusta el ancho del sidebar */
+        background-color: #3BB64A;
+        z-index: 1000; /* Asegura que esté encima del contenido */
+        transform: translateX(25%); /* Oculta el sidebar por defecto */
         transition: transform 0.3s ease-in-out;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra para destacar */
     }
 
-    .sidebar.visible {
+    .sidebar.active {
         transform: translateX(0); /* Muestra el sidebar */
     }
-
-    .navbar {
-        justify-content: space-between;
-        padding: 10px;
+    .sidebar.hidden {
+        transform: translateX(-100%); /* Asegura que esté oculto al cargar */
     }
-
-    .navbar .fecha-btnlogout {
-        flex-direction: column;
-        gap: 10px;
-    }
-
     .main {
-        padding: 10px;
-        font-size: 14px; /* Reduce el tamaño de fuente en el contenido principal */
+        padding: 15px;
+        overflow-y: auto;
+        padding: 15px;
+        overflow-y: auto;
+        height: 878px;
+        width: 100%;
     }
-
-    .btn {
-        width: 100%; /* Botones ocupan el ancho completo */
-        padding: 10px;
+    .navbar {
+        width: 100%;
+        height: 100px;
+        display: flex;
+        flex-direction: row;
     }
-
-    .table-container {
-        padding-left: 0; /* Ajuste de márgenes */
+    .navbar img{
+       width: 155px;
     }
-
-    .table th, .table td {
-        font-size: 12px; /* Fuente más pequeña en tablas */
+    .navbar .fecha-btnlogout .fecha {
+        display: none;
     }
-
-    .btn-items, .btn-items-inicio, .btn-items-config {
-        grid-template-columns: 0.6fr 1fr; /* Ajuste de columnas en botones */
+    .navbar .fecha-btnlogout .btn-logout {
+        width: 88px;
+        height: 25px;
+        font-size: 10px;
+    }
+    .busqueda .search .btn-add-planta{
+        width: 10px;
     }
 }
 
+
 /* Estilos para dispositivos móviles medianos (pantallas entre 576px y 768px) */
-@media (min-width: 576px) and (max-width: 768px) {
+@media (min-width: 576px) and (max-width: 1024px) {
     .all-screen {
         grid-template-columns: 1fr; /* Sidebar oculto por defecto */
         grid-template-areas:
             "navbar"
+            "sidebar"
             "main";
     }
 
     .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 60%;
-        max-width: 300px;
-        height: 100vh;
-        z-index: 1000;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease-in-out;
+        grid-area: sidebar;
+        transform: none; /* Sidebar siempre visible */
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-size: 12px; /* Tamaño de fuente ajustado */
+        padding: 5px;
     }
 
     .sidebar.visible {
@@ -576,17 +577,28 @@ th.sortable:hover {
     .all-screen {
         grid-template-columns: 0.5fr 1.5fr; /* Sidebar más pequeño */
         grid-template-areas:
-            "sidebar sidebar navbar"
-            "sidebar sidebar main";
+            "sidebar navbar navbar"
+            "sidebar main main";
     }
 
     .sidebar {
-        width: 200px;
-        overflow-y: auto;
+        grid-area: sidebar;
+        transform: none; /* Sidebar siempre visible */
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-size: 12px; /* Tamaño de fuente ajustado */
+        padding: 5px;
     }
 
     .navbar {
         padding: 10px;
+    }
+    .navbar img{
+        width: 180px;
+    }
+    .navbar .fecha-btnlogout .fecha {
+        display: none;
     }
 
     .main {
@@ -605,8 +617,9 @@ th.sortable:hover {
     .all-screen {
         grid-template-columns: 0.5fr 1.7fr; /* Layout normal */
         grid-template-areas:
-            "sidebar navbar"
-            "sidebar main";
+            "sidebar navbar navbar"
+            "sidebar main main"
+            "sidebar main main";
     }
 
     .sidebar {
@@ -622,9 +635,9 @@ th.sortable:hover {
         
     }
 
-    .sidebar-titulo-user {
+    /* .sidebar-titulo-user {
         width: 100%;
-        height: 100%;
+        height: 15%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -634,7 +647,7 @@ th.sortable:hover {
         color: #fff;
         border-bottom: 1px solid #fff;
         font-size: 11px;
-    }
+    } */
     .sidebar-titulo-user h2{
         font-size: 13px;
     }
@@ -833,7 +846,7 @@ th.sortable:hover {
 
 }
 /* Estilos para pantallas grandes (mayores a 1024px) */
-@media (min-width: 1921px) and (max-width: 1440px) {
+@media (min-width: 1921px) and (max-width: 2440px) {
     .all-screen {
         grid-template-columns: 0.4fr 1.7fr; /* Layout normal */
         grid-template-areas:

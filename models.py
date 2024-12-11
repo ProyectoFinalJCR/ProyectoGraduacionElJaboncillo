@@ -69,7 +69,8 @@ class Plantas(db.Model):
     temporada_plantacion_id = db.Column(db.Integer, db.ForeignKey('temporadas_plantacion.id'), nullable = False)
     imagen_url = db.Column(db.String, nullable=True)
     precio_venta = db.Column(db.Float, nullable=False)
-    estado = db.Column(db.Boolean, nullable=False, default=True)
+    estado = db.Column(db.Boolean, nullable=False, server_default=db.text("true"))
+
   
 class Insumos(db.Model):
     __tablename__ = 'insumos'
@@ -84,7 +85,8 @@ class Insumos(db.Model):
     imagen_url = db.Column(db.String, nullable=True)
     fecha_vencimiento = db.Column(db.Date, nullable=True)
     precio_venta = db.Column(db.Float, nullable=False)
-    estado = db.Column(db.Boolean, nullable=False, default=True)
+    estado = db.Column(db.Boolean, nullable=False, server_default=db.text("true"))
+
 
 
 class Insumos_Unidades(db.Model):
@@ -104,7 +106,8 @@ class Categorias(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     categoria= db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
-    estado = db.Column(db.Boolean, nullable=False, default=True)
+    estado = db.Column(db.Boolean, nullable=False, server_default=db.text("true"))
+
 
 
 class Subcategorias(db.Model):
@@ -113,7 +116,8 @@ class Subcategorias(db.Model):
     categoria_id = db.Column(db.Integer, db.ForeignKey('categorias.id'), nullable = False)
     subcategoria = db.Column(db.String, nullable=False)
     descripcion = db.Column(db.String, nullable=False)
-    estado = db.Column(db.Boolean, nullable=False, default=True)
+    estado = db.Column(db.Boolean, nullable=False, server_default=db.text("true"))
+
 
 class Plantas_Subcategoria(db.Model):
     __tablename__ = 'plantas_subcategoria'
@@ -140,7 +144,8 @@ class Stock(db.Model):
     insumo_id = db.Column(db.Integer, db.ForeignKey('insumos.id'), nullable = True)
     cantidad = db.Column(db.Float, nullable=False)
     kardex_id = db.Column(db.Integer, db.ForeignKey('movimientos_kardex.id'), nullable = False)
-    estado = db.Column(db.String, default = False)
+    estado = db.Column(db.Boolean, nullable=False, server_default=db.text("true"))
+
 
 class Roles(db.Model):
     __tablename__ = 'roles'
@@ -165,7 +170,8 @@ class Usuarios(db.Model):
     correo = db.Column(db.String, unique=True, nullable=False)
     clave = db.Column(db.String, nullable=False)
     rol_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable = False)
-    estado = db.Column(db.Boolean, nullable=False, default=1)
+    estado = db.Column(db.Boolean, nullable=False, server_default=db.text("true"))
+
 
 class Cliente_Categoria(db.Model):
     __tablename__ = 'cliente_categoria'
@@ -187,7 +193,8 @@ class Ventas (db.Model):
     fecha_venta = db.Column (db.Date, nullable=False)
     nota = db.Column (db.String, nullable=True)
     total = db.Column (db.Float, nullable=False)
-    estado = db.Column (db.Boolean, nullable=False)
+    estado = db.Column(db.Boolean, nullable=False, server_default=db.text("true"))
+
 
 class Movimientos_kardex (db.Model):
     __tablename__ = 'movimientos_kardex'
@@ -237,7 +244,8 @@ class Proveedores(db.Model):
     correo_electronico = db.Column(db.String, unique=True, nullable=False)  
     telefono = db.Column(db.Integer, nullable=False)
     direccion = db.Column(db.String, nullable=False)
-    estado = db.Column(db.Boolean, nullable=False, default=True)
+    estado = db.Column(db.Boolean, nullable=False, server_default=db.text("true"))
+
 
 class Compras(db.Model):
     __tablename__ = 'compras'

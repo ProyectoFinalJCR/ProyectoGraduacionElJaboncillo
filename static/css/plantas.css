@@ -416,6 +416,42 @@
 
 
   /* MEDIA QUERIES*/
+  @media (min-width: 320px) and (max-width: 640px) {
+
+    .bienvenida div h2, .bienvenida div p{
+      font-size: 10px;
+    }
+    .bienvenida .modulo-container h3{
+      font-size: 10px;
+    }
+    
+    .container-table-inputs {
+     width: 100%;
+     height: 50vh;
+    }
+    .busqueda .search .seccion-buscar{
+      width: 75%;
+      height: 60%;
+    }
+    .search input{
+      padding: 10px;
+    }
+    .busqueda .search .btn-add-planta{
+      width: 70px;
+      height: 50px;
+      font-size: 12px;
+  }
+  .search {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap:50px;
+    padding: 0px 0px;
+}
+    }
+
+  
 /* Estilos para pantallas grandes (mayores a 1024px) */
 @media (min-width: 1024px) and (max-width: 1919px) {
   .bienvenida div h2, .bienvenida div p{
