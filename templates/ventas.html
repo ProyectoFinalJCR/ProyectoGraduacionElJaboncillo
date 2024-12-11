@@ -265,13 +265,23 @@ Ventas | El Jaboncillo
 
         <div class="details">
             <div class="info">
-                <p>Número RUC: <p id="numRUC"></p> </p>
-                <p>Fecha: <p id="fecha"></p> </p>
-                <p>Método de pago: <p id="metodoPago"></p> </p>
+                <p>Número RUC:
+                <p id="numRUC"> 001-290697-0000Q</p>
+                </p>
+                <p>Fecha:
+                <p id="fecha"></p>
+                </p>
+                <p>Método de pago:
+                <p id="metodoPago"> Efectivo</p>
+                </p>
             </div>
             <div class="info-personal">
-                <p>Nombre del cliente: <p id="nombreCliente"></p> </p>
-                <p>Nombre del vendedor: <p id="nombreVendedor"></p> </p>
+                <p>Nombre del cliente:
+                <p id="nombreCliente"></p>
+                </p>
+                <p>Nombre del vendedor:
+                <p id="nombreVendedor"></p>
+                </p>
             </div>
         </div>
         <table>
@@ -284,7 +294,7 @@ Ventas | El Jaboncillo
                 </tr>
             </thead>
             <tbody id="factura-body">
-                
+
             </tbody>
         </table>
 
@@ -297,13 +307,21 @@ Ventas | El Jaboncillo
             <p>Km 40 Carretera Masaya - Catarina, Catarina, Nicaragua</p>
             <p>EL PERIODO DE DEVOLUCIONES</p>
             <p>CADUCA EL DÍA <span id="fecha_caducacion"></span></p>
+        </div>
+         <!-- Botones de acciones -->
+         <div class="actions">
             <button class="btn btn-print" id="btn-print">Imprimir</button>
+            <button class="btn btn-cancel" id="btn-cancelar-print">Cancelar</button>
         </div>
     </div>
 </div>
 
 <script>
-    document.getElementById('btn-print').addEventListener('click', function() {
+    // Ocultar el modal al hacer clic en "Cancelar"
+    document.getElementById('btn-cancelar-print').addEventListener('click', function () {
+        document.getElementById('ticket-cont').style.display = 'none';
+        });
+    document.getElementById('btn-print').addEventListener('click', function () {
         const ticketContent = document.querySelector('.ticket').innerHTML;
         const printWindow = window.open('', '', 'width=800,height=600');
         printWindow.document.write('<html><head><title>Ticket</title>');
@@ -328,8 +346,13 @@ Ventas | El Jaboncillo
         printWindow.focus();
         printWindow.print();
         printWindow.close();
+
+         // Ocultar el modal al hacer clic en "Cancelar"
+        document.getElementById('btn-cancelar-print').addEventListener('click', function () {
+        document.getElementById('ticket-cont').style.display = 'none';
+        });
     });
-    
+
 </script>
 
 
@@ -344,9 +367,9 @@ Ventas | El Jaboncillo
     }
 
     .ticket-cont {
-        display: none; 
-        position: fixed; 
-        z-index: 1; 
+        display: none;
+        position: fixed;
+        z-index: 1;
         left: 0;
         top: 0;
         width: 100%;
@@ -355,10 +378,11 @@ Ventas | El Jaboncillo
     }
 
     .ticket {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-30%, -50%); /* Centra el modal */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-30%, -50%);
+        /* Centra el modal */
         width: 148mm;
         /* Ancho A5 */
         height: 210mm;
@@ -437,7 +461,35 @@ Ventas | El Jaboncillo
         margin-top: 10px;
         color: #666;
     }
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
 
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .btn-print {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .btn-cancel {
+        background-color: #f44336;
+        color: white;
+    }
+
+    /* Ocultar botones al imprimir */
+    @media print {
+        .actions {
+            display: none;
+        }
+    }
     /* Estilos para impresión */
     @media print {
         body {

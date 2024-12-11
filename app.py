@@ -283,7 +283,7 @@ def usuarios():
         return render_template('usuarios.html', usuario=usuario, Roles = roles)
     else:
         nombre_completo = request.form.get('nombre')
-        correo = request.form.get('correo')
+        correo = request.form.get('correo')         
         contraseña = request.form.get('contraseña')
         rol_id = request.form.get("idrol")
 
@@ -649,7 +649,6 @@ def insumos():
 
 @app.route('/eliminarInsumo', methods=["GET", "POST"])
 @login_required
-@ruta_permitida
 def eliminarInsumos():
     idInsumo = request.form.get('id_insumo')
 
@@ -829,7 +828,6 @@ def editarinsumo():
 
 @app.route('/agregarSubcategoriaInsumos', methods=["POST"])
 @login_required
-@ruta_permitida
 def agregarSubcategoriaInsumos():
     nombreSub = request.form.get('nombreSub')
     descripcion = request.form.get('descripcion')
@@ -988,7 +986,6 @@ GROUP BY
 
 @app.route('/eliminarPlanta', methods=["POST"])
 @login_required
-@ruta_permitida
 def eliminarPlanta():
     idPlanta = request.form.get('id_eliminar')
 
@@ -1041,7 +1038,6 @@ def proveedores():
 
 @app.route('/bajaProveedor', methods=["GET", "POST"])
 @login_required
-@ruta_permitida
 def bajaProveedor():
     idProveedor = request.form.get('id_baja')
     eliminarProveedor = text("UPDATE proveedores SET estado = 'false' WHERE id = :id")
@@ -1611,8 +1607,8 @@ INNER JOIN
        
         # Insertar datos en la base de datos
 
-        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, nota, id_tipo_pago) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :nota, :id_tipo_pago)")
-        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha_formateada, "total": total, "usuario_id": session["user_id"], "nota": nota , "id_tipo_pago": tipoPago})
+        insertarCompra = text("INSERT INTO compras (proveedor_id, fecha_compra, total, usuario_id, tipo_pago_id, nota) VALUES (:proveedor_id, :fecha_compra, :total, :usuario_id, :tipo_pago_id, :nota  )")
+        db.execute(insertarCompra, {"proveedor_id": proveedorId, "fecha_compra": fecha_formateada, "total": total, "usuario_id": session["user_id"], "tipo_pago_id": tipoPago, "nota": nota })
 
         for producto in productos:
             if producto['tipo'] == 'planta':
@@ -1743,6 +1739,7 @@ def listaDeseos():
 
 @app.route('/devoluciones', methods=["GET", "POST"])
 @login_required
+@ruta_permitida
 def devoluciones():
     if request.method == "GET":
         ObtenerMovimientos = text("SELECT * FROM tipo_movimientos WHERE tipo_movimiento = 'Devolución' OR tipo_movimiento = 'Devolucion por daños'")
@@ -3090,6 +3087,7 @@ def reportes_ventas():
 
 @app.route('/listaDAdmin', methods=['GET'])
 @login_required
+@ruta_permitida
 def lista_dadmin():
     #selecciona la lista de deseo por usuarios
     lista_deseo_query = text("""SELECT DISTINCT u.id, u.nombre_completo, u.correo, l.fecha
@@ -3211,6 +3209,7 @@ LEFT JOIN tipo_movimientos as t ON m.tipo_movimiento_id = t.id
     
 @app.route('/gastos', methods=['GET', 'POST'])
 @login_required
+@ruta_permitida
 def gastos():
     if request.method == 'GET':
         obtenerGastos = text("SELECT * FROM gastos")

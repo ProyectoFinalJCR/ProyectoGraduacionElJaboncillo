@@ -337,7 +337,14 @@
 .table-container-add{
     transition:all 0.6s ease;
 }
-
+ .btn-reportes{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+ }
 
 /* Formato de la tabla */
 /* .table {

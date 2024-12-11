@@ -255,6 +255,7 @@ class Compras(db.Model):
     tipo_pago_id = db.Column(db.Integer, db.ForeignKey('tipos_pagos.id'), nullable = False)
     fecha_compra = db.Column(db.Date, nullable=False)
     total = db.Column(db.Float, nullable=False)
+    nota = db.Column(db.Text, nullable=True)    
 
 class Detalles_Compra(db.Model):
     __tablename__ = 'detalle_compra'

@@ -179,6 +179,17 @@ def composiciones_principales():
         db.session.add(data)
         db.session.commit()
 
+def roles():
+    roles = [
+        (1, "ADMINISTRADOR"),
+        (2, "OPERADOR"),
+        (3, "CLIENTE")
+    ]
+    for id, rol in roles:
+        nueva_rol = Roles(id=id, rol=rol)
+        db.session.add(nueva_rol)
+        db.session.commit()
+
 def rutas():
     rutas = [
         "/inicioAdmin",
@@ -192,7 +203,9 @@ def rutas():
         "/categorias",
         "/subCategorias",
         "/configuracion",
-        "/devoluciones"
+        "/devoluciones",
+        "/gastos",
+        "/listaDAdmin"
     ]
     for ruta in rutas:
         nueva_ruta = Rutas(ruta=ruta)
@@ -213,27 +226,56 @@ def agregar_rutas_roles():
         (1, 10),
         (1, 11),
         (1, 12),
+        (1, 13),
+        (1, 14),
+        (2, 1),
         (2, 5),
-        (2, 6)
-    ]
+        (2, 6),
+        (2,12),
+        (2, 13),
+        (2, 14),
+        ]
     for rol_id, ruta_id in rutas_roles:
         nueva_relacion = Rutas_roles(rol_id=rol_id, ruta_id=ruta_id)
         db.session.add(nueva_relacion)
         db.session.commit()
 
-        
+def tipo_pagos():
+    tipo_pagos = [
+        (1, "Efectivo"),
+        (2, "Tarjeta")
+    ]
+    for id, tipo_pago in tipo_pagos:
+        nueva_tipo_pago = tipos_pagos(id=id, tipo_pago=tipo_pago)
+        db.session.add(nueva_tipo_pago)
+        db.session.commit()
+
+def cliente_categorias():
+    cliente_categorias = [
+        (1, "Casual"),
+        (2,"Canastero")
+    ]
+    for id, categoria in cliente_categorias:
+        cliente_c = Cliente_Categoria(id=id, categoria=categoria)
+        db.session.add(cliente_c)
+        db.session.commit()
+
 with app.app_context():
-    # entornos_ideales()        
-    # tipos_suelos()
-    # tipo_movimientos()
-    # requerimientos_agua()
-    # aplicaciones()
-    # temporadas_plantacion()
-    # composiciones_principales()
-    # medidas()
-    # unidades_medidas()
-    # colores()   
-    # rutas()
-    agregar_rutas_roles()
-    # usuarios()
-    # print(app.app_context)
+    #entornos_ideales()        
+    #tipos_suelos()
+    #tipo_movimientos()
+    #requerimientos_agua()
+    #aplicaciones()
+    #temporadas_plantacion()
+    #composiciones_principales()
+    #medidas()
+    #unidades_medidas()
+    #colores()   
+    #rutas()
+    #agregar_rutas_roles()
+    #usuarios()
+    print(app.app_context)
+    #tipo_pagos()
+    #cliente_categorias()
+    #roles()
+    #agregar_rutas_roles()
