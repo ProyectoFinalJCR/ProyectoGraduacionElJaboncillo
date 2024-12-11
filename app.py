@@ -70,7 +70,7 @@ def ruta_permitida(f):
         ruta_actual = request.path  # Obtener la ruta que está intentando acceder
 
         if ruta_actual not in rutas_permitidas:
-            return "Acceso denegado", 403
+            return render_template("acceso_denegado.html"), 403
         return f(*args, **kwargs)
     return decorated_function
 
@@ -938,9 +938,6 @@ GROUP BY
 
         if not nombrePlanta:
             flash(('Ingrese el nombre', 'error', '¡Error!'))
-            return redirect(url_for('plantas'))
-        if not descripcion:
-            flash(('Ingrese la descripcion', 'error', '¡Error!'))
             return redirect(url_for('plantas'))
         if not precio:
             flash(('Ingrese el precio', 'error', '¡Error!'))
