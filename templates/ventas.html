@@ -303,35 +303,118 @@ Ventas | El Jaboncillo
 </div>
 
 <script>
-    document.getElementById('btn-print').addEventListener('click', function() {
-        const ticketContent = document.querySelector('.ticket').innerHTML;
+    document.getElementById('btn-print').addEventListener('click', function () {
+        // Selecciona el contenido de la factura
+        const ticketContent = document.querySelector('.ticket').outerHTML;
         const printWindow = window.open('', '', 'width=800,height=600');
-        printWindow.document.write('<html><head><title>Ticket</title>');
-        printWindow.document.write('<style>');
-        printWindow.document.write('body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }');
-        printWindow.document.write('.ticket { position: relative; width: 148mm; height: 210mm; padding: 10px 20px; margin: auto; background: #fff; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; }');
-        printWindow.document.write('.ticket h1 { font-size: 20px; font-weight: bold; text-align: center; margin: 5px 0; }');
-        printWindow.document.write('.ticket p { font-size: 12px; text-align: center; margin: 2px 2px; }');
-        printWindow.document.write('.ticket .details { display: flex; flex-direction: row; padding: 20px; gap: 25%; }');
-        printWindow.document.write('.ticket .details .info p, .ticket .details .info-personal p { margin: 3px 0; font-size: 12px; text-align: left; }');
-        printWindow.document.write('.ticket table { width: 100%; border-collapse: collapse; margin-top: 10px; }');
-        printWindow.document.write('.ticket table th, .ticket table td { font-size: 12px; text-align: left; padding: 5px; }');
-        printWindow.document.write('.ticket table th { border-bottom: 1px solid #ddd; }');
-        printWindow.document.write('.ticket .totals { margin-top: 10px; font-size: 12px; }');
-        printWindow.document.write('.ticket .totals p { display: flex; justify-content: space-between; }');
-        printWindow.document.write('.ticket .footer { text-align: center; font-size: 10px; margin-top: 10px; color: #666; }');
-        printWindow.document.write('</style>');
-        printWindow.document.write('</head><body>');
-        printWindow.document.write(ticketContent);
-        printWindow.document.write('</body></html>');
+        
+        // Escribe el contenido en la ventana de impresión
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Ticket</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 20px;
+                        }
+                        .ticket {
+                            position: relative;
+                            width: 148mm;
+                            height: 210mm;
+                            padding: 10px 20px;
+                            margin: auto;
+                            background: #fff;
+                            border: 1px solid #ddd;
+                            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        .ticket h1 {
+                            font-size: 20px;
+                            font-weight: bold;
+                            text-align: center;
+                            margin: 5px 0;
+                        }
+                        .ticket p {
+                            font-size: 12px;
+                            text-align: center;
+                            margin: 2px 2px;
+                        }
+                        .ticket .details {
+                            display: flex;
+                            flex-direction: row;
+                            padding: 20px;
+                            gap: 25%;
+                        }
+                        .ticket .details .info p,
+                        .ticket .details .info-personal p {
+                            margin: 3px 0;
+                            font-size: 12px;
+                            text-align: left;
+                        }
+                        .ticket table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 10px;
+                        }
+                        .ticket table th,
+                        .ticket table td {
+                            font-size: 12px;
+                            text-align: left;
+                            padding: 5px;
+                        }
+                        .ticket table th {
+                            border-bottom: 1px solid #ddd;
+                        }
+                        .ticket .totals {
+                            margin-top: 10px;
+                            font-size: 12px;
+                        }
+                        .ticket .totals p {
+                            display: flex;
+                            justify-content: space-between;
+                        }
+                        .ticket .footer {
+                            text-align: center;
+                            font-size: 10px;
+                            margin-top: 10px;
+                            color: #666;
+                        }
+                        .img {
+                            display: flex;
+                            justify-content: center;
+                            padding-top: 10%;
+                        }
+                        .img img {
+                            max-width: 100px;
+                            height: auto;
+                        }
+                        @page {
+                            size: A5;
+                            margin: 0;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="ticket">
+                        <div class="img">
+                            <img src="/static/img/logoElJaboncillo.png" alt="Logo del Vivero">
+                        </div>
+                        ${ticketContent}
+                    </div>
+                </body>
+            </html>
+        `);
+
+        // Cierra el documento de la ventana y abre el cuadro de impresión
         printWindow.document.close();
         printWindow.focus();
         printWindow.print();
         printWindow.close();
     });
-    
 </script>
-
 
 <style>
     /* Configuración general */
